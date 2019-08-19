@@ -26,9 +26,7 @@ PODS:
     - MMBase-iOS/MMFoundation
   - MMBase-iOS/MMFoundation (1.0.0)
   - MMKV (1.0.22)
-  - PhotonIMSDK (0.0.1):
-    - PhotonIMSDK/PhotonIMSDK (= 0.0.1)
-  - PhotonIMSDK/PhotonIMSDK (0.0.1)
+  - PhotonIMSDK (0.0.1)
   - PhotonPushSDK (0.0.9)
   - SDWebImage (4.4.7):
     - SDWebImage/Core (= 4.4.7)
@@ -78,7 +76,7 @@ SPEC CHECKSUMS:
   MMAppBus: 6ba218c564db3fd03309a21790cd662543936571
   MMBase-iOS: 4ad28dbde99dfb81dc639a31e22e1b504cf3ec61
   MMKV: 99b05c376c0eb412b468ba1d3e6813502edeaa24
-  PhotonIMSDK: 5583f08803a721f7a6802dfa5ed3961e5cfe8eb6
+  PhotonIMSDK: 49fa49df1c29e6c793068e023b748e96c42f77e9
   PhotonPushSDK: 7ba836d206da7233644f557451293e7c5515e0ae
   SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6

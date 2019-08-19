@@ -8,13 +8,25 @@
     "cosmos33": "cosmossaas@gmail.com"
   },
   "source": {
-    "git": "http://say-public.oss-cn-beijing.aliyuncs.com/cosmos/PhotonIMSDK-iOS.zip",
-    "tag": "0.0.1"
+    "http": "http://say-public.oss-cn-beijing.aliyuncs.com/cosmos/PhotonIMSDK-iOS.zip"
   },
   "platforms": {
     "ios": "10.0"
   },
   "static_framework": true,
+  "frameworks": "CoreTelephony",
+  "vendored_frameworks": [
+    "Products/PhotonIMSDK.framework",
+    "Products/MDAudioKit.framework"
+  ],
+  "vendored_libraries": "Products/libprotobuf.a",
+  "resources": "Products/PhotonImResource.bundle",
+  "libraries": [
+    "z",
+    "resolv",
+    "stdc++",
+    "sqlite3"
+  ],
   "ios": {
     "libraries": [
       "c++",
@@ -23,23 +35,5 @@
       "stdc++",
       "sqlite3"
     ]
-  },
-  "subspecs": [
-    {
-      "name": "PhotonIMSDK",
-      "frameworks": "CoreTelephony",
-      "vendored_frameworks": [
-        "Products/PhotonIMSDK.framework",
-        "Products/MDAudioKit.framework"
-      ],
-      "vendored_libraries": "Products/libprotobuf.a",
-      "resources": "Products/PhotonImResource.bundle",
-      "libraries": [
-        "z",
-        "resolv",
-        "stdc++",
-        "sqlite3"
-      ]
-    }
-  ]
+  }
 }
