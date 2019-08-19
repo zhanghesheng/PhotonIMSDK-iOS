@@ -1,6 +1,0 @@
-framework module MDLog {
-  umbrella header "MDLog.h"
-
-  export *
-  module * { export * }
-}
