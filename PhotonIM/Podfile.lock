@@ -26,7 +26,10 @@ PODS:
     - MMBase-iOS/MMFoundation
   - MMBase-iOS/MMFoundation (1.0.0)
   - MMKV (1.0.22)
+  - PhotonIMSDK (0.0.2):
+    - protobuf-lib
   - PhotonPushSDK (0.0.9)
+  - protobuf-lib (3.6.1)
   - SDWebImage (4.4.7):
     - SDWebImage/Core (= 4.4.7)
   - SDWebImage/Core (4.4.7)
@@ -40,6 +43,7 @@ DEPENDENCIES:
   - MDLog (= 1.0.0)
   - MJRefresh (= 3.2.0)
   - MMKV (= 1.0.22)
+  - PhotonIMSDK (= 0.0.2)
   - PhotonPushSDK (= 0.0.9)
   - SDWebImage (= 4.4.7)
   - SVProgressHUD (= 2.2.5)
@@ -59,6 +63,8 @@ SPEC REPOS:
     - MDLog
     - MMAppBus
     - MMBase-iOS
+    - PhotonIMSDK
+    - protobuf-lib
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
@@ -70,10 +76,12 @@ SPEC CHECKSUMS:
   MMAppBus: 6ba218c564db3fd03309a21790cd662543936571
   MMBase-iOS: 4ad28dbde99dfb81dc639a31e22e1b504cf3ec61
   MMKV: 99b05c376c0eb412b468ba1d3e6813502edeaa24
+  PhotonIMSDK: d4a786a553dfe21ea57ee4dcab49845cc5bc1a16
   PhotonPushSDK: 7ba836d206da7233644f557451293e7c5515e0ae
+  protobuf-lib: 17f7bc24b358cfeab87def9adc59c76bc220cd05
   SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: a91023138936874e75ef2bebc7442f1421b94390
+PODFILE CHECKSUM: b814f8c6f468893d27b012b7e79c18cdffdb5054
 
 COCOAPODS: 1.5.3

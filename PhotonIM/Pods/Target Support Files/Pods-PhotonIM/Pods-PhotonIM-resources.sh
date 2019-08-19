@@ -93,11 +93,13 @@ EOM
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${PODS_ROOT}/PhotonIMSDK/Products/PhotonImResource.bundle"
   install_resource "${PODS_ROOT}/PhotonPushSDK/Frameworks/pushBudle.bundle"
   install_resource "${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle"
+  install_resource "${PODS_ROOT}/PhotonIMSDK/Products/PhotonImResource.bundle"
   install_resource "${PODS_ROOT}/PhotonPushSDK/Frameworks/pushBudle.bundle"
   install_resource "${PODS_ROOT}/SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
 fi
