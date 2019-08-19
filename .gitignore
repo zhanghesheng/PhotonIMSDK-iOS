@@ -5,7 +5,8 @@
 ## Build generated
 build/
 DerivedData/
-
+PhotonIM/Pods/
+PhotonIM/Podfile.lock
 ## Various settings
 *.pbxuser
 !default.pbxuser
@@ -61,5 +62,3 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
-PhotonIM/Pods
-PhotonIM/Podfile.lock
