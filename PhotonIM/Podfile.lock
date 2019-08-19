@@ -1,0 +1,88 @@
+PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - FMDB (2.7.2):
+    - FMDB/standard (= 2.7.2)
+  - FMDB/standard (2.7.2)
+  - Masonry (1.1.0)
+  - MBProgressHUD (1.1.0)
+  - MDLog (1.0.0):
+    - MMAppBus
+  - MJRefresh (3.2.0)
+  - MMAppBus (1.0.1):
+    - MMBase-iOS/MMFoundation
+  - MMBase-iOS/MMFoundation (1.0.0)
+  - MMKV (1.0.22)
+  - PhotonIMSDK (0.0.1):
+    - PhotonIMSDK/PhotonIMSDK (= 0.0.1)
+  - PhotonIMSDK/PhotonIMSDK (0.0.1)
+  - PhotonPushSDK (0.0.9)
+  - SDWebImage (4.4.7):
+    - SDWebImage/Core (= 4.4.7)
+  - SDWebImage/Core (4.4.7)
+  - SVProgressHUD (2.2.5)
+
+DEPENDENCIES:
+  - AFNetworking (= 3.2.1)
+  - FMDB (= 2.7.2)
+  - Masonry (= 1.1.0)
+  - MBProgressHUD (= 1.1.0)
+  - MDLog (= 1.0.0)
+  - MJRefresh (= 3.2.0)
+  - MMKV (= 1.0.22)
+  - PhotonIMSDK (from `..`)
+  - PhotonPushSDK (= 0.0.9)
+  - SDWebImage (= 4.4.7)
+  - SVProgressHUD (= 2.2.5)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+    - FMDB
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
+    - MMKV
+    - PhotonPushSDK
+    - SDWebImage
+    - SVProgressHUD
+  https://github.com/cosmos33/MMSpecs.git:
+    - MDLog
+    - MMAppBus
+    - MMBase-iOS
+
+EXTERNAL SOURCES:
+  PhotonIMSDK:
+    :path: ".."
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MDLog: 3b6cc2ee64aca983f440928d7bd7f1d1ad0f3c31
+  MJRefresh: ed450d6eb9d3346a2cb033ab7eb6de090aeef437
+  MMAppBus: 6ba218c564db3fd03309a21790cd662543936571
+  MMBase-iOS: 4ad28dbde99dfb81dc639a31e22e1b504cf3ec61
+  MMKV: 99b05c376c0eb412b468ba1d3e6813502edeaa24
+  PhotonIMSDK: 5583f08803a721f7a6802dfa5ed3961e5cfe8eb6
+  PhotonPushSDK: 7ba836d206da7233644f557451293e7c5515e0ae
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+
+PODFILE CHECKSUM: fa1d5a7f4771b3d27733b22d5f51d8a5826f9a6b
+
+COCOAPODS: 1.5.3

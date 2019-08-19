@@ -1,0 +1,14 @@
+//
+//  PhotonIM.pch
+//  PhotonIM
+//
+//  Created by Bruce on 2019/6/25.
+//  Copyright © 2019 Bruce. All rights reserved.
+//
+
+#ifndef PhotonIM_pch
+#define PhotonIM_pch
+
+//#import "PhotonMacros.h"
+
+#endif /* PhotonIM_pch */

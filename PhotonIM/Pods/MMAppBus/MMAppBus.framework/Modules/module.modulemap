@@ -1,0 +1,6 @@
+framework module MMAppBus {
+  umbrella header "MMAppBus-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,87 @@
+{
+  "name": "QSFrameWork",
+  "version": "1.0.3",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "summary": "基础框架核心模块",
+  "homepage": "https://github.com/WisdomTeamGo/qsframework",
+  "authors": {
+    "zhanghesheng": "zhangshuisheng1@126.com"
+  },
+  "source": {
+    "git": "https://github.com/WisdomTeamGo/qsframework.git",
+    "tag": "1.0.3",
+    "submodules": true
+  },
+  "requires_arc": true,
+  "platforms": {
+    "ios": "7.0"
+  },
+  "public_header_files": "QSFrameWork/QSFrameWork.h",
+  "source_files": [
+    "QSFrameWork",
+    "QSFrameWork/QSFrameWork.{h,m,c}"
+  ],
+  "resources": [
+    "QSFrameWork/**/*.{png,jpg,xib,storyboard,txt}"
+  ],
+  "dependencies": {
+    "AFNetworking": [
+
+    ],
+    "MagicalRecord": [
+
+    ]
+  },
+  "libraries": [
+    "xml2",
+    "sqlite3"
+  ],
+  "frameworks": [
+    "CoreGraphics",
+    "Foundation",
+    "UIKit"
+  ],
+  "xcconfig": {
+    "HEADER_SEARCH_PATHS": "$(SDKROOT)/usr/include/libxml2"
+  },
+  "subspecs": [
+    {
+      "name": "QSCore",
+      "source_files": [
+        "QSFrameWork/QSCore",
+        "QSFrameWork/QSCore/**/*.{h,m,c}"
+      ]
+    },
+    {
+      "name": "QSService",
+      "source_files": [
+        "QSFrameWork/QSService",
+        "QSFrameWork/QSService/**/*.{h,m,c}"
+      ]
+    },
+    {
+      "name": "QSNetwork",
+      "source_files": [
+        "QSFrameWork/QSNetwork",
+        "QSFrameWork/QSNetwork/**/*.{h,m,c}"
+      ]
+    },
+    {
+      "name": "QSUI",
+      "source_files": [
+        "QSFrameWork/QSUI",
+        "QSFrameWork/QSUI/**/*.{h,m,c}"
+      ]
+    },
+    {
+      "name": "QSDataStore",
+      "source_files": [
+        "QSFrameWork/QSDataStore",
+        "QSFrameWork/QSDataStore/**/*.{h,m,c}"
+      ]
+    }
+  ]
+}
