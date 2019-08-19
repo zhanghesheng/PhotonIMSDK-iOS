@@ -188,7 +188,7 @@ static NSString *message_syncing = @"消息(收取中......)";
             break;
         case PhotonIMLoginStatusConnected:// 连接成功
             break;
-        case PhotonIMLoginStatusSucceed:// 登录成功
+        case PhotonIMLoginStatusLoginSucceed:// 登录成功
              [self setNavTitle:message_title];
             break;
         case PhotonIMLoginStatusConnectFailed:// 连接失败

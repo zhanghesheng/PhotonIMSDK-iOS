@@ -336,7 +336,6 @@
 		23D185912F6EBAC8D0B1B8D5AE1BF9EB /* SDWebImageManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageManager.h; path = SDWebImage/SDWebImageManager.h; sourceTree = "<group>"; };
 		24CADEAA5F834EAA434CBA15C2515454 /* SDWebImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloader.m; path = SDWebImage/SDWebImageDownloader.m; sourceTree = "<group>"; };
 		272C26D99589077294C4C719437D1F1D /* SDWebImageGIFCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageGIFCoder.m; path = SDWebImage/SDWebImageGIFCoder.m; sourceTree = "<group>"; };
-		2755E5A0440F9DE567778B5C4156D117 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		2840C992009F0BB87A9221B5EF126B36 /* SVProgressHUD-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SVProgressHUD-prefix.pch"; sourceTree = "<group>"; };
 		28B11715DCF4190A2746A18E34D940A2 /* MemoryFile.mm */ = {isa = PBXFileReference; includeInIndex = 1; name = MemoryFile.mm; path = iOS/MMKV/MMKV/MemoryFile.mm; sourceTree = "<group>"; };
 		29A5AE0708CA1B1CCEF589091D03F5EC /* libFMDB.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libFMDB.a; path = libFMDB.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -431,7 +430,6 @@
 		7D08CD3DBC7544F9FEE88003BEDD0D34 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
 		7E8A7B8F8209CDFC2B05B852E894B761 /* SDWebImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageManager.m; path = SDWebImage/SDWebImageManager.m; sourceTree = "<group>"; };
 		7EF8E5DE4904CD7A73D7E63712A2F2E8 /* Pods-PhotonIM.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PhotonIM.debug.xcconfig"; sourceTree = "<group>"; };
-		817F5A0EE11E6EBC138155D99851593F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
 		82CE5168F8580DDBB5232429BA6E1CC0 /* SVProgressAnimatedView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SVProgressAnimatedView.h; path = SVProgressHUD/SVProgressAnimatedView.h; sourceTree = "<group>"; };
 		83734B3EFD85F1E64A6788929B6546B4 /* MJRefreshFooter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MJRefreshFooter.h; path = MJRefresh/Base/MJRefreshFooter.h; sourceTree = "<group>"; };
 		872D6AFAAE994B94CA65D6DAFA33B8C6 /* SDImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageCache.h; path = SDWebImage/SDImageCache.h; sourceTree = "<group>"; };
@@ -498,7 +496,6 @@
 		BB6C0658DA517B507F6E92835E410A87 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPSessionManager.h; path = AFNetworking/AFHTTPSessionManager.h; sourceTree = "<group>"; };
 		BB7CEF1DB2367ABCF87FC8B1B8A91694 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIWebView+AFNetworking.h"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		BCD00DD93CF8389498C57CCE2B7908A1 /* AESCrypt.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AESCrypt.h; path = iOS/MMKV/MMKV/aes/AESCrypt.h; sourceTree = "<group>"; };
-		BD3D8701012B3D1D36707D0A7579197B /* PhotonIMSDK.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = PhotonIMSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		BE69B9CEEB4EC0C488C4C6B1D0905EB7 /* libMMKV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMMKV.a; path = libMMKV.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEF496CD709B2735A4638DFAD109DC83 /* MiniCodedOutputData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MiniCodedOutputData.h; path = iOS/MMKV/MMKV/MiniCodedOutputData.h; sourceTree = "<group>"; };
 		BF1AFCC1277E566FD414E8D1D795C44B /* MJRefreshBackGifFooter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MJRefreshBackGifFooter.m; path = MJRefresh/Custom/Footer/Back/MJRefreshBackGifFooter.m; sourceTree = "<group>"; };
@@ -928,15 +925,6 @@
 			path = MDLog;
 			sourceTree = "<group>";
 		};
-		6B9CB24025594146EA86A4E9FF917F38 /* PhotonIMSDK */ = {
-			isa = PBXGroup;
-			children = (
-				ADDC9CEAA22ABC775EDFDDC111924888 /* Pod */,
-			);
-			name = PhotonIMSDK;
-			path = ../..;
-			sourceTree = "<group>";
-		};
 		6FF37B02EFA9BE37D0A7E588756D10B9 /* MMBase-iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -965,7 +953,6 @@
 			isa = PBXGroup;
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
-				F543737EDD653EAAF37056D7C5260C60 /* Development Pods */,
 				24002A6670E6882ECD6250D3E60F9CB2 /* Frameworks */,
 				E8CE44235EB29B33A38593C3C5805E1F /* Pods */,
 				E80714A940698FA9DE285B2E25453DD4 /* Products */,
@@ -1084,16 +1071,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/MMKV";
-			sourceTree = "<group>";
-		};
-		ADDC9CEAA22ABC775EDFDDC111924888 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				817F5A0EE11E6EBC138155D99851593F /* LICENSE */,
-				BD3D8701012B3D1D36707D0A7579197B /* PhotonIMSDK.podspec */,
-				2755E5A0440F9DE567778B5C4156D117 /* README.md */,
-			);
-			name = Pod;
 			sourceTree = "<group>";
 		};
 		B0CD7DE864AA08C69BDB924816CC6F9C /* Resources */ = {
@@ -1277,14 +1254,6 @@
 			);
 			name = MMKV;
 			path = MMKV;
-			sourceTree = "<group>";
-		};
-		F543737EDD653EAAF37056D7C5260C60 /* Development Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6B9CB24025594146EA86A4E9FF917F38 /* PhotonIMSDK */,
-			);
-			name = "Development Pods";
 			sourceTree = "<group>";
 		};
 		F71520A2179DF2BD429A24AAF844769B /* Frameworks */ = {
