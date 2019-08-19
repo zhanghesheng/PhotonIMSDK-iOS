@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  发送通用消息
  
- @param message <#message description#>
- @param completion <#completion description#>
+ @param message 消息
+ @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
  */
 - (void)sendMessage:(nullable PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 

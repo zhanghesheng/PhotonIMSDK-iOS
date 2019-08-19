@@ -44,7 +44,7 @@
 #pragma mark ======== 接收消息 ===========
 /**
  设置会话中对方的id
-
+ 
  @return <#return value description#>
  */
 - (NSString *)getChatWith;
