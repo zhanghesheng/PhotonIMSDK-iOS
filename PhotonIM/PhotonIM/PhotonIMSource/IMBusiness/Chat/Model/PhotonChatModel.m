@@ -111,6 +111,13 @@
             resultItem = audioItem;
         }
             break;
+//        case PhotonIMMessageTypeRaw:{// 语音
+//            PhotonIMCustomBody *body = (PhotonIMCustomBody *)message.messageBody;
+//            NSDictionary *dictionary =[NSJSONSerialization JSONObjectWithData:body.data  options:NSJSONReadingMutableLeaves error:nil];
+//            PhotonVoiceMessageChatItem *audioItem = [[PhotonVoiceMessageChatItem alloc] init];
+//            resultItem = audioItem;
+//        }
+//            break;
             
         default:
             break;

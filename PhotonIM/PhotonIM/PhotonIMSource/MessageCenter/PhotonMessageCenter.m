@@ -133,6 +133,28 @@ static PhotonMessageCenter *center = nil;
     [message setMesageBody:body];
     item.userInfo = message;
     [self _sendMessage:message completion:completion];
+    
+    
+//    PhotonIMMessage *message1 =[[PhotonIMMessage alloc] init];
+//    message1.fr = [PhotonContent currentUser].userID;
+//    message1.to = conversation.chatWith;
+//    message1.chatWith = conversation.chatWith;
+//    message1.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+//    message1.chatType = PhotonIMChatTypeSingle;
+//    message1.messageType = PhotonIMMessageTypeRaw;
+//    message1.messageStatus = PhotonIMMessageStatusSending;
+//    
+//    PhotonIMCustomBody *body1 = [[PhotonIMCustomBody alloc] init];
+//    NSDictionary *dict = @{@"text":item.messageText};
+//    NSData *data= [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+//    body1.data = data;
+//    
+//    [message1 setMesageBody:body1];
+//    [self _sendMessage:message1 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+//        PhotonLog(@"error message = %@",error);
+//    }];
+    
+    
 }
 
 - (void)sendImageMessage:(PhotonImageMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
