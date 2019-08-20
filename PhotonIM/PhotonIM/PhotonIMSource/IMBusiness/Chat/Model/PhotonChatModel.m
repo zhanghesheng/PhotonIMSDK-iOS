@@ -31,7 +31,9 @@
         NSMutableArray *items = [NSMutableArray array];
         for (PhotonIMMessage *msg in messages) {
            id item =  [weakself wrapperMessage:msg];
-           [items addObject:item];
+            if (item) {
+                 [items addObject:item];
+            }
         }
         NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
         [totolItems addObjectsFromArray:items];
@@ -111,13 +113,6 @@
             resultItem = audioItem;
         }
             break;
-//        case PhotonIMMessageTypeRaw:{// 语音
-//            PhotonIMCustomBody *body = (PhotonIMCustomBody *)message.messageBody;
-//            NSDictionary *dictionary =[NSJSONSerialization JSONObjectWithData:body.data  options:NSJSONReadingMutableLeaves error:nil];
-//            PhotonVoiceMessageChatItem *audioItem = [[PhotonVoiceMessageChatItem alloc] init];
-//            resultItem = audioItem;
-//        }
-//            break;
             
         default:
             break;
