@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  消息类型
  */
-@property(nonatomic, copy, nullable) NSString *messagID;
+@property(nonatomic, copy, nullable) NSString *messageID;
 
 /**
  对方id 
@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable)NSString *chatWith;
 
 /**
- 时间
+ 时间，以毫秒为单位
  */
 @property(nonatomic, assign) int64_t timeStamp;
 /**
