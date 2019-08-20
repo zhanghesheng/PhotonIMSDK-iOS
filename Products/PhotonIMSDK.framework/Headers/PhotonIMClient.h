@@ -78,6 +78,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ 获取当前的连接状态
+ */
+- (PhotonIMLoginStatus)currentLoginStatus;
+
+
+/**
  开启断言，接口调用不合理或者存在时会启用断言。建议在debugn模式下打开，release模式下关闭，默认是关闭状态
 
  @param enable <#enable description#>

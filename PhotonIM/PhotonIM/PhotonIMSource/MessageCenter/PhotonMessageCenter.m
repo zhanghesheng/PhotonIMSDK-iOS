@@ -25,6 +25,8 @@ static PhotonMessageCenter *center = nil;
 @property (nonatomic, strong, nullable)PhotonIMThreadSafeArray *readMsgIdscCache;
 @property (nonatomic, strong, nullable)NSDictionary*readMsgIdscDict;
 @property (nonatomic, strong, nullable)PhotonIMTimer   *timer;
+
+@property (nonatomic, strong,nullable) NSMutableArray<PhotonIMMessage *> *messages;
 @end
 
 #define TOKENKEY [NSString stringWithFormat:@"photonim_token_%@",[PhotonContent currentUser].userID]
@@ -59,6 +61,7 @@ static PhotonMessageCenter *center = nil;
 - (void)login{
     // 客户端登录后
     [[PhotonIMClient sharedClient] bindCurrentUserId:[PhotonContent currentUser].userID];
+    _messages = [[[PhotonIMClient sharedClient] getAllSendingMessages] mutableCopy];
     // 获取token
     [self getToken];
 }
@@ -272,24 +275,41 @@ static PhotonMessageCenter *center = nil;
 
 // 重新发送未发送完成的消息
 - (void)reSendAllSendingMessages{
-    NSArray<PhotonIMMessage *> *messages = [[PhotonIMClient sharedClient] getAllSendingMessages];
-    for(PhotonIMMessage *message in messages){
-        message.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-        if(message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio){
-            PhotonIMBaseBody *body = message.messageBody;
-            if ([body.url isNotEmpty]) {// 文件上传完成，直接发送
-                [self _sendMessage:message completion:nil];
-            }else{// 文件上传未完成，先上再发送
-                if (message.messageType == PhotonIMMessageTypeImage) {
-                    [self p_sendImageMessage:message completion:nil];
-                }else if (message.messageType == PhotonIMMessageTypeAudio){
-                    [self p_sendVoiceMessage:message completion:nil];
+    if(self.messages){
+        __weak typeof(self)weakSelf = self;
+        NSArray<PhotonIMMessage *> *messages = [self.messages copy];
+        for(PhotonIMMessage *message in messages){
+            message.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+            if(message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio){
+                PhotonIMBaseBody *body = message.messageBody;
+                if ([body.url isNotEmpty]) {// 文件上传完成，直接发送
+                    [self _sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                        if (succeed) {
+                             [weakSelf.messages removeObject:message];
+                        }
+                       
+                    }];
+                }else{// 文件上传未完成，先上再发送
+                    if (message.messageType == PhotonIMMessageTypeImage) {
+                        [self p_sendImageMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                            if (succeed) {
+                                [weakSelf.messages removeObject:message];
+                            }
+                        }];
+                    }else if (message.messageType == PhotonIMMessageTypeAudio){
+                        [self p_sendVoiceMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                            if (succeed) {
+                                [weakSelf.messages removeObject:message];
+                            }
+                        }];
+                    }
                 }
+            }else if(message.messageType == PhotonIMMessageTypeText){//文本直接发送
+                [self _sendMessage:message completion:nil];
             }
-        }else if(message.messageType == PhotonIMMessageTypeText){//文本直接发送
-            [self _sendMessage:message completion:nil];
         }
     }
+   
 }
 
 // 发送已读消息
