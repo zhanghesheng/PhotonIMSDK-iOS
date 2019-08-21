@@ -33,7 +33,7 @@
     }
     PhotonEmptyTableItem *emptyItem = [[PhotonEmptyTableItem alloc] init];
     emptyItem.itemHeight = 10.5f;
-     emptyItem.backgroudColor = [UIColor clearColor];
+    emptyItem.backgroudColor = [UIColor clearColor];
     [self.items addObject:emptyItem];
     
     PhotonTitleTableItem *titleItem1 = [[PhotonTitleTableItem alloc] init];
