@@ -24,7 +24,10 @@
         if (!succeed && error.code == 1001 && error.em) {
            textItem.tipText = error.em;
         }else if (!succeed){
-             [PhotonUtil showErrorHint:error.em];
+            if (error.code != -1 && error.code != -2) {
+                 [PhotonUtil showErrorHint:error.em];
+            }
+            
         }
         [weakself reloadData];
     }];
@@ -63,7 +66,9 @@
         if (!succeed && error.code == 1001 && error.em) {
             imageItem.tipText = error.em;
         }else if (!succeed){
-            [PhotonUtil showErrorHint:error.em];
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
         }
          [weakself reloadData];
     }];
@@ -84,7 +89,9 @@
         if (!succeed && error.em) {
             audioItem.tipText = error.em;
         }else if (!succeed){
-            [PhotonUtil showErrorHint:error.em];
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
         }
         [weakself reloadData];
     }];
@@ -110,7 +117,9 @@
         if (!succeed && error.code == 1001 && error.em) {
             item.tipText = error.em;
         }else if (!succeed){
-            [PhotonUtil showErrorHint:error.em];
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
         }
         [weakself reloadData];
     }];

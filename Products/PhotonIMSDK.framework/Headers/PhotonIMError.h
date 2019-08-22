@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  1003    消息发送频率过高
  1004    消息不可撤回
  -1      消息发送超时
+ -2      切换账号时，等待发送的消息
  */
 @interface PhotonIMError : NSError
 @property(nonatomic,copy,readonly,nullable,)NSString *em;
