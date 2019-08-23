@@ -20,6 +20,8 @@
  */
 - (void)imClient:(id)client didReceiveSingleMesage:(PhotonIMMessage *)message{
     [self wrapperMessage:message];
+    [[PhotonIMClient sharedClient] updateConversationWithCustomArg1:message.chatType chatWith:message.chatWith arg:1];
+    [[PhotonIMClient sharedClient] updateConversationWithCustomArg2:message.chatType chatWith:message.chatWith arg:2];
 }
 
 
@@ -48,6 +50,9 @@
 // 处理二人聊天收到的信息
 - (void)wrapperMessage:(PhotonIMMessage *)message{
     id item = [self.model wrapperMessage:message];
+    if (!item) {
+        return;
+    }
     [self.model.items addObject:item];
     [self reloadData];
 }

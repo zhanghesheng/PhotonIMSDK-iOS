@@ -145,6 +145,8 @@ static PhotonMessageCenter *center = nil;
 //    message1.messageStatus = PhotonIMMessageStatusSending;
 //    
 //    PhotonIMCustomBody *body1 = [[PhotonIMCustomBody alloc] init];
+//    body1.arg1 = 1;
+//    body1.arg2 = 2;
 //    NSDictionary *dict = @{@"text":item.messageText};
 //    NSData *data= [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
 //    body1.data = data;

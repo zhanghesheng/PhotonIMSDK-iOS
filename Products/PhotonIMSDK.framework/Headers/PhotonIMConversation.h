@@ -88,6 +88,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, copy, nullable)NSDictionary<NSString *, NSString *> *extra;
 
+/*
+ session中最后一条消息自定义扩展字段参数
+ */
+@property (nonatomic, assign)int  lastMsgArg1;
+@property (nonatomic, assign)int  lastMsgArg2;
+
+/**
+ session中自定义扩展字段参数
+ */
+@property (nonatomic, assign)int  customArg1;
+@property (nonatomic, assign)int  customArg2;
+
 /**
  最后一天消息是否为接收的消息
  */

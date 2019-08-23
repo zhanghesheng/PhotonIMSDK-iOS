@@ -290,6 +290,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<PhotonIMConversation *> *)findConversationList:(int)start size:(int)size asc:(BOOL)asc;
 
+// 
+- (void)updateConversationWithLastMsgArg1:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith arg:(int)arg;
+- (void)updateConversationWithLastMsgArg2:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith arg:(int)arg;
+// 自定义字段的操作
+- (void)updateConversationWithCustomArg1:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith arg:(int)arg;
+- (void)updateConversationWithCustomArg2:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith arg:(int)arg;
+- (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg1:(int)arg asc:(BOOL)asc;
+- (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg2:(int)arg asc:(BOOL)asc;
 @end
 
 NS_ASSUME_NONNULL_END
