@@ -60,8 +60,10 @@
         NSArray *lists = [data objectForKey:@"lists"];
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {
-                PhotonIMConversation *conversation = [[PhotonIMConversation alloc] init];
-                conversation.chatWith = [[item objectForKey:@"userId"] isNil];
+                
+                NSString *chatWith = [[item objectForKey:@"userId"] isNil];
+                PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:PhotonIMChatTypeSingle chatWith:chatWith];
+                
                 conversation.FName = [[item objectForKey:@"nickname"] isNil];
                 conversation.FAvatarPath = [[item objectForKey:@"avatar"] isNil];
 

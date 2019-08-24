@@ -120,14 +120,7 @@ static PhotonMessageCenter *center = nil;
 - (void)sendTextMessage:(PhotonTextMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message =[[PhotonIMMessage alloc] init];
-    message.fr = [PhotonContent currentUser].userID;
-    message.to = conversation.chatWith;
-    message.chatWith = conversation.chatWith;
-    message.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-    message.chatType = PhotonIMChatTypeSingle;
-    message.messageType = PhotonIMMessageTypeText;
-    message.messageStatus = PhotonIMMessageStatusSending;
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:PhotonIMChatTypeSingle];
     
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
@@ -135,40 +128,13 @@ static PhotonMessageCenter *center = nil;
     [self _sendMessage:message completion:completion];
     
     
-//    PhotonIMMessage *message1 =[[PhotonIMMessage alloc] init];
-//    message1.fr = [PhotonContent currentUser].userID;
-//    message1.to = conversation.chatWith;
-//    message1.chatWith = conversation.chatWith;
-//    message1.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-//    message1.chatType = PhotonIMChatTypeSingle;
-//    message1.messageType = PhotonIMMessageTypeRaw;
-//    message1.messageStatus = PhotonIMMessageStatusSending;
-//    
-//    PhotonIMCustomBody *body1 = [[PhotonIMCustomBody alloc] init];
-//    body1.arg1 = 1;
-//    body1.arg2 = 2;
-//    NSDictionary *dict = @{@"text":item.messageText};
-//    NSData *data= [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
-//    body1.data = data;
-//    
-//    [message1 setMesageBody:body1];
-//    [self _sendMessage:message1 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-//        PhotonLog(@"error message = %@",error);
-//    }];
-    
     
 }
 
 - (void)sendImageMessage:(PhotonImageMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message =[[PhotonIMMessage alloc] init];
-    message.fr = [PhotonContent currentUser].userID;
-    message.to = conversation.chatWith;
-    message.chatWith = conversation.chatWith;
-    message.timeStamp = item.timeStamp;
-    message.messageType = PhotonIMMessageTypeImage;
-    message.messageStatus = PhotonIMMessageStatusDefault;
-    message.chatType = PhotonIMChatTypeSingle;
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:PhotonIMChatTypeSingle];
+    
     PhotonIMImageBody *body = [[PhotonIMImageBody alloc] init];
     body.localFileName = item.fileName;
     body.whRatio = item.whRatio;
@@ -181,14 +147,8 @@ static PhotonMessageCenter *center = nil;
 
 - (void)sendVoiceMessage:(PhotonVoiceMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
-    PhotonIMMessage *message =[[PhotonIMMessage alloc] init];
-    message.fr = [PhotonContent currentUser].userID;
-    message.to = conversation.chatWith;
-    message.chatWith = conversation.chatWith;
-    message.timeStamp = item.timeStamp;
-    message.messageType = PhotonIMMessageTypeAudio;
-    message.messageStatus = PhotonIMMessageStatusDefault;
-    message.chatType = PhotonIMChatTypeSingle;
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeAudio chatType:PhotonIMChatTypeSingle];
+    
     PhotonIMAudioBody *body = [[PhotonIMAudioBody alloc] init];
     body.localFileName = item.fileName;
     body.mediaTime = item.duration;

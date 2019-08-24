@@ -29,20 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isMessageExist:(PhotonIMMessage *)message;
 
 /**
- 存储一条消息到数据库，如果消息已经存在，此操作无效
-
- @param message <#message description#>
- */
-- (void)saveMessage:(PhotonIMMessage *)message;
-
-/**
- 更新数据库中消息的存储信息，如果消息不存在,此操作无效
-
- @param message <#message description#>
- */
-- (void)updateMessage:(PhotonIMMessage *)message;
-
-/**
  存储或者更新数据 如果数据不存在，则插入一条数据，数据存在则更新
  @param update 是否同时更新会话中的最后一条消息
  @param message <#message description#>

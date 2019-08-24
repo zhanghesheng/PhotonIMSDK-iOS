@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  单人聊天中发送消息的撤回
  
- @param message 撤回消息的对象
+ @param message 要被撤回的那条消息的对象
  */
 - (void)sendWithDrawMessage:(PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 

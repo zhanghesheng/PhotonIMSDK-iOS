@@ -153,7 +153,6 @@ static NSString *message_syncing = @"消息(收取中......)";
             break;
         case PhotonIMConversationEventUpdate:
             break;
-  
         default:
             break;
     }
@@ -167,9 +166,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     [[PhotonContent currentUser] getIgnoreAlert:chatWith completion:^(BOOL success, BOOL open) {
-        PhotonIMConversation *conversation = [[PhotonIMConversation alloc] init];
-        conversation.chatType = chatType;
-        conversation.chatWith = chatWith;
+         PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
         conversation.ignoreAlert = open;
         [[PhotonMessageCenter sharedCenter] updateConversationIgnoreAlert:conversation];
     }];

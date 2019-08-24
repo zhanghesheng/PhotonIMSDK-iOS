@@ -13,11 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PhotonIMConversation : NSObject
 
 /**
- 会话id
- */
-@property(nonatomic, copy, nullable) NSString *CID;
-
-/**
  会话中对方id
  */
 @property(nonatomic, copy, nullable) NSString *chatWith;
@@ -115,7 +110,7 @@ NS_ASSUME_NONNULL_BEGIN
  会话是否设置置顶 默认值为NO（不指定）
  */
 @property(nonatomic, assign) BOOL sticky;
-
+// 初始化方法
 - (instancetype)initWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
 @end
 

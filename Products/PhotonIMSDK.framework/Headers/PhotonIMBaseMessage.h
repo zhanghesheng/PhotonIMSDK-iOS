@@ -12,44 +12,44 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PhotonIMBaseMessage : NSObject
 
 /**
- 消息类型
+ 消息类型，初始化时默认产生，业务端也可设置
  */
 @property(nonatomic, copy, nullable) NSString *messageID;
 
 /**
- 对方id 
+ 对方id SDK内部处理，上行消息业务端非必需设置
  */
 @property(nonatomic, copy, nullable)NSString *chatWith;
 
 /**
- 时间，以毫秒为单位
+ 时间，以毫秒为单位，消息发送时SDK会设置，上行消息业务端非必需设置
  */
 @property(nonatomic, assign) int64_t timeStamp;
+
 /**
- 发送者
+ 发送者，必需
  */
 @property(nonatomic, copy, nullable) NSString *fr;
 /**
- 接收者
+ 接收者，必需
  */
 @property(nonatomic, copy, nullable) NSString *to;
 
 /**
- 消息类型
+ 消息类型，必需
  */
 @property(nonatomic, assign)PhotonIMMessageType messageType;
 
 /**
- 会话类型
+ 会话类型，必需
  */
 @property(nonatomic, assign)PhotonIMChatType chatType;
 
 
 /**
- 扩展信息
+ 扩展信息，非必需
  */
 @property(nonatomic, strong, nullable) NSMutableDictionary<NSString*, NSString*> *extra;
-
 
 
 
@@ -77,6 +77,8 @@ NS_ASSUME_NONNULL_BEGIN
  当前消息在队列中的游标
  */
 @property (nonatomic, assign) int64_t lv;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

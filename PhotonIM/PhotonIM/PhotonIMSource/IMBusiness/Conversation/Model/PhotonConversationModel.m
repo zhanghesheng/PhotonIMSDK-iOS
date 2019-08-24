@@ -18,7 +18,6 @@
 - (void)loadItems:(nullable NSDictionary *)params finish:(void (^)(NSDictionary * _Nullable))finish failure:(void (^)(PhotonErrorDescription * _Nullable))failure{
     [super loadItems:params finish:finish failure:failure];
     NSArray<PhotonIMConversation *> *conversations = [[PhotonIMClient sharedClient] findConversationList:0 size:200 asc:NO];
-//    NSArray<PhotonIMConversation *> *conversations = [[PhotonIMClient sharedClient] findConversationListWithCustomArg1:1 asc:YES];
     if (conversations.count > 0) {
         NSMutableArray *chatWiths = [NSMutableArray array];
         for (PhotonIMConversation *conversation in  conversations) {
@@ -81,13 +80,17 @@
         PhotonLog(@"history session data count: %@",@([lists count]));
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {
-                PhotonIMConversation *conversation = [[PhotonIMConversation alloc] init];
-                conversation.CID = [[item objectForKey:@"userId"] isNil];
-                conversation.chatWith = [[item objectForKey:@"userId"] isNil];
+                
+                NSString *chatWith = [[item objectForKey:@"userId"] isNil];
+                int type = [[[item objectForKey:@"type"] isNil] intValue];
+                PhotonIMChatType chatType = (PhotonIMChatType)type;
+                
+                PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
+                
                 conversation.FName = [[item objectForKey:@"nickname"] isNil];
                 conversation.FAvatarPath = [[item objectForKey:@"avatar"] isNil];
-                int type = [[[item objectForKey:@"type"] isNil] intValue];
-                conversation.chatType = (PhotonIMChatType)type;
+                
+                
                 [conversations addObject:conversation];
                 PhotonConversationItem *conItem = [[PhotonConversationItem alloc] init];
                 conItem.userInfo = conversation;
