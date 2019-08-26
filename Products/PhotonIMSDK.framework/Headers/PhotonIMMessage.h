@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param chatType 所属会话类型
  @return 构建好的i消息对象
  */
-+ (PhotonIMMessage *)withDrawMessageWithFrid:(NSString *)msgID
++ (PhotonIMMessage *)withDrawMessageWithMsgID:(NSString *)msgID
                                         frid:(NSString *)frid
                                 toid:(NSString *)toid
                          messageType:(PhotonIMMessageType)messageType

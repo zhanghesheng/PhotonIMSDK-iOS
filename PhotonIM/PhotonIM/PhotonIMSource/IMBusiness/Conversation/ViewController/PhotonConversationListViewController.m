@@ -164,6 +164,12 @@ static NSString *message_syncing = @"消息(收取中......)";
     [self.dataDispatchSource addSemaphore];
 }
 
+- (void)refreshConversations{
+    
+}
+
+
+
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     [[PhotonContent currentUser] getIgnoreAlert:chatWith completion:^(BOOL success, BOOL open) {
          PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
