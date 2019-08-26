@@ -110,7 +110,14 @@ NS_ASSUME_NONNULL_BEGIN
  会话是否设置置顶 默认值为NO（不指定）
  */
 @property(nonatomic, assign) BOOL sticky;
-// 初始化方法
+
+/**
+ 初始化方法
+
+ @param chatType 会话类型
+ @param chatWith 会话中对方的id
+ @return <#return value description#>
+ */
 - (instancetype)initWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
 @end
 
