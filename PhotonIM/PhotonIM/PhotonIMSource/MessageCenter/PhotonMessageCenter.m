@@ -46,7 +46,6 @@ static PhotonMessageCenter *center = nil;
     [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
-    
 #ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
