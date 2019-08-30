@@ -513,7 +513,10 @@ static PhotonMessageCenter *center = nil;
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"error = %@",error.errorMessage);
             [PhotonUtil showAlertWithTitle:@"Token获取失败" message:error.errorMessage];
-            [self logout];
+            if(error.errorCode == 403){
+                [self logout];
+            }
+            
         }];
     }
 }
