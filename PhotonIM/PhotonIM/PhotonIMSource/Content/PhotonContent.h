@@ -10,7 +10,7 @@
 #import "PhotonAppDelegate.h"
 #import "PhotonUser.h"
 NS_ASSUME_NONNULL_BEGIN
-#define APP_ID @"280f8ef2cec41cde3bed705236ab9bc4"
+#define APP_ID @"326a7a61d5e8f170957f9bf6591a7c9b"
 @interface PhotonContent : NSObject
 + (instancetype)sharedInstance;
 + (PhotonAppDelegate *)sharedAppDelegate;
