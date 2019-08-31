@@ -19,6 +19,7 @@
  @param message 消息
  */
 - (void)imClient:(id)client didReceiveSingleMesage:(PhotonIMMessage *)message{
+    [[PhotonIMClient sharedClient] consumePacket:message.lt lv:message.lv];
     [self wrapperMessage:message];
     [[PhotonIMClient sharedClient] updateConversationWithCustomArg1:message.chatType chatWith:message.chatWith arg:1];
     [[PhotonIMClient sharedClient] updateConversationWithCustomArg2:message.chatType chatWith:message.chatWith arg:2];
