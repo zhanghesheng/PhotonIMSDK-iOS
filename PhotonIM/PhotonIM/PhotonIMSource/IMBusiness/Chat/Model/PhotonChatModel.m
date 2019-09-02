@@ -88,9 +88,6 @@
             if(fromeType == PhotonChatMessageFromSelf){
                 imageItem.localPath = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:imageItem.fileName];
             }
-            if (!CGSizeEqualToSize(imgBody.imageSize, CGSizeZero)) {
-                imageItem.imageSize = imgBody.imageSize;
-            }
             imageItem.whRatio = imgBody.whRatio;
             
             imageItem.userInfo = message;
