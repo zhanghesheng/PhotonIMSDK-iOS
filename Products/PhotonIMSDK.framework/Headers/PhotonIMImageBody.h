@@ -17,16 +17,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable)NSString *thumbURL;
 
-
-/**
- 图片大小
- */
-@property (nonatomic, assign)CGSize imageSize;
-
 /**
  图片的宽高比
  */
 @property (nonatomic, assign)CGFloat whRatio;
+
++ (PhotonIMImageBody *)videoBodyWithURL:(NSString *)url
+                            thumbURL:(nullable NSString *)thumbURL
+                               localFileName:(nullable NSString *)localFileName
+                                whRatio:(CGFloat)whRatio;
 @end
 
 NS_ASSUME_NONNULL_END

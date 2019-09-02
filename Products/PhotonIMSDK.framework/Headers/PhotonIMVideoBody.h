@@ -11,7 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonIMVideoBody : PhotonIMMediaBody
+@property(nonatomic, copy, nullable) NSString *coverUrl;
+@property(nonatomic, assign)CGFloat  whRatio;
 
++ (PhotonIMVideoBody *)videoBodyWithURL:(NSString *)url
+                              mediaTime:(int64_t)mediaTime
+                               coverUrl:(nullable NSString *)coverUrl
+                                whRatio:(CGFloat)whRatio
+                          localFileName:(nullable NSString *)localFileName;
 @end
 
 NS_ASSUME_NONNULL_END
