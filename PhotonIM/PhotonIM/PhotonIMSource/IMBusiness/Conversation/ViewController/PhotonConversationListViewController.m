@@ -132,7 +132,6 @@ static NSString *message_syncing = @"消息(收取中......)";
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
         [weakSlef removeNoDataView];
         [weakSlef.uiDispatchSource addSemaphore];
-        [weakSlef reloadData];
         [weakSlef endRefreshing];
     } failure:^(PhotonErrorDescription * _Nullable error) {
         [PhotonUtil showAlertWithTitle:@"加载会话列表失败" message:error.errorMessage];
@@ -172,13 +171,13 @@ static NSString *message_syncing = @"消息(收取中......)";
     _refreshCount++;
     __weak typeof(self)weakSelf = self;
     if (!_imTimer) {
-        _imTimer = [PhotonIMTimer initWithInterval:2 delay:1 repeat:NO targetQueue:dispatch_get_main_queue() handler:^{
+        _imTimer = [PhotonIMTimer initWithInterval:1 delay:1 repeat:NO targetQueue:dispatch_get_main_queue() handler:^{
             if (!weakSelf.isExcute) {
                 [weakSelf startRefreshConversations];
             }
         }];
     }
-    if (self.refreshCount > 5) {
+    if (self.refreshCount > 2) {
         [weakSelf startRefreshConversations];
     }
 }
