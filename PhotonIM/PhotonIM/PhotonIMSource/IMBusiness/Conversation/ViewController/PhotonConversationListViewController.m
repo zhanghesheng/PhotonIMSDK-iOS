@@ -160,8 +160,9 @@ static NSString *message_syncing = @"消息(收取中......)";
         default:
             break;
     }
-    [self setTabBarBadgeValue];
+   
     if (!self.isAppeared) {
+        [self setTabBarBadgeValue];
         self.needRefreshData  = YES;
         return;
     }
@@ -184,6 +185,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)startRefreshConversations{
+    [self setTabBarBadgeValue];
     if (!self.isExcute) {
         self.refreshCount = 0;
         [self.imTimer cancel];
