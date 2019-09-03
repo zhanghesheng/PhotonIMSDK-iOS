@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  已读消息的id集合
  */
-@property (nonatomic, copy, nullable)NSArray  *readMagIds;
+@property (nonatomic, copy, nullable)NSArray  *readMsgIDs;
 
 
 /**
