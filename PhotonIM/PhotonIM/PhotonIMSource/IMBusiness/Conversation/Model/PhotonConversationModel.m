@@ -11,7 +11,7 @@
 #import "PhotonMessageCenter.h"
 #import <MMKV/MMKV.h>
 @interface PhotonConversationModel()
-@property (nonatomic, strong)NSMutableArray  *cache;
+@property (nonatomic, strong)PhotonIMThreadSafeArray  *cache;
 @end
 
 @implementation PhotonConversationModel
@@ -103,9 +103,9 @@
     }
 }
 
-- (NSMutableArray *)cache{
+- (PhotonIMThreadSafeArray *)cache{
     if (!_cache) {
-        _cache = [NSMutableArray array];
+        _cache = [PhotonIMThreadSafeArray array];
     }
     return _cache;
 }

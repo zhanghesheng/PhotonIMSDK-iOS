@@ -43,7 +43,7 @@
     if (data.count > 0) {
         NSArray *lists = [data objectForKey:@"lists"];
         if (lists.count > 0) {
-            self.items = [NSMutableArray arrayWithCapacity:lists.count];
+            self.items = [PhotonIMThreadSafeArray arrayWithCapacity:lists.count];
             for (NSDictionary *item in lists) {
                 PhotonUser *user = [[PhotonUser alloc] init];
                 user.userID = [[item objectForKey:@"userId"] isNil];

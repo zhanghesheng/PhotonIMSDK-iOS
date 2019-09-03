@@ -24,9 +24,9 @@
 }
 - (void)wrappResponseddDict:(NSDictionary *)dict{
 }
-- (NSMutableArray *)items{
+- (PhotonIMThreadSafeArray *)items{
     if (!_items) {
-        _items = [NSMutableArray array];
+        _items = [PhotonIMThreadSafeArray array];
     }
     return _items;
 }

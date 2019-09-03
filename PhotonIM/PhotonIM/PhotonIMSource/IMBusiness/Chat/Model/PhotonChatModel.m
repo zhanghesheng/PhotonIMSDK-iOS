@@ -38,7 +38,7 @@
         NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
         [totolItems addObjectsFromArray:items];
         [totolItems addObjectsFromArray:self.items];
-        self.items = [NSMutableArray arrayWithArray:totolItems];
+        self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
         if (finish) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 finish(nil);
