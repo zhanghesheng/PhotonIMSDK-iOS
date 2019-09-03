@@ -46,15 +46,19 @@ static PhotonMessageCenter *center = nil;
     [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
-#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
     // 是否开启断言，debug模式下推荐开启
     [[PhotonIMClient sharedClient] setAssertEnable:YES];
-#else
-    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
-    [[PhotonIMClient sharedClient] setAssertEnable:NO];
-#endif
+//#ifdef DEBUG
+//    // 是否在写log时开启控制台日志输出，debug模式下建议开启
+//    [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
+//    // 是否开启断言，debug模式下推荐开启
+//    [[PhotonIMClient sharedClient] setAssertEnable:YES];
+//#else
+//    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
+//    [[PhotonIMClient sharedClient] setAssertEnable:NO];
+//#endif
 }
 
 - (void)login{
