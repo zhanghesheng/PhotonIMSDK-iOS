@@ -36,12 +36,16 @@ static PhotonMessageCenter *center = nil;
     dispatch_once(&onceToken, ^{
         center = [[self alloc] init];
         [[PhotonIMClient sharedClient] addObservers:center];
-        
+       
     });
     return center;
 }
+- (void)handleAppWillEnterForegroundNotification:(id)enter{
+    [self getToken];
+}
 
 - (void)initPhtonIMSDK{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
     // 通过注册appid 完成sdk的初始化
     [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
