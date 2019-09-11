@@ -41,7 +41,6 @@ static PhotonMessageCenter *center = nil;
     return center;
 }
 - (void)handleAppWillEnterForegroundNotification:(id)enter{
-    [self getToken];
 }
 
 - (void)initPhtonIMSDK{
