@@ -76,7 +76,7 @@
         _iconView = [[UIImageView alloc] init];
         _iconView.backgroundColor = [UIColor clearColor];
         _iconView.userInteractionEnabled = NO;
-        _iconView.image = [UIImage imageNamed:@"account_icon"];
+        _iconView.image = [UIImage imageNamed:@"photon_icon"];
         _iconView.contentMode = UIViewContentModeScaleAspectFit;
     }
     return _iconView;
