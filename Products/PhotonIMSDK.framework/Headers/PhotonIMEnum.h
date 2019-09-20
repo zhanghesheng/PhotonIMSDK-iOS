@@ -183,4 +183,16 @@ typedef NS_ENUM(NSInteger, PhotonIMNetworkType) {
     PhotonIMNetworkType3G      = 3,
     PhotonIMNetworkType4g      = 4,
 };
+
+typedef NS_ENUM(NSInteger, PhotonIMConversationAtType) {
+    PhotonIMConversationAtTypeNoAt = 0,//
+    PhotonIMConversationAtTypeAtMe = 1,
+    PhotonIMConversationTypeAtAll = 2,
+};
+
+typedef NS_ENUM(NSInteger, PhotonIMAtType) {
+    PhotonIMAtTypeNoAt = 0,
+    PhotonIMAtTypeNotAtAll = 1,
+    PhotonIMAtTypeAtAll = 2,
+};
 #endif /* PhotonIMEnum_h */

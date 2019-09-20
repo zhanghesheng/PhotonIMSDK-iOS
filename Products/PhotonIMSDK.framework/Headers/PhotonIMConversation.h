@@ -111,6 +111,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property(nonatomic, assign) BOOL sticky;
 
+
+/**
+此值不为空，则表示还有未读的at消息
+ */
+@property(nonatomic, assign)PhotonIMConversationAtType apType;
+
 /**
  初始化方法
 
