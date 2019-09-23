@@ -2,15 +2,15 @@
 //  PhotonContactViewController.h
 //  PhotonIM
 //
-//  Created by Bruce on 2019/9/23.
+//  Created by Bruce on 2019/6/19.
 //  Copyright © 2019 Bruce. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "PhotonBaseViewController.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PhotonContactViewController : PhotonBaseViewController
+@interface PhotonSingleContactViewController : PhotonBaseViewController
 
 @end
 

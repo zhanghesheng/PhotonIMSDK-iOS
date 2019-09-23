@@ -10,8 +10,8 @@
 #import "PhotonMessageCenter.h"
 #import "PhotonChatTransmitModel.h"
 #import "PhotonEmptyTableItem.h"
-#import "PhotonContactItem.h"
-#import "PhotonContactCell.h"
+#import "PhotonBaseContactItem.h"
+#import "PhotonBaseContactCell.h"
 #import "PhotonChatTransmitCell.h"
 #import "PhotonChatTransmitItem.h"
 @interface PhotonChatTransmitListDataSource ()

@@ -10,8 +10,8 @@
 #import "PhotonMessageSettingItem.h"
 #import "PhotonMessageSettingCell.h"
 #import "PhotonNetworkService.h"
-#import "PhotonContactItem.h"
-#import "PhotonContactCell.h"
+#import "PhotonBaseContactItem.h"
+#import "PhotonBaseContactCell.h"
 #import "PhotonEmptyTableItem.h"
 @interface PhotonMessageSettingDataSource ()
 @end
@@ -20,8 +20,8 @@
 - (Class)tableView:(UITableView *)tableView cellClassForObject:(id)object{
     if ([object isKindOfClass:[PhotonMessageSettingItem class]]) {
         return [PhotonMessageSettingCell class];
-    }else if ([object isKindOfClass:[PhotonContactItem class]]){
-        return [PhotonContactCell class];
+    }else if ([object isKindOfClass:[PhotonBaseContactItem class]]){
+        return [PhotonBaseContactCell class];
     }
     return [super tableView:tableView cellClassForObject:object];
 }
@@ -61,9 +61,9 @@
     emptyItem.backgroudColor = [UIColor clearColor];
     [self.items addObject:emptyItem];
     
-    PhotonContactItem *contactItem = [[PhotonContactItem alloc] init];
-    contactItem.fNickName = self.conversation.FName?self.conversation.FName:self.conversation.chatWith;
-    contactItem.fIcon = self.conversation.FAvatarPath;
+    PhotonBaseContactItem *contactItem = [[PhotonBaseContactItem alloc] init];
+    contactItem.contactName = self.conversation.FName?self.conversation.FName:self.conversation.chatWith;
+    contactItem.contactAvatar = self.conversation.FAvatarPath;
     contactItem.itemHeight = 63;
     contactItem.userInfo = [PhotonContent friendDetailInfo:self.conversation.chatWith];
     [self.items addObject:contactItem];

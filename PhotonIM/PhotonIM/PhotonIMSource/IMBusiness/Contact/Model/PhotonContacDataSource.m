@@ -7,12 +7,12 @@
 //
 
 #import "PhotonContacDataSource.h"
-#import "PhotonContactItem.h"
-#import "PhotonContactCell.h"
+#import "PhotonBaseContactItem.h"
+#import "PhotonBaseContactCell.h"
 @implementation PhotonContacDataSource
 - (Class)tableView:(UITableView *)tableView cellClassForObject:(id)object{
-    if ([object isKindOfClass:[PhotonContactItem class]]) {
-        return [PhotonContactCell class];
+    if ([object isKindOfClass:[PhotonBaseContactItem class]]) {
+        return [PhotonBaseContactCell class];
     }
     return [super tableView:tableView cellClassForObject:object];
 }

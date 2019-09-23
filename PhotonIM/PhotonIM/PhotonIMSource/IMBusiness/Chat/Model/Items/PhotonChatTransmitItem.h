@@ -6,11 +6,11 @@
 //  Copyright © 2019 Bruce. All rights reserved.
 //
 
-#import "PhotonContactItem.h"
+#import "PhotonBaseContactItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PhotonChatTransmitItem : PhotonContactItem
+@interface PhotonChatTransmitItem : PhotonBaseContactItem
 @property (nonatomic, assign)BOOL selected;
 @end
 

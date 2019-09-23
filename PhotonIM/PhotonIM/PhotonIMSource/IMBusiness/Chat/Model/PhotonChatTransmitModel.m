@@ -20,8 +20,8 @@
     for (PhotonIMConversation *conversation in conversations) {
         PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
         PhotonChatTransmitItem *item = [[PhotonChatTransmitItem alloc] init];
-        item.fNickName = user.nickName?user.nickName:conversation.chatWith;
-        item.fIcon = user.avatarURL;
+        item.contactName = user.nickName?user.nickName:conversation.chatWith;
+        item.contactAvatar = user.avatarURL;
         item.selected = NO;
         item.userInfo = conversation;
         [self.items addObject:item];
@@ -68,8 +68,8 @@
                 conversation.FAvatarPath = [[item objectForKey:@"avatar"] isNil];
 
                 PhotonChatTransmitItem *item = [[PhotonChatTransmitItem alloc] init];
-                item.fNickName = conversation.FName?conversation.FName:conversation.chatWith;
-                item.fIcon = conversation.FAvatarPath;
+                item.contactName = conversation.FName?conversation.FName:conversation.chatWith;
+                item.contactAvatar = conversation.FAvatarPath;
                 item.selected = NO;
                 item.userInfo = conversation;
                 [self.items addObject:item];

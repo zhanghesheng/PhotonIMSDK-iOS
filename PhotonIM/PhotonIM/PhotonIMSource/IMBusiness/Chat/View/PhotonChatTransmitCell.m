@@ -74,7 +74,7 @@
 
 
 + (CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{
-    PhotonContactItem *item = (PhotonContactItem *)object;
+    PhotonBaseContactItem *item = (PhotonBaseContactItem *)object;
     return item.itemHeight;
 }
 
