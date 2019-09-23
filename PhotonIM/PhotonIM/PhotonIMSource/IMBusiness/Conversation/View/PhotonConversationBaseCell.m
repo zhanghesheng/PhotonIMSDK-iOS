@@ -79,7 +79,7 @@
         [self.badgeView setBadgeValue:valueStr];
         }
     }
-    BOOL isSending = [conversation.lastMsgContent isNotEmpty] && (conversation.lastMsgStatus == PhotonIMMessageStatusSending || conversation.lastMsgStatus == PhotonIMMessageStatusDefault);
+    BOOL isSending = [conversation.lastMsgContent isNotEmpty] && (conversation.lastMsgStatus == PhotonIMMessageStatusSending);
     BOOL isSentFailed = [conversation.lastMsgContent isNotEmpty] && (conversation.lastMsgStatus == PhotonIMMessageStatusFailed);
     if (!conversation.lastMsgIsReceived) {
         isSending = NO;

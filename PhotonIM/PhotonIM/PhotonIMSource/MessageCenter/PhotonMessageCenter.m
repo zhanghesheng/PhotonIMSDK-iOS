@@ -122,7 +122,7 @@ static PhotonMessageCenter *center = nil;
 - (void)sendTextMessage:(PhotonTextMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:PhotonIMChatTypeSingle];
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
     
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
@@ -135,7 +135,7 @@ static PhotonMessageCenter *center = nil;
 
 - (void)sendImageMessage:(PhotonImageMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:PhotonIMChatTypeSingle];
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:conversation.chatType];
     
     PhotonIMImageBody *body = [[PhotonIMImageBody alloc] init];
     body.localFileName = item.fileName;
@@ -149,7 +149,7 @@ static PhotonMessageCenter *center = nil;
 
 - (void)sendVoiceMessage:(PhotonVoiceMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
-    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeAudio chatType:PhotonIMChatTypeSingle];
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeAudio chatType:conversation.chatType];
     
     PhotonIMAudioBody *body = [[PhotonIMAudioBody alloc] init];
     body.localFileName = item.fileName;
@@ -300,6 +300,9 @@ static PhotonMessageCenter *center = nil;
 
 // 发送已读消息
 - (void)sendReadMessage:(NSArray<NSString *> *)readMsgIDs conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+    if (conversation.chatType != PhotonIMChatTypeSingle) {
+        return;
+    }
     [self.imClient sendReadMessage:readMsgIDs fromid:[PhotonContent currentUser].userID toid:conversation.chatWith completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
             if (completion) {

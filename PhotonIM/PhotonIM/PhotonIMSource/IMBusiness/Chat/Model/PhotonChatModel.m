@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        self.pageSize = 50;
+        self.pageSize = 10;
         _anchorMsgId = @"";
         
     }
@@ -25,14 +25,13 @@
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
-    dispatch_block_t block = ^(void){
-       weakself.anchorMsgId = [[self.items.firstObject userInfo] messageID];
-       NSArray<PhotonIMMessage *>* messages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:weakself.anchorMsgId beforeAuthor:beforeAnchor asc:asc size:(int)weakself.pageSize];
+    [imclient loadHistoryMessages:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)weakself.pageSize reaultBlock:^(NSArray<PhotonIMMessage *> * _Nonnull messages, NSString * _Nonnull an) {
         NSMutableArray *items = [NSMutableArray array];
+        weakself.anchorMsgId = [an copy];
         for (PhotonIMMessage *msg in messages) {
-           id item =  [weakself wrapperMessage:msg];
+            id item =  [weakself wrapperMessage:msg];
             if (item) {
-                 [items addObject:item];
+                [items addObject:item];
             }
         }
         NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
@@ -44,9 +43,7 @@
                 finish(nil);
             });
         }
-    };
-    block();
-//    [imclient runInPhotonIMDBReadQueue:block];
+    }] ;
 }
 
 // 处理二人聊天收到的信息

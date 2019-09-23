@@ -125,7 +125,7 @@
     if (item.fromType == PhotonChatMessageFromSelf)
     {
         // 发送中转小菊花
-        if (message.messageStatus == PhotonIMMessageStatusSending || message.messageStatus == PhotonIMMessageStatusDefault){
+        if (message.messageStatus == PhotonIMMessageStatusSending){
             [self.contentView addSubview:self.indicatorView];
             self.indicatorView.hidden = NO;
             [self.indicatorView mas_makeConstraints:^(MASConstraintMaker *make) {

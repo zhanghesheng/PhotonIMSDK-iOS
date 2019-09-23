@@ -18,12 +18,11 @@
  @param client client im sdk client 句柄
  @param message 消息
  */
-- (void)imClient:(id)client didReceiveSingleMesage:(PhotonIMMessage *)message{
+- (void)imClient:(id)client didReceiveMesage:(PhotonIMMessage *)message{
     [[PhotonIMClient sharedClient] consumePacket:message.lt lv:message.lv];
     [self wrapperMessage:message];
-    [[PhotonIMClient sharedClient] updateConversationWithCustomArg1:message.chatType chatWith:message.chatWith arg:1];
-    [[PhotonIMClient sharedClient] updateConversationWithCustomArg2:message.chatType chatWith:message.chatWith arg:2];
 }
+
 
 
 /**
@@ -34,6 +33,10 @@
  */
 - (void)imClient:(id)client didReceiveSingleWithDrawMesage:(PhotonIMMessage *)message{
     [self wrapperWithdrawMessage:message];
+}
+
+- (void)imClient:(id)client didReceiveGroupWithDrawMesage:(PhotonIMMessage *)message{
+     [self wrapperWithdrawMessage:message];
 }
 
 
@@ -64,6 +67,7 @@
          [self reloadData];
     }
 }
+
 
 // 消息已读的处理
 - (void)wrapperReadMessage:(PhotonIMMessage *)message{
