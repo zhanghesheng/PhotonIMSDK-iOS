@@ -67,6 +67,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy, nullable)NSString  *notic;
 
 
+/**
+ 是否在服务端保存此消息，默认值为YES（保存）
+ */
+@property (nonatomic,assign,readonly)BOOL saveMessageOnServer;
+
+/**
+ 是否针对此条消息给对方发送push，默认值为YES（发送）
+ */
+@property (nonatomic,assign,readonly)BOOL needSendPush;
+
+
 #pragma mark ----- 消息在服务端的位置标记，使用sdk的数据库不需要关注此项 -----
 /**
  当前消息属于哪个消息队列
@@ -78,6 +89,18 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) int64_t lv;
 
+
+/**
+ 设置在服务端数据库不保存此条消息
+ */
+- (void)unSaveMessageOnServer;
+
+
+/**
+  针对此条消息不给对方发送push
+
+ */
+- (void)unSendPush;
 
 @end
 
