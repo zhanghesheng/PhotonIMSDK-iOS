@@ -49,7 +49,7 @@
                 user.userID = [[item objectForKey:@"userId"] isNil];
                 user.nickName = [[item objectForKey:@"nickname"] isNil];
                 user.avatarURL = [[item objectForKey:@"avatar"] isNil];
-                user.type = [[[item objectForKey:@"type"] isNil] intValue];
+                user.type = [[item objectForKey:@"type"] isNil]?1:[[[item objectForKey:@"type"] isNil] intValue];
                 [PhotonContent addFriendToDB:user];
                 PhotonBaseContactItem *conItem = [[PhotonBaseContactItem alloc] init];
                 conItem.contactAvatar = user.avatarURL;

@@ -8,6 +8,7 @@
 
 #import "PhotonGroupContactModel.h"
 #import "PhotonBaseContactItem.h"
+#import "PhotonGroupContactItem.h"
 @implementation PhotonGroupContactModel
 - (instancetype)init
 {
@@ -44,19 +45,38 @@
         if (lists.count > 0) {
             self.items = [PhotonIMThreadSafeArray arrayWithCapacity:lists.count];
             for (NSDictionary *item in lists) {
-//                PhotonUser *user = [[PhotonUser alloc] init];
-//                user.userID = [[item objectForKey:@"userId"] isNil];
-//                user.nickName = [[item objectForKey:@"nickname"] isNil];
-//                user.avatarURL = [[item objectForKey:@"avatar"] isNil];
-//                user.type = [[[item objectForKey:@"type"] isNil] intValue];
-//                [PhotonContent addFriendToDB:user];
-                PhotonBaseContactItem *conItem = [[PhotonBaseContactItem alloc] init];
+                PhotonUser *user = [[PhotonUser alloc] init];
+                user.userID = [[item objectForKey:@"gid"] isNil];
+                user.nickName = [[item objectForKey:@"name"] isNil];
+                user.avatarURL = [[item objectForKey:@"avatar"] isNil];
+                user.type = [[item objectForKey:@"type"] isNil]?2:[[[item objectForKey:@"type"] isNil] intValue];
+                [PhotonContent addFriendToDB:user];
+                PhotonGroupContactItem *conItem = [[PhotonGroupContactItem alloc] init];
                 conItem.contactAvatar = [[item objectForKey:@"avatar"] isNil];;
                 conItem.contactName = [[item objectForKey:@"name"] isNil];
-                conItem.contactID = [[item objectForKey:@"gid"] isNil];;
+                conItem.contactID = [[item objectForKey:@"gid"] isNil];
+                conItem.isInGroup = NO;
                 [self.items addObject:conItem];
             }
         }
     }
+}
+
+
+- (void)enterGroup:(NSString *)gid finish:(void (^)(NSDictionary * _Nullable))finish failure:(void (^)(PhotonErrorDescription * _Nullable))failure{
+    if (![gid isNotEmpty]) {
+        return;
+    }
+    NSDictionary *patamter = @{@"gid":gid};
+    [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/group/remote/join" paramter:patamter completion:^(NSDictionary * _Nonnull responseDict) {
+        if (finish) {
+            finish(nil);
+        }
+        [PhotonUtil hiddenLoading];
+    } failure:^(PhotonErrorDescription * _Nonnull error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
 }
 @end

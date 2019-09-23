@@ -10,8 +10,11 @@
 #import "PhotonBaseViewController+Refresh.h"
 #import "PhotonGroupContactModel.h"
 #import "PhotonContacDataSource.h"
+#import "PhotonGroupContactItem.h"
+#import "PhotonGroupContactCell.h"
+#import "PhotonChatViewController.h"
 
-@interface PhotonGroupContactViewController ()
+@interface PhotonGroupContactViewController ()<PhotonGroupContactCellDelegate>
 @property (nonatomic, strong, nullable)PhotonGroupContactModel *model;
 @end
 
@@ -60,11 +63,55 @@
     return _model;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([cell isKindOfClass:[PhotonGroupContactCell class]]) {
+        PhotonGroupContactCell *tempCell = (PhotonGroupContactCell *)cell;
+        tempCell.delegate = self;
+    }
+}
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-  
+    if (indexPath.row < self.model.items.count) {
+        PhotonGroupContactItem *temp_Item = (PhotonGroupContactItem *)[self.model.items objectAtIndex:indexPath.row];
+        if (temp_Item.isInGroup) {
+            PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:PhotonIMChatTypeGroup chatWith:temp_Item.contactID];
+            conversation.FName = temp_Item.contactName;
+            
+            PhotonChatViewController *chatCtl = [[PhotonChatViewController alloc] initWithConversation:conversation];
+            [self.navigationController pushViewController:chatCtl animated:YES];
+            
+        }
+    }
 }
 
+- (void)refreshCellAfterEnterGroup:(NSIndexPath *)indexPath{
+    if (indexPath.row < self.model.items.count) {
+        PhotonGroupContactItem *temp_Item = (PhotonGroupContactItem *)[self.model.items objectAtIndex:indexPath.row];
+        temp_Item.isInGroup = YES;
+        [self.model.items replaceObjectAtIndex:indexPath.row withObject:temp_Item];
+        [PhotonUtil runMainThread:^{
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    }
+    
+}
+
+- (void)cellEnterGroup:(PhotonGroupContactCell *)cell item:(id)item{
+    PhotonGroupContactItem *temp_Item = (PhotonGroupContactItem *)item;
+    if (!temp_Item || self.model.items.count == 0) {
+        return;
+    }
+    NSInteger index = [self.model.items indexOfObject:item];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    PhotonWeakSelf(self);
+    if (!temp_Item.isInGroup) {
+        [self.model enterGroup:temp_Item.contactID finish:^(NSDictionary * _Nullable dict) {
+            [weakself refreshCellAfterEnterGroup:indexPath];
+        } failure:^(PhotonErrorDescription * _Nullable erro) {
+            
+        }];
+    }
+}
 
 @end

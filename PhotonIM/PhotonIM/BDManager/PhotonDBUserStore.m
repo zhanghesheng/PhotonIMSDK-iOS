@@ -25,14 +25,43 @@ ext3 TEXT,\
 ext4 TEXT,\
 ext5 TEXT,\
 PRIMARY KEY(uid, fid))"
-
 #define     SQL_UPDATE_FRIEND               @"REPLACE INTO %@ (uid, fid, username, nickname, avatar, remark, type, ext1, ext2, ext3, ext4, ext5) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
 #define     SQL_SELECT_FRIENDS              @"SELECT * FROM %@ WHERE uid = '%@'"
-
 #define     SQL_SELECT_FRIEND              @"SELECT * FROM %@ WHERE uid = '%@' and fid = '%@'"
-
 #define     SQL_DELETE_FRIEND               @"DELETE FROM %@ WHERE uid = '%@' and fid = '%@'"
+
+
+#define     SQL_CREATE_UID_GROUPS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
+gid TEXT,\
+ext1 TEXT,\
+ext2 TEXT,\
+ext3 TEXT,\
+ext4 TEXT,\
+ext5 TEXT,\
+ext6 TEXT,\
+ext7 TEXT,\
+ext8 TEXT,\
+ext9 TEXT,\
+ext10 TEXT,\
+PRIMARY KEY(gid))"
+
+
+#define     SQL_CREATE_GROUP_UIDS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
+uid TEXT,\
+ext1 TEXT,\
+ext2 TEXT,\
+ext3 TEXT,\
+ext4 TEXT,\
+ext5 TEXT,\
+ext6 TEXT,\
+ext7 TEXT,\
+ext8 TEXT,\
+ext9 TEXT,\
+ext10 TEXT,\
+PRIMARY KEY(uid))"
+
+
+
 @implementation PhotonDBUserStore
 - (instancetype)init
 {
@@ -50,6 +79,11 @@ PRIMARY KEY(uid, fid))"
 {
     NSString *sqlString = [NSString stringWithFormat:SQL_CREATE_FRIENDS_TABLE, FRIENDS_TABLE_NAME];
     return [self createTable:FRIENDS_TABLE_NAME withSQL:sqlString];
+}
+
+- (BOOL)createTable:(NSString *)tableName{
+    NSString *sqlString = [NSString stringWithFormat:SQL_CREATE_FRIENDS_TABLE, tableName];
+    return [self createTable:tableName withSQL:sqlString];
 }
 
 - (BOOL)addFriend:(nullable PhotonUser *)user forUid:(nullable NSString *)uid
@@ -101,7 +135,6 @@ PRIMARY KEY(uid, fid))"
 {
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     NSString *sqlString = [NSString stringWithFormat:SQL_SELECT_FRIENDS, FRIENDS_TABLE_NAME, uid];
-    
     PhotonWeakSelf(self)
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet *retSet) {
         while ([retSet next]) {
@@ -146,7 +179,7 @@ PRIMARY KEY(uid, fid))"
     user.nickName = [retSet stringForColumn:@"nickname"];
     user.avatarURL = [retSet stringForColumn:@"avatar"];
     user.remark = [retSet stringForColumn:@"remark"];
-    user.type = [[retSet stringForColumn:@"remark"] intValue];
+    user.type = [[retSet stringForColumn:@"type"] intValue];
     return user;
 }
 @end
