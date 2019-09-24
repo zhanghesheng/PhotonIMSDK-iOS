@@ -7,7 +7,7 @@
 //
 
 #import "PhotonChatViewController+Send.h"
-
+#import "PhotonGroupMemberListViewController.h"
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
 // 发送文本消息
@@ -140,4 +140,15 @@
     }
 }
 
+- (void)processAtAction:(PhotonCharBar *)charBar{
+    if (self.conversation.chatType == PhotonIMChatTypeGroup) {
+        PhotonGroupMemberListViewController *memberListCtl = [[PhotonGroupMemberListViewController alloc] initWithGid:self.conversation.chatWith result:^(AtType type, NSDictionary * _Nullable resultDict) {
+            charBar.atType = type;
+            charBar.atInfo = [resultDict copy];
+        }];
+        [self.navigationController pushViewController:memberListCtl animated:YES];
+    }
+   
+    
+}
 @end

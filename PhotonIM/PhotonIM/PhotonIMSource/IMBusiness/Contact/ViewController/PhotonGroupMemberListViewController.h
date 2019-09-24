@@ -7,10 +7,13 @@
 //
 
 #import "PhotonBaseViewController.h"
-
+#import "PhotonMacros.h"
 NS_ASSUME_NONNULL_BEGIN
+
+typedef void(^ PhotonGroupMemberListBlock)(AtType type,NSDictionary * _Nullable);
+
 @interface PhotonGroupMemberListViewController : PhotonBaseViewController
-- (instancetype)initWithGid:(NSString *)gid;
+- (instancetype)initWithGid:(NSString *)gid result:(PhotonGroupMemberListBlock)result;
 @end
 
 NS_ASSUME_NONNULL_END

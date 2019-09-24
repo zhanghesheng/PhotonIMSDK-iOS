@@ -170,6 +170,25 @@
                 }
             }
         }
+        
+        if ([textView.text characterAtIndex:range.location] == ' ') {
+            NSUInteger location = range.location;
+            NSUInteger length = range.length;
+            while (location != 0) {
+                location --;
+                length ++ ;
+                char c = [textView.text characterAtIndex:location];
+                if (c == '@') {
+                    textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
+                    [self p_reloadTextViewWithAnimation:YES];
+                    return NO;
+                }
+                else if (c == ']') {
+                    return YES;
+                }
+            }
+        }
+        
     }
      return YES;
     

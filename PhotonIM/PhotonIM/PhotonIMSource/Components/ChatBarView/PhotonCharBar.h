@@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)NSInteger maxTextWordCount;
 @property (nonatomic, strong, readonly,nullable) UITextView *textView;
 @property (nonatomic, assign) BOOL activity;
+@property (nonatomic,assign)AtType atType;
+@property (nonatomic,copy)NSDictionary *atInfo;
 
 - (void)addEmojiString:(nullable NSString *)emojiString;
 

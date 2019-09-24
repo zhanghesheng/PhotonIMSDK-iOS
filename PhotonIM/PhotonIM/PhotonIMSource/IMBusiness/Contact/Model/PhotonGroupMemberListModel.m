@@ -42,11 +42,14 @@
     NSDictionary *data = [dict objectForKey:@"data"];
     if (data.count > 0) {
         NSArray *lists = [data objectForKey:@"lists"];
-        PhotonTitleTableItem *allItem = [[PhotonTitleTableItem alloc]init];
-        allItem.title = [NSString stringWithFormat:@"所有人(%@)",@(data.count)];
-        [self.items addObject:allItem];
+        
         if (lists.count > 0) {
             self.items = [PhotonIMThreadSafeArray arrayWithCapacity:lists.count];
+            PhotonTitleTableItem *allItem = [[PhotonTitleTableItem alloc]init];
+            self.memberCount = lists.count;
+            allItem.title = [NSString stringWithFormat:@"所有人(%@)",@(lists.count)];
+            allItem.itemHeight = 70.0;
+            [self.items addObject:allItem];
             for (NSDictionary *item in lists) {
                 PhotonUser *user = [[PhotonUser alloc] init];
                 user.userID = [[item objectForKey:@"userId"] isNil];
@@ -59,6 +62,7 @@
                     item.contactID = user.userID;
                     item.contactName = user.nickName;
                     item.contactAvatar = user.avatarURL;
+                    item.userInfo = user;
                     [self.items addObject:item];
                 }
             }

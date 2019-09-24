@@ -15,6 +15,7 @@
 #import "PhotonBaseContactCell.h"
 #import "PhotonChatTransmitCell.h"
 #import "PhotonChatTransmitItem.h"
+#import "PhotonTitleTableItem.h"
 @interface PhotonGroupMemberListViewController ()<PhotonChatTransmitCellDelegate>
 @property (nonatomic, copy, nullable)NSString *gid;
 @property (nonatomic, strong, nullable)PhotonGroupMemberListModel *model;
@@ -22,19 +23,22 @@
 @property (nonatomic, strong, nullable)UIButton  *okBtn;
 @property (nonatomic, strong, nullable)NSMutableArray *selectedChats;
 @property (nonatomic, strong, nullable)PhotonIMMessage *message;
+
+@property (nonatomic, copy, nullable)PhotonGroupMemberListBlock result;
 @end
 
 @implementation PhotonGroupMemberListViewController
-- (instancetype)initWithGid:(NSString *)gid{
+- (instancetype)initWithGid:(NSString *)gid result:(PhotonGroupMemberListBlock)result{
     self = [super init];
     if (self) {
         _gid = gid;
+        _result = [result copy];
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"选择联系人";
+    self.navigationItem.title = @"选择提醒的人";
     [self.view setBackgroundColor:[UIColor colorWithHex:0xF3F3F3]];
     self.tableView.backgroundColor = [UIColor colorWithHex:0xF3F3F3];
     
@@ -105,6 +109,17 @@
     }
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row < self.model.items.count) {
+        id item = [self.model.items objectAtIndex:indexPath.row];
+        if ([item isKindOfClass:[PhotonTitleTableItem class]]) {
+            if (self.result) {
+                self.result(2, nil);
+            }
+        }
+    }
+}
+
 -(void)cell:(id)cell selectedItem:(id)item{
     if ([item isKindOfClass:[PhotonChatTransmitItem class]]) {
         PhotonChatTransmitItem *tempItem = (PhotonChatTransmitItem *)item;
@@ -129,6 +144,28 @@
 }
 
 - (void)okAction:(UIButton *)sender{
+    if (self.selectedChats.count == 0) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
+    if (self.selectedChats.count == self.model.memberCount) {
+        if (self.result) {
+            self.result(2, nil);
+        }
+      
+    }else{
+        NSMutableDictionary *resultDict = [NSMutableDictionary dictionaryWithCapacity:self.selectedChats.count];
+        for (PhotonUser *user in self.selectedChats) {
+            NSString *userID = user.userID;
+            NSString *nickName = user.nickName;
+            if ([userID isNotEmpty] && [nickName isNotEmpty]) {
+                resultDict[nickName] =  resultDict[userID];
+            }
+        }
+        if (self.result) {
+            self.result(1, [resultDict copy]);
+        }
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 

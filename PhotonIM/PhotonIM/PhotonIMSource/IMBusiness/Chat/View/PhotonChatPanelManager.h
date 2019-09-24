@@ -22,6 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendImageMessage:(NSData *)imageData;
 // 发送语音信息
 - (void)sendVoiceMessage:(NSString *)fileName duraion:(CGFloat)duraion;
+
+
+//初始输入at的处理
+- (void)processAtAction:(PhotonCharBar *)charBar;
 @end
 
 @interface PhotonChatPanelManager : NSObject

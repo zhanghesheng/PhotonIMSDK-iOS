@@ -227,8 +227,12 @@ PhotonAudioRecorderDelegate>
 #pragma mark ---- PhotonCharBarDelegate -------
 
 - (void)chatBarTextViewDidChange:(PhotonCharBar *)charBar{
+  
     if ([charBar.currentInputText isEqualToString:ATCharater]) {
-        
+          // 如果是@
+        if(self.delegate && [self.delegate respondsToSelector:@selector(processAtAction:)]){
+            [self.delegate processAtAction:charBar];
+        }
     }
 }
 
