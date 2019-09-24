@@ -27,7 +27,8 @@
 @property (nonatomic, strong, nullable) PontonTalkButton *talkButton;
 @property (nonatomic, strong, nullable) UIButton *emojiButton;
 @property (nonatomic, strong, nullable) UIButton *moreButton;
-
+@property(nonatomic, copy, nullable) NSString *currentInputText;
+@property(nonatomic, copy, nullable) NSString *currentText;
 @end
 
 @implementation PhotonCharBar
@@ -147,6 +148,7 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+    _currentInputText = text;
     if ([text isEqualToString:@"\n"]) {
         [self sendCurrentText];
         return NO;
@@ -180,6 +182,7 @@
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    _currentText = textView.text;
     NSInteger length = [self getTextLength:textView.text];
     if (length > _maxTextWordCount)
     {
@@ -188,6 +191,10 @@
     }
     [self p_reloadTextViewWithAnimation:YES];
     [self hiddentTextViewLabel];
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(chatBarTextViewDidChange:)]) {
+        [self.delegate chatBarTextViewDidChange:self];
+    }
 }
 
 - (NSInteger )subString:(NSString *)text subCount:(NSInteger)count{

@@ -115,7 +115,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
 此值不为空，则表示还有未读的at消息
  */
-@property(nonatomic, assign)PhotonIMConversationAtType apType;
+@property(nonatomic, assign)PhotonIMConversationAtType atType;
 
 /**
  初始化方法

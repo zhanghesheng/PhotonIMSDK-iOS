@@ -87,6 +87,12 @@
             user.avatarURL = [[profile objectForKey:@"avatar"] isNil];
             [PhotonContent addFriendToDB:user];
         }
+        NSArray *joinedGids = [data objectForKey:@"joinedGids"];
+        for (NSString *gid in joinedGids) {
+            if (gid && [gid isKindOfClass:[NSString class]]) {
+                [PhotonContent addGroupToCurrentUserByGid:gid];
+            }
+        }
     }
 }
 

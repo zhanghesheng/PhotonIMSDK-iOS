@@ -31,13 +31,13 @@
         make.edges.mas_equalTo(self.view);
     }];
     singleItem.contactID = @"1";
-    singleItem.contactAvatar = @"nav_add_friend";
+    singleItem.contactAvatar = @"default_head";
     singleItem.contactName = @"附近在线的人";
     singleItem.contactIcon = @"right_arrow";
     
     PhotonBaseContactItem *groupItem = [[PhotonBaseContactItem alloc] init];
     groupItem.contactID = @"2";
-    groupItem.contactAvatar = @"nav_add_friend";
+    groupItem.contactAvatar = @"default_head";
     groupItem.contactName = @"附近的群组";
     groupItem.contactIcon = @"right_arrow";
     

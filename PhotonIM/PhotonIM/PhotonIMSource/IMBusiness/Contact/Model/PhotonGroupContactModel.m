@@ -55,7 +55,11 @@
                 conItem.contactAvatar = [[item objectForKey:@"avatar"] isNil];;
                 conItem.contactName = [[item objectForKey:@"name"] isNil];
                 conItem.contactID = [[item objectForKey:@"gid"] isNil];
+                NSArray *groupids = [PhotonContent findAllGroups];
                 conItem.isInGroup = NO;
+                if ([groupids containsObject:conItem.contactID]) {
+                    conItem.isInGroup = YES;
+                }
                 [self.items addObject:conItem];
             }
         }
@@ -72,6 +76,7 @@
         if (finish) {
             finish(nil);
         }
+        [PhotonContent addGroupToCurrentUserByGid:gid];
         [PhotonUtil hiddenLoading];
     } failure:^(PhotonErrorDescription * _Nonnull error) {
         if (failure) {

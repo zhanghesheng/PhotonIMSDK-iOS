@@ -69,7 +69,7 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)logout{
-    [PhotonDBManager closeDB];
+    
     [[PhotonIMClient sharedClient] logout];
     [[MMKV defaultMMKV] removeValueForKey:TOKENKEY];
     [PhotonContent logout];

@@ -20,6 +20,30 @@ NS_ASSUME_NONNULL_BEGIN
 - (PhotonUser *)getFriendsByUid:(nullable NSString *)uid friendID:(nullable NSString *)fid;
 
 - (BOOL)deleteFriendByFid:(nullable NSString *)fid forUid:(nullable NSString *)uid;
+
+
+#pragma mark --- user_groups -----
+
+// 创建当前用户表
+- (BOOL)createUserTable:(NSString *)tableName;
+
+// 查找当前用户加入的群组
+- (NSArray<NSString *> *)findAllGroupWithTableName:(NSString *)tableName;
+
+// 当前用户加入群组
+- (BOOL)addGroupWithGid:(nullable NSString *)gid tableName:(NSString *)tableName;
+// 当前用户移除群组
+- (BOOL)deleteGroupByGid:(nullable NSString *)gid tableName:(NSString *)tableName;
+
+#pragma mark --- group-users -----
+// 创建群组表
+- (BOOL)createGroupTable:(NSString *)tableName;
+// 查找群组成员
+- (NSArray<NSString *> *)findAllUsersWithGroupTableName:(NSString *)tableName;
+// 当前用户加入群组
+- (BOOL)adduUserToGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName;
+// 移除数组中的成员
+- (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName;
 @end
 
 NS_ASSUME_NONNULL_END

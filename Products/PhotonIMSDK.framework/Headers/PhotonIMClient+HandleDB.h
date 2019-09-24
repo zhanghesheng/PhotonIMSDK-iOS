@@ -284,6 +284,18 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateConversationWithCustomArg2:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith arg:(int)arg;
 - (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg1:(int)arg asc:(BOOL)asc;
 - (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg2:(int)arg asc:(BOOL)asc;
+
+
+/**
+ 下拉获取加载更多的会话消息
+
+ @param chatType 会话类型
+ @param chatWith 会话中对方的id
+ @param anchor 开始一次查询的锚点
+ @param size 每次查询的条数
+ @param result 回调的数据结构是查询到数据以及下次查询数据的锚点
+ */
+- (void)loadHistoryMessages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith anchor:(nullable NSString *)anchor size:(int)size reaultBlock:(void(^)(NSArray<PhotonIMMessage *> *,NSString *))result;
 @end
 
 NS_ASSUME_NONNULL_END

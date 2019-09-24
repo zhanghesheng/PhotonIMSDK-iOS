@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonChatTransmitItem : PhotonBaseContactItem
+@property (nonatomic, assign)BOOL showSelectBtn;
 @property (nonatomic, assign)BOOL selected;
 @end
 

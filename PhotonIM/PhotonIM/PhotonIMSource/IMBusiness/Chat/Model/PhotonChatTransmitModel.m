@@ -31,14 +31,7 @@
             finish(nil);
         }
     }
-    PhotonEmptyTableItem *emptyItem = [[PhotonEmptyTableItem alloc] init];
-    emptyItem.itemHeight = 10.5f;
-    emptyItem.backgroudColor = [UIColor clearColor];
-    [self.items addObject:emptyItem];
-    
-    PhotonTitleTableItem *titleItem1 = [[PhotonTitleTableItem alloc] init];
-    titleItem1.title = @"在线好友";
-    [self.items addObject:titleItem1];
+   
     PhotonWeakSelf(self);
     [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/contact/onlineUser" paramter:nil completion:^(NSDictionary * _Nonnull responseDict) {
         [weakself wrappResponseddDict:responseDict];
@@ -57,6 +50,15 @@
     [super wrappResponseddDict:dict];
     NSDictionary *data = [dict objectForKey:@"data"];
     if (data.count > 0) {
+        PhotonEmptyTableItem *emptyItem = [[PhotonEmptyTableItem alloc] init];
+        emptyItem.itemHeight = 10.5f;
+        emptyItem.backgroudColor = [UIColor clearColor];
+        [self.items addObject:emptyItem];
+        
+        PhotonTitleTableItem *titleItem1 = [[PhotonTitleTableItem alloc] init];
+        titleItem1.title = @"在线好友";
+        [self.items addObject:titleItem1];
+        
         NSArray *lists = [data objectForKey:@"lists"];
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {

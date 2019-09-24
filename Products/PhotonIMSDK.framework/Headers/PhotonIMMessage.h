@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  是否已当前消息的时间戳加载服务端的历史数据
  */
-@property(nonatomic, assign)BOOL startLoadHistory;
+@property(nonatomic, assign)BOOL remainHistory;
 
 /**
  普通消息构造函数

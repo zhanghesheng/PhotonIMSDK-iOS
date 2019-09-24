@@ -144,6 +144,8 @@
 		3272588A22F1A61900842026 /* PhotonChatTransmitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588922F1A61900842026 /* PhotonChatTransmitModel.m */; };
 		3286B10A22BB25FA0032D066 /* Chat.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3286B10922BB25FA0032D066 /* Chat.xcassets */; };
 		3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 3286B13222BB808C0032D066 /* FaceEmoji.json */; };
+		328A764D2339D517009F0668 /* PhotonGroupMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A764C2339D517009F0668 /* PhotonGroupMemberListViewController.m */; };
+		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
 		329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */; };
 		32E0BE0122D3464300DEEFA5 /* PhotonEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */; };
 		32E0BE0422D3466A00DEEFA5 /* PhotonEmptyTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */; };
@@ -154,6 +156,7 @@
 		32F94D9223388456002DF468 /* PhotonGroupContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D9123388456002DF468 /* PhotonGroupContactModel.m */; };
 		32F94D96233887EC002DF468 /* PhotonGroupContactItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D95233887EC002DF468 /* PhotonGroupContactItem.m */; };
 		32F94D99233888A3002DF468 /* PhotonGroupContactCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D98233888A3002DF468 /* PhotonGroupContactCell.m */; };
+		32F94DB02338F092002DF468 /* PhotonGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94DAF2338F092002DF468 /* PhotonGroup.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -425,6 +428,10 @@
 		3286B12622BB675A0032D066 /* PhotonEmojiKeyboardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmojiKeyboardCell.h; sourceTree = "<group>"; };
 		3286B12722BB675A0032D066 /* PhotonEmojiKeyboardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmojiKeyboardCell.m; sourceTree = "<group>"; };
 		3286B13222BB808C0032D066 /* FaceEmoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FaceEmoji.json; sourceTree = "<group>"; };
+		328A764B2339D517009F0668 /* PhotonGroupMemberListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupMemberListViewController.h; sourceTree = "<group>"; };
+		328A764C2339D517009F0668 /* PhotonGroupMemberListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupMemberListViewController.m; sourceTree = "<group>"; };
+		328A76512339D8EB009F0668 /* PhotonGroupMemberListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupMemberListModel.h; sourceTree = "<group>"; };
+		328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupMemberListModel.m; sourceTree = "<group>"; };
 		328C32D822BDE2B10031E948 /* NSDate+PhotonExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+PhotonExtensions.h"; sourceTree = "<group>"; };
 		328C32D922BDE2B10031E948 /* NSDate+PhotonExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+PhotonExtensions.m"; sourceTree = "<group>"; };
 		328C32DF22C06A210031E948 /* PhotonMenuView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonMenuView.h; sourceTree = "<group>"; };
@@ -451,6 +458,8 @@
 		32F94D95233887EC002DF468 /* PhotonGroupContactItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupContactItem.m; sourceTree = "<group>"; };
 		32F94D97233888A3002DF468 /* PhotonGroupContactCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupContactCell.h; sourceTree = "<group>"; };
 		32F94D98233888A3002DF468 /* PhotonGroupContactCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupContactCell.m; sourceTree = "<group>"; };
+		32F94DAE2338F092002DF468 /* PhotonGroup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroup.h; sourceTree = "<group>"; };
+		32F94DAF2338F092002DF468 /* PhotonGroup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroup.m; sourceTree = "<group>"; };
 		32FDC80622C46FAF00EECD24 /* PhotonMessageCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonMessageCenter.h; sourceTree = "<group>"; };
 		32FDC80722C46FAF00EECD24 /* PhotonMessageCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonMessageCenter.m; sourceTree = "<group>"; };
 		32FDC9E822C4A8F800EECD24 /* PhotonRegisterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonRegisterViewController.h; sourceTree = "<group>"; };
@@ -892,6 +901,8 @@
 				322CC08B22CB04DC00518D58 /* PhotonDBaseStore.m */,
 				322CC09122CB0C6500518D58 /* PhotonDBUserStore.h */,
 				322CC09222CB0C6500518D58 /* PhotonDBUserStore.m */,
+				32F94DAE2338F092002DF468 /* PhotonGroup.h */,
+				32F94DAF2338F092002DF468 /* PhotonGroup.m */,
 			);
 			path = BDManager;
 			sourceTree = "<group>";
@@ -1064,6 +1075,8 @@
 				3238AC4C22D4AB8800EB3D0B /* PhotonSingleContactModel.m */,
 				32F94D9023388456002DF468 /* PhotonGroupContactModel.h */,
 				32F94D9123388456002DF468 /* PhotonGroupContactModel.m */,
+				328A76512339D8EB009F0668 /* PhotonGroupMemberListModel.h */,
+				328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */,
 				3238AC4A22D4AB8800EB3D0B /* PhotonBaseContactItem.h */,
 				3238AC4D22D4AB8800EB3D0B /* PhotonBaseContactItem.m */,
 				32F94D94233887EC002DF468 /* PhotonGroupContactItem.h */,
@@ -1090,6 +1103,8 @@
 				3238AC7322D4AB8800EB3D0B /* PhotonSingleContactViewController.h */,
 				32F94D8D23388353002DF468 /* PhotonGroupContactViewController.h */,
 				32F94D8E23388353002DF468 /* PhotonGroupContactViewController.m */,
+				328A764B2339D517009F0668 /* PhotonGroupMemberListViewController.h */,
+				328A764C2339D517009F0668 /* PhotonGroupMemberListViewController.m */,
 				32F94D8A23387D06002DF468 /* PhotonContactViewController.h */,
 				32F94D8B23387D06002DF468 /* PhotonContactViewController.m */,
 				3238AC7222D4AB8800EB3D0B /* PhotonFriendDetailViewController.m */,
@@ -1480,6 +1495,7 @@
 				3272588422F18D2D00842026 /* PhotonChatTransmitItem.m in Sources */,
 				321A0FEE22E6A447000AF586 /* PhotonChatNoticItem.m in Sources */,
 				3238ACAA22D4AB8800EB3D0B /* PhotonConversationCell.m in Sources */,
+				328A764D2339D517009F0668 /* PhotonGroupMemberListViewController.m in Sources */,
 				3221882222CCA5B6007E9FA3 /* PhotonLoginViewController.m in Sources */,
 				3221882322CCA5B6007E9FA3 /* PhotonAccountViewController.m in Sources */,
 				32F94D8F23388353002DF468 /* PhotonGroupContactViewController.m in Sources */,
@@ -1526,6 +1542,7 @@
 				3221883C22CCA5B6007E9FA3 /* PhotonEmojiKeyboard.m in Sources */,
 				3238ACAB22D4AB8800EB3D0B /* PhotonConversationBaseCell.m in Sources */,
 				32258ADB22CD9D61002D56E5 /* PhotonFileUploadManager.m in Sources */,
+				32F94DB02338F092002DF468 /* PhotonGroup.m in Sources */,
 				3221883D22CCA5B6007E9FA3 /* PhotonEmojiHorizontalLayout.m in Sources */,
 				3221883E22CCA5B6007E9FA3 /* PhotonMoreKeyboardItem.m in Sources */,
 				32F94D8C23387D06002DF468 /* PhotonContactViewController.m in Sources */,
@@ -1556,6 +1573,7 @@
 				3221884E22CCA5B6007E9FA3 /* UIButton+PhotonExtensions.m in Sources */,
 				3223E58922D8283C007B77A9 /* PhotonChatViewController+Receive.m in Sources */,
 				3221884F22CCA5B6007E9FA3 /* UIImage+PhotonExtensions.m in Sources */,
+				328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */,
 				3272588A22F1A61900842026 /* PhotonChatTransmitModel.m in Sources */,
 				3221885022CCA5B6007E9FA3 /* NSString+PhotonExtensions.m in Sources */,
 				3221885122CCA5B6007E9FA3 /* NSData+PhotonExtensions.m in Sources */,

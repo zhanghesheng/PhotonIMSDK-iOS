@@ -49,14 +49,18 @@ NS_ASSUME_NONNULL_BEGIN
  * 完成录音
  */
 - (void)chatBarFinishedRecoding:(PhotonCharBar *)chatBar;
+
+
+- (void)chatBarTextViewDidChange:(PhotonCharBar *)charBar;
 @end
 
 @interface PhotonCharBar : UIView
 @property(nonatomic, weak)id<PhotonCharBarDelegate> delegate;
 @property(nonatomic,assign)PhotonChatBarStatus status;
-@property(nonatomic, copy, readonly) NSString *currentText;
+@property(nonatomic, copy, readonly,nullable) NSString *currentInputText;
+@property(nonatomic, copy, readonly,nullable) NSString *currentText;
 @property(nonatomic,assign)NSInteger maxTextWordCount;
-
+@property (nonatomic, strong, readonly,nullable) UITextView *textView;
 @property (nonatomic, assign) BOOL activity;
 
 - (void)addEmojiString:(nullable NSString *)emojiString;

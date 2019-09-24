@@ -30,7 +30,7 @@ PRIMARY KEY(uid, fid))"
 #define     SQL_SELECT_FRIEND              @"SELECT * FROM %@ WHERE uid = '%@' and fid = '%@'"
 #define     SQL_DELETE_FRIEND               @"DELETE FROM %@ WHERE uid = '%@' and fid = '%@'"
 
-
+// user-groups
 #define     SQL_CREATE_UID_GROUPS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
 gid TEXT,\
 ext1 TEXT,\
@@ -45,7 +45,11 @@ ext9 TEXT,\
 ext10 TEXT,\
 PRIMARY KEY(gid))"
 
+#define     SQL_UPDATE_UID_GROUPS               @"REPLACE INTO %@ (gid, ext1, ext2, ext3, ext4, ext5, ext6, ext7, ext8, ext9, ext10) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+#define     SQL_SELECT_GROUPS              @"SELECT * FROM %@"
+#define     SQL_DELETE_GROUP               @"DELETE FROM %@ WHERE gid = '%@'"
 
+// group-users
 #define     SQL_CREATE_GROUP_UIDS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
 uid TEXT,\
 ext1 TEXT,\
@@ -55,11 +59,12 @@ ext4 TEXT,\
 ext5 TEXT,\
 ext6 TEXT,\
 ext7 TEXT,\
-ext8 TEXT,\
-ext9 TEXT,\
-ext10 TEXT,\
 PRIMARY KEY(uid))"
 
+#define     SQL_UPDATE_GROUP_UIDS             @"REPLACE INTO %@ (uid, ext1, ext2, ext3, ext4, ext5, ext6, ext7) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+#define     SQL_SELECT_USERS            @"SELECT * FROM %@"
+#define     SQL_SELECT_USER             @"SELECT * FROM %@ WHERE uid = '%@'"
+#define     SQL_DELETE_USER          @"DELETE FROM %@ WHERE uid = '%@'"
 
 
 @implementation PhotonDBUserStore
@@ -81,11 +86,9 @@ PRIMARY KEY(uid))"
     return [self createTable:FRIENDS_TABLE_NAME withSQL:sqlString];
 }
 
-- (BOOL)createTable:(NSString *)tableName{
-    NSString *sqlString = [NSString stringWithFormat:SQL_CREATE_FRIENDS_TABLE, tableName];
-    return [self createTable:tableName withSQL:sqlString];
-}
 
+
+#pragma mark ----- Profile -----
 - (BOOL)addFriend:(nullable PhotonUser *)user forUid:(nullable NSString *)uid
 {
     NSString *sqlString = [NSString stringWithFormat:SQL_UPDATE_FRIEND, FRIENDS_TABLE_NAME];
@@ -164,6 +167,86 @@ PRIMARY KEY(uid))"
 - (BOOL)deleteFriendByFid:(nullable NSString *)fid forUid:(nullable NSString *)uid
 {
     NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_FRIEND, FRIENDS_TABLE_NAME, uid, fid];
+    BOOL ok = [self excuteSQL:sqlString, nil];
+    return ok;
+}
+
+#pragma mark --- user_groups -----
+
+// 创建当前用户表
+- (BOOL)createUserTable:(NSString *)tableName{
+    NSString *sqlString = [NSString stringWithFormat:SQL_CREATE_UID_GROUPS_TABLE, tableName];
+    return [self createTable:tableName withSQL:sqlString];
+}
+
+// 查找当前用户加入的群组
+- (NSArray<NSString *> *)findAllGroupWithTableName:(NSString *)tableName{
+    [self createUserTable:tableName];
+    __block NSMutableArray *data = [[NSMutableArray alloc] init];
+    NSString *sqlString = [NSString stringWithFormat:SQL_SELECT_GROUPS, tableName];
+    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet *retSet) {
+        while ([retSet next]) {
+            NSString *gid =  [retSet stringForColumn:@"gid"];
+            [data addObject:gid];
+        }
+        [retSet close];
+    }];
+    return data;
+}
+
+// 当前用户加入群组
+- (BOOL)addGroupWithGid:(nullable NSString *)gid tableName:(NSString *)tableName
+{
+    [self createUserTable:tableName];
+    NSString *sqlString = [NSString stringWithFormat:SQL_UPDATE_UID_GROUPS, tableName];
+    NSArray *arrPara = [NSArray arrayWithObjects:
+                        [PhotonUtil noNilString:gid],
+                        @"", @"", @"", @"", @"",@"", @"", @"", @"", @"", nil];
+    BOOL ok = [self excuteSQL:sqlString withArrParameter:arrPara];
+    return ok;
+}
+// 当前用户移除群组
+- (BOOL)deleteGroupByGid:(nullable NSString *)gid tableName:(NSString *)tableName{
+    [self createUserTable:tableName];
+    NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_GROUP, tableName, gid];
+    BOOL ok = [self excuteSQL:sqlString, nil];
+    return ok;
+}
+
+#pragma mark --- group-users -----
+// 创建群组表
+- (BOOL)createGroupTable:(NSString *)tableName{
+    NSString *sqlString = [NSString stringWithFormat:SQL_CREATE_GROUP_UIDS_TABLE, tableName];
+    return [self createTable:tableName withSQL:sqlString];
+}
+
+// 查找群组成员
+- (NSArray<NSString *> *)findAllUsersWithGroupTableName:(NSString *)tableName{
+    __block NSMutableArray *data = [[NSMutableArray alloc] init];
+    NSString *sqlString = [NSString stringWithFormat:SQL_SELECT_USERS, tableName];
+    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet *retSet) {
+        while ([retSet next]) {
+            NSString *gid =  [retSet stringForColumn:@"uid"];
+            [data addObject:gid];
+        }
+        [retSet close];
+    }];
+    return data;
+}
+
+// 当前用户加入群组
+- (BOOL)adduUserToGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName
+{
+    NSString *sqlString = [NSString stringWithFormat:SQL_UPDATE_GROUP_UIDS, tableName];
+    NSArray *arrPara = [NSArray arrayWithObjects:
+                        [PhotonUtil noNilString:uid],
+                        @"", @"",@"", @"", @"", @"", @"", nil];
+    BOOL ok = [self excuteSQL:sqlString withArrParameter:arrPara];
+    return ok;
+}
+// 移除数组中的成员
+- (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName{
+    NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_USER, tableName, uid];
     BOOL ok = [self excuteSQL:sqlString, nil];
     return ok;
 }

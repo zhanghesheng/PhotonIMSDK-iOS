@@ -15,6 +15,9 @@
 #import "PhotonUtil.h"
 #import "PhotonRecorderIndicator.h"
 #import "PhotonMessageCenter.h"
+
+static NSString  *ATCharater = @"@";
+
 @interface PhotonChatPanelManager()<PhotonCharBarDelegate,
 PhotonBaseKeyBoardDelegate,
 PhotonMoreKeyBoardDelegate,
@@ -39,10 +42,10 @@ PhotonAudioRecorderDelegate>
 
 @property(nonatomic, strong, nullable)PhotonAudioRecorder  *audioRecorder;
 
-
 @property(nonatomic, strong, nullable)PhotonRecorderIndicator *recorderIndicatorView;
 
 @property(nonatomic, copy, nullable)NSString *identifier;
+
 @end
 @implementation PhotonChatPanelManager
 - (void)dealloc
@@ -222,6 +225,13 @@ PhotonAudioRecorderDelegate>
 }
 
 #pragma mark ---- PhotonCharBarDelegate -------
+
+- (void)chatBarTextViewDidChange:(PhotonCharBar *)charBar{
+    if ([charBar.currentInputText isEqualToString:ATCharater]) {
+        
+    }
+}
+
 - (void)chatBar:(PhotonCharBar *)chatBar changeStatusFrom:(PhotonChatBarStatus)fromStatus to:(PhotonChatBarStatus)toStatus{
     if (curStatus == toStatus) {
         return;
