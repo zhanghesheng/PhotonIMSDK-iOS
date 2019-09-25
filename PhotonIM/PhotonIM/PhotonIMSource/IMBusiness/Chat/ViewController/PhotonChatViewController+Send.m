@@ -11,12 +11,14 @@
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
 // 发送文本消息
-- (void)sendTextMessage:(NSString *)text{
+- (void)sendTextMessage:(NSString *)text atItems:(nonnull NSArray<PhotonChatAtInfo *> *)atItems type:(AtType)atType{
     PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
     textItem.fromType = PhotonChatMessageFromSelf;
     textItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     textItem.messageText = text;
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
+    textItem.atInfo = [atItems copy];
+    textItem.type = atType;
     [self.model.items addObject:textItem];
     [self reloadData];
     PhotonWeakSelf(self);
@@ -142,9 +144,18 @@
 
 - (void)processAtAction:(PhotonCharBar *)charBar{
     if (self.conversation.chatType == PhotonIMChatTypeGroup) {
-        PhotonGroupMemberListViewController *memberListCtl = [[PhotonGroupMemberListViewController alloc] initWithGid:self.conversation.chatWith result:^(AtType type, NSDictionary * _Nullable resultDict) {
+        PhotonGroupMemberListViewController *memberListCtl = [[PhotonGroupMemberListViewController alloc] initWithGid:self.conversation.chatWith result:^(AtType type, NSArray * _Nullable resultItems) {
             charBar.atType = type;
-            charBar.atInfo = [resultDict copy];
+            if (type == AtTypeAtAll) {
+                NSString *atContent = [NSString stringWithFormat:@"所有人"];
+                [charBar addAtContent:atContent];
+            }else if (type == AtTypeAtMember){
+                charBar.atInfos = [resultItems copy];
+                for (PhotonChatAtInfo *item in resultItems) {
+                    [charBar addAtContent:item.nickName];
+                }
+            }
+           
         }];
         [self.navigationController pushViewController:memberListCtl animated:YES];
     }

@@ -90,8 +90,8 @@ typedef NS_ENUM(NSInteger, PhotonChatBarStatus) {
 
 typedef NS_ENUM(NSInteger, AtType) {
     AtTypeNoAt = 0,
-    AtTypeNoAtMember,
-    AtTypeNoAtAll
+    AtTypeAtMember,
+    AtTypeAtAll
 };
 
 #define DEFAULT_TABLE_CELL_HRIGHT 64.0;

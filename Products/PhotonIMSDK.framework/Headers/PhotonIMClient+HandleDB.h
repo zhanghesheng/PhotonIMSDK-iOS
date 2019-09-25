@@ -296,6 +296,10 @@ NS_ASSUME_NONNULL_BEGIN
  @param result 回调的数据结构是查询到数据以及下次查询数据的锚点
  */
 - (void)loadHistoryMessages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith anchor:(nullable NSString *)anchor size:(int)size reaultBlock:(void(^)(NSArray<PhotonIMMessage *> *,NSString *))result;
+
+
+- (void)updateConversationAtType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith atType:(PhotonIMConversationAtType)atType;
+
 @end
 
 NS_ASSUME_NONNULL_END

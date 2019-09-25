@@ -10,6 +10,8 @@
 #import "PontonTalkButton.h"
 #import <Masonry/Masonry.h>
 #import "PhotonMacros.h"
+@implementation PhotonChatAtInfo
+@end
 @interface PhotonCharBar()<UITextViewDelegate>{
     UIImage *kVoiceImage;
     UIImage *kVoiceImageHL;
@@ -85,6 +87,17 @@
     [self hiddentTextViewLabel];
     [self p_reloadTextViewWithAnimation:YES];
     
+}
+
+- (void)addAtContent:(NSString *)content{
+    NSString *str = [NSString stringWithFormat:@"%@%@ ", self.textView.text, content];
+    NSInteger length = [self getTextLength:self.textView.text];
+    if (length > _maxTextWordCount) {
+        return;
+    }
+    [self.textView setText:str];
+    [self hiddentTextViewLabel];
+    [self p_reloadTextViewWithAnimation:YES];
 }
 
 - (void)deleteLastCharacter
@@ -171,27 +184,33 @@
             }
         }
         
-        if ([textView.text characterAtIndex:range.location] == ' ') {
-            NSUInteger location = range.location;
-            NSUInteger length = range.length;
-            while (location != 0) {
-                location --;
-                length ++ ;
-                char c = [textView.text characterAtIndex:location];
-                if (c == '@') {
-                    textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
-                    [self p_reloadTextViewWithAnimation:YES];
-                    return NO;
-                }
-                else if (c == ']') {
-                    return YES;
-                }
-            }
-        }
-        
+        [self characterDidRemovedWith:textView shouldChangeTextInRange:range replacementText:text];
     }
      return YES;
     
+}
+
+- (void)characterDidRemovedWith:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    NSInteger endLocation = range.location;
+    if(endLocation > 0 && endLocation <= [textView.text length]){
+        NSRange atRange = [textView.text rangeOfString:@"@" options:NSBackwardsSearch range:NSMakeRange(0, endLocation)];
+        if (atRange.location != NSNotFound && (endLocation > atRange.location) && endLocation <= [textView.text length]) {
+            NSRange atItemRange = NSMakeRange(atRange.location, (endLocation - atRange.location));
+            NSString *removedAtText = [textView.text substringWithRange:atItemRange];
+            NSMutableArray *atItems = [NSMutableArray array];
+            for (PhotonChatAtInfo *item in self.atInfos) {
+                if ([item.nickName isEqualToString:removedAtText]) {
+                    NSMutableString *mutableText = [[NSMutableString alloc] initWithString:textView.text];
+                    [mutableText replaceCharactersInRange:atItemRange withString:@""];
+                    textView.text = mutableText;
+                    continue;
+                }
+                [atItems addObject:item];
+            }
+            self.atInfos = [atItems copy];
+        }
+    }
 }
 
 - (void)textViewDidEndEditing:(UITextView *)textView

@@ -234,6 +234,7 @@ PhotonAudioRecorderDelegate>
             [self.delegate processAtAction:charBar];
         }
     }
+    
 }
 
 - (void)chatBar:(PhotonCharBar *)chatBar changeStatusFrom:(PhotonChatBarStatus)fromStatus to:(PhotonChatBarStatus)toStatus{
@@ -284,8 +285,8 @@ PhotonAudioRecorderDelegate>
     if ([sendText length] == 0) {
         return;
     }
-    if ([self.delegate respondsToSelector:@selector(sendTextMessage:)]) {
-        [self.delegate sendTextMessage:text];
+    if ([self.delegate respondsToSelector:@selector(sendTextMessage:atItems:type:)]) {
+        [self.delegate sendTextMessage:text atItems:chatBar.atInfos type:chatBar.atType];
     }
 }
 

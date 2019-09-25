@@ -10,6 +10,11 @@
 #import "PhotonMacros.h"
 #import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
+@interface PhotonChatAtInfo : NSObject
+@property (nonatomic,assign)AtType atType;
+@property (nonatomic,copy)NSString *userid;
+@property (nonatomic,copy)NSString *nickName;
+@end
 
 @class PhotonCharBar;
 @protocol PhotonCharBarDelegate <NSObject>
@@ -62,10 +67,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)NSInteger maxTextWordCount;
 @property (nonatomic, strong, readonly,nullable) UITextView *textView;
 @property (nonatomic, assign) BOOL activity;
-@property (nonatomic,assign)AtType atType;
-@property (nonatomic,copy)NSDictionary *atInfo;
+@property (nonatomic, copy) NSArray<PhotonChatAtInfo *>*atInfos;
+@property (nonatomic, assign)AtType atType;
 
 - (void)addEmojiString:(nullable NSString *)emojiString;
+
+- (void)addAtContent:(NSString *)content;
 
 - (void)sendCurrentText;
 

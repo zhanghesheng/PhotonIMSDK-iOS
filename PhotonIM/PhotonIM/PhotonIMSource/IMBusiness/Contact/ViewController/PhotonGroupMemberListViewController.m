@@ -16,6 +16,7 @@
 #import "PhotonChatTransmitCell.h"
 #import "PhotonChatTransmitItem.h"
 #import "PhotonTitleTableItem.h"
+#import "PhotonCharBar.h"
 @interface PhotonGroupMemberListViewController ()<PhotonChatTransmitCellDelegate>
 @property (nonatomic, copy, nullable)NSString *gid;
 @property (nonatomic, strong, nullable)PhotonGroupMemberListModel *model;
@@ -116,6 +117,7 @@
             if (self.result) {
                 self.result(2, nil);
             }
+             [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }
@@ -150,20 +152,28 @@
     }
     if (self.selectedChats.count == self.model.memberCount) {
         if (self.result) {
-            self.result(2, nil);
+            self.result(AtTypeAtAll, nil);
         }
-      
     }else{
-        NSMutableDictionary *resultDict = [NSMutableDictionary dictionaryWithCapacity:self.selectedChats.count];
+        NSMutableArray *resultItems = [NSMutableArray arrayWithCapacity:self.selectedChats.count];
+        NSInteger index = 0;
         for (PhotonUser *user in self.selectedChats) {
             NSString *userID = user.userID;
-            NSString *nickName = user.nickName;
-            if ([userID isNotEmpty] && [nickName isNotEmpty]) {
-                resultDict[nickName] =  resultDict[userID];
+            NSString *nickName = nil;
+            if (index == 0) {
+                nickName = [NSString stringWithFormat:@"%@",user.userName];
+            }else{
+                nickName = [NSString stringWithFormat:@"@%@",user.userName];
             }
+            PhotonChatAtInfo *atInfo = [[PhotonChatAtInfo alloc] init];
+            atInfo.userid = userID;
+            atInfo.nickName = nickName;
+            atInfo.atType = AtTypeAtMember;
+            [resultItems addObject:atInfo];
+            index ++;
         }
         if (self.result) {
-            self.result(1, [resultDict copy]);
+            self.result(1, [resultItems copy]);
         }
     }
     [self.navigationController popViewControllerAnimated:YES];

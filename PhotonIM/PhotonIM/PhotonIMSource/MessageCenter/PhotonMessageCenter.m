@@ -12,6 +12,7 @@
 #import "PhotonDownLoadFileManager.h"
 #import "PhotonDBManager.h"
 #import "PhotonNetworkService.h"
+#import "PhotonCharBar.h"
 static PhotonMessageCenter *center = nil;
 @interface PhotonMessageCenter()<PhotonIMClientProtocol>
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
@@ -123,7 +124,13 @@ static PhotonMessageCenter *center = nil;
     
     // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
-    
+    NSMutableArray *uids = [[NSMutableArray alloc] init];
+    for (PhotonChatAtInfo *atInfo in item.atInfo) {
+        if ([atInfo.userid isNotEmpty]) {
+            [uids addObject:atInfo.userid ];
+        }
+    }
+    [message setAtInfoWithAtType:(PhotonIMAtType)(item.type) atList:uids];
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
     item.userInfo = message;
