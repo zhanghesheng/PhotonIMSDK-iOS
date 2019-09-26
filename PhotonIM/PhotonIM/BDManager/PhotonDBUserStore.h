@@ -39,9 +39,13 @@ NS_ASSUME_NONNULL_BEGIN
 // 创建群组表
 - (BOOL)createGroupTable:(NSString *)tableName;
 // 查找群组成员
-- (NSArray<NSString *> *)findAllUsersWithGroupTableName:(NSString *)tableName;
+- (NSArray< PhotonUser *> *)findAllUsersWithGroupTableName:(NSString *)tableName;
+
+// 查找指定的群组成员
+- (PhotonUser *)findUserWithGroupTableName:(NSString *)tableName uid:(NSString *)uid;
+
 // 当前用户加入群组
-- (BOOL)adduUserToGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName;
+- (BOOL)addUserToGroupWithUser:(nullable PhotonUser *)user tableName:(NSString *)tableName;
 // 移除数组中的成员
 - (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName;
 @end

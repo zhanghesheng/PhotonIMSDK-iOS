@@ -52,6 +52,9 @@ PRIMARY KEY(gid))"
 // group-users
 #define     SQL_CREATE_GROUP_UIDS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
 uid TEXT,\
+username TEXT,\
+nickname TEXT,\
+avatar TEXT,\
 ext1 TEXT,\
 ext2 TEXT,\
 ext3 TEXT,\
@@ -61,7 +64,7 @@ ext6 TEXT,\
 ext7 TEXT,\
 PRIMARY KEY(uid))"
 
-#define     SQL_UPDATE_GROUP_UIDS             @"REPLACE INTO %@ (uid, ext1, ext2, ext3, ext4, ext5, ext6, ext7) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+#define     SQL_UPDATE_GROUP_UIDS             @"REPLACE INTO %@ (uid, username,nickname,avatar,ext1, ext2, ext3, ext4, ext5, ext6, ext7) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 #define     SQL_SELECT_USERS            @"SELECT * FROM %@"
 #define     SQL_SELECT_USER             @"SELECT * FROM %@ WHERE uid = '%@'"
 #define     SQL_DELETE_USER          @"DELETE FROM %@ WHERE uid = '%@'"
@@ -221,31 +224,60 @@ PRIMARY KEY(uid))"
 }
 
 // 查找群组成员
-- (NSArray<NSString *> *)findAllUsersWithGroupTableName:(NSString *)tableName{
+- (NSArray< PhotonUser *> *)findAllUsersWithGroupTableName:(NSString *)tableName{
+    [self createGroupTable:tableName];
     __block NSMutableArray *data = [[NSMutableArray alloc] init];
     NSString *sqlString = [NSString stringWithFormat:SQL_SELECT_USERS, tableName];
     [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet *retSet) {
         while ([retSet next]) {
-            NSString *gid =  [retSet stringForColumn:@"uid"];
-            [data addObject:gid];
+            PhotonUser *user = [[PhotonUser alloc] init];
+            // 用户id，fid如果是当前使用用户id，则表示自己，fid如果不是当前用户，则为好友id
+            user.userID = [retSet stringForColumn:@"uid"];
+            user.userName = [retSet stringForColumn:@"username"];
+            user.nickName = [retSet stringForColumn:@"nickname"];
+            user.avatarURL = [retSet stringForColumn:@"avatar"];
+            [data addObject:user];
         }
         [retSet close];
     }];
     return data;
 }
 
+// 查找指定的群组成员
+- (PhotonUser *)findUserWithGroupTableName:(NSString *)tableName uid:(NSString *)uid{
+     [self createGroupTable:tableName];
+    NSString *sqlString = [NSString stringWithFormat:SQL_SELECT_USER, tableName,uid];
+    __block PhotonUser *user = [[PhotonUser alloc] init];
+    [self excuteQuerySQL:sqlString resultBlock:^(FMResultSet *retSet) {
+        while ([retSet next]) {
+            // 用户id，fid如果是当前使用用户id，则表示自己，fid如果不是当前用户，则为好友id
+            user.userID = [retSet stringForColumn:@"uid"];
+            user.userName = [retSet stringForColumn:@"username"];
+            user.nickName = [retSet stringForColumn:@"nickname"];
+            user.avatarURL = [retSet stringForColumn:@"avatar"];
+        }
+        [retSet close];
+    }];
+    return user;
+}
+
 // 当前用户加入群组
-- (BOOL)adduUserToGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName
+- (BOOL)addUserToGroupWithUser:(nullable PhotonUser *)user tableName:(NSString *)tableName
 {
+     [self createGroupTable:tableName];
     NSString *sqlString = [NSString stringWithFormat:SQL_UPDATE_GROUP_UIDS, tableName];
     NSArray *arrPara = [NSArray arrayWithObjects:
-                        [PhotonUtil noNilString:uid],
+                        [PhotonUtil noNilString:user.userID],
+                        [PhotonUtil noNilString:user.userName],
+                        [PhotonUtil noNilString:user.nickName],
+                        [PhotonUtil noNilString:user.avatarURL],
                         @"", @"",@"", @"", @"", @"", @"", nil];
     BOOL ok = [self excuteSQL:sqlString withArrParameter:arrPara];
     return ok;
 }
 // 移除数组中的成员
 - (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName{
+     [self createGroupTable:tableName];
     NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_USER, tableName, uid];
     BOOL ok = [self excuteSQL:sqlString, nil];
     return ok;

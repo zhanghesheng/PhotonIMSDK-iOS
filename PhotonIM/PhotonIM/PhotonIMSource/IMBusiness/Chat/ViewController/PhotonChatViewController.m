@@ -10,7 +10,8 @@
 #import <MMFoundation/MMFoundation.h>
 #import "PhotonBaseViewController+Refresh.h"
 #import "PhotonMessageCenter.h"
-#import "PhotonMessageSettingViewController.h"
+#import "PhotonSingleSettingViewController.h"
+#import "PhotonGroupSettingViewController.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 @interface PhotonChatViewController ()
@@ -96,8 +97,14 @@
 }
 
 - (void)more{
-    PhotonMessageSettingViewController *msgSetting = [[PhotonMessageSettingViewController alloc] initWithConversation:self.conversation];
-    [self.navigationController pushViewController:msgSetting animated:YES];
+    if (self.conversation.chatType == PhotonIMChatTypeSingle) {
+        PhotonSingleSettingViewController *msgSetting = [[PhotonSingleSettingViewController alloc] initWithConversation:self.conversation];
+        [self.navigationController pushViewController:msgSetting animated:YES];
+    }else if (self.conversation.chatType == PhotonIMChatTypeGroup){
+        PhotonGroupSettingViewController *msgSetting = [[PhotonGroupSettingViewController alloc] initWithGroupID:self.conversation];
+        [self.navigationController pushViewController:msgSetting animated:YES];
+    }
+   
 }
 - (void)tapGesture:(id)gesture{
      [_panelManager dismissKeyboard];

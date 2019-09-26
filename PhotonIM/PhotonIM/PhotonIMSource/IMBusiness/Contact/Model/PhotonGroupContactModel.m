@@ -48,6 +48,7 @@
                 PhotonUser *user = [[PhotonUser alloc] init];
                 user.userID = [[item objectForKey:@"gid"] isNil];
                 user.nickName = [[item objectForKey:@"name"] isNil];
+                user.userName = [[item objectForKey:@"name"] isNil];
                 user.avatarURL = [[item objectForKey:@"avatar"] isNil];
                 user.type = [[item objectForKey:@"type"] isNil]?2:[[[item objectForKey:@"type"] isNil] intValue];
                 [PhotonContent addFriendToDB:user];

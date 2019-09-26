@@ -112,6 +112,27 @@
     return [userDB addGroupWithGid:gid tableName:tableName];
 }
 
++ (NSArray<PhotonUser *> *)findAllUsersWithGroupId:(NSString *)gid{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
+    return [userDB findAllUsersWithGroupTableName:tableName];
+}
++ (PhotonUser *)findAllUserWithGroupId:(NSString *)gid uid:(NSString *)uid;{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
+    return [userDB findUserWithGroupTableName:tableName uid:uid];
+}
++ (BOOL)adduUserToGroupWithUser:(nullable PhotonUser *)user gid:(NSString *)gid{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
+    return [userDB addUserToGroupWithUser:user tableName:tableName];
+}
++ (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid gid:(NSString *)gid{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
+     return [userDB deleteUserFromGroupWithUid:uid tableName:tableName];
+}
+
 
 
 

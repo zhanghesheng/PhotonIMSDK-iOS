@@ -2,18 +2,16 @@
 //  PhotonGroupMemberListViewController.h
 //  PhotonIM
 //
-//  Created by Bruce on 2019/9/24.
+//  Created by Bruce on 2019/9/26.
 //  Copyright © 2019 Bruce. All rights reserved.
 //
 
 #import "PhotonBaseViewController.h"
-#import "PhotonMacros.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
-typedef void(^ PhotonGroupMemberListBlock)(AtType type,NSArray * _Nullable);
-
 @interface PhotonGroupMemberListViewController : PhotonBaseViewController
-- (instancetype)initWithGid:(NSString *)gid result:(PhotonGroupMemberListBlock)result;
+- (instancetype)initWithGid:(NSString *)gid;
 @end
 
 NS_ASSUME_NONNULL_END

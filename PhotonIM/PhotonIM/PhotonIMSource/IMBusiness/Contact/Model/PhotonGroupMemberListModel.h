@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonGroupMemberListModel : PhotonBaseModel
 @property (nonatomic, assign)NSInteger memberCount;
+@property (nonatomic, copy)NSString *gid;
+@property (nonatomic, assign)BOOL showSelectBtn;
 @end
 
 NS_ASSUME_NONNULL_END

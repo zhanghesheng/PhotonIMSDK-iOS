@@ -396,6 +396,13 @@ static PhotonMessageCenter *center = nil;
     [self.imClient updateConversationIgnoreAlert:conversation];
 }
 
+- (void)resetAtType:(PhotonIMConversation *)conversation{
+    if (conversation.atType != PhotonIMConversationAtTypeNoAt) {
+        [self.imClient updateConversationAtType:conversation.chatType chatWith:conversation.chatWith atType:PhotonIMConversationAtTypeNoAt];
+    }
+    
+}
+
 
 
 #pragma mark --------- 文件操作相关 ----------------

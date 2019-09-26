@@ -6,17 +6,17 @@
 //  Copyright © 2019 Bruce. All rights reserved.
 //
 
-#import "PhotonMessageSettingViewController.h"
+#import "PhotonSingleSettingViewController.h"
 #import "PhotonMessageSettingItem.h"
 #import "PhotonMessageSettingCell.h"
 #import "PhotonNetworkService.h"
 #import "PhotonBaseContactItem.h"
 #import "PhotonBaseContactCell.h"
 #import "PhotonEmptyTableItem.h"
-@interface PhotonMessageSettingDataSource ()
+@interface PhotonSingleSettingDataSource ()
 @end
 
-@implementation PhotonMessageSettingDataSource
+@implementation PhotonSingleSettingDataSource
 - (Class)tableView:(UITableView *)tableView cellClassForObject:(id)object{
     if ([object isKindOfClass:[PhotonMessageSettingItem class]]) {
         return [PhotonMessageSettingCell class];
@@ -26,12 +26,12 @@
     return [super tableView:tableView cellClassForObject:object];
 }
 @end
-@interface PhotonMessageSettingViewController ()<UITableViewDelegate,PhotonMessageSettingCellDelegate>
+@interface PhotonSingleSettingViewController ()<UITableViewDelegate,PhotonMessageSettingCellDelegate>
 @property (nonatomic, weak, nullable)PhotonIMConversation *conversation;
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
 @end
 
-@implementation PhotonMessageSettingViewController
+@implementation PhotonSingleSettingViewController
 
 - (instancetype)initWithConversation:(PhotonIMConversation *)conversation{
     self = [super init];
@@ -76,7 +76,7 @@
     settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
     [self.items addObject:settionItem];
     
-    PhotonMessageSettingDataSource *dataSource = [[PhotonMessageSettingDataSource alloc] initWithItems:self.items];
+    PhotonSingleSettingDataSource *dataSource = [[PhotonSingleSettingDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
 }
 

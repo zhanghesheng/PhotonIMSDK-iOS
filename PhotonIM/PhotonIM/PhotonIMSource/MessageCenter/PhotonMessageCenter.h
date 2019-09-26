@@ -123,6 +123,8 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 - (void)clearConversationUnReadCount:(PhotonIMConversation *)conversation;
 
 - (void)updateConversationIgnoreAlert:(PhotonIMConversation *)conversation;
+
+- (void)resetAtType:(PhotonIMConversation *)conversation;
 @end
 
 NS_ASSUME_NONNULL_END

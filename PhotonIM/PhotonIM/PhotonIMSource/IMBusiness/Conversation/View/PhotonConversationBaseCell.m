@@ -59,8 +59,30 @@
     }else{
         nickName = conversation.chatWith;
     }
-    self.nickLabel.text = nickName;
-     self.contextLabel.text = conversation.lastMsgContent;
+     self.nickLabel.text = nickName;
+    
+    
+    NSMutableAttributedString *content = [[NSMutableAttributedString alloc] init];
+    NSMutableAttributedString *atTypeString;
+    if (conversation.atType == PhotonIMConversationAtTypeAtMe) {
+        atTypeString = [[NSMutableAttributedString alloc] initWithString:@"有人@了我" attributes:@{NSForegroundColorAttributeName:(id)[UIColor redColor]}];
+    }else if (conversation.atType == PhotonIMConversationTypeAtAll){
+         atTypeString = [[NSMutableAttributedString alloc] initWithString:@"@所有人" attributes:@{NSForegroundColorAttributeName:(id)[UIColor redColor]}];
+    }
+    if (atTypeString) {
+        [content appendAttributedString:atTypeString];
+    }
+    NSMutableAttributedString *chatContent;
+    if(conversation.chatType == PhotonIMChatTypeGroup){
+         PhotonUser *user =  [PhotonContent findAllUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
+         chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,conversation.lastMsgContent] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+    }else{
+        chatContent = [[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+    }
+    if (chatContent) {
+        [content appendAttributedString:chatContent];
+    }
+    self.contextLabel.attributedText = content;
     if([conversation.lastMsgContent isNotEmpty]){
         NSTimeInterval tempTimeStamp = (conversation.lastTimeStamp/1000.0);
         NSDate *localeDate = [NSDate dateWithTimeIntervalSince1970:tempTimeStamp];

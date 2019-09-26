@@ -59,6 +59,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getIgnoreAlert:(NSString *)remoteId completion:(void(^)(BOOL success,BOOL open))completion;
 
+- (void)loadMembersFormGroup:(NSString *)gid completion:(nullable void(^)(BOOL success))completion;
+
+- (void)loadGroupProfile:(NSString *)gid completion:(void(^)(NSString *gid ,BOOL success))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END
