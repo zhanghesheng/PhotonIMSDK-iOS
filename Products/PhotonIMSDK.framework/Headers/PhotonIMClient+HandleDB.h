@@ -35,6 +35,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)insertOrUpdateMessage:(PhotonIMMessage *)message updateConversion:(BOOL)update;
 
+
+/**
+ 批量保存消息到数据库
+
+ @param chatType 查找的会话类型
+ @param chatWith 会话中对方的id
+ @param messageList 保存的消息列表，如果其中的消息已在表中，则不保存
+ */
+- (void)saveMessageBatch:(PhotonIMChatType)chatType
+                chatWith:(NSString *)chatWith
+             messageList:(NSArray<PhotonIMMessage *>*)messageList;
 /**
  更新消息状态
  使用场景: 只更新数据库中的消息状态时推荐调用
@@ -285,6 +296,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg1:(int)arg asc:(BOOL)asc;
 - (NSArray<PhotonIMConversation *> *)findConversationListWithCustomArg2:(int)arg asc:(BOOL)asc;
 
+- (void)updateConversationAtType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith atType:(PhotonIMConversationAtType)atType;
 
 /**
  下拉获取加载更多的会话消息
@@ -295,10 +307,48 @@ NS_ASSUME_NONNULL_BEGIN
  @param size 每次查询的条数
  @param result 回调的数据结构是查询到数据以及下次查询数据的锚点
  */
-- (void)loadHistoryMessages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith anchor:(nullable NSString *)anchor size:(int)size reaultBlock:(void(^)(NSArray<PhotonIMMessage *> *,NSString *))result;
+- (void)loadHistoryMessages:(PhotonIMChatType)chatType
+                   chatWith:(NSString *)chatWith
+                     anchor:(nullable NSString *)anchor
+                       size:(int)size
+                reaultBlock:(void(^)(NSArray<PhotonIMMessage *> * _Nullable,NSString * _Nullable,BOOL))result;
 
 
-- (void)updateConversationAtType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith atType:(PhotonIMConversationAtType)atType;
+
+/**
+ 同步服务端上的历史数据
+
+ @param chatType 会话类型
+ @param chatWith 会话中对方的id
+ @param size 每次查询的条数
+ @param beginTimeStamp <#beginTimeStamp description#>
+ @param result <#result description#>
+ */
+- (void)syncHistoryMessagesFromServer:(PhotonIMChatType)chatType
+                             chatWith:(NSString *)chatWith
+                                 size:(int)size
+                       beginTimeStamp:(int64_t)beginTimeStamp
+                          reaultBlock:(void (^)(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable anchor, NSError * _Nullable error))result;
+
+
+
+/**
+ <#Description#>
+
+ @param chatType 会话类型
+ @param chatWith 会话中对方的id
+ @param anchor 开始一次查询的锚点，在固定的时间段内查找数据，是有锚点进行查找类似下一页的操作，锚点在回调中返回，请求下一页是直接使用
+ @param size 每次查询的条数
+ @param beginTimeStamp 开始查找的时间时间戳，毫秒级（比如查询9点-11点之间的数据，beginTimeStamp指的是9点的那个时间点）
+ @param endTimeStamp 结束查找的时间时间戳，毫秒级（比如查询9点-11点之间的数据，beginTimeStamp指的是11点的那个时间点）
+ @param result <#result description#>
+ */
+- (void)syncHistoryMessagesFromServer:(PhotonIMChatType)chatType
+                             chatWith:(NSString *)chatWith
+                               anchor:(nullable NSString *)anchor
+                                 size:(int)size beginTimeStamp:(int64_t)beginTimeStamp
+                         endTimeStamp:(int64_t)endTimeStamp
+                          reaultBlock:(void (^)(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable anchor, NSError * _Nullable error))result;
 
 @end
 

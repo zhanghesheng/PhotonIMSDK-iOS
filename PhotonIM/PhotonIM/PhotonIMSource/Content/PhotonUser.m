@@ -7,6 +7,7 @@
 //
 
 #import "PhotonUser.h"
+#import "PhotonMessageCenter.h"
 #import "PhotonNetworkService.h"
 @interface PhotonUser()
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
@@ -92,15 +93,25 @@
             if (gid && [gid isKindOfClass:[NSString class]]) {
                 [PhotonContent addGroupToCurrentUserByGid:gid];
                 [self loadMembersFormGroup:gid completion:nil];
+                [self loadGroupProfile:gid completion:nil];
             }
         }
     }
 }
 
-- (void)getIgnoreAlert:(NSString *)remoteId completion:(void(^)(BOOL success,BOOL open))completion{
+- (void)getIgnoreAlert:(int)chatType
+              chatWith:(NSString *)chatWith
+            completion:(void(^)(BOOL success,BOOL open))completion{
     NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
-    [paramter setValue:remoteId forKey:@"remoteid"];
-    [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/setting/msg/getP2pRemind" paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
+    NSString *url = @"";
+    if (chatType == (int)PhotonIMChatTypeSingle) {
+        url = @"photonimdemo/setting/msg/getP2pRemind";
+         [paramter setValue:chatWith forKey:@"remoteid"];
+    }else if (chatType == (int)PhotonIMChatTypeGroup){
+        url = @"photonimdemo/setting/msg/getP2GRemind";
+         [paramter setValue:chatWith forKey:@"gid"];
+    }
+    [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:url paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
         NSDictionary *data = dict[@"data"];
         if (data.count > 0) {
             id switch_ = data[@"switch"];
@@ -149,7 +160,7 @@
                 user.nickName = [[item objectForKey:@"nickname"] isNil];
                 user.userName = [[item objectForKey:@"username"] isNil];
                 user.avatarURL = [[item objectForKey:@"avatar"] isNil];
-                [PhotonContent adduUserToGroupWithUser:user gid:gid];
+                [PhotonContent addUserToGroupWithUser:user gid:gid];
             }
             
         }
@@ -159,7 +170,7 @@
     }
 }
 
-- (void)loadGroupProfile:(NSString *)gid completion:(void(^)(NSString *gid,BOOL success))completion{
+- (void)loadGroupProfile:(NSString *)gid completion:(nullable void(^)(NSString *gid,BOOL success))completion{
     NSDictionary *paramter = @{@"gid":gid};
     __weak typeof(self)weakSelf = self;
     [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/group/remote/profile" paramter:paramter completion:^(NSDictionary * _Nonnull responseDict) {

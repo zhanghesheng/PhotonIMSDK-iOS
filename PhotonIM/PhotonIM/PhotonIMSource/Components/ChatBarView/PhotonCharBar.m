@@ -66,6 +66,7 @@
 #pragma mark - Public Methods
 - (void)sendCurrentText
 {
+    [self processSendAtInfo];
     if (self.textView.text.length > 0) {     // send Text
         if (_delegate && [_delegate respondsToSelector:@selector(chatBar:sendText:)]) {
             [_delegate chatBar:self sendText:self.textView.text];
@@ -74,6 +75,26 @@
     [self.textView setText:@""];
     [self hiddentTextViewLabel];
     [self p_reloadTextViewWithAnimation:YES];
+}
+
+- (void)processSendAtInfo{
+    if (self.atType == AtTypeNoAt) {
+        return;
+    }
+    NSMutableArray *atItems = [NSMutableArray array];
+    for (PhotonChatAtInfo *atItem in self.atInfos) {
+        if ([self.textView.text containsString:atItem.nickName]) {
+            [atItems addObject:atItem];
+        }
+    }
+    if (atItems.count == 0) {
+        self.atType = AtTypeNoAt;
+    }else{
+        if (self.atInfos.count != atItems.count && self.atType == AtTypeAtAll) {
+            self.atType = AtTypeAtMember;
+        }
+        self.atInfos = [atItems copy];
+    }
 }
 
 - (void)addEmojiString:(NSString *)emojiString
@@ -90,7 +111,7 @@
 }
 
 - (void)addAtContent:(NSString *)content{
-    NSString *str = [NSString stringWithFormat:@"%@%@ ", self.textView.text, content];
+    NSString *str = [NSString stringWithFormat:@"%@%@", self.textView.text, content];
     NSInteger length = [self getTextLength:self.textView.text];
     if (length > _maxTextWordCount) {
         return;
@@ -198,15 +219,23 @@
         if (atRange.location != NSNotFound && (endLocation > atRange.location) && endLocation <= [textView.text length]) {
             NSRange atItemRange = NSMakeRange(atRange.location, (endLocation - atRange.location));
             NSString *removedAtText = [textView.text substringWithRange:atItemRange];
-            NSMutableArray *atItems = [NSMutableArray array];
-            for (PhotonChatAtInfo *item in self.atInfos) {
-                if ([item.nickName isEqualToString:removedAtText]) {
-                    NSMutableString *mutableText = [[NSMutableString alloc] initWithString:textView.text];
-                    [mutableText replaceCharactersInRange:atItemRange withString:@""];
-                    textView.text = mutableText;
-                    continue;
+            NSMutableArray *atItems = [self.atInfos mutableCopy];
+            PhotonChatAtInfo *atItem = nil;
+            for (PhotonChatAtInfo *item in atItems) {
+                if ([[item.nickName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] isEqualToString:removedAtText]) {
+                    atItem = item;
+                    break;
                 }
-                [atItems addObject:item];
+            }
+            if (atItem) {
+                NSMutableString *mutableText = [[NSMutableString alloc] initWithString:textView.text];
+                [mutableText replaceCharactersInRange:atItemRange withString:@""];
+                textView.text = mutableText;
+                [atItems removeObject:atItem];
+            }
+            
+            if (self.atInfos.count != atItems.count && self.atType == AtTypeAtAll) {
+                self.atType = AtTypeAtMember;
             }
             self.atInfos = [atItems copy];
         }

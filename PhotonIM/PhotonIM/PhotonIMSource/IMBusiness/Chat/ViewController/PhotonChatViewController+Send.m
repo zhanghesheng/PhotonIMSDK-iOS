@@ -146,16 +146,11 @@
     if (self.conversation.chatType == PhotonIMChatTypeGroup) {
         PhotonAtMemberListViewController *memberListCtl = [[PhotonAtMemberListViewController alloc] initWithGid:self.conversation.chatWith result:^(AtType type, NSArray * _Nullable resultItems) {
             charBar.atType = type;
-            if (type == AtTypeAtAll) {
-                NSString *atContent = [NSString stringWithFormat:@"所有人"];
-                [charBar addAtContent:atContent];
-            }else if (type == AtTypeAtMember){
-                charBar.atInfos = [resultItems copy];
-                for (PhotonChatAtInfo *item in resultItems) {
-                    [charBar addAtContent:item.nickName];
-                }
+            [charBar deleteLastCharacter];
+            charBar.atInfos = [resultItems copy];
+            for (PhotonChatAtInfo *item in resultItems) {
+                [charBar addAtContent:item.nickName];
             }
-           
         }];
         [self.navigationController pushViewController:memberListCtl animated:YES];
     }

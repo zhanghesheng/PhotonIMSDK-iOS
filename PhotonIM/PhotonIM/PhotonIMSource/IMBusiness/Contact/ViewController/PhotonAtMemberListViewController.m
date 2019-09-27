@@ -124,7 +124,15 @@
         id item = [self.model.items objectAtIndex:indexPath.row];
         if ([item isKindOfClass:[PhotonTitleTableItem class]]) {
             if (self.result) {
-                self.result(2, nil);
+                NSMutableArray *resultItems = [NSMutableArray arrayWithCapacity:1];
+                PhotonChatAtInfo *atInfo = [[PhotonChatAtInfo alloc] init];
+                atInfo.userid = @"";
+                atInfo.nickName = @"@所有人 ";
+                atInfo.atType = AtTypeAtAll;
+                [resultItems addObject:atInfo];
+                if (self.result) {
+                    self.result(2, [resultItems copy]);
+                }
             }
              [self.navigationController popViewControllerAnimated:YES];
         }
@@ -159,31 +167,21 @@
         [self.navigationController popViewControllerAnimated:YES];
         return;
     }
-    if (self.selectedChats.count == self.model.memberCount) {
-        if (self.result) {
-            self.result(AtTypeAtAll, nil);
-        }
-    }else{
-        NSMutableArray *resultItems = [NSMutableArray arrayWithCapacity:self.selectedChats.count];
-        NSInteger index = 0;
-        for (PhotonUser *user in self.selectedChats) {
-            NSString *userID = user.userID;
-            NSString *nickName = nil;
-            if (index == 0) {
-                nickName = [NSString stringWithFormat:@"%@",user.nickName];
-            }else{
-                nickName = [NSString stringWithFormat:@"@%@",user.nickName];
-            }
-            PhotonChatAtInfo *atInfo = [[PhotonChatAtInfo alloc] init];
-            atInfo.userid = userID;
-            atInfo.nickName = nickName;
-            atInfo.atType = AtTypeAtMember;
-            [resultItems addObject:atInfo];
-            index ++;
-        }
-        if (self.result) {
-            self.result(1, [resultItems copy]);
-        }
+    NSMutableArray *resultItems = [NSMutableArray arrayWithCapacity:self.selectedChats.count];
+    NSInteger index = 0;
+    for (PhotonUser *user in self.selectedChats) {
+        NSString *userID = user.userID;
+        NSString *nickName = nil;
+        nickName = [NSString stringWithFormat:@"@%@ ",user.nickName];
+        PhotonChatAtInfo *atInfo = [[PhotonChatAtInfo alloc] init];
+        atInfo.userid = userID;
+        atInfo.nickName = nickName;
+        atInfo.atType = AtTypeAtMember;
+        [resultItems addObject:atInfo];
+        index ++;
+    }
+    if (self.result) {
+        self.result(1, [resultItems copy]);
     }
     [self.navigationController popViewControllerAnimated:YES];
 }

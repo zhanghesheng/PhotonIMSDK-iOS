@@ -65,7 +65,7 @@
                 user.nickName = [[item objectForKey:@"nickname"] isNil];
                 user.userName = [[item objectForKey:@"username"] isNil];
                 user.avatarURL = [[item objectForKey:@"avatar"] isNil];
-                [PhotonContent adduUserToGroupWithUser:user gid:self.gid];
+                [PhotonContent addUserToGroupWithUser:user gid:self.gid];
                 if (user) {
                     PhotonChatTransmitItem *item = [[PhotonChatTransmitItem alloc] init];
                     item.contactID = user.userID;

@@ -59,6 +59,10 @@
     }
     [self.model.items addObject:item];
     [self reloadData];
+    
+    if(message.chatType == PhotonIMChatTypeGroup && message.msgAtType != PhotonIMAtTypeNoAt){
+        [[PhotonMessageCenter sharedCenter] resetAtType:self.conversation];
+    }
 }
 // 处理撤回消息
 - (void)wrapperWithdrawMessage:(PhotonIMMessage *)message{

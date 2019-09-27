@@ -33,8 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 + (NSArray< PhotonUser *> *)findAllUsersWithGroupId:(NSString *)gid;
-+ (PhotonUser *)findAllUserWithGroupId:(NSString *)gid uid:(NSString *)uid;
-+ (BOOL)adduUserToGroupWithUser:(nullable PhotonUser *)user gid:(NSString *)gid;
++ (PhotonUser *)findUserWithGroupId:(NSString *)gid uid:(NSString *)uid;
++ (BOOL)addUserToGroupWithUser:(nullable PhotonUser *)user gid:(NSString *)gid;
 + (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid gid:(NSString *)gid;
 
 
