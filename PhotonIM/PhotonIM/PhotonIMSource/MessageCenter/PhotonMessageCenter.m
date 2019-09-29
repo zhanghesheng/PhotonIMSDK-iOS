@@ -375,6 +375,17 @@ static PhotonMessageCenter *center = nil;
     }];
 }
 
+
+- (void)sendAddGrupNoticeMessage:(nullable PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
+    [[PhotonIMClient sharedClient] sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        [PhotonUtil runMainThread:^{
+            if (completion) {
+                completion(succeed,error);
+            }
+        }];
+    }];
+}
+
 #pragma mark ---  数据操作相关 -----
 - (void)insertOrUpdateMessage:(PhotonIMMessage *)message{
     [self.imClient insertOrUpdateMessage:message updateConversion:YES];
@@ -397,9 +408,12 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)resetAtType:(PhotonIMConversation *)conversation{
-    if (conversation.atType != PhotonIMConversationAtTypeNoAt) {
-        [self.imClient updateConversationAtType:conversation.chatType chatWith:conversation.chatWith atType:PhotonIMConversationAtTypeNoAt];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (conversation.atType != PhotonIMConversationAtTypeNoAt) {
+            [self.imClient updateConversationAtType:conversation.chatType chatWith:conversation.chatWith atType:PhotonIMConversationAtTypeNoAt];
+        }
+    });
+    
     
 }
 
@@ -484,6 +498,7 @@ static PhotonMessageCenter *center = nil;
     switch (failedType) {
         case PhotonIMLoginFailedTypeTokenError:
         case PhotonIMLoginFailedTypeParamterError:{
+            NSLog(@"[pim]:PhotonIMLoginFailedTypeTokenError or PhotonIMLoginFailedTypeParamterError");
             [self reGetToken];
         }
             break;
@@ -515,6 +530,7 @@ static PhotonMessageCenter *center = nil;
 
 #pragma mark ---- 登录相关 ----
 - (void)reGetToken{
+     NSLog(@"[pim]:reGetToken");
     [[MMKV defaultMMKV] setString:@"" forKey:TOKENKEY];
     [self getToken];
 }
@@ -528,9 +544,9 @@ static PhotonMessageCenter *center = nil;
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
             [[PhotonIMClient sharedClient] loginWithToken:token extra:nil];
-            PhotonLog(@"dict = %@",dict);
+            PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
-            PhotonLog(@"error = %@",error.errorMessage);
+            PhotonLog(@"[pim] error = %@",error.errorMessage);
             [PhotonUtil showAlertWithTitle:@"Token获取失败" message:error.errorMessage];
             [self logout];
         }];

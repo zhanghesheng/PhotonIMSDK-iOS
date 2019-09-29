@@ -33,8 +33,8 @@
     }];
     
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(120);
-        make.bottom.left.right.mas_equalTo(self.view).mas_equalTo(-SAFEAREA_INSETS_BOTTOM);
+        make.top.mas_equalTo(self.iconView.mas_bottom).offset(0);
+        make.bottom.left.right.mas_equalTo(self.view).mas_equalTo(0);
     }];
 }
 

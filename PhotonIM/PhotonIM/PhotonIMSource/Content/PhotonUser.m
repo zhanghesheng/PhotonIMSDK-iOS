@@ -89,6 +89,7 @@
             [PhotonContent addFriendToDB:user];
         }
         NSArray *joinedGids = [data objectForKey:@"joinedGids"];
+        [PhotonContent deleteAllGroups];
         for (NSString *gid in joinedGids) {
             if (gid && [gid isKindOfClass:[NSString class]]) {
                 [PhotonContent addGroupToCurrentUserByGid:gid];

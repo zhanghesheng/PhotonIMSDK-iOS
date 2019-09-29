@@ -111,14 +111,6 @@ PhotonAudioRecorderDelegate>
 }
 
 - (void)addMasonry{
-    if (SAFEAREA_INSETS_BOTTOM > 0) {
-        self.view.backgroundColor = self.chatBar.backgroundColor;
-        [self.view mas_makeConstraints:(^ (MASConstraintMaker *make) {
-            make.left.right.bottom.mas_equalTo(0);
-            make.top.mas_equalTo(self.chatBar.mas_bottom);
-        })] ;
-    }
-    
     [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self.view);
         make.bottom.mas_equalTo(self.view).mas_offset(-SAFEAREA_INSETS_BOTTOM);

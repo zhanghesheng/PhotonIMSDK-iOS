@@ -16,6 +16,7 @@
     textItem.fromType = PhotonChatMessageFromSelf;
     textItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     textItem.messageText = text;
+    NSString *avatarUrl = @"";
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     textItem.atInfo = [atItems copy];
     textItem.type = atType;

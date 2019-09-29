@@ -17,7 +17,7 @@
 {
     self = [super init];
     if (self) {
-        self.pageSize = 10;
+        self.pageSize = 50;
         _anchorMsgId = @"";
         
     }
@@ -27,7 +27,7 @@
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
     if (self.startSyncServer) {
-        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:5 beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
+        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
             if (error) {
                 weakself.startSyncServer = NO;
             }else{
@@ -89,6 +89,12 @@
         noticItem.userInfo = message;
         return noticItem;
     }
+    NSString *avatarUrl = @"";
+    if (message.chatType == PhotonIMChatTypeSingle) {
+        avatarUrl = [PhotonContent friendDetailInfo:message.fr].avatarURL;
+    }else if (message.chatType == PhotonIMChatTypeGroup){
+        avatarUrl = [PhotonContent findUserWithGroupId:message.to uid:message.fr].avatarURL;
+    }
     switch (message.messageType) {
         case PhotonIMMessageTypeText:{// 文本
             PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
@@ -97,7 +103,7 @@
             PhotonIMTextBody * body = (PhotonIMTextBody *)message.messageBody;
             textItem.messageText = [body text];
             textItem.userInfo = message;
-            textItem.avatalarImgaeURL = [PhotonContent friendDetailInfo:message.fr].avatarURL;
+            textItem.avatalarImgaeURL = avatarUrl;
             resultItem = textItem;
         }
             break;
@@ -105,7 +111,7 @@
             PhotonImageMessageChatItem *imageItem = [[PhotonImageMessageChatItem alloc] init];
             imageItem.fromType = fromeType;
             imageItem.timeStamp = message.timeStamp;
-            imageItem.avatalarImgaeURL = [PhotonContent friendDetailInfo:message.fr].avatarURL;
+            imageItem.avatalarImgaeURL = avatarUrl;
             PhotonIMImageBody *imgBody = (PhotonIMImageBody *)message.messageBody;
             if([imgBody.thumbURL isNotEmpty]){
                 imageItem.thumURL = imgBody.thumbURL;
@@ -135,8 +141,19 @@
             audioItem.duration = audioBody.mediaTime;
             audioItem.userInfo = message;
             audioItem.isPlayed = audioBody.localMediaPlayed;
-            audioItem.avatalarImgaeURL = [PhotonContent friendDetailInfo:message.fr].avatarURL;
+            audioItem.avatalarImgaeURL = avatarUrl;
             resultItem = audioItem;
+        }
+            break;
+        case PhotonIMMessageTypeRaw:{// 自定义
+            PhotonIMCustomBody *customBody = (PhotonIMCustomBody *)message.messageBody;
+            if (customBody.data) {
+                PhotonChatNoticItem *noticItem = [[PhotonChatNoticItem alloc] init];
+                noticItem.notic = [[NSString alloc] initWithData:customBody.data encoding:NSUTF8StringEncoding];
+                noticItem.userInfo = message;
+                return noticItem;
+            }
+          
         }
             break;
             

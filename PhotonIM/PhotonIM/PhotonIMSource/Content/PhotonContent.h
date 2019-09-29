@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 // 当前用户移除群组
 + (BOOL)deleteGroupByGid:(nullable NSString *)gid;
 
-
++ (BOOL)deleteAllGroups;
 
 + (NSArray< PhotonUser *> *)findAllUsersWithGroupId:(NSString *)gid;
 + (PhotonUser *)findUserWithGroupId:(NSString *)gid uid:(NSString *)uid;

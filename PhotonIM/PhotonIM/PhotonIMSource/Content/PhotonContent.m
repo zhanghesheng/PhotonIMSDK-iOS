@@ -112,6 +112,12 @@
     return [userDB addGroupWithGid:gid tableName:tableName];
 }
 
++ (BOOL)deleteAllGroups{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"user_group_%@",[PhotonContent currentUser].userID];
+    return [userDB deleteAllGroups:tableName];
+}
+
 + (NSArray<PhotonUser *> *)findAllUsersWithGroupId:(NSString *)gid{
     PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
     NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
@@ -152,6 +158,7 @@
     [PhotonUtil runMainThread:^{
          [PhotonDBManager openDB];
         [MoPushManager registerWithAlias:[PhotonContent currentUser].userID];
+        [[PhotonContent currentUser] loadFriendProfile];
     }];
 }
 @end

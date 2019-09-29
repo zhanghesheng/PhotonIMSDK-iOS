@@ -55,7 +55,6 @@
         self.items = [NSMutableArray array];
         // 添加接收消息的监听
         [[PhotonMessageCenter sharedCenter] addObserver:self];
-       
         [self.tableView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     }
     return self;

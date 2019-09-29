@@ -53,7 +53,6 @@ static PhotonAppLaunchManager *lauchManager = nil;
     if ([[PhotonContent currentUser].userID isNotEmpty]) {
         
         [PhotonContent login];
-      
         [[PhotonMessageCenter sharedCenter] login];
         PhotonConversationListViewController *conversationVC = [[PhotonConversationListViewController alloc] init];
         PhotonContactViewController *contactVC = [[PhotonContactViewController alloc] init];

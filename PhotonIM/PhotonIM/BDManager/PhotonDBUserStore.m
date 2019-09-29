@@ -48,6 +48,7 @@ PRIMARY KEY(gid))"
 #define     SQL_UPDATE_UID_GROUPS               @"REPLACE INTO %@ (gid, ext1, ext2, ext3, ext4, ext5, ext6, ext7, ext8, ext9, ext10) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 #define     SQL_SELECT_GROUPS              @"SELECT * FROM %@"
 #define     SQL_DELETE_GROUP               @"DELETE FROM %@ WHERE gid = '%@'"
+#define     SQL_DELETE_ALLGROUPS               @" delete from   %@"
 
 // group-users
 #define     SQL_CREATE_GROUP_UIDS_TABLE        @"CREATE TABLE IF NOT EXISTS %@(\
@@ -212,6 +213,14 @@ PRIMARY KEY(uid))"
 - (BOOL)deleteGroupByGid:(nullable NSString *)gid tableName:(NSString *)tableName{
     [self createUserTable:tableName];
     NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_GROUP, tableName, gid];
+    BOOL ok = [self excuteSQL:sqlString, nil];
+    return ok;
+}
+
+
+- (BOOL)deleteAllGroups:(NSString *)tableName{
+    [self createUserTable:tableName];
+    NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_ALLGROUPS, tableName];
     BOOL ok = [self excuteSQL:sqlString, nil];
     return ok;
 }

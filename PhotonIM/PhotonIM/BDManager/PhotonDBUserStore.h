@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 // 当前用户移除群组
 - (BOOL)deleteGroupByGid:(nullable NSString *)gid tableName:(NSString *)tableName;
 
+- (BOOL)deleteAllGroups:(NSString *)tableName;
+
 #pragma mark --- group-users -----
 // 创建群组表
 - (BOOL)createGroupTable:(NSString *)tableName;

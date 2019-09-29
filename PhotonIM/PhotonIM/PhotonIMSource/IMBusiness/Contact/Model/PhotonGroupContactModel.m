@@ -7,6 +7,7 @@
 //
 
 #import "PhotonGroupContactModel.h"
+#import "PhotonMessageCenter.h"
 #import "PhotonBaseContactItem.h"
 #import "PhotonGroupContactItem.h"
 @implementation PhotonGroupContactModel
@@ -72,17 +73,37 @@
     if (![gid isNotEmpty]) {
         return;
     }
+    PhotonWeakSelf(self);
     NSDictionary *patamter = @{@"gid":gid};
     [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/group/remote/join" paramter:patamter completion:^(NSDictionary * _Nonnull responseDict) {
         if (finish) {
             finish(nil);
         }
+        [weakself sendEnterGroupNoticeMessage:gid];
         [PhotonContent addGroupToCurrentUserByGid:gid];
+        [[PhotonContent currentUser] loadMembersFormGroup:gid completion:nil];
         [PhotonUtil hiddenLoading];
     } failure:^(PhotonErrorDescription * _Nonnull error) {
         if (failure) {
             failure(error);
         }
     }];
+}
+
+- (void)sendEnterGroupNoticeMessage:(NSString *)gid{
+    
+    PhotonUser *user = [PhotonContent userDetailInfo];
+    NSString *notice = [NSString stringWithFormat:@"\"%@\"已加入群聊",user.nickName];
+    NSData *customData = [notice dataUsingEncoding:NSUTF8StringEncoding];
+    
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:gid messageType:PhotonIMMessageTypeRaw chatType:PhotonIMChatTypeGroup];
+    PhotonIMCustomBody *customBody = [[PhotonIMCustomBody alloc] init];
+    customBody.data = customData;
+    [message setMesageBody:customBody];
+    [[PhotonMessageCenter sharedCenter] sendAddGrupNoticeMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        
+    }];
+    
+    
 }
 @end

@@ -75,6 +75,9 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 - (void)transmitMessage:(nullable PhotonIMMessage *)message conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
 
 
+- (void)sendAddGrupNoticeMessage:(nullable PhotonIMMessage *)message  completion:(nullable CompletionBlock)completion;
+
+
 #pragma mark === 资源路径的处理 ====
 
 /**

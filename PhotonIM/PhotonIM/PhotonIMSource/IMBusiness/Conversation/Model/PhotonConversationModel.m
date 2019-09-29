@@ -21,11 +21,13 @@
     if (conversations.count > 0) {
         NSMutableArray *chatWiths = [NSMutableArray array];
         for (PhotonIMConversation *conversation in  conversations) {
+             PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
             if (conversation.chatType == PhotonIMChatTypeSingle) {
-                PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
                 if (!user) {
                     [chatWiths addObject:conversation.chatWith];
                 }
+            }else if (conversation.chatType == PhotonIMChatTypeGroup){
+                [[PhotonContent currentUser]loadMembersFormGroup:conversation.chatWith completion:nil];
             }
             
         }
