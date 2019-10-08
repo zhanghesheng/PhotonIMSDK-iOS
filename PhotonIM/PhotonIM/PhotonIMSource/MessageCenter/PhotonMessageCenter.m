@@ -353,8 +353,7 @@ static PhotonMessageCenter *center = nil;
     sendMessage.to = conversation.chatWith;
     sendMessage.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     sendMessage.messageType = message.messageType;
-    sendMessage.messageStatus = PhotonIMMessageStatusDefault;
-    sendMessage.chatType = message.chatType;
+    sendMessage.messageStatus = PhotonIMMessageStatusSending;
     [sendMessage setMesageBody:message.messageBody];
     [self _sendMessage:sendMessage completion:completion];
 }

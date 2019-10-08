@@ -15,6 +15,7 @@
     [super loadItems:params finish:finish failure:failure];
     PhotonTitleTableItem *titleItem = [[PhotonTitleTableItem alloc] init];
     titleItem.title = @"最近会话";
+    titleItem.itemHeight = 40.f;
     [self.items addObject:titleItem];
     NSArray<PhotonIMConversation *> *conversations = [[PhotonIMClient sharedClient] findConversationList:0 size:INT_MAX asc:NO];
     for (PhotonIMConversation *conversation in conversations) {
@@ -57,6 +58,7 @@
         
         PhotonTitleTableItem *titleItem1 = [[PhotonTitleTableItem alloc] init];
         titleItem1.title = @"在线好友";
+        titleItem1.itemHeight = 40.f;
         [self.items addObject:titleItem1];
         
         NSArray *lists = [data objectForKey:@"lists"];

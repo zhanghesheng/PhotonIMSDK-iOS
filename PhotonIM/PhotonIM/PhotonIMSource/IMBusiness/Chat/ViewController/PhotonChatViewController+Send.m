@@ -144,10 +144,13 @@
 
 - (void)processAtAction:(PhotonCharBar *)charBar{
     if (self.conversation.chatType == PhotonIMChatTypeGroup) {
+        NSMutableArray *items = [NSMutableArray array];
         PhotonAtMemberListViewController *memberListCtl = [[PhotonAtMemberListViewController alloc] initWithGid:self.conversation.chatWith result:^(AtType type, NSArray * _Nullable resultItems) {
             charBar.atType = type;
             [charBar deleteLastCharacter];
-            charBar.atInfos = [resultItems copy];
+            [items addObjectsFromArray:charBar.atInfos];
+            [items addObjectsFromArray:resultItems];
+            charBar.atInfos = [items copy];
             for (PhotonChatAtInfo *item in resultItems) {
                 [charBar addAtContent:item.nickName];
             }
