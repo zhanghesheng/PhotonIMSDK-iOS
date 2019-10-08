@@ -119,6 +119,12 @@
     settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
     [self.items addObject:settionItem];
     
+    PhotonMessageSettingItem *stickyItem = [[PhotonMessageSettingItem alloc] init];
+    stickyItem.settingName = @"置顶";
+    stickyItem.open = _conversation.sticky;
+    stickyItem.type = PhotonMessageSettingTypeIgnorSticky;
+    [self.items addObject:stickyItem];
+    
     PhotonGroupSettingDataSource *dataSource = [[PhotonGroupSettingDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
 }
@@ -157,6 +163,7 @@
             break;
         case PhotonMessageSettingTypeIgnorSticky:{
             _conversation.sticky = item.open;
+            [[PhotonIMClient sharedClient] updateConversationSticky:_conversation];
         }
             break;
             
