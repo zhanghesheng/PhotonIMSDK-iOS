@@ -185,9 +185,9 @@ typedef NS_ENUM(NSInteger, PhotonIMNetworkType) {
 };
 
 typedef NS_ENUM(NSInteger, PhotonIMConversationAtType) {
-    PhotonIMConversationAtTypeNoAt = 0,//
-    PhotonIMConversationAtTypeAtMe = 1,
-    PhotonIMConversationTypeAtAll = 2,
+    PhotonIMConversationAtTypeNoAt = 0,//会话不包含at
+    PhotonIMConversationAtTypeAtMe = 1,//会话处于at中，非全部，包含我
+    PhotonIMConversationTypeAtAll = 2,//会话处于at所有群成员
 };
 
 typedef NS_ENUM(NSInteger, PhotonIMAtType) {
