@@ -55,7 +55,6 @@
     imageItem.fromType = PhotonChatMessageFromSelf;
     imageItem.fileName = imageName;
     imageItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    imageItem.imageSize = image.size;
     imageItem.whRatio = image.size.width/image.size.height;
     imageItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     if (res) {
