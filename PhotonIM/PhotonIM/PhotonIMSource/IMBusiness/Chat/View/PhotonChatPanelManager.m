@@ -279,6 +279,8 @@ PhotonAudioRecorderDelegate>
     }
     if ([self.delegate respondsToSelector:@selector(sendTextMessage:atItems:type:)]) {
         [self.delegate sendTextMessage:text atItems:chatBar.atInfos type:chatBar.atType];
+        chatBar.atInfos = [@[] copy];
+        chatBar.atType = AtTypeNoAt;
     }
 }
 

@@ -77,7 +77,10 @@
          PhotonUser *user =  [PhotonContent findUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
          chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,conversation.lastMsgContent] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
     }else{
-        chatContent = [[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+        if(conversation.lastMsgContent){
+             chatContent = [[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+        }
+       
     }
     if (chatContent) {
         [content appendAttributedString:chatContent];
