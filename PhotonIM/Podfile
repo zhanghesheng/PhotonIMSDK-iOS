@@ -16,5 +16,5 @@ target :PhotonIM do
     pod 'MDLog','1.0.0'
     pod 'PhotonPushSDK','0.0.9'
 #    pod 'PhotonIMSDK','1.0.11'
-    pod 'PhotonIMSDK',:git=>'https://cosmos33@github.com/cosmos33/PhotonIMSDK-iOS.git', :commit=>'320b2b859fb57ba51c16c5c872a34dda781af1de'
+    pod 'PhotonIMSDK',:git=>'https://cosmos33@github.com/cosmos33/PhotonIMSDK-iOS.git', :commit=>'740abfb126c12c334f2119bc455094371308e587'
 end
