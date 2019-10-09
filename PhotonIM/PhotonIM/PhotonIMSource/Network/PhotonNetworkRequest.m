@@ -9,6 +9,7 @@
 #import "PhotonNetworkRequest.h"
 #import "PhotonMacros.h"
 #import "AFHTTPSessionManager.h"
+#import "PhotonAPIMacros.h"
 NSString *const PhotonRequestMethodGet = @"GET";
 NSString *const PhotonRequestMethodPost = @"POST";
 NSString *const PhotonRequestMethodPut = @"PUT";
@@ -42,8 +43,6 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
     self = [super init];
     if (self) {
         self.manager = [AFHTTPSessionManager manager];
-//        self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.mutifileItems = [NSMutableArray arrayWithCapacity:10];
         
@@ -54,15 +53,27 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 - (instancetype)initWithUrl:(NSString *)urlString andParamer:(NSDictionary *)paramter{
     self =  [super init];
     if (self) {
-        self.manager = [AFHTTPSessionManager manager];
-//        self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:PHOTON_BASE_URL]];
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.urlString = urlString;
         self.parameters = [NSMutableDictionary dictionaryWithDictionary:paramter];
         self.timeOut = 15;
-        self.cerArray = nil;
+        self.cerArray = @[];
         self.mutifileItems = [NSMutableArray arrayWithCapacity:10];
+        
+        if (self.cerArray) {
+            NSMutableSet *pSet = [[NSMutableSet alloc] init];
+            for (id item in self.cerArray) {
+                [pSet addObject:item];
+            }
+            //自动加载.cer证书
+            AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+            [securityPolicy setPinnedCertificates:pSet];
+            
+            self.manager.securityPolicy = [self customSecurityPolicy];
+        } else {
+            self.manager.securityPolicy = [AFSecurityPolicy defaultPolicy];
+        }
     }
     return self;
 }
@@ -106,11 +117,11 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 - (AFSecurityPolicy*)customSecurityPolicy
 {
     // /先导入证书
-    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"hgcang" ofType:@"cer"];//证书的路径
+    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"momo" ofType:@"cer"];//证书的路径
     NSData *certData = [NSData dataWithContentsOfFile:cerPath];
     
     // AFSSLPinningModeCertificate 使用证书验证模式
-    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
     
     // allowInvalidCertificates 是否允许无效证书（也就是自建的证书），默认为NO
     // 如果是需要验证自建证书，需要设置为YES
@@ -120,7 +131,7 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
     //假如证书的域名与你请求的域名不一致，需把该项设置为NO；如设成NO的话，即服务器使用其他可信任机构颁发的证书，也可以建立连接，这个非常危险，建议打开。
     //置为NO，主要用于这种情况：客户端请求的是子域名，而证书上的是另外一个域名。因为SSL证书上的域名是独立的，假如证书上注册的域名是www.google.com，那么mail.google.com是无法验证通过的；当然，有钱可以注册通配符的域名*.google.com，但这个还是比较贵的。
     //如置为NO，建议自己添加对应域名的校验逻辑。
-    securityPolicy.validatesDomainName = YES;
+    securityPolicy.validatesDomainName = NO;
     
     securityPolicy.pinnedCertificates = [NSSet setWithObjects:certData, nil];
     
@@ -133,20 +144,6 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 - (void)sendRequest{
     
     __weak typeof(self)weakInstance = self;
-    
-    if (self.cerArray) {
-        NSMutableSet *pSet = [[NSMutableSet alloc] init];
-        for (id item in self.cerArray) {
-            [pSet addObject:item];
-        }
-        //自动加载.cer证书
-        AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeCertificate];
-        [securityPolicy setPinnedCertificates:pSet];
-        
-        self.manager.securityPolicy = [self customSecurityPolicy];
-    } else {
-        self.manager.securityPolicy = [AFSecurityPolicy defaultPolicy];
-    }
     
     for (NSString *key in self.requestHeaders) {
         NSString *value = [self.requestHeaders objectForKey:key];
