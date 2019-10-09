@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PhotonIMSDK'
-  s.version          = '1.0.12'
+  s.version          = '1.1.0'
   s.summary          = 'A short description of PhotonIMSDK.'
 
   s.description      = <<-DESC
@@ -19,4 +19,5 @@ TODO: Add long description of the pod here.
   s.resources = 'Products/PhotonImResource.bundle'
   s.ios.libraries = 'c++','z','resolv','stdc++','sqlite3'
   s.dependency 'protobuf-lib'
+  s.dependency 'MDLog'
 end
