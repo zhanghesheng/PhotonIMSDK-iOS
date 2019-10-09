@@ -86,7 +86,7 @@
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {
                 
-                NSString *chatWith = [[item objectForKey:@"userId"] isNil];
+                NSString *chatWith = [[item objectForKey:@"id"] isNil];
                 int type = [[[item objectForKey:@"type"] isNil] intValue];
                 PhotonIMChatType chatType = (PhotonIMChatType)type;
                 

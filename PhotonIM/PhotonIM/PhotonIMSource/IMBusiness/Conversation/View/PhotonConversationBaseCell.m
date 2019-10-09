@@ -73,7 +73,7 @@
         [content appendAttributedString:atTypeString];
     }
     NSMutableAttributedString *chatContent;
-    if(conversation.chatType == PhotonIMChatTypeGroup){
+    if(conversation.chatType == PhotonIMChatTypeGroup && conversation.lastMsgContent && conversation.lastMsgContent.length > 0){
          PhotonUser *user =  [PhotonContent findUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
          chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,conversation.lastMsgContent] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
     }else{
