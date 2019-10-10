@@ -139,7 +139,7 @@
 
 - (BOOL)wrapperReadMessage:(PhotonIMMessage *)message{
     BOOL ret = NO;
-    NSArray *readMsgIds = message.readMagIds;
+    NSArray *readMsgIds = message.readMsgIDs;
     if (readMsgIds.count > 0) {
         for (NSString *msgID in readMsgIds) {
             for (PhotonBaseChatItem *item in self.items) {
