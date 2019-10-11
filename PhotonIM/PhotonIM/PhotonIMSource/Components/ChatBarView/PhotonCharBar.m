@@ -85,15 +85,18 @@
     for (PhotonChatAtInfo *atItem in self.atInfos) {
         if ([self.textView.text containsString:atItem.nickName]) {
             [atItems addObject:atItem];
+            
         }
     }
     if (atItems.count == 0) {
         self.atType = AtTypeNoAt;
-    }else{
-        if (self.atInfos.count != atItems.count && self.atType == AtTypeAtAll) {
-            self.atType = AtTypeAtMember;
+    }
+    self.atInfos = [atItems copy];
+    for (PhotonChatAtInfo *atItem in self.atInfos) {
+        self.atType = atItem.atType;
+        if(atItem.atType == AtTypeAtAll){
+            break;
         }
-        self.atInfos = [atItems copy];
     }
 }
 

@@ -26,14 +26,39 @@
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
-    if (self.startSyncServer) {
-        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
-            if (error) {
-                weakself.startSyncServer = NO;
-            }else{
-                weakself.anchorMsgId = [an copy];
+    [imclient runInPhotonIMDBQueue:^{
+        if (self.startSyncServer) {
+            [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
+                if (error) {
+                    weakself.startSyncServer = NO;
+                }else{
+                    weakself.anchorMsgId = [an copy];
+                    NSMutableArray *items = [NSMutableArray array];
+                    for (PhotonIMMessage *msg in messageList) {
+                        id item =  [weakself wrapperMessage:msg];
+                        if (item) {
+                            [items addObject:item];
+                        }
+                    }
+                    NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
+                    [totolItems addObjectsFromArray:items];
+                    [totolItems addObjectsFromArray:self.items];
+                    self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
+                }
+                if (finish) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        finish(nil);
+                    });
+                }
+                
+            }];
+            
+        }else{
+            [imclient loadHistoryMessages:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)weakself.pageSize reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messages, NSString * _Nullable an, BOOL remainHistoryInServer) {
                 NSMutableArray *items = [NSMutableArray array];
-                for (PhotonIMMessage *msg in messageList) {
+                weakself.anchorMsgId = [an copy];
+                weakself.startSyncServer = remainHistoryInServer;
+                for (PhotonIMMessage *msg in messages) {
                     id item =  [weakself wrapperMessage:msg];
                     if (item) {
                         [items addObject:item];
@@ -43,39 +68,14 @@
                 [totolItems addObjectsFromArray:items];
                 [totolItems addObjectsFromArray:self.items];
                 self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
-            }
-            if (finish) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    finish(nil);
-                });
-            }
-            
-        }];
-
-    }else{
-        [imclient loadHistoryMessages:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)weakself.pageSize reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messages, NSString * _Nullable an, BOOL remainHistoryInServer) {
-            NSMutableArray *items = [NSMutableArray array];
-            weakself.anchorMsgId = [an copy];
-            weakself.startSyncServer = remainHistoryInServer;
-            for (PhotonIMMessage *msg in messages) {
-                id item =  [weakself wrapperMessage:msg];
-                if (item) {
-                    [items addObject:item];
+                if (finish) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        finish(nil);
+                    });
                 }
-            }
-            NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
-            [totolItems addObjectsFromArray:items];
-            [totolItems addObjectsFromArray:self.items];
-            self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
-            if (finish) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    finish(nil);
-                });
-            }
-        }] ;
-    }
-    
-    
+            }] ;
+        }
+    }];
 }
 
 // 处理二人聊天收到的信息

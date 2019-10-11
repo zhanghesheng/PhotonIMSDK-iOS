@@ -10,6 +10,7 @@
 #import "PhotonMessageCenter.h"
 #import "PhotonConversationItem.h"
 #import "PhoneBadgeView.h"
+#import "NSString+PhotonExtensions.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 @interface PhotonConversationBaseCell()
 @property (nonatomic, strong, nullable) UIImageView *iconView;
@@ -75,7 +76,7 @@
     NSMutableAttributedString *chatContent;
     if(conversation.chatType == PhotonIMChatTypeGroup && conversation.lastMsgContent && conversation.lastMsgContent.length > 0){
          PhotonUser *user =  [PhotonContent findUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
-         chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,conversation.lastMsgContent] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+         chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
     }else{
         if(conversation.lastMsgContent){
              chatContent = [[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];

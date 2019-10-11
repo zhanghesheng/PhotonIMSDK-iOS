@@ -175,13 +175,13 @@
 - (void)setIgnoreAlert:(BOOL)open{
     NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
     [paramter setValue:self.conversation.chatWith forKey:@"gid"];
-    [paramter setValue:@(open) forKey:@"switch"];
+    [paramter setValue:@(!open) forKey:@"switch"];
     PhotonWeakSelf(self);
     [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/setting/msg/setP2GRemind" paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
          [[PhotonMessageCenter sharedCenter] updateConversationIgnoreAlert:weakself.conversation];
-        [PhotonUtil showSuccessHint:@"勿扰模式保存成功!"];
+        [PhotonUtil showSuccessHint:@"设置成功!"];
     } failure:^(PhotonErrorDescription * _Nonnull error) {
-        [PhotonUtil showErrorHint:@"勿扰模式保存失败!"];
+        [PhotonUtil showErrorHint:@"设置失败!"];
     }];
 }
 - (PhotonNetworkService *)netService{
