@@ -28,14 +28,14 @@
  */
 typedef NS_ENUM(NSInteger, PhotonIMLoginStatus) {
     PhotonIMLoginStatusUnknow = 0,
-    PhotonIMLoginStatusConnecting = 1,
-    PhotonIMLoginStatusConnected = 2,
-    PhotonIMLoginStatusConnectFailed = 3,
-    PhotonIMLoginStatusLogining = 4,
-    PhotonIMLoginStatusLoginSucceed = 5,
-    PhotonIMLoginStatusLoginFailed = 6,
-    PhotonIMLoginStatusDisconnecting = 7,
-    PhotonIMLoginStatusDisconnected = 8,
+    PhotonIMLoginStatusConnecting,
+    PhotonIMLoginStatusConnected,
+    PhotonIMLoginStatusConnectFailed,
+    PhotonIMLoginStatusLogining,
+    PhotonIMLoginStatusLoginSucceed,
+    PhotonIMLoginStatusLoginFailed,
+    PhotonIMLoginStatusDisconnecting,
+    PhotonIMLoginStatusDisconnected,
 };
 
 /**

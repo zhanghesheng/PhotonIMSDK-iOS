@@ -79,9 +79,9 @@
     [self.items removeAllObjects];
     [super wrappResponseddDict:dict];
     NSMutableArray<PhotonIMConversation *> *conversations = [[NSMutableArray alloc] init];
-    NSDictionary *data = [dict objectForKey:@"data"];
+    NSDictionary *data = [[dict objectForKey:@"data"] isNil];
     if (data.count > 0) {
-        NSArray *lists = [data objectForKey:@"lists"];
+        NSArray *lists = [[data objectForKey:@"lists"] isNil];
         PhotonLog(@"history session data count: %@",@([lists count]));
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {

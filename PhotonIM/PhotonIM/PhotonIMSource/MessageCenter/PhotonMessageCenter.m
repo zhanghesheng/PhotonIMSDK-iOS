@@ -415,6 +415,9 @@ static PhotonMessageCenter *center = nil;
     
     
 }
+- (PhotonIMConversation *)findConversation:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    return [self.imClient findConversation:chatType chatWith:chatWith];
+}
 
 
 

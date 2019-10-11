@@ -159,7 +159,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         default:
             break;
     }
-    [self setTabBarBadgeValue];
+   
     if (!self.isAppeared) {
         self.needRefreshData  = YES;
         return;
@@ -177,13 +177,11 @@ static NSString *message_syncing = @"消息(收取中......)";
             }
         }];
     }
-    if (self.refreshCount > 2) {
-        [weakSelf startRefreshConversations];
-    }
 }
 
 - (void)startRefreshConversations{
     if (!self.isExcute) {
+        [self setTabBarBadgeValue];
         self.refreshCount = 0;
         [self.imTimer cancel];
         self.imTimer = nil;
@@ -197,7 +195,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     [[PhotonContent currentUser] getIgnoreAlert:chatType chatWith:chatWith completion:^(BOOL success, BOOL open) {
          PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
-        conversation.ignoreAlert = open;
+        conversation.ignoreAlert = !open;
         [[PhotonMessageCenter sharedCenter] updateConversationIgnoreAlert:conversation];
     }];
 }
