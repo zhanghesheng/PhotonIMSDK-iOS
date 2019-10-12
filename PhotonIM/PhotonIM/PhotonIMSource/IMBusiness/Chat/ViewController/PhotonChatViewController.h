@@ -24,6 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, readonly, nullable)PhotonIMConversation *conversation;
 @property(nonatomic,strong,readonly,nullable)PhotonChatPanelManager *panelManager;
 @property(nonatomic,strong,readonly,nullable)PhotonMenuView *menuView;
+@property(nonatomic, assign)NSInteger  totleSendCount;
+@property(nonatomic, assign)NSInteger  sendSucceedCount;
+@property(nonatomic, assign)NSInteger  sendFailedCount;
+@property(nonatomic, strong)UILabel  *totleSendCountLable;
+@property(nonatomic, strong)UILabel  *sendSucceedCountLable;
+@property(nonatomic, strong)UILabel  *sendFailedCountLable;
 - (instancetype)initWithConversation:(nullable PhotonIMConversation *)conversation;
 @end
 

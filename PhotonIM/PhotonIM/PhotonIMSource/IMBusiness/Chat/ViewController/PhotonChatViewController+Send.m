@@ -20,7 +20,20 @@
     [self.model.items addObject:textItem];
     [self reloadData];
     PhotonWeakSelf(self);
+   
+    [PhotonUtil runMainThread:^{
+         self.totleSendCount ++;
+         self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(self.totleSendCount)];
+    }];
+   
     [[PhotonMessageCenter sharedCenter] sendTextMessage:textItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        if (succeed) {
+            weakself.sendSucceedCount ++;
+            self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(self.sendSucceedCount)];
+        }else{
+            weakself.sendFailedCount ++;
+            self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(self.sendFailedCount)];
+        }
         if (!succeed && error.code == 1001 && error.em) {
            textItem.tipText = error.em;
         }else if (!succeed){
