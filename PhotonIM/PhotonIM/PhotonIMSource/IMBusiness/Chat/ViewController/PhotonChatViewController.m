@@ -45,7 +45,6 @@
 
 @property (nonatomic, assign)NSTimeInterval  interval;
 
-@property (nonatomic, assign)NSInteger  count;
 
 @property (atomic, assign)BOOL  isStop;
 @end
@@ -92,6 +91,7 @@
     [super viewDidLoad];
     [self addRightBarItem];
     self.title = _conversation.FName;
+    self.isStop = YES;
     [self.view setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];
     [self.tableView setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];
     
@@ -214,7 +214,10 @@
 
 #pragma mark ----- PhotonChatPanelDelegate -------
 - (void)scrollToBottomWithAnimation:(BOOL)animation{
-    [self.tableView scrollToBottomWithAnimation:animation];
+    [PhotonUtil runMainThread:^{
+        [self.tableView scrollToBottomWithAnimation:animation];
+    }];
+    
 }
 #pragma mark --- 刷新数据 ------
 - (void)refreshUI{
@@ -240,10 +243,10 @@
     [self.testUIView addSubview:self.countFiled];
     [self.testUIView addSubview:self.intervalFiled];
     [self.testUIView addSubview:self.autoSendMessage];
-    [self.testUIView addSubview:self.stopSendMessage];
     [self.testUIView addSubview:self.totleSendCountLable];
     [self.testUIView addSubview:self.sendSucceedCountLable];
     [self.testUIView addSubview:self.sendFailedCountLable];
+    [self.testUIView addSubview:self.totalTimeLable];
     
     [self.testUIView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
@@ -275,15 +278,10 @@
         make.top.mas_equalTo(self.intervalFiled.mas_bottom).mas_offset(5);
         make.height.mas_equalTo(40);
     }];
-    [self.stopSendMessage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.mas_equalTo(0);
-        make.top.mas_equalTo(self.autoSendMessage.mas_bottom).mas_offset(5);
-        make.height.mas_equalTo(40);
-    }];
     
     [self.totleSendCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.mas_equalTo(0);
-        make.top.mas_equalTo(self.stopSendMessage.mas_bottom).mas_offset(5);
+        make.top.mas_equalTo(self.autoSendMessage.mas_bottom).mas_offset(5);
         make.height.mas_equalTo(40);
     }];
     [self.sendSucceedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -296,6 +294,12 @@
         make.left.and.right.mas_equalTo(0);
         make.top.mas_equalTo(self.sendSucceedCountLable.mas_bottom).mas_offset(5);
         make.height.mas_equalTo(40);
+    }];
+    
+    [self.totalTimeLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(20);
     }];
 }
 
@@ -370,6 +374,17 @@
     return _sendFailedCountLable;
 }
 
+- (UILabel *)totalTimeLable{
+    if (!_totalTimeLable) {
+        _totalTimeLable = [[UILabel alloc] init];
+        _totalTimeLable.numberOfLines = 2;
+        _totalTimeLable.font = [UIFont systemFontOfSize:12];
+        _totalTimeLable.textColor = [UIColor whiteColor];
+        _totalTimeLable.backgroundColor = [UIColor grayColor];
+    }
+    return _totalTimeLable;
+}
+
 - (UIButton *)autoSendMessage{
     if (!_autoSendMessage) {
         _autoSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -380,34 +395,46 @@
     return _autoSendMessage;
 }
 
-- (UIButton *)stopSendMessage{
-    if (!_stopSendMessage) {
-        _stopSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_stopSendMessage setTitle:@"停止" forState:UIControlStateNormal];
-        _stopSendMessage.backgroundColor = [UIColor grayColor];
-        [_stopSendMessage addTarget:self action:@selector(stopSendMessage:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _stopSendMessage;
+-(void)setTotleSendCount:(NSInteger)totleSendCount{
+    _totleSendCount = totleSendCount;
+     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
+}
+
+- (void)setSendSucceedCount:(NSInteger)sendSucceedCount{
+    _sendSucceedCount = sendSucceedCount;
+     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
+}
+
+- (void)setSendFailedCount:(NSInteger)sendFailedCount{
+    _sendFailedCount = sendFailedCount;
+       self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
 }
 
 - (void)autoSendMessage:(UIButton *)sender{
+    if(!self.isStop){
+        self.isStop = YES;
+        [sender setTitle:@"开始" forState:UIControlStateNormal];
+       
+        return;
+    }
+    [sender setTitle:@"停止" forState:UIControlStateNormal];
+    self.sendSucceedCount = 0;
+    self.sendFailedCount = 0;
+    self.totleSendCount = 0;
     self.isStop = NO;
     self.content = self.contentFiled.text;
     self.count = [self.countFiled.text integerValue];
     self.interval = [self.intervalFiled.text integerValue]/1000.0;
+    self.startTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
     PhotonWeakSelf(self);
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int index =  0;
-        while (index <= weakself.count && !weakself.isStop) {
+        while (index < weakself.count && !weakself.isStop) {
             index ++;
             [NSThread sleepForTimeInterval:weakself.interval];
             [weakself sendTextMessage:[NSString stringWithFormat:@"%@-%@",self.content,@(index)]];
         }
     });
-}
-
-- (void)stopSendMessage:(UIButton *)sender{
-    self.isStop = YES;
 }
 
 - (void)uigesture{
