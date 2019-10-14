@@ -19,7 +19,7 @@
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     textItem.atInfo = [atItems copy];
     textItem.type = atType;
-    [self.model.items addObject:textItem];
+    [self.model addItem:textItem];
     [self reloadData];
     PhotonWeakSelf(self);
     [[PhotonMessageCenter sharedCenter] sendTextMessage:textItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
@@ -60,7 +60,7 @@
         imageItem.orignURL = imagePath;
         imageItem.thumURL = imagePath;
     }
-    [self.model.items addObject:imageItem];
+    [self.model addItem:imageItem];
     [self reloadData];
      PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
@@ -83,7 +83,7 @@
     audioItem.fileName = fileName;
     audioItem.duration = duraion;
     audioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    [self.model.items addObject:audioItem];
+    [self.model addItem:audioItem];
     [self reloadData];
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendVoiceMessage:audioItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
@@ -112,7 +112,7 @@
     [self.model.items removeObject:item];
     PhotonWeakSelf(self)
     item.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-    [self.model.items addObject:item];
+    [self.model addItem:item];
     
     [[PhotonMessageCenter sharedCenter] resendMessage:item completion:^(BOOL succeed, PhotonIMError * _Nullable error){
         if (!succeed && error.code == 1001 && error.em) {

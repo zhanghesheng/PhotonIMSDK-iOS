@@ -29,6 +29,9 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, strong)PhotonIMTimer *imTimer;
 @property (nonatomic, assign)NSInteger  refreshCount;
 @property (nonatomic, assign)BOOL  isExcute;
+
+@property (nonatomic, assign)NSInteger lastOprationTimeStamp;
+
 @end
 
 @implementation PhotonConversationListViewController
@@ -164,30 +167,23 @@ static NSString *message_syncing = @"消息(收取中......)";
         self.needRefreshData  = YES;
         return;
     }
-    [self readyRefreshConversations];
+    [self.dataDispatchSource addSemaphore];
+   
 }
 
 - (void)readyRefreshConversations{
-    _refreshCount++;
-    __weak typeof(self)weakSelf = self;
-    if (!_imTimer) {
-        _imTimer = [PhotonIMTimer initWithInterval:1 delay:1 repeat:NO targetQueue:dispatch_get_main_queue() handler:^{
-            if (!weakSelf.isExcute) {
-                [weakSelf startRefreshConversations];
-            }
-        }];
+    NSInteger startTime =[[NSDate date] timeIntervalSince1970] * 1000;
+    NSInteger duration = startTime - _lastOprationTimeStamp;
+    if (duration > 500) {
+        _lastOprationTimeStamp = startTime;
+        [self startRefreshConversations];
     }
 }
 
 - (void)startRefreshConversations{
-    if (!self.isExcute) {
-        [self setTabBarBadgeValue];
-        self.refreshCount = 0;
-        [self.imTimer cancel];
-        self.imTimer = nil;
-        self.isExcute = NO;
-        [self.dataDispatchSource addSemaphore];
-    }
+    [self setTabBarBadgeValue];
+    self.isExcute = NO;
+    [self loadDataItems];
 }
 
 
@@ -256,6 +252,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)refreshData{
-    [self loadDataItems];
+    [self readyRefreshConversations];
 }
 @end

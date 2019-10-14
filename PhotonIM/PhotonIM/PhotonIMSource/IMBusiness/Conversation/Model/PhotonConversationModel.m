@@ -17,7 +17,7 @@
 @implementation PhotonConversationModel
 - (void)loadItems:(nullable NSDictionary *)params finish:(void (^)(NSDictionary * _Nullable))finish failure:(void (^)(PhotonErrorDescription * _Nullable))failure{
     PhotonWeakSelf(self);
-    [[PhotonIMClient sharedClient] runInPhotonIMDBQueue:^{
+//    [[PhotonIMClient sharedClient] runInPhotonIMDBQueue:^{
         [super loadItems:params finish:finish failure:failure];
         NSArray<PhotonIMConversation *> *conversations = [[PhotonIMClient sharedClient] findConversationList:0 size:200 asc:NO];
         if (conversations.count > 0) {
@@ -69,7 +69,7 @@
             } failure:^(PhotonErrorDescription * _Nonnull error) {
             }];
         }
-    }];
+//    }];
    
 }
 
