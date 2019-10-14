@@ -173,7 +173,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)readyRefreshConversations{
     
-    [NSThread sleepForTimeInterval:0.5];
+    [NSThread sleepForTimeInterval:1];
     [self startRefreshConversations];
 }
 
