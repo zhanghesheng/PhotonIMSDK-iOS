@@ -172,21 +172,15 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)readyRefreshConversations{
-    NSInteger startTime =[[NSDate date] timeIntervalSince1970] * 1000;
-    NSInteger duration = startTime - _lastOprationTimeStamp;
-    if (duration > 500) {
-        _lastOprationTimeStamp = startTime;
-        [self startRefreshConversations];
-    }
+    
+    [NSThread sleepForTimeInterval:0.5];
+    [self startRefreshConversations];
 }
 
 - (void)startRefreshConversations{
     [self setTabBarBadgeValue];
-    self.isExcute = NO;
     [self loadDataItems];
 }
-
-
 
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     [[PhotonContent currentUser] getIgnoreAlert:chatType chatWith:chatWith completion:^(BOOL success, BOOL open) {

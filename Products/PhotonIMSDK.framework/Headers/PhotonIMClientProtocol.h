@@ -110,7 +110,7 @@
 #pragma mark ======== 其他 ===========
 /**
 会话信息有变化时回调
- 
+ dev_2.0.1
 @param envent 会话的操作类型（创建，删除，更新）
 @param chatType 会话类型
 @param chatWith 会话id
