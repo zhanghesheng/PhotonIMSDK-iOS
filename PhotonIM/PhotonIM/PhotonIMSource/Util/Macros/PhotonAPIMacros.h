@@ -10,7 +10,7 @@
 #define PhotonAPIMacros_h
 
 
-#define PHOTON_BASE_URL @"https://140.210.71.254"
+#define PHOTON_BASE_URL @"https://cosmos-im-demo.immomo.com"
 
 // token 获取
 #define PHOTON_TOKEN_PATH @"photonimdemo/imsdk/client/getAuthInfo"

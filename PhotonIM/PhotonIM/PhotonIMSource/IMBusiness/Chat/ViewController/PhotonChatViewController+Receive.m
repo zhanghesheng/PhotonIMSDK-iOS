@@ -54,7 +54,7 @@
     if (!item) {
         return;
     }
-    [self.model.items addObject:item];
+    [self.model addItem:item];
     [self reloadData];
 }
 // 处理撤回消息

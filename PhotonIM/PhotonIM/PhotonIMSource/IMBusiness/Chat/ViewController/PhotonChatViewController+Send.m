@@ -17,7 +17,7 @@
     textItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     textItem.messageText = text;
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    [self.model.items addObject:textItem];
+    [self.model addItem:textItem];
     [self reloadData];
     PhotonWeakSelf(self);
    
@@ -81,7 +81,7 @@
         imageItem.orignURL = imagePath;
         imageItem.thumURL = imagePath;
     }
-    [self.model.items addObject:imageItem];
+    [self.model addItem:imageItem];
     [self reloadData];
      PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
@@ -103,7 +103,7 @@
     audioItem.fileName = fileName;
     audioItem.duration = duraion;
     audioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    [self.model.items addObject:audioItem];
+    [self.model addItem:audioItem];
     [self reloadData];
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendVoiceMessage:audioItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
