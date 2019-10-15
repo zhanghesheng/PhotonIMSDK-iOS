@@ -24,29 +24,25 @@
 }
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
-    PhotonWeakSelf(self);
-    dispatch_block_t block = ^(void){
-       weakself.anchorMsgId = [[self.items.firstObject userInfo] messageID];
-       NSArray<PhotonIMMessage *>* messages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:weakself.anchorMsgId beforeAuthor:beforeAnchor asc:asc size:(int)weakself.pageSize];
-        NSMutableArray *items = [NSMutableArray array];
-        for (PhotonIMMessage *msg in messages) {
-           id item =  [weakself wrapperMessage:msg];
-            if (item) {
-                 [items addObject:item];
-            }
+    self.anchorMsgId = [[self.items.firstObject userInfo] messageID];
+    NSArray<PhotonIMMessage *>* messages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:self.anchorMsgId beforeAuthor:beforeAnchor asc:asc size:(int)self.pageSize];
+    NSMutableArray *items = [NSMutableArray array];
+    for (PhotonIMMessage *msg in messages) {
+        id item =  [self wrapperMessage:msg];
+        if (item) {
+            [items addObject:item];
         }
-        NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
-        [totolItems addObjectsFromArray:items];
-        [totolItems addObjectsFromArray:self.items];
-        self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
-        if (finish) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                finish(nil);
-            });
-        }
-    };
-    block();
-//    [imclient runInPhotonIMDBReadQueue:block];
+    }
+    NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
+    [totolItems addObjectsFromArray:items];
+    [totolItems addObjectsFromArray:self.items];
+    self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
+    if (finish) {
+        [PhotonUtil runMainThread:^{
+            finish(nil);
+        }];
+    }
+    
 }
 
 // 处理二人聊天收到的信息
@@ -160,6 +156,7 @@
     NSInteger count = self.items.count;
     if (item && count > self.pageSize * 2){
         NSArray *items = [self.items subarrayWithRange:NSMakeRange(count-(self.pageSize), self.pageSize)];
+        [self.items removeAllObjects];
         self.items = [items mutableCopy];
         self.anchorMsgId = [[[self.items firstObject] userInfo] messageID];
         [self.items addObject:item];

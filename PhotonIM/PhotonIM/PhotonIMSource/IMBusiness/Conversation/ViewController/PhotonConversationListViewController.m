@@ -39,12 +39,13 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)setNavTitle:(NSString *)text{
+    PhotonWeakSelf(self);
     [PhotonUtil runMainThread:^{
         NSInteger totalCount = [[PhotonMessageCenter sharedCenter] unreadMsgCount];
         if([text isEqualToString:message_title] && totalCount > 0){
-            self.navigationItem.title = [NSString stringWithFormat:@"消息(%@)",@(totalCount)];
+            weakself.navigationItem.title = [NSString stringWithFormat:@"消息(%@)",@(totalCount)];
         }else{
-            self.navigationItem.title = text;
+            weakself.navigationItem.title = text;
         }
         
     }];
@@ -52,6 +53,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 
 - (void)setTabBarBadgeValue{
+     PhotonWeakSelf(self);
     [PhotonUtil runMainThread:^{
         NSInteger totalCount = [[PhotonMessageCenter sharedCenter] unreadMsgCount];
         if (totalCount > 0) {
@@ -60,13 +62,13 @@ static NSString *message_syncing = @"消息(收取中......)";
 //                totalCount = 99;
 //                valueStr = [NSString stringWithFormat:@"%@+",@(totalCount)];
 //            }
-            self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%@",valueStr];
-            self.tabBarItem.badgeColor = [UIColor redColor];
-            self.navigationItem.title = [NSString stringWithFormat:@"消息(%@)",valueStr];
+            weakself.tabBarItem.badgeValue = [NSString stringWithFormat:@"%@",valueStr];
+            weakself.tabBarItem.badgeColor = [UIColor redColor];
+            weakself.navigationItem.title = [NSString stringWithFormat:@"消息(%@)",valueStr];
         }else{
-            self.tabBarItem.badgeValue = nil;
-            if (![self.navigationItem.title containsString:@"连接"]) {
-                 self.navigationItem.title = message_title;
+            weakself.tabBarItem.badgeValue = nil;
+            if (![weakself.navigationItem.title containsString:@"连接"]) {
+                 weakself.navigationItem.title = message_title;
             }
            
         }
@@ -169,12 +171,8 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)readyRefreshConversations{
-    NSInteger startTime =[[NSDate date] timeIntervalSince1970] * 1000;
-    NSInteger duration = startTime - _lastOprationTimeStamp;
-    if (duration > 500) {
-        _lastOprationTimeStamp = startTime;
-        [self startRefreshConversations];
-    }
+    [NSThread sleepForTimeInterval:1];
+    [self startRefreshConversations];
 }
 
 - (void)startRefreshConversations{

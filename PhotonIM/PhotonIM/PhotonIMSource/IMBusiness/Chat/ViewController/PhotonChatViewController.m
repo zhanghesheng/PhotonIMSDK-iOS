@@ -214,8 +214,9 @@
 
 #pragma mark ----- PhotonChatPanelDelegate -------
 - (void)scrollToBottomWithAnimation:(BOOL)animation{
+    PhotonWeakSelf(self);
     [PhotonUtil runMainThread:^{
-        [self.tableView scrollToBottomWithAnimation:animation];
+        [weakself.tableView scrollToBottomWithAnimation:animation];
     }];
     
 }

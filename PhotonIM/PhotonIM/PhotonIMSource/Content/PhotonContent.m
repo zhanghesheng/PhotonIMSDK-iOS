@@ -94,9 +94,10 @@
 }
 
 + (void)logout{
+    PhotonWeakSelf(self);
     [PhotonUtil runMainThread:^{
          [MoPushManager unAlias:[PhotonContent currentUser].userID];
-        [self clearCurrentUser];
+        [weakself clearCurrentUser];
         [PhotonAppLaunchManager launchInWindow];
     }];
    

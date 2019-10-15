@@ -63,7 +63,7 @@ static PhotonMessageCenter *center = nil;
 - (void)login{
     // 客户端登录后
     [[PhotonIMClient sharedClient] bindCurrentUserId:[PhotonContent currentUser].userID];
-    _messages = [[[PhotonIMClient sharedClient] getAllSendingMessages] mutableCopy];
+//    _messages = [[[PhotonIMClient sharedClient] getAllSendingMessages] mutableCopy];
     // 获取token
     [self getToken];
 }
@@ -350,12 +350,13 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
+    PhotonWeakSelf(self);
     [[PhotonIMClient sharedClient] sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
             if (completion) {
                 completion(succeed,error);
             }
-            NSHashTable *_observer = [self.observers copy];
+            NSHashTable *_observer = [weakself.observers copy];
             for (id<PhotonMessageProtocol> observer in _observer) {
                 if (observer && [observer respondsToSelector:@selector(sendMessageResultCallBack:)]) {
                     [observer sendMessageResultCallBack:message];
@@ -481,7 +482,7 @@ static PhotonMessageCenter *center = nil;
 
 - (void)imClientLogin:(nonnull id)client loginStatus:(PhotonIMLoginStatus)loginstatus {
     if (loginstatus ==  PhotonIMLoginStatusLoginSucceed) {
-        [self reSendAllSendingMessages];
+//        [self reSendAllSendingMessages];
     }
 }
 

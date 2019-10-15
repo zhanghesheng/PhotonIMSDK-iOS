@@ -47,13 +47,14 @@
     
     NSString *urlString = [NSString stringWithFormat:@"%@/%@",self.baseUrl,queryString];
     PhotonNetworkRequest *request = [PhotonNetworkRequest initWithUrl:urlString andParamer:paramter];
-    request.delegate = self;
     request.requestMethod = method;
-    [request setRequestHeaders:self.requestHeaders];
-    __weak PhotonNetworkRequest *pRequest = request;
     __weak typeof(self)instance = self;
+     __weak PhotonNetworkRequest *pRequest = request;
+    [request setRequestHeaders:self.requestHeaders];
     [request setCompletionBlock:^{
-        NSDictionary *dict = [instance getResponseJsonResult:pRequest];
+        __strong PhotonNetworkRequest *strongRequest = pRequest;
+        [instance.requestArray removeObject:strongRequest];
+        NSDictionary *dict = [instance getResponseJsonResult:strongRequest];
         if (!dict) {
             failure(nil);
             return;
