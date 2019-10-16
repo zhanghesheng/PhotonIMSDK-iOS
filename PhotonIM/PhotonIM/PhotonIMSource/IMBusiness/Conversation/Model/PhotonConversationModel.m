@@ -44,6 +44,7 @@
             }];
         }];
     }
+    
     BOOL excute = [[MMKV defaultMMKV] getBoolForKey:[PhotonContent currentUser].userID];
     if (conversations.count == 0 && !excute) {
         [[MMKV defaultMMKV] setBool:YES forKey:[PhotonContent currentUser].userID];
@@ -60,6 +61,11 @@
                 }
             }];
         } failure:^(PhotonErrorDescription * _Nonnull error) {
+            [PhotonUtil runMainThread:^{
+                if (failure) {
+                    failure(nil);
+                }
+            }];
         }];
     }
 }

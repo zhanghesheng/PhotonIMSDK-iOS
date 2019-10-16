@@ -19,6 +19,8 @@ NSString *const PhotonServiceMethod = @"serviceMethod";
 NSString *const PhotonRequesUpLoadData = @"UpLoadData";
 NSString *const PhotonRequesUpLoadFile = @"UpLoadFile";
 NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
+
+static AFHTTPSessionManager *photonNetworkAFManager;
 @interface PhotonNetworkRequest()
 @property (nonatomic, copy, nullable) PhotonNetworkCompletionBlock completionBlock;
 @property (nonatomic, copy, nullable) PhotonNetworkCompletionBlock failureBlock;
@@ -37,11 +39,16 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 @property (nonatomic, copy, nullable)NSString *urlString;// 请求url
 @end
 @implementation PhotonNetworkRequest
++ (void)initialize{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        photonNetworkAFManager =  [AFHTTPSessionManager manager];
+    });
+}
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.manager = [AFHTTPSessionManager manager];
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.mutifileItems = [NSMutableArray arrayWithCapacity:10];
         
@@ -56,7 +63,6 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 - (instancetype)initWithUrl:(NSString *)urlString andParamer:(NSDictionary *)paramter{
     self =  [super init];
     if (self) {
-        self.manager = [AFHTTPSessionManager manager];
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.urlString = urlString;
         self.parameters = [NSMutableDictionary dictionaryWithDictionary:paramter];
@@ -65,6 +71,13 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
         self.mutifileItems = [NSMutableArray arrayWithCapacity:10];
     }
     return self;
+}
+
+- (AFHTTPSessionManager *)manager{
+    if (!_manager) {
+        _manager = photonNetworkAFManager;
+    }
+    return photonNetworkAFManager;
 }
 
 - (void)setUrlString:(NSString *)urlString {
@@ -251,7 +264,7 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
             NSString *value = [self.requestHeaders objectForKey:key];
             [request setValue:value forHTTPHeaderField:key];
         }
-        _uploadTask=[_manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+        _uploadTask=[self.manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [instance loadPorgress:uploadProgress];
             });
@@ -298,7 +311,7 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
             NSString *value = [self.requestHeaders objectForKey:key];
             [request setValue:value forHTTPHeaderField:key];
         }
-        _uploadTask=[_manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+        _uploadTask=[self.manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [instance loadPorgress:uploadProgress];
             });

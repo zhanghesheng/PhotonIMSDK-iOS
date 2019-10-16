@@ -58,7 +58,7 @@
         _panelManager.delegate = self;
         
         _uiDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_UI dataQueue:dispatch_get_main_queue()];
-        _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_get_main_queue()];
+        _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.chatdata", DISPATCH_QUEUE_SERIAL)];
     }
     return self;
 }
@@ -68,6 +68,8 @@
     [[PhotonMessageCenter sharedCenter] removeObserver:self];
     [self.tableView removeObserver:self forKeyPath:@"bounds"];
     [PhotonUtil resetLastShowTimestamp];
+    [_uiDispatchSource clearDelegateAndCancel];
+    [_dataDispatchSource clearDelegateAndCancel];
 }
 - (instancetype)init
 {

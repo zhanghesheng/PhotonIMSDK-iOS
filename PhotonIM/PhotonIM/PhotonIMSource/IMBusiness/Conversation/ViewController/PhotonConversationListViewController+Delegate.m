@@ -59,6 +59,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if([self.model.items count] <= indexPath.row){
+        return;
+    }
     PhotonConversationItem *item = [[self.model.items objectAtIndex:indexPath.row] isNil];
     if (!item) {
         return;

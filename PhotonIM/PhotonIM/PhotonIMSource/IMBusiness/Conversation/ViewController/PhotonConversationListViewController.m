@@ -36,6 +36,8 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)dealloc
 {
     [[PhotonMessageCenter sharedCenter] removeObserver:self];
+    [_uiDispatchSource clearDelegateAndCancel];
+    [_dataDispatchSource clearDelegateAndCancel];
 }
 
 - (void)setNavTitle:(NSString *)text{
