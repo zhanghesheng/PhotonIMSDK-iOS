@@ -30,7 +30,7 @@
     [self.textMessageLabel setAttributedText:item.messageAttriText];
     [self.textMessageLabel setContentCompressionResistancePriority:500 forAxis:UILayoutConstraintAxisHorizontal];
     [self.contentBackgroundView setContentCompressionResistancePriority:100 forAxis:UILayoutConstraintAxisHorizontal];
-    [self p_layoutSubviews];
+    
 }
 - (void) p_layoutSubviews{
     PhotonTextMessageChatItem *item = (PhotonTextMessageChatItem *)self.item;
@@ -65,6 +65,7 @@
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
+    [self p_layoutSubviews];
 }
 #pragma mark - Getter -
 - (UILabel *)textMessageLabel

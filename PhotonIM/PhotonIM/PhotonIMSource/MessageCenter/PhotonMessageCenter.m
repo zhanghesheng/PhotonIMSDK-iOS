@@ -45,10 +45,7 @@ static PhotonMessageCenter *center = nil;
 
 - (void)initPhtonIMSDK{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    // 通过注册appid 完成sdk的初始化
-    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
-    // 指定使用sdk内的数据库模式，推荐使用异步模式
-    [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
+   
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
@@ -58,6 +55,12 @@ static PhotonMessageCenter *center = nil;
 //    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
 //    [[PhotonIMClient sharedClient] setAssertEnable:NO];
 //#endif
+    
+    // 通过注册appid 完成sdk的初始化
+    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
+    // 指定使用sdk内的数据库模式，推荐使用异步模式
+    [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeNoDB];
+    
 }
 
 - (void)login{
@@ -127,9 +130,9 @@ static PhotonMessageCenter *center = nil;
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
     item.userInfo = message;
+    
+    
     [self _sendMessage:message completion:completion];
-    
-    
     
 }
 
@@ -480,19 +483,17 @@ static PhotonMessageCenter *center = nil;
     }
 }
 
-- (void)imClientLogin:(nonnull id)client loginStatus:(PhotonIMLoginStatus)loginstatus {
-    if (loginstatus ==  PhotonIMLoginStatusLoginSucceed) {
-//        [self reSendAllSendingMessages];
-    }
-}
 
 
 - (void)networkChange:(PhotonIMNetworkStatus)networkStatus {
 }
 
 - (BOOL)imClientSync:(nonnull id)client syncStatus:(PhotonIMSyncStatus)status {
-    NSLog(@"imClientSync:(nonnull id)client syncStatus:(PhotonIMSyncStatus)status");
     return YES;
+}
+
+- (void)imClient:(id)client sendResultWithMsgID:(NSString *)msgID chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith error:(PhotonIMError *)error{
+    NSLog(@"[pim sendResultWithMsgID msgID=%@,chatType=%@,chatWith=%@,errorCode=%@",msgID,@(chatType),chatWith,@(error.code));
 }
 
 

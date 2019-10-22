@@ -43,10 +43,16 @@
 //发送按钮
 @property (nonatomic, copy,nullable)NSString  *content;
 
+// login内容
+@property (nonatomic, strong,nullable)UILabel  *authFiled;
+
 @property (nonatomic, assign)NSTimeInterval  interval;
 
-
 @property (atomic, assign)BOOL  isStop;
+
+@property (nonatomic, assign)NSInteger authSucceedCount;
+
+@property (nonatomic, assign)NSInteger authFaileddCount;
 @end
 
 @implementation PhotonChatViewController
@@ -91,6 +97,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _authSucceedCount = 0;
+    _authFaileddCount = 0;
     [self addRightBarItem];
     self.title = _conversation.FName;
     self.isStop = YES;
@@ -224,12 +232,13 @@
 }
 #pragma mark --- 刷新数据 ------
 - (void)refreshUI{
-    [UIView animateWithDuration:0 animations:^{
-        [self p_reloadData];
-    } completion:^(BOOL finished) {
-        [self scrollToBottomWithAnimation:self.isFirstPage];
-        self.isFirstPage = YES;
-    }];
+    [self p_reloadData];
+//    [UIView animateWithDuration:0 animations:^{
+//        [self p_reloadData];
+//    } completion:^(BOOL finished) {
+//        [self scrollToBottomWithAnimation:self.isFirstPage];
+//        self.isFirstPage = YES;
+//    }];
 }
 
 - (void)refreshData{
@@ -250,6 +259,7 @@
     [self.testUIView addSubview:self.sendSucceedCountLable];
     [self.testUIView addSubview:self.sendFailedCountLable];
     [self.testUIView addSubview:self.totalTimeLable];
+    [self.testUIView addSubview:self.authFiled];
     
     [self.testUIView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
@@ -303,6 +313,12 @@
         make.left.and.right.mas_equalTo(0);
         make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
         make.height.mas_equalTo(20);
+    }];
+    
+    [self.authFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
     }];
 }
 
@@ -388,6 +404,17 @@
     return _totalTimeLable;
 }
 
+- (UILabel *)authFiled{
+    if (!_authFiled) {
+        _authFiled = [[UILabel alloc] init];
+        _authFiled.numberOfLines = 2;
+        _authFiled.font = [UIFont systemFontOfSize:12];
+        _authFiled.textColor = [UIColor whiteColor];
+        _authFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _authFiled;
+}
+
 - (UIButton *)autoSendMessage{
     if (!_autoSendMessage) {
         _autoSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -439,6 +466,30 @@
         }
     });
 }
+
+- (void)imClientLogin:(nonnull id)client loginStatus:(PhotonIMLoginStatus)loginstatus {
+    BOOL change = NO;
+    switch (loginstatus) {
+        case PhotonIMLoginStatusLoginSucceed:
+            self.authSucceedCount ++;
+            change = YES;
+            break;
+        case PhotonIMLoginStatusLoginFailed:
+            self.authFaileddCount ++;
+            change = NO;
+            break;
+        default:
+            break;
+    }
+    __weak typeof(self)weakself = self;
+    [PhotonUtil runMainThread:^{
+        if (change) {
+            weakself.authFiled.text = [NSString stringWithFormat:@"authSucceedCount = %@ authFaileddCount =%@",@(weakself.authSucceedCount),@(weakself.authFaileddCount)];
+        }
+    }];
+   
+}
+
 
 - (void)uigesture{
     [self.countFiled resignFirstResponder];

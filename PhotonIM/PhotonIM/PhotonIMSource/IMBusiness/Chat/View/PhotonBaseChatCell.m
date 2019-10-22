@@ -57,27 +57,18 @@
         [self.contentView addSubview:self.tipLable];
         [self.contentView addSubview:self.msgStatusLable];
         [self.contentView addSubview:self.timeLabel];
+       
         
-        [self p_layoutSubviews];
     }
     return self;
 }
-- (void)prepareForReuse{
-    [super prepareForReuse];
-    self.tipLable.text = nil;
-    self.msgStatusLable.text = nil;
-    self.timeLabel.text = nil;
-}
+
 
 - (void)setObject:(id)object{
     [super setObject:object];
-    if (!self.item) {
-        return;
-    }
     PhotonBaseChatItem *item = (PhotonBaseChatItem *)object;
     
     self.lineLayer.hidden = YES;
-    
     if (item.fromType == PhotonChatMessageFromSelf) {
         [self.contentBackgroundView setImage:[UIImage imageWithColor:[UIColor colorWithHex:0x3D82FF]]];
     }
@@ -92,6 +83,83 @@
     }else{
         [self.timeLabel setText:nil];
     }
+    
+    PhotonIMMessage *message = [item userInfo];
+    if (item.fromType == PhotonChatMessageFromSelf)
+    {
+        // 发送中转小菊花
+        if (message.messageStatus == PhotonIMMessageStatusSending || message.messageStatus == PhotonIMMessageStatusDefault){
+            [self.contentView addSubview:self.indicatorView];
+            self.indicatorView.hidden = NO;
+            [self.indicatorView startAnimating];
+        }else{
+            self.indicatorView.hidden = YES;
+        }
+        
+        // 发送失败显示小红叹号
+        if (message.messageStatus == PhotonIMMessageStatusFailed ) {
+            self.sendStateBtn.hidden = NO;
+            [self.sendStateBtn setImage:[UIImage imageNamed:@"send_error"] forState:UIControlStateNormal];
+        }else{
+             self.sendStateBtn.hidden = YES;
+        }
+        
+        
+        NSString *readStateText = @"";
+        if(message.messageStatus == PhotonIMMessageStatusSucceed){
+            readStateText = @"已发送";
+        }
+        if(message.messageStatus == PhotonIMMessageStatusSentRead){
+            readStateText = @"已读";
+        }
+        
+        self.msgStatusLable.text = readStateText;
+
+        if ([item.tipText isNotEmpty]) {
+            // 背景
+            self.tipLable.text = item.tipText;
+        }
+    }else if(item.fromType == PhotonChatMessageFromFriend){
+        self.indicatorView.hidden = YES;
+        self.sendStateBtn.hidden = YES;
+
+        
+    }
+}
+- (void)p_layoutSubviews{
+    
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.contentView).mas_offset(TIMELABEL_SPACE_Y);
+        make.centerX.mas_equalTo(self.contentView);
+    }];
+    
+    [self.avatarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.contentView).mas_offset(-AVATAR_SPACE_X);
+        make.width.and.height.mas_equalTo(AVATAR_WIDTH);
+        make.top.mas_equalTo(self.timeLabel.mas_bottom).mas_offset(AVATAR_SPACE_Y);
+    }];
+    
+    [self.contentBackgroundView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.avatarBtn.mas_left).mas_offset(-MSGBG_SPACE_X);
+        make.top.mas_equalTo(self.avatarBtn.mas_top);
+    }];
+    
+    [self.msgStatusLable mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.contentBackgroundView.right).mas_offset(-MSGBG_SPACE_X);
+        make.top.mas_equalTo(self.contentBackgroundView.mas_bottom);
+    }];
+    
+    [self.tipLable mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.contentBackgroundView.mas_bottom).mas_equalTo(TIPLABEL_SPACE_Y);
+        make.right.mas_equalTo(self.contentBackgroundView.mas_right);
+    }];
+}
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    [self p_layoutSubviews];
+    
+    PhotonBaseChatItem *item = (PhotonBaseChatItem *)self.item;
+    
     // 时间
     [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(item.showTime ? TIMELABEL_HEIGHT : 0);
@@ -139,16 +207,12 @@
         }
         
         // 发送失败显示小红叹号
-        if (message.messageStatus == PhotonIMMessageStatusFailed ) {
-            self.sendStateBtn.hidden = NO;
-            [self.sendStateBtn setImage:[UIImage imageNamed:@"send_error"] forState:UIControlStateNormal];
+        if (!self.sendStateBtn.hidden) {
             [self.sendStateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(21, 21));
                 make.centerY.mas_equalTo(self.contentBackgroundView.mas_centerY);
                 make.right.mas_equalTo(self.contentBackgroundView.mas_left).mas_offset(-6);
             }];
-        }else{
-             self.sendStateBtn.hidden = YES;
         }
         
         // 状态布局（已读，已发送）
@@ -156,16 +220,6 @@
             make.bottom.mas_equalTo(self.contentBackgroundView.mas_bottom);
             make.right.mas_equalTo(self.contentBackgroundView.mas_left).mas_offset(-5.5);
         }];
-        
-        NSString *readStateText = @"";
-        if(message.messageStatus == PhotonIMMessageStatusSucceed){
-            readStateText = @"已发送";
-        }
-        if(message.messageStatus == PhotonIMMessageStatusSentRead){
-            readStateText = @"已读";
-        }
-        
-        self.msgStatusLable.text = readStateText;
         
         // 已发送显示已发送文案
         if (self.msgStatusLable.text.length > 0) {
@@ -187,10 +241,8 @@
             make.right.mas_equalTo(self.contentBackgroundView.mas_right);
         }];
         
-         
-        if ([item.tipText isNotEmpty]) {
-            // 背景
-            self.tipLable.text = item.tipText;
+        
+        if ([ self.tipLable.text isNotEmpty]) {
             CGSize size = [self.tipLable sizeThatFits:CGSizeMake(40, 20)];
             CGFloat tip_width = size.width + 22;
             if (tip_width + AVATAR_WIDTH + AVATAR_SPACE_X + MSGBG_SPACE_X > PhotoScreenWidth) {
@@ -202,14 +254,11 @@
                 make.width.mas_equalTo(tip_width);
             }];
         }else{
-            self.tipLable.text = nil;
             [self.tipLable mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeZero);
             }];
         }
     }else if(item.fromType == PhotonChatMessageFromFriend){
-        self.indicatorView.hidden = YES;
-        self.sendStateBtn.hidden = YES;
         [self.msgStatusLable mas_updateConstraints:^(MASConstraintMaker *make) {
             make.size.mas_equalTo(CGSizeZero);
         }];
@@ -219,37 +268,13 @@
         
     }
 }
-- (void)p_layoutSubviews{
-    
-    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.contentView).mas_offset(TIMELABEL_SPACE_Y);
-        make.centerX.mas_equalTo(self.contentView);
-    }];
-    
-    [self.avatarBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.contentView).mas_offset(-AVATAR_SPACE_X);
-        make.width.and.height.mas_equalTo(AVATAR_WIDTH);
-        make.top.mas_equalTo(self.timeLabel.mas_bottom).mas_offset(AVATAR_SPACE_Y);
-    }];
-    
-    [self.contentBackgroundView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.avatarBtn.mas_left).mas_offset(-MSGBG_SPACE_X);
-        make.top.mas_equalTo(self.avatarBtn.mas_top);
-    }];
-    
-    [self.msgStatusLable mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.contentBackgroundView.right).mas_offset(-MSGBG_SPACE_X);
-        make.top.mas_equalTo(self.contentBackgroundView.mas_bottom);
-    }];
-    
-    [self.tipLable mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.contentBackgroundView.mas_bottom).mas_equalTo(TIPLABEL_SPACE_Y);
-        make.right.mas_equalTo(self.contentBackgroundView.mas_right);
-    }];
-}
-- (void)layoutSubviews{
-    [super layoutSubviews];
-    
+
+
+- (void)prepareForReuse{
+    [super prepareForReuse];
+    self.tipLable.text = nil;
+    self.msgStatusLable.text = nil;
+    self.timeLabel.text = nil;
 }
 
 + (CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{

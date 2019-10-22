@@ -97,11 +97,12 @@
     }else{
         [self.indicatorView stopAnimating];
     }
-    [self p_layoutViews];
+    
 }
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    [self p_layoutViews];
 }
 
 - (void)p_layoutViews{
