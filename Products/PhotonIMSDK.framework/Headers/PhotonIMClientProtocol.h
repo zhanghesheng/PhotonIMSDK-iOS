@@ -127,7 +127,7 @@
 /**
  收到消息已读的消息
  
- @param client
+ @param client client
  @param msgID 消息的id
  @param chatType 消息所属的会话
  @param chatWith 消息所属的会话对方id
