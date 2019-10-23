@@ -232,7 +232,6 @@
 }
 #pragma mark --- 刷新数据 ------
 - (void)refreshUI{
-    [self p_reloadData];
     [UIView animateWithDuration:0 animations:^{
         [self p_reloadData];
     } completion:^(BOOL finished) {
