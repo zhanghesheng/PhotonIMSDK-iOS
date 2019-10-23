@@ -22,7 +22,28 @@
     [self.model addItem:textItem];
     [self reloadData];
     PhotonWeakSelf(self);
+   
+    [PhotonUtil runMainThread:^{
+        NSInteger count = weakself.totleSendCount + 1;
+         weakself.totleSendCount =  count;
+        
+    }];
+   
     [[PhotonMessageCenter sharedCenter] sendTextMessage:textItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        if (succeed) {
+             NSInteger count = weakself.sendSucceedCount + 1;
+            weakself.sendSucceedCount = count;
+           
+        }else{
+             NSInteger count = weakself.sendFailedCount + 1;
+            weakself.sendFailedCount =  count;
+         
+        }
+        if ((weakself.sendSucceedCount + weakself.sendFailedCount) == weakself.count) {
+            NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+            int duration = endTime - weakself.startTime;
+             weakself.totalTimeLable.text = [NSString stringWithFormat:@"总耗时(毫秒)：%@",@(duration)];
+        }
         if (!succeed && error.code == 1001 && error.em) {
            textItem.tipText = error.em;
         }else if (!succeed){
@@ -33,6 +54,7 @@
         }
         [weakself reloadData];
     }];
+
 }
 
 // 发送图片消息
@@ -73,7 +95,6 @@
         }
          [weakself reloadData];
     }];
-    
 }
 // 发送语音消息
 - (void)sendVoiceMessage:(nonnull NSString *)fileName duraion:(CGFloat)duraion{

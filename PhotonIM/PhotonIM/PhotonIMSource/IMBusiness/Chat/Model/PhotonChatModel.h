@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)wrapperWithdrawMessage:(PhotonIMMessage *)messag;
 
 - (BOOL)wrapperReadMessage:(PhotonIMMessage *)message;
-
 - (void)addItem:(id)item;
 @end
 

@@ -9,6 +9,7 @@
 #import "PhotonNetworkRequest.h"
 #import "PhotonMacros.h"
 #import "AFHTTPSessionManager.h"
+#import "PhotonAPIMacros.h"
 NSString *const PhotonRequestMethodGet = @"GET";
 NSString *const PhotonRequestMethodPost = @"POST";
 NSString *const PhotonRequestMethodPut = @"PUT";
@@ -19,6 +20,8 @@ NSString *const PhotonServiceMethod = @"serviceMethod";
 NSString *const PhotonRequesUpLoadData = @"UpLoadData";
 NSString *const PhotonRequesUpLoadFile = @"UpLoadFile";
 NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
+
+static AFHTTPSessionManager *manager;
 @interface PhotonNetworkRequest()
 @property (nonatomic, copy, nullable) PhotonNetworkCompletionBlock completionBlock;
 @property (nonatomic, copy, nullable) PhotonNetworkCompletionBlock failureBlock;
@@ -37,13 +40,18 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 @property (nonatomic, copy, nullable)NSString *urlString;// 请求url
 @end
 @implementation PhotonNetworkRequest
+
++ (void)initialize{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+       manager = [AFHTTPSessionManager manager];
+    });
+}
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        self.manager = [AFHTTPSessionManager manager];
-//        self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        self.manager = manager;
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.mutifileItems = [NSMutableArray arrayWithCapacity:10];
         
@@ -54,9 +62,7 @@ NSString *const PhotonRequesUpLoadMultiFile = @"UpLoadMultiFile";
 - (instancetype)initWithUrl:(NSString *)urlString andParamer:(NSDictionary *)paramter{
     self =  [super init];
     if (self) {
-        self.manager = [AFHTTPSessionManager manager];
-//        self.manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//        self.manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        self.manager = manager;
         self.requestHeaders = [NSMutableDictionary dictionaryWithCapacity:10];
         self.urlString = urlString;
         self.parameters = [NSMutableDictionary dictionaryWithDictionary:paramter];

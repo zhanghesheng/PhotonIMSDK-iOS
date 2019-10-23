@@ -29,9 +29,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, strong)PhotonIMTimer *imTimer;
 @property (nonatomic, assign)NSInteger  refreshCount;
 @property (nonatomic, assign)BOOL  isExcute;
-
 @property (nonatomic, assign)NSInteger lastOprationTimeStamp;
-
 @end
 
 @implementation PhotonConversationListViewController

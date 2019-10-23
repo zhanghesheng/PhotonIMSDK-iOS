@@ -26,6 +26,28 @@
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
 
 @property (nonatomic, assign)BOOL isFirstPage;
+
+
+@property (nonatomic, strong,nullable)UIView  *testUIView;
+// 内容
+@property (nonatomic, strong,nullable)UITextField  *contentFiled;
+// 间隔放松的时间
+@property (nonatomic, strong,nullable)UITextField  *intervalFiled;
+// 间隔放松的时间
+@property (nonatomic, strong,nullable)UITextField  *countFiled;
+//发送按钮
+@property (nonatomic, strong,nullable)UIButton  *autoSendMessage;
+
+//发送按钮
+@property (nonatomic, strong,nullable)UIButton  *stopSendMessage;
+
+//发送按钮
+@property (nonatomic, copy,nullable)NSString  *content;
+
+@property (nonatomic, assign)NSTimeInterval  interval;
+
+
+@property (atomic, assign)BOOL  isStop;
 @end
 
 @implementation PhotonChatViewController
@@ -69,6 +91,7 @@
     [super viewDidLoad];
     [self addRightBarItem];
     self.title = _conversation.FName;
+    self.isStop = YES;
     [self.view setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];
     [self.tableView setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];
     
@@ -83,6 +106,8 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     [self.tableView addGestureRecognizer:tap];
     [self firstLoadMessages];
+    
+    [self addTextUI];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -112,6 +137,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated{
     [_panelManager dismissKeyboard];
+    self.isStop = YES;
    
 }
 - (void)viewWillDisappear:(BOOL)animated{
@@ -194,7 +220,10 @@
 
 #pragma mark ----- PhotonChatPanelDelegate -------
 - (void)scrollToBottomWithAnimation:(BOOL)animation{
-    [self.tableView scrollToBottomWithAnimation:animation];
+    [PhotonUtil runMainThread:^{
+        [self.tableView scrollToBottomWithAnimation:animation];
+    }];
+    
 }
 #pragma mark --- 刷新数据 ------
 - (void)refreshUI{
@@ -208,6 +237,216 @@
 
 - (void)refreshData{
     [self p_loadDataItems];
+}
+
+
+
+#pragma mark ------ demo uitextView ----
+
+- (void)addTextUI{
+    [self.view addSubview:self.testUIView];
+    [self.testUIView addSubview:self.contentFiled];
+    [self.testUIView addSubview:self.countFiled];
+    [self.testUIView addSubview:self.intervalFiled];
+    [self.testUIView addSubview:self.autoSendMessage];
+    [self.testUIView addSubview:self.totleSendCountLable];
+    [self.testUIView addSubview:self.sendSucceedCountLable];
+    [self.testUIView addSubview:self.sendFailedCountLable];
+    [self.testUIView addSubview:self.totalTimeLable];
+    
+    [self.testUIView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(10);
+        make.top.mas_equalTo(90);
+        make.bottom.mas_equalTo(-90);
+        make.width.mas_equalTo(200);
+    }];
+    
+    [self.contentFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.countFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.contentFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.intervalFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.countFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+
+    [self.autoSendMessage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.intervalFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.totleSendCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.autoSendMessage.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    [self.sendSucceedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.totleSendCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.sendFailedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendSucceedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.totalTimeLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(20);
+    }];
+}
+
+- (UIView *)testUIView{
+    if (!_testUIView) {
+        _testUIView= [[UIView alloc] init];
+        _testUIView.backgroundColor = [UIColor clearColor];
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(uigesture)];
+        gesture.numberOfTapsRequired = 1;
+        [_testUIView addGestureRecognizer:gesture];
+    }
+    return _testUIView;
+}
+- (UITextField *)contentFiled{
+    if (!_contentFiled) {
+        _contentFiled = [[UITextField alloc] init];
+        _contentFiled.keyboardType = UIKeyboardTypeDefault;
+         _contentFiled.text = @"测试";
+        _contentFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _contentFiled;
+}
+
+- (UITextField *)intervalFiled{
+    if (!_intervalFiled) {
+        _intervalFiled = [[UITextField alloc] init];
+        _intervalFiled.keyboardType = UIKeyboardTypeNumberPad;
+        _intervalFiled.text = @"1000";
+        _intervalFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _intervalFiled;
+}
+
+- (UITextField *)countFiled{
+    if (!_countFiled) {
+        _countFiled = [[UITextField alloc] init];
+        _countFiled.keyboardType = UIKeyboardTypeNumberPad;
+         _countFiled.text = @"100";
+        _countFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _countFiled;
+}
+
+- (UILabel *)totleSendCountLable{
+    if (!_totleSendCountLable) {
+        _totleSendCountLable = [[UILabel alloc] init];
+        _totleSendCountLable.numberOfLines = 2;
+        _totleSendCountLable.font = [UIFont systemFontOfSize:12];
+        _totleSendCountLable.textColor = [UIColor whiteColor];
+        _totleSendCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _totleSendCountLable;
+}
+- (UILabel *)sendSucceedCountLable{
+    if (!_sendSucceedCountLable) {
+        _sendSucceedCountLable = [[UILabel alloc] init];
+        _sendSucceedCountLable.numberOfLines = 2;
+         _sendSucceedCountLable.font = [UIFont systemFontOfSize:12];
+        _sendSucceedCountLable.textColor = [UIColor whiteColor];
+        _sendSucceedCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _sendSucceedCountLable;
+}
+- (UILabel *)sendFailedCountLable{
+    if (!_sendFailedCountLable) {
+        _sendFailedCountLable = [[UILabel alloc] init];
+        _sendFailedCountLable.numberOfLines = 2;
+         _sendFailedCountLable.font = [UIFont systemFontOfSize:12];
+        _sendFailedCountLable.textColor = [UIColor whiteColor];
+        _sendFailedCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _sendFailedCountLable;
+}
+
+- (UILabel *)totalTimeLable{
+    if (!_totalTimeLable) {
+        _totalTimeLable = [[UILabel alloc] init];
+        _totalTimeLable.numberOfLines = 2;
+        _totalTimeLable.font = [UIFont systemFontOfSize:12];
+        _totalTimeLable.textColor = [UIColor whiteColor];
+        _totalTimeLable.backgroundColor = [UIColor grayColor];
+    }
+    return _totalTimeLable;
+}
+
+- (UIButton *)autoSendMessage{
+    if (!_autoSendMessage) {
+        _autoSendMessage = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_autoSendMessage setTitle:@"开始" forState:UIControlStateNormal];
+        _autoSendMessage.backgroundColor = [UIColor grayColor];
+        [_autoSendMessage addTarget:self action:@selector(autoSendMessage:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _autoSendMessage;
+}
+
+-(void)setTotleSendCount:(NSInteger)totleSendCount{
+    _totleSendCount = totleSendCount;
+     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
+}
+
+- (void)setSendSucceedCount:(NSInteger)sendSucceedCount{
+    _sendSucceedCount = sendSucceedCount;
+     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
+}
+
+- (void)setSendFailedCount:(NSInteger)sendFailedCount{
+    _sendFailedCount = sendFailedCount;
+       self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
+}
+
+- (void)autoSendMessage:(UIButton *)sender{
+    if(!self.isStop){
+        self.isStop = YES;
+        [sender setTitle:@"开始" forState:UIControlStateNormal];
+       
+        return;
+    }
+    [sender setTitle:@"停止" forState:UIControlStateNormal];
+    self.sendSucceedCount = 0;
+    self.sendFailedCount = 0;
+    self.totleSendCount = 0;
+    self.isStop = NO;
+    self.content = self.contentFiled.text;
+    self.count = [self.countFiled.text integerValue];
+    self.interval = [self.intervalFiled.text integerValue]/1000.0;
+    self.startTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    PhotonWeakSelf(self);
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int index =  0;
+        while (index < weakself.count && !weakself.isStop) {
+            index ++;
+            [NSThread sleepForTimeInterval:weakself.interval];
+            [weakself sendTextMessage:[NSString stringWithFormat:@"%@-%@",self.content,@(index)]];
+        }
+    });
+}
+
+- (void)uigesture{
+    [self.countFiled resignFirstResponder];
+    [self.contentFiled resignFirstResponder];
+    [self.intervalFiled resignFirstResponder];
 }
 @end
 #pragma clang diagnostic pop

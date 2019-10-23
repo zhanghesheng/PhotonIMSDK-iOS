@@ -48,7 +48,7 @@
 #elif INHOUSE
     [MoPushManager setBuildStat:MOBuildStat_INHOUSE];
 #else
-    [MoPushManager setBuildStat:MOBuildStat_RELEASE];
+    [MoPushManager setBuildStat:MOBuildStat_DEBUG];
 #endif
     [MoPushManager addCommandListener:@selector(onMoPushManagerCommand:) target:self];
     [MoPushManager registerToken];

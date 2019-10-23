@@ -167,7 +167,8 @@
 
 - (BOOL)wrapperWithdrawMessage:(PhotonIMMessage *)messag{
     PhotonBaseChatItem *tempItem = nil;
-    for (PhotonBaseChatItem *item in self.items) {
+    NSArray *items=[self.items copy];
+    for (PhotonBaseChatItem *item in items) {
         PhotonIMMessage *tempMsg = item.userInfo;
         if ([tempMsg.messageID isEqualToString:messag.withdrawMsgID]) {
             tempItem = item;
@@ -187,8 +188,9 @@
     BOOL ret = NO;
     NSArray *readMsgIds = message.readMsgIDs;
     if (readMsgIds.count > 0) {
+        NSArray *items=[self.items copy];
         for (NSString *msgID in readMsgIds) {
-            for (PhotonBaseChatItem *item in self.items) {
+            for (PhotonBaseChatItem *item in items) {
                 PhotonIMMessage *tempMsg = item.userInfo;
                 if ([tempMsg.messageID isEqualToString:msgID]) {
                     tempMsg.messageStatus = PhotonIMMessageStatusSentRead;

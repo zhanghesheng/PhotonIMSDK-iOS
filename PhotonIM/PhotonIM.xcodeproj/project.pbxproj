@@ -928,6 +928,7 @@
 		3235758622C3128D00C0B442 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3253C697234DAC6200F88AF0 /* momo.cer */,
 				321FE3CF22CEEF4000020CCE /* Common.xcassets */,
 				3228700322BA552D009B6881 /* Conversation.xcassets */,
 				3228700522BA56BD009B6881 /* Mine.xcassets */,
@@ -1440,6 +1441,7 @@
 				3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */,
 				3235759922C3129400C0B442 /* icon_chat_audio_playstatus_2@2x.png in Resources */,
 				3235759622C3129400C0B442 /* icon_chat_audio_playstatus_5@2x.png in Resources */,
+				3253C698234DAC6200F88AF0 /* momo.cer in Resources */,
 				3235759422C3129400C0B442 /* icon_chat_audio_playstatus_1@2x.png in Resources */,
 				3235759C22C3129400C0B442 /* icon_chat_audio_playstatus_4@2x.png in Resources */,
 				32286F9522B9F208009B6881 /* LaunchScreen.storyboard in Resources */,
@@ -1718,7 +1720,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
@@ -1730,7 +1732,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = pushHOC;
+				PROVISIONING_PROFILE_SPECIFIER = push;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1934,7 +1936,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				ENABLE_BITCODE = NO;
@@ -2001,7 +2003,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = PhotonimAHCdemo;
+				PROVISIONING_PROFILE_SPECIFIER = Photonimdemo;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -2009,7 +2011,9 @@
 		32286FAA22B9F208009B6881 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3WCAH9767T;
 				INFOPLIST_FILE = PhotonIMUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2018,6 +2022,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Bruce-zhang.www.PhotonIMUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PhotonIM;
 			};
@@ -2026,7 +2031,9 @@
 		32286FAB22B9F208009B6881 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 3WCAH9767T;
 				INFOPLIST_FILE = PhotonIMUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2035,6 +2042,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Bruce-zhang.www.PhotonIMUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = PhotonIM;
 			};
