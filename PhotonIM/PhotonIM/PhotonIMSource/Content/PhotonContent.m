@@ -139,11 +139,16 @@
      return [userDB deleteUserFromGroupWithUid:uid tableName:tableName];
 }
 
++ (BOOL)deleteaAllUserFromGroupWithGid:(NSString *)gid{
+    PhotonDBUserStore *userDB = [[PhotonDBUserStore alloc] init];
+    NSString *tableName = [NSString stringWithFormat:@"group_user_%@",gid];
+    return [userDB deleteAllUserFromGroupWithTableName:tableName];
+}
+
 
 
 
 + (void)logout{
-    
     [PhotonUtil runMainThread:^{
         [PhotonDBManager closeDB];
         [MoPushManager unAlias:[PhotonContent currentUser].userID];

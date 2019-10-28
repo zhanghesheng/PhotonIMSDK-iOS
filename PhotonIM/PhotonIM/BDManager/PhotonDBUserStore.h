@@ -50,6 +50,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)addUserToGroupWithUser:(nullable PhotonUser *)user tableName:(NSString *)tableName;
 // 移除数组中的成员
 - (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName;
+
+- (BOOL)deleteAllUserFromGroupWithTableName:(NSString *)tableName;
 @end
 
 NS_ASSUME_NONNULL_END

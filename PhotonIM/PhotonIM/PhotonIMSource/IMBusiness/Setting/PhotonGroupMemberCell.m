@@ -67,7 +67,7 @@
         UILabel *nameLable = [[UILabel alloc] init];
         nameLable.backgroundColor = [UIColor clearColor];
         nameLable.textAlignment = NSTextAlignmentCenter;
-        nameLable.text = member.userName;
+        nameLable.text = member.nickName;
         nameLable.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12.0f];
         nameLable.textColor = [UIColor colorWithHex:0x6F6C70];
         [memberView addSubview:nameLable];

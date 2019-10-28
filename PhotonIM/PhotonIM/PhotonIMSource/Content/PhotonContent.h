@@ -10,7 +10,9 @@
 #import "PhotonAppDelegate.h"
 #import "PhotonUser.h"
 NS_ASSUME_NONNULL_BEGIN
-#define APP_ID @"280f8ef2cec41cde3bed705236ab9bc4"
+//#define APP_ID @"280f8ef2cec41cde3bed705236ab9bc4"
+
+static NSString* APP_ID = @"280f8ef2cec41cde3bed705236ab9bc4";
 @interface PhotonContent : NSObject
 + (instancetype)sharedInstance;
 + (PhotonAppDelegate *)sharedAppDelegate;
@@ -38,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid gid:(NSString *)gid;
 
 
-
++ (BOOL)deleteaAllUserFromGroupWithGid:(NSString *)gid;
 
 + (void)logout;
 + (void)login;

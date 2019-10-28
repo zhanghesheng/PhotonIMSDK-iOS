@@ -60,10 +60,12 @@
     [self.model addItem:item];
     [self reloadData];
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if(message.chatType == PhotonIMChatTypeGroup && message.msgAtType != PhotonIMAtTypeNoAt){
+            [[PhotonMessageCenter sharedCenter] resetAtType:self.conversation];
+        }
+    });
     
-    if(message.chatType == PhotonIMChatTypeGroup && message.msgAtType != PhotonIMAtTypeNoAt){
-        [[PhotonMessageCenter sharedCenter] resetAtType:self.conversation];
-    }
 }
 // 处理撤回消息
 - (void)wrapperWithdrawMessage:(PhotonIMMessage *)message{

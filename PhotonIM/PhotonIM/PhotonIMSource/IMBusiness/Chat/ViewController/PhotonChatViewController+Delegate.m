@@ -231,6 +231,7 @@
         case PhotonMenuTypeTransmit:{// 转发
             PhotonWeakSelf(self)
             PhotonChatTransmitListViewController *transmitVc = [[PhotonChatTransmitListViewController alloc] initWithMessage:item.userInfo block:^(id  _Nonnull msg) {
+                [msg setTimeStamp:[[NSDate date] timeIntervalSince1970] * 1000];
                 [weakself addItems:msg];
             }];
             [self.navigationController pushViewController:transmitVc animated:YES];

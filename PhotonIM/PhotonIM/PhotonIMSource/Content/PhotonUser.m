@@ -155,6 +155,7 @@
         NSArray *lists = [data objectForKey:@"lists"];
         
         if (lists.count > 0) {
+            [PhotonContent deleteaAllUserFromGroupWithGid:gid];
             for (NSDictionary *item in lists) {
                 PhotonUser *user = [[PhotonUser alloc] init];
                 user.userID = [[item objectForKey:@"userId"] isNil];

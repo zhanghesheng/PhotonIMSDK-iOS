@@ -52,6 +52,9 @@
             }
             
         }
+        if (succeed) {
+            textItem.tipText = @"";
+        }
         [weakself reloadData];
     }];
 
@@ -93,6 +96,9 @@
                 [PhotonUtil showErrorHint:error.em];
             }
         }
+        if (succeed) {
+            imageItem.tipText = @"";
+        }
          [weakself reloadData];
     }];
 }
@@ -114,6 +120,9 @@
             if (error.code != -1 && error.code != -2) {
                 [PhotonUtil showErrorHint:error.em];
             }
+        }
+        if (succeed) {
+            audioItem.tipText = @"";
         }
         [weakself reloadData];
     }];
@@ -142,6 +151,9 @@
             if (error.code != -1 && error.code != -2) {
                 [PhotonUtil showErrorHint:error.em];
             }
+        }
+        if (succeed) {
+            item.tipText = @"";
         }
         [weakself reloadData];
     }];

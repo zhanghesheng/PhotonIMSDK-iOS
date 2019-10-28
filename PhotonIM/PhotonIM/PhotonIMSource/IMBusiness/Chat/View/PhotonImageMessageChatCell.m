@@ -53,7 +53,6 @@
             [self.contentBackgroundView sd_setImageWithURL:fileURL placeholderImage:nil];
         }
     }
-    [self p_layoutViews];
 }
 
 - (void)p_layoutViews{
@@ -62,6 +61,11 @@
     [self.contentBackgroundView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(size);
     }];
+}
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    [self p_layoutViews];
 }
 
 - (void)prepareForReuse{

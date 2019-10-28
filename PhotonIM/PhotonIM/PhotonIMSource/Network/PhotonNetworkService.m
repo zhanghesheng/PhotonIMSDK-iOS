@@ -52,7 +52,9 @@
     [request setRequestHeaders:instance.requestHeaders];
     __weak PhotonNetworkRequest *pRequest = request;
     [request setCompletionBlock:^{
-        NSDictionary *dict = [instance getResponseJsonResult:pRequest];
+        __strong PhotonNetworkRequest *strongRequest = pRequest;
+        [instance.requestArray removeObject:strongRequest];
+        NSDictionary *dict = [instance getResponseJsonResult:strongRequest];
         if (!dict) {
             failure(nil);
             return;

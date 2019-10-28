@@ -928,7 +928,6 @@
 		3235758622C3128D00C0B442 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				3253C697234DAC6200F88AF0 /* momo.cer */,
 				321FE3CF22CEEF4000020CCE /* Common.xcassets */,
 				3228700322BA552D009B6881 /* Conversation.xcassets */,
 				3228700522BA56BD009B6881 /* Mine.xcassets */,
@@ -1441,7 +1440,6 @@
 				3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */,
 				3235759922C3129400C0B442 /* icon_chat_audio_playstatus_2@2x.png in Resources */,
 				3235759622C3129400C0B442 /* icon_chat_audio_playstatus_5@2x.png in Resources */,
-				3253C698234DAC6200F88AF0 /* momo.cer in Resources */,
 				3235759422C3129400C0B442 /* icon_chat_audio_playstatus_1@2x.png in Resources */,
 				3235759C22C3129400C0B442 /* icon_chat_audio_playstatus_4@2x.png in Resources */,
 				32286F9522B9F208009B6881 /* LaunchScreen.storyboard in Resources */,

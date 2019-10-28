@@ -69,6 +69,7 @@ PRIMARY KEY(uid))"
 #define     SQL_SELECT_USERS            @"SELECT * FROM %@"
 #define     SQL_SELECT_USER             @"SELECT * FROM %@ WHERE uid = '%@'"
 #define     SQL_DELETE_USER          @"DELETE FROM %@ WHERE uid = '%@'"
+#define     SQL_DELETE_ALLUSER          @"DELETE FROM %@"
 
 
 @implementation PhotonDBUserStore
@@ -286,8 +287,14 @@ PRIMARY KEY(uid))"
 }
 // 移除数组中的成员
 - (BOOL)deleteUserFromGroupWithUid:(nullable NSString *)uid tableName:(NSString *)tableName{
-     [self createGroupTable:tableName];
     NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_USER, tableName, uid];
+    BOOL ok = [self excuteSQL:sqlString, nil];
+    return ok;
+}
+
+// 移除群组中的所有成员
+- (BOOL)deleteAllUserFromGroupWithTableName:(NSString *)tableName{
+    NSString *sqlString = [NSString stringWithFormat:SQL_DELETE_ALLUSER, tableName];
     BOOL ok = [self excuteSQL:sqlString, nil];
     return ok;
 }

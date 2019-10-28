@@ -88,7 +88,7 @@
     titleItem.title = @"聊天组名称";
     titleItem.itemHeight = 70;
     titleItem.icon = @"right_arrow";;
-    titleItem.detail = user.userName?user.userName:@"无";
+    titleItem.detail = user.nickName?user.nickName:@"无";
     titleItem.userInfo = [PhotonContent friendDetailInfo:self.conversation.chatWith];
     [self.items addObject:titleItem];
     

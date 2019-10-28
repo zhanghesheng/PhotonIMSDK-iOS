@@ -206,6 +206,7 @@
     NSInteger count = self.items.count;
     if (item && count > self.pageSize * 2){
         NSArray *items = [self.items subarrayWithRange:NSMakeRange(count-(self.pageSize), self.pageSize)];
+        [self.items removeAllObjects];
         self.items = [items mutableCopy];
         self.anchorMsgId = [[[self.items firstObject] userInfo] messageID];
         [self.items addObject:item];

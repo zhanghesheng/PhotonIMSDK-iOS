@@ -34,6 +34,9 @@
         NSArray *users = [PhotonContent findAllUsersWithGroupId:weakSelf.gid];
         for (PhotonUser *user in users) {
             if (user) {
+                if([user.userID isEqualToString:[PhotonContent currentUser].userID]){
+                    continue;
+                }
                 PhotonChatTransmitItem *item = [[PhotonChatTransmitItem alloc] init];
                 item.contactID = user.userID;
                 item.contactName = user.nickName;
@@ -62,6 +65,9 @@
             for (NSDictionary *item in lists) {
                 PhotonUser *user = [[PhotonUser alloc] init];
                 user.userID = [[item objectForKey:@"userId"] isNil];
+                if([user.userID isEqualToString:[PhotonContent currentUser].userID]){
+                    continue;
+                }
                 user.nickName = [[item objectForKey:@"nickname"] isNil];
                 user.userName = [[item objectForKey:@"username"] isNil];
                 user.avatarURL = [[item objectForKey:@"avatar"] isNil];
