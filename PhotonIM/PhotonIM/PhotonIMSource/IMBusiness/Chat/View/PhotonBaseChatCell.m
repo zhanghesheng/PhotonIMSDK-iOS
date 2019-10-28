@@ -154,8 +154,7 @@
 }
 - (void)layoutSubviews{
     [super layoutSubviews];
-    [self p_layoutSubviews];
-    
+
     PhotonBaseChatItem *item = (PhotonBaseChatItem *)self.item;
     
     // 时间

@@ -367,11 +367,12 @@ static PhotonMessageCenter *center = nil;
         [PhotonUtil runMainThread:^{
             if (completion) {
                 completion(succeed,error);
-            }
-            NSHashTable *_observer = [weakself.observers copy];
-            for (id<PhotonMessageProtocol> observer in _observer) {
-                if (observer && [observer respondsToSelector:@selector(sendMessageResultCallBack:)]) {
-                    [observer sendMessageResultCallBack:message];
+            }else{
+                NSHashTable *_observer = [weakself.observers copy];
+                for (id<PhotonMessageProtocol> observer in _observer) {
+                    if (observer && [observer respondsToSelector:@selector(sendMessageResultCallBack:)]) {
+                        [observer sendMessageResultCallBack:message];
+                    }
                 }
             }
         }];
@@ -411,13 +412,7 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)resetAtType:(PhotonIMConversation *)conversation{
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (conversation.atType != PhotonIMConversationAtTypeNoAt) {
-            [self.imClient updateConversationAtType:conversation.chatType chatWith:conversation.chatWith atType:PhotonIMConversationAtTypeNoAt];
-        }
-    });
-    
-    
+    [self.imClient updateConversationAtType:conversation.chatType chatWith:conversation.chatWith atType:PhotonIMConversationAtTypeNoAt];
 }
 - (PhotonIMConversation *)findConversation:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     return [self.imClient findConversation:chatType chatWith:chatWith];

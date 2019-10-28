@@ -54,6 +54,8 @@
 @property (nonatomic, assign)NSInteger authSucceedCount;
 
 @property (nonatomic, assign)NSInteger authFaileddCount;
+
+@property (atomic, assign)BOOL scrollTop;
 @end
 
 @implementation PhotonChatViewController
@@ -182,7 +184,6 @@
 
 - (void)reloadData{
     [self.uiDispatchSource addSemaphore];
-  
 }
 
 - (void)p_reloadData{

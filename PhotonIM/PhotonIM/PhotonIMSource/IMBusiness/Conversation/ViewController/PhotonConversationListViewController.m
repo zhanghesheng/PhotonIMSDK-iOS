@@ -30,6 +30,8 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, assign)NSInteger  refreshCount;
 @property (nonatomic, assign)BOOL  isExcute;
 @property (nonatomic, assign)NSInteger lastOprationTimeStamp;
+
+@property (atomic, assign)BOOL isRefreshing;
 @end
 
 @implementation PhotonConversationListViewController
@@ -96,7 +98,6 @@ static NSString *message_syncing = @"消息(收取中......)";
     [super viewDidAppear:animated];
     if (self.needRefreshData) {
         [self.dataDispatchSource addSemaphore];
-        [self setTabBarBadgeValue];
         self.needRefreshData = YES;
     }
 }
@@ -138,11 +139,13 @@ static NSString *message_syncing = @"消息(收取中......)";
         [weakSlef removeNoDataView];
         [weakSlef.uiDispatchSource addSemaphore];
         [weakSlef endRefreshing];
+        weakSlef.isRefreshing = NO;
     } failure:^(PhotonErrorDescription * _Nullable error) {
         [PhotonUtil showAlertWithTitle:@"加载会话列表失败" message:error.errorMessage];
         [weakSlef.uiDispatchSource addSemaphore];
         [weakSlef loadNoDataView];
         [weakSlef endRefreshing];
+        weakSlef.isRefreshing = NO;
     }];
 }
 - (void)reloadData{
@@ -164,16 +167,20 @@ static NSString *message_syncing = @"消息(收取中......)";
         default:
             break;
     }
-   
+    [self setTabBarBadgeValue];
     if (!self.isAppeared) {
         self.needRefreshData  = YES;
         return;
     }
     [self.dataDispatchSource addSemaphore];
-    [self setTabBarBadgeValue];
+   
 }
 
 - (void)readyRefreshConversations{
+    if (_isRefreshing) {
+        return;
+    }
+    _isRefreshing = YES;
     [NSThread sleepForTimeInterval:1];
     [self startRefreshConversations];
 }

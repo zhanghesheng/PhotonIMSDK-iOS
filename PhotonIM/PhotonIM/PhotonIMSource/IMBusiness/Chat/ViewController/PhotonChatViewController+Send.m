@@ -44,7 +44,7 @@
             int duration = endTime - weakself.startTime;
              weakself.totalTimeLable.text = [NSString stringWithFormat:@"总耗时(毫秒)：%@",@(duration)];
         }
-        if (!succeed && error.code == 1001 && error.em) {
+        if (!succeed && error.code >=1000 && error.em) {
            textItem.tipText = error.em;
         }else if (!succeed){
             if (error.code != -1 && error.code != -2) {
@@ -89,7 +89,7 @@
     [self reloadData];
      PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-        if (!succeed && error.code == 1001 && error.em) {
+        if (!succeed && error.code >=1000 && error.em) {
             imageItem.tipText = error.em;
         }else if (!succeed){
             if (error.code != -1 && error.code != -2) {
@@ -145,7 +145,7 @@
     [self.model addItem:item];
     
     [[PhotonMessageCenter sharedCenter] resendMessage:item completion:^(BOOL succeed, PhotonIMError * _Nullable error){
-        if (!succeed && error.code == 1001 && error.em) {
+        if (!succeed && error.code >=1000 && error.em) {
             item.tipText = error.em;
         }else if (!succeed){
             if (error.code != -1 && error.code != -2) {
@@ -161,6 +161,9 @@
 
 #pragma mark ------  PhotonMessageProtocol ------
 - (void)sendMessageResultCallBack:(PhotonIMMessage *)message{
+    if (message.chatType == PhotonIMChatTypeGroup) {
+        return;
+    }
     BOOL ret  = NO;
     NSArray *tempItems = [self.model.items copy];
     for (PhotonBaseChatItem *item in tempItems) {

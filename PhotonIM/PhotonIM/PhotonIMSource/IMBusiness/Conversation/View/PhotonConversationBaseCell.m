@@ -64,7 +64,7 @@
     
     
     NSMutableAttributedString *content = [[NSMutableAttributedString alloc] init];
-    NSMutableAttributedString *atTypeString;
+    NSMutableAttributedString *atTypeString = [[NSMutableAttributedString alloc] init];
     if (conversation.atType == PhotonIMConversationAtTypeAtMe) {
         atTypeString = [[NSMutableAttributedString alloc] initWithString:@"有人@了我" attributes:@{NSForegroundColorAttributeName:(id)[UIColor redColor]}];
     }else if (conversation.atType == PhotonIMConversationTypeAtAll){

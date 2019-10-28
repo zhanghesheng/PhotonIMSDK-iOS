@@ -30,12 +30,17 @@
     [self.textMessageLabel setAttributedText:item.messageAttriText];
     [self.textMessageLabel setContentCompressionResistancePriority:500 forAxis:UILayoutConstraintAxisHorizontal];
     [self.contentBackgroundView setContentCompressionResistancePriority:100 forAxis:UILayoutConstraintAxisHorizontal];
+    if (item.fromType == PhotonChatMessageFromSelf) {
+        self.textMessageLabel.textColor = [UIColor colorWithHex:0xFFFFFF];
+    }
+    else if (item.fromType== PhotonChatMessageFromFriend){
+        self.textMessageLabel.textColor = [UIColor colorWithHex:0x272727];
+    }
     
 }
 - (void) p_layoutSubviews{
     PhotonTextMessageChatItem *item = (PhotonTextMessageChatItem *)self.item;
     if (item.fromType == PhotonChatMessageFromSelf) {
-        self.textMessageLabel.textColor = [UIColor colorWithHex:0xFFFFFF];
         [self.textMessageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.contentBackgroundView).mas_offset(-MSG_SPACE_RIGHT);
             make.top.mas_equalTo(self.contentBackgroundView).mas_offset(MSG_SPACE_TOP);
@@ -46,8 +51,6 @@
         }];
     }
     else if (item.fromType== PhotonChatMessageFromFriend){
-         self.textMessageLabel.textColor = [UIColor colorWithHex:0x272727];
-        
         [self.textMessageLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.contentBackgroundView).mas_offset(MSG_SPACE_LEFT);
             make.top.mas_equalTo(self.contentBackgroundView).mas_offset(MSG_SPACE_TOP);
