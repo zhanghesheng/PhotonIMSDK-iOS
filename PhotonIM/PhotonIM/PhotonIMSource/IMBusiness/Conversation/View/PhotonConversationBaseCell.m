@@ -79,7 +79,7 @@
          chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
     }else{
         if(conversation.lastMsgContent){
-             chatContent = [[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+             chatContent = [[NSMutableAttributedString alloc] initWithString:[conversation.lastMsgContent trim] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
         }
        
     }
