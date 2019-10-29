@@ -9,6 +9,7 @@
 #ifndef PhotonIMClientProtocol_h
 #define PhotonIMClientProtocol_h
 #import "PhotonIMEnum.h"
+#import "PhotonIMError.h"
 @class PhotonIMMessage;
 @protocol PhotonIMClientProtocol <NSObject>
 
@@ -122,5 +123,20 @@
  会话数据有变化，依据此回调刷新会话列表
  */
 - (void)networkChange:(PhotonIMNetworkStatus)networkStatus;
+
+/**
+ 收到消息已读的消息
+ 
+ @param client client
+ @param msgID 消息的id
+ @param chatType 消息所属的会话
+ @param chatWith 消息所属的会话对方id
+ @param error 消息所属的会话对方error
+ */
+- (void)imClient:(id)client
+        sendResultWithMsgID:(NSString *)msgID
+        chatType:(PhotonIMChatType)chatType
+        chatWith:(NSString * _Nullable)chatWith
+        error:( PhotonIMError* _Nullable)error;
 @end
 #endif /* PhotonIMClientProtocol_h */

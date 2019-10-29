@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonIMAudioBody : PhotonIMMediaBody
-+ (PhotonIMAudioBody *)videoBodyWithURL:(NSString *)url
++ (PhotonIMAudioBody *)audioBodyWithURL:(NSString *)url
                               mediaTime:(int64_t)mediaTime
                           localFileName:(nullable NSString *)localFileName;
 @end
