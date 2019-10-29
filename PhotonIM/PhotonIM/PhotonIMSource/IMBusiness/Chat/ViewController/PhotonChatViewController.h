@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign)NSInteger  count;
 @property(nonatomic, strong)UILabel  *totalTimeLable;
 - (instancetype)initWithConversation:(nullable PhotonIMConversation *)conversation;
+
+- (void)reloadDataScroll;
 @end
 
 NS_ASSUME_NONNULL_END

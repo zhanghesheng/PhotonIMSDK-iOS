@@ -466,6 +466,7 @@
 		32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonRecorderIndicator.m; sourceTree = "<group>"; };
 		32E7927E22FAC3A900CB3E76 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		32ECA8F122E06B6000C9A899 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
+		32F0571D23682EF70075D7A7 /* PhotonIM copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PhotonIM copy-Info.plist"; path = "/Users/momo/work/TOB_IM/PhotonIMSDK-iOS/PhotonIM/PhotonIM copy-Info.plist"; sourceTree = "<absolute>"; };
 		32F94D8A23387D06002DF468 /* PhotonContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonContactViewController.h; sourceTree = "<group>"; };
 		32F94D8B23387D06002DF468 /* PhotonContactViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonContactViewController.m; sourceTree = "<group>"; };
 		32F94D8D23388353002DF468 /* PhotonGroupContactViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupContactViewController.h; sourceTree = "<group>"; };
@@ -685,6 +686,7 @@
 				32286F8622B9F207009B6881 /* Products */,
 				C84EF2226E7274D03561DE3C /* Pods */,
 				F643BDE099CB9A2C77E9CC5E /* Frameworks */,
+				32F0571D23682EF70075D7A7 /* PhotonIM copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1721,7 +1723,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
@@ -1733,7 +1735,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = push;
+				PROVISIONING_PROFILE_SPECIFIER = pushHOC;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1937,7 +1939,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				ENABLE_BITCODE = NO;
@@ -2004,7 +2006,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Photonimdemo;
+				PROVISIONING_PROFILE_SPECIFIER = PhotonimAHCdemo;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

@@ -166,18 +166,8 @@
 
 - (void)p_loadDataItems{
     PhotonWeakSelf(self);
-    BOOL isEmpty = (self.model.items.count == 0);
     [self.model loadMoreMeesages:self.conversation.chatType chatWith:self.conversation.chatWith beforeAuthor:YES asc:YES finish:^(NSDictionary * _Nullable pa) {
-        if (!isEmpty) {
-            weakself.enableWithoutScrollToTop = YES;
-        }else{
-            weakself.enableWithoutScrollToTop = NO;
-        }
-        if(isEmpty){
-            [weakself.uiDispatchSource addSemaphore];
-        }else{
-             [weakself p_reloadData];
-        }
+        [weakself.uiDispatchSource addSemaphore];
        
     }];
 }
@@ -185,7 +175,9 @@
 - (void)reloadData{
     [self.uiDispatchSource addSemaphore];
 }
-
+- (void)reloadDataScroll{
+    [self.uiDispatchSource addSemaphore];
+}
 - (void)p_reloadData{
     if (!self.model.items.count) {
         return;
@@ -256,7 +248,7 @@
 #pragma mark ------ demo uitextView ----
 
 - (void)addTextUI{
-//    return;
+    return;
     [self.view addSubview:self.testUIView];
     [self.testUIView addSubview:self.contentFiled];
     [self.testUIView addSubview:self.countFiled];

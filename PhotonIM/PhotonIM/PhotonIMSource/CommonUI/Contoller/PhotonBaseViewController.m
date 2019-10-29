@@ -108,12 +108,7 @@
     }
     
     _tableView.dataSource = _dataSource;
-    if (self.enableWithoutScrollToTop) {
-        [_tableView reloadDataWithoutScrollToTop];
-    }else{
-        [_tableView reloadData];
-    }
-    
+    [_tableView reloadData];
 }
 
 #pragma mark UITableViewDataDelegate
