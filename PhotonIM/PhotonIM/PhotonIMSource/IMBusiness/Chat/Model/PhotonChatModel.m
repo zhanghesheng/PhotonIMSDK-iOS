@@ -203,15 +203,18 @@
 }
 
 - (void)addItem:(id)item{
-    NSInteger count = self.items.count;
-    if (item && count > self.pageSize * 2){
-        NSArray *items = [self.items subarrayWithRange:NSMakeRange(count-(self.pageSize), self.pageSize)];
-        [self.items removeAllObjects];
-        self.items = [items mutableCopy];
-        self.anchorMsgId = [[[self.items firstObject] userInfo] messageID];
-        [self.items addObject:item];
-    }else if (item){
-         [self.items addObject:item];
-    }
+    PhotonWeakSelf(self);
+    [PhotonUtil runMainThread:^{
+        NSInteger count = weakself.items.count;
+        if (item && count > weakself.pageSize * 2){
+            NSArray *items = [self.items subarrayWithRange:NSMakeRange(count-(weakself.pageSize), weakself.pageSize)];
+            weakself.items = [items mutableCopy];
+            weakself.anchorMsgId = [[[self.items firstObject] userInfo] messageID];
+            [weakself.items addObject:item];
+        }else if (item){
+            [weakself.items addObject:item];
+        }
+    }];
+   
 }
 @end
