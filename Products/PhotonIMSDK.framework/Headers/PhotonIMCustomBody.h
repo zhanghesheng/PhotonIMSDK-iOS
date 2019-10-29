@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 自定义二进制数据 */
 @property(nonatomic, copy, nullable) NSData *data;
+
++ (PhotonIMCustomBody *)customBodyWithURL:(int32_t *)arg1
+                              mediaTime:(int32_t)arg2
+                          localFileName:(nullable NSData *)data;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign)CGFloat whRatio;
 
-+ (PhotonIMImageBody *)videoBodyWithURL:(NSString *)url
++ (PhotonIMImageBody *)imageBodyWithURL:(NSString *)url
                             thumbURL:(nullable NSString *)thumbURL
                                localFileName:(nullable NSString *)localFileName
                                 whRatio:(CGFloat)whRatio;
