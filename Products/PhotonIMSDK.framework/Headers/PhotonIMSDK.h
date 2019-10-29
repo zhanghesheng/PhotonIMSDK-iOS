@@ -31,6 +31,7 @@ FOUNDATION_EXPORT const unsigned char PhotonIMSDKVersionString[];
 #import <PhotonIMSDK/PhotonIMImageBody.h>
 #import <PhotonIMSDK/PhotonIMAudioBody.h>
 #import <PhotonIMSDK/PhotonIMCustomBody.h>
+#import <PhotonIMSDK/PhotonIMVideoBody.h>
 
 // protocol
 #import <PhotonIMSDK/PhotonIMClientProtocol.h>
