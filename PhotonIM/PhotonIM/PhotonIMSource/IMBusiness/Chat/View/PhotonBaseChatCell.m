@@ -219,7 +219,7 @@
             CGFloat tipLableHeight  = TIPLABEL_HEIGHT;
             CGFloat tipLableWidth = tip_width;
             CGFloat tipLableTop = contentViewfFrame.origin.y + contentViewfFrame.size.height + TIPLABEL_SPACE_Y;
-            CGFloat tipLableLeft = contentViewfFrame.origin.x;
+            CGFloat tipLableLeft = contentViewfFrame.origin.x + contentViewfFrame.size.width - tip_width;
             CGRect tipLableFrame = CGRectMake(tipLableLeft, tipLableTop, tipLableWidth, tipLableHeight);
             self.tipLable.frame = tipLableFrame;
         }else{
