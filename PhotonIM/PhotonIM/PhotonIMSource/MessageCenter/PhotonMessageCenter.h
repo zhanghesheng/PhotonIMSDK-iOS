@@ -72,7 +72,7 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 
 
 // 转发的逻辑
-- (void)transmitMessage:(nullable PhotonIMMessage *)message conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (PhotonIMMessage *)transmitMessage:(nullable PhotonIMMessage *)message conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
 
 
 - (void)sendAddGrupNoticeMessage:(nullable PhotonIMMessage *)message  completion:(nullable CompletionBlock)completion;

@@ -334,7 +334,7 @@ static PhotonMessageCenter *center = nil;
     }
 }
 
-- (void)transmitMessage:(nullable PhotonIMMessage *)message conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+- (PhotonIMMessage *)transmitMessage:(nullable PhotonIMMessage *)message conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     // 文件操作，转发时将文件拷贝到转发的会话下
     if (message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio) {
         PhotonIMMediaBody *imgBody = (PhotonIMMediaBody *)message.messageBody;
@@ -359,12 +359,16 @@ static PhotonMessageCenter *center = nil;
     sendMessage.messageStatus = PhotonIMMessageStatusSending;
     [sendMessage setMesageBody:message.messageBody];
     [self _sendMessage:sendMessage completion:completion];
+    return sendMessage;
 }
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
     PhotonWeakSelf(self);
     [[PhotonIMClient sharedClient] sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
+            if (!succeed && error.code >= 1000) {
+                message.notic = error.em;
+            }
             if (completion) {
                 completion(succeed,error);
             }else{

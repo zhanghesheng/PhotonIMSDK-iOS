@@ -161,14 +161,16 @@
 
 #pragma mark ------  PhotonMessageProtocol ------
 - (void)sendMessageResultCallBack:(PhotonIMMessage *)message{
-    if (message.chatType == PhotonIMChatTypeGroup) {
-        return;
-    }
+//    if (message.chatType == PhotonIMChatTypeGroup) {
+//        return;
+//    }
     BOOL ret  = NO;
     NSArray *tempItems = [self.model.items copy];
     for (PhotonBaseChatItem *item in tempItems) {
         if ([[item.userInfo messageID] isEqualToString:[message messageID]]) {
             ((PhotonIMMessage *)item.userInfo).messageStatus = [message messageStatus];
+            ((PhotonIMMessage *)item.userInfo).notic = [message notic];
+            item.tipText = message.notic;
             ret = YES;
         }
     }
