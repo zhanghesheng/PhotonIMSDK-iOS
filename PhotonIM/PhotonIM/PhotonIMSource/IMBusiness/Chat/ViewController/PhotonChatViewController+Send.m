@@ -18,7 +18,6 @@
     textItem.messageText = text;
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     [self.model addItem:textItem];
-    [self reloadData];
     PhotonWeakSelf(self);
    
     [PhotonUtil runMainThread:^{
@@ -52,7 +51,8 @@
         }
         [weakself reloadData];
     }];
-
+    [weakself reloadData];
+    
 }
 
 // 发送图片消息
