@@ -480,9 +480,9 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)imClientLogin:(nonnull id)client loginStatus:(PhotonIMLoginStatus)loginstatus {
-    if (loginstatus ==  PhotonIMLoginStatusLoginSucceed) {
-        [self reSendAllSendingMessages];
-    }
+//    if (loginstatus ==  PhotonIMLoginStatusLoginSucceed) {
+//        [self reSendAllSendingMessages];
+//    }
 }
 
 

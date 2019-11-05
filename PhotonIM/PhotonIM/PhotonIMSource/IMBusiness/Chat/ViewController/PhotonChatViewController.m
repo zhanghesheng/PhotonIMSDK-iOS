@@ -165,8 +165,8 @@
 }
 
 - (void)reloadData{
-    [self p_reloadData];
-//    [self.uiDispatchSource addSemaphore];
+//    [self p_reloadData];
+    [self.uiDispatchSource addSemaphore];
   
 }
 
