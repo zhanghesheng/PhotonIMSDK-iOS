@@ -435,6 +435,8 @@
 		3272588622F1981B00842026 /* PhotonChatTransmitCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatTransmitCell.m; sourceTree = "<group>"; };
 		3272588822F1A61900842026 /* PhotonChatTransmitModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatTransmitModel.h; sourceTree = "<group>"; };
 		3272588922F1A61900842026 /* PhotonChatTransmitModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatTransmitModel.m; sourceTree = "<group>"; };
+		327336322371583A00CEF6C2 /* PhotonIMSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotonIMSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		327336342371586000CEF6C2 /* libProtocolBuffers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libProtocolBuffers.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		327D8D7D23066A00006E2E90 /* PhotonCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCommonHeader.h; sourceTree = "<group>"; };
 		327D8D7E230691D6006E2E90 /* PhotonAPIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAPIMacros.h; sourceTree = "<group>"; };
 		3286B10922BB25FA0032D066 /* Chat.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Chat.xcassets; sourceTree = "<group>"; };
@@ -1305,6 +1307,8 @@
 		F643BDE099CB9A2C77E9CC5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				327336342371586000CEF6C2 /* libProtocolBuffers.a */,
+				327336322371583A00CEF6C2 /* PhotonIMSDK.framework */,
 				32E7927E22FAC3A900CB3E76 /* CoreServices.framework */,
 				321E45FD22F2E99A00BB9585 /* libc.tbd */,
 				321E45FC22F2E99A00BB9585 /* libc++abi.tbd */,
@@ -1703,6 +1707,7 @@
 				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1711,6 +1716,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = push;
@@ -1725,6 +1731,7 @@
 				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1733,6 +1740,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 2.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = push;

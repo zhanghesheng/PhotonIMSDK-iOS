@@ -20,7 +20,6 @@
     textItem.atInfo = [atItems copy];
     textItem.type = atType;
     [self.model addItem:textItem];
-    [self reloadData];
     PhotonWeakSelf(self);
    
     [PhotonUtil runMainThread:^{
@@ -57,7 +56,8 @@
         }
         [weakself reloadData];
     }];
-
+    [weakself reloadData];
+    
 }
 
 // 发送图片消息

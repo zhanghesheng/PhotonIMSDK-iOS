@@ -173,6 +173,7 @@
 }
 
 - (void)reloadData{
+//    [self p_reloadData];
     [self.uiDispatchSource addSemaphore];
 }
 - (void)reloadDataScroll{
