@@ -143,7 +143,17 @@ NS_ASSUME_NONNULL_BEGIN
                                             beforeAuthor:(BOOL)beforeAuthor
                                                      asc:(BOOL)asc size:(int)size;
 
+/**
+查找消息
 
+@param chatType 查找的会话类型
+@param chatWith 会话中对方的id
+@param msgId 消息id 
+@return <#return value description#>
+*/
+- (PhotonIMMessage *)findMessage:(PhotonIMChatType)chatType
+                        chatWith:(NSString *)chatWith
+                           msgId:(nullable NSString *)msgId;
 /**
  查找消息
 

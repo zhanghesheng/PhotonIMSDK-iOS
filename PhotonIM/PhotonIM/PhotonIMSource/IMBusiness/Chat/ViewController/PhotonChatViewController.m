@@ -166,19 +166,26 @@
 
 - (void)p_loadDataItems{
     PhotonWeakSelf(self);
+    BOOL isEmpty = (self.model.items.count == 0);
     [self.model loadMoreMeesages:self.conversation.chatType chatWith:self.conversation.chatWith beforeAuthor:YES asc:YES finish:^(NSDictionary * _Nullable pa) {
-        [weakself.uiDispatchSource addSemaphore];
+        if (!isEmpty) {
+            weakself.enableWithoutScrollToTop = YES;
+        }else{
+            weakself.enableWithoutScrollToTop = NO;
+        }
+        if(isEmpty){
+            [weakself.uiDispatchSource addSemaphore];
+        }else{
+             [weakself p_reloadData];
+        }
        
     }];
 }
 
 - (void)reloadData{
-//    [self p_reloadData];
     [self.uiDispatchSource addSemaphore];
 }
-- (void)reloadDataScroll{
-    [self.uiDispatchSource addSemaphore];
-}
+
 - (void)p_reloadData{
     if (!self.model.items.count) {
         return;
@@ -478,6 +485,11 @@
             self.authFaileddCount ++;
             change = NO;
             break;
+        case PhotonIMLoginStatusUnknow:
+            self.authFaileddCount ++;
+            change = NO;
+            break;
+                      
         default:
             break;
     }
