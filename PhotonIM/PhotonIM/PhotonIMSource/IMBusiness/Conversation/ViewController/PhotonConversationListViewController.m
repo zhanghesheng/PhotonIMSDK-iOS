@@ -181,12 +181,10 @@ static NSString *message_syncing = @"消息(收取中......)";
         return;
     }
     _isRefreshing = YES;
-    [NSThread sleepForTimeInterval:1];
     [self startRefreshConversations];
 }
 
 - (void)startRefreshConversations{
-    
     [self loadDataItems];
 }
 
