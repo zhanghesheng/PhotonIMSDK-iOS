@@ -1844,7 +1844,6 @@
 					"\"SystemConfiguration\"",
 					"-framework",
 					"\"UIKit\"",
-					"-fprofile-instr-generate",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1923,7 +1922,6 @@
 					"\"SystemConfiguration\"",
 					"-framework",
 					"\"UIKit\"",
-					"-fprofile-instr-generate",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
