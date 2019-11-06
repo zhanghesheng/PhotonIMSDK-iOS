@@ -10,6 +10,7 @@
 #define PhotonIMClientProtocol_h
 #import "PhotonIMEnum.h"
 #import "PhotonIMError.h"
+NS_ASSUME_NONNULL_BEGIN
 @class PhotonIMMessage;
 @protocol PhotonIMClientProtocol <NSObject>
 
@@ -140,3 +141,4 @@
         error:( PhotonIMError* _Nullable)error;
 @end
 #endif /* PhotonIMClientProtocol_h */
+NS_ASSUME_NONNULL_END

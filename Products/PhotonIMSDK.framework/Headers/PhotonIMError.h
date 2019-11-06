@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
  1004    消息不可撤回
  1005    撤回消息功能未开启
  1006    参数错误
- -1      消息发送超时
- -2      切换账号时，等待发送的消息
  */
 @interface PhotonIMError : NSError
 @property(nonatomic,copy,readonly,nullable,)NSString *em;
