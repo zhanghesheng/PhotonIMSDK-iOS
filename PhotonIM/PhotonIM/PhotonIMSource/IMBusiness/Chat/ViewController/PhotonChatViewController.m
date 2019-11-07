@@ -187,14 +187,15 @@
 }
 
 - (void)p_reloadData{
+     [self endRefreshing];
     if (!self.model.items.count) {
+       
         return;
     }
     // 刷新数据
     PhotonChatDataSource *dataSource = [[PhotonChatDataSource alloc] initWithItems:self.model.items];
     dataSource.delegate = self;
     self.dataSource = dataSource;
-    [self endRefreshing];
 }
 
 #pragma mark ----- getter --------
