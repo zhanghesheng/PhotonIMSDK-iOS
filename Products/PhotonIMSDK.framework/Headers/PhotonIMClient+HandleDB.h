@@ -438,7 +438,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param chatType 会话类型
  @param chatWith 会话中对方的id
  @param size 每次查询的条数
- @param beginTimeStamp <#beginTimeStamp description#>
+ @param beginTimeStamp 要拉去历史消息的起始时间，比如昨天8点到现在，此处为昨天八点的时间戳。
  @param result <#result description#>
  */
 - (void)syncHistoryMessagesFromServer:(PhotonIMChatType)chatType
