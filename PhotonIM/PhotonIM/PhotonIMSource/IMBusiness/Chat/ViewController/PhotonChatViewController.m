@@ -325,7 +325,7 @@
     
     [self.authFiled mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.mas_equalTo(0);
-        make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
+        make.top.mas_equalTo(self.totalTimeLable.mas_bottom).mas_offset(5);
         make.height.mas_equalTo(40);
     }];
 }
@@ -484,11 +484,11 @@
             break;
         case PhotonIMLoginStatusLoginFailed:
             self.authFaileddCount ++;
-            change = NO;
+            change = YES;
             break;
         case PhotonIMLoginStatusUnknow:
             self.authFaileddCount ++;
-            change = NO;
+            change = YES;
             break;
                       
         default:
