@@ -78,9 +78,13 @@
             }];
 
         }else{
+            if(!weakself.anchorMsgId || weakself.anchorMsgId.length == 0){
+               weakself.anchorMsgId = [[[weakself.items firstObject] userInfo] messageID];
+            }
             [imclient loadHistoryMessages:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)weakself.pageSize reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messages, NSString * _Nullable an, BOOL remainHistoryInServer) {
                 NSMutableArray *items = [NSMutableArray array];
                 weakself.anchorMsgId = [an copy];
+               
                 weakself.startSyncServer = remainHistoryInServer;
                 for (PhotonIMMessage *msg in messages) {
                     id item =  [weakself wrapperMessage:msg];
@@ -88,10 +92,10 @@
                         [items addObject:item];
                     }
                 }
-                NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
+                NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:weakself.items.count + items.count];
                 [totolItems addObjectsFromArray:items];
-                [totolItems addObjectsFromArray:self.items];
-                self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
+                [totolItems addObjectsFromArray:weakself.items];
+                weakself.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
                 if (finish) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         finish(nil);
