@@ -28,6 +28,9 @@
     if ([[PhotonUtil getCookie] isNotEmpty]) {
         [_requestHeaders setValue:[PhotonUtil getCookie] forKey:@"Cookie"];
     }
+    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"host"];
+    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"HOST"];
+    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"Host"];
     return _requestHeaders;
 }
 - (void)setRequestHeader:(NSString *)value key:(NSString *)key{
@@ -44,13 +47,14 @@
     
     NSString *urlString = [NSString stringWithFormat:@"%@/%@",self.baseUrl,queryString];
     PhotonNetworkRequest *request = [PhotonNetworkRequest initWithUrl:urlString andParamer:paramter];
-    request.delegate = self;
     request.requestMethod = method;
-    [request setRequestHeaders:self.requestHeaders];
+     __weak typeof(self)instance = self;
+    [request setRequestHeaders:instance.requestHeaders];
     __weak PhotonNetworkRequest *pRequest = request;
-    __weak typeof(self)instance = self;
     [request setCompletionBlock:^{
-        NSDictionary *dict = [instance getResponseJsonResult:pRequest];
+        __strong PhotonNetworkRequest *strongRequest = pRequest;
+        [instance.requestArray removeObject:strongRequest];
+        NSDictionary *dict = [instance getResponseJsonResult:strongRequest];
         if (!dict) {
             failure(nil);
             return;

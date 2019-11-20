@@ -13,8 +13,16 @@ target :PhotonIM do
     pod 'MBProgressHUD', '1.1.0'
     pod 'FMDB', '2.7.2'
     pod 'MMKV','1.0.22'
+<<<<<<< HEAD
     pod 'PhotonPushSDK','0.1.0-hw'
     pod 'PhotonIMSDK','1.2.0-hw'
     pod 'MMBase-iOS'
 #    pod 'PhotonIMSDK',:git=>'https://cosmos33@github.com/cosmos33/PhotonIMSDK-iOS.git', :commit=>'0e4fbd21767ae36c8331728a10dd9aa5f2a1d670'
+=======
+    pod 'MMBase-iOS'
+    pod 'PhotonPushSDK','0.1.0'
+#    pod 'PhotonIMSDK','2.0.0'
+#    pod 'PhotonIMSDK',:git=>'https://cosmos33@github.com/cosmos33/PhotonIMSDK-iOS.git', :commit=>'92766efc0b63454acddcda4efc464da8429301af'
+    pod 'PhotonIMSDK',:path=>'../'
+>>>>>>> dev_2.0
 end
