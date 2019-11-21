@@ -11,6 +11,9 @@
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
 // 发送文本消息
+static int count = 0;
+static int64_t start = 0;
+static int64_t end = 0;
 - (void)sendTextMessage:(NSString *)text atItems:(nonnull NSArray<PhotonChatAtInfo *> *)atItems type:(AtType)atType{
     PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
     textItem.fromType = PhotonChatMessageFromSelf;
@@ -18,30 +21,37 @@
     textItem.messageText = text;
     textItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     textItem.atInfo = [atItems copy];
-    textItem.type = atType;
-    [self.model addItem:textItem];
+    textItem.type = (int)atType;
+//    [self.model addItem:textItem];
     PhotonWeakSelf(self);
    
-    [PhotonUtil runMainThread:^{
-        NSInteger count = weakself.totleSendCount + 1;
-         weakself.totleSendCount =  count;
-        
-    }];
-   
+//    [PhotonUtil runMainThread:^{
+//        NSInteger count = weakself.totleSendCount + 1;
+//         weakself.totleSendCount =  count;
+//        
+//    }];
+    if(start == 0){
+        start = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    }
     [[PhotonMessageCenter sharedCenter] sendTextMessage:textItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-        if (succeed) {
-             NSInteger count = weakself.sendSucceedCount + 1;
-            weakself.sendSucceedCount = count;
-           
-        }else{
-             NSInteger count = weakself.sendFailedCount + 1;
-            weakself.sendFailedCount =  count;
-         
-        }
-        if ((weakself.sendSucceedCount + weakself.sendFailedCount) == weakself.count) {
-            NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
-            int duration = endTime - weakself.startTime;
-             weakself.totalTimeLable.text = [NSString stringWithFormat:@"总耗时(毫秒)：%@",@(duration)];
+        count ++;
+//        if (succeed) {
+//             NSInteger count = weakself.sendSucceedCount + 1;
+//            weakself.sendSucceedCount = count;
+//
+//        }else{
+//             NSInteger count = weakself.sendFailedCount + 1;
+//            weakself.sendFailedCount =  count;
+//
+//        }
+        if (count == weakself.count) {
+            end = [[NSDate date] timeIntervalSince1970] * 1000;
+            int64_t duratin = end - start;
+            NSLog(@"总耗时(毫秒)：:==%@",@(duratin));
+//            NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+//            int duration = endTime - weakself.startTime;
+//            NSLog(@"%@",[NSString stringWithFormat:@"总耗时(毫秒)：%@",@(duration)]);
+             weakself.totalTimeLable.text = [NSString stringWithFormat:@"总耗时(毫秒)：%@",@(duratin)];
         }
         if (!succeed && error.code >=1000 && error.em) {
            textItem.tipText = error.em;
@@ -54,9 +64,9 @@
         if (succeed) {
             textItem.tipText = @"";
         }
-        [weakself reloadData];
+//        [weakself reloadData];
     }];
-    [weakself reloadData];
+//    [weakself reloadData];
     
 }
 

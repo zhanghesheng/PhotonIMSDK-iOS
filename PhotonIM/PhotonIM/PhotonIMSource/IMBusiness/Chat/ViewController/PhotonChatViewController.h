@@ -36,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithConversation:(nullable PhotonIMConversation *)conversation;
 
 - (void)reloadDataScroll;
+- (void)insertItem:(PhotonBaseChatItem *)item;
 @end
 
 NS_ASSUME_NONNULL_END

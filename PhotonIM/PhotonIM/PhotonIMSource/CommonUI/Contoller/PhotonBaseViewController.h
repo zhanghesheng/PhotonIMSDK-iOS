@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) UITableViewStyle tableViewStyle;
 - (void)loadDataItems;
 - (void)reloadData;
+- (void)insert:(NSArray<NSIndexPath *> *)indexPaths animated:(BOOL)animated;
+- (void)update:(NSIndexPath *)indexPath;
+- (void)remove:(NSArray<NSIndexPath *> *)indexPaths;  
 
 - (void)loadNoDataView;
 - (void)removeNoDataView;

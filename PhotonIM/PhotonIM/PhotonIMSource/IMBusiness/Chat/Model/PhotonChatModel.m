@@ -27,30 +27,6 @@
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
     [imclient runInPhotonIMDBQueue:^{
-        
-//        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)self.pageSize beginTimeStamp:0 endTimeStamp:(int64_t)([NSDate date].timeIntervalSince1970 * 1000) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor, NSError * _Nullable error) {
-//             if (!error){
-//                weakself.anchorMsgId = [anchor copy];
-//                NSMutableArray *items = [NSMutableArray array];
-//                for (PhotonIMMessage *msg in messageList) {
-//                    id item =  [weakself wrapperMessage:msg];
-//                    if (item) {
-//                        [items addObject:item];
-//                    }
-//                }
-//                NSMutableArray *totolItems = [NSMutableArray arrayWithCapacity:self.items.count + items.count];
-//                [totolItems addObjectsFromArray:items];
-//                [totolItems addObjectsFromArray:self.items];
-//                self.items = [PhotonIMThreadSafeArray arrayWithArray:totolItems];
-//            }
-//            if (finish) {
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    finish(nil);
-//                });
-//            }
-//        }];
-        
-        
         if (self.startSyncServer) {
             [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
                 if (error) {
@@ -245,4 +221,9 @@
     }];
    
 }
+
+- (NSArray *)insertItem:(id)item{
+    
+}
+
 @end

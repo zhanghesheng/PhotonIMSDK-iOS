@@ -97,6 +97,7 @@
     [self loadDataItems];
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     _authSucceedCount = 0;
@@ -198,6 +199,10 @@
     self.dataSource = dataSource;
 }
 
+- (void)insertItem:(PhotonBaseChatItem *)item{
+    
+}
+
 #pragma mark ----- getter --------
 - (PhotonChatModel *)model{
     if (!_model) {
@@ -257,7 +262,7 @@
 #pragma mark ------ demo uitextView ----
 
 - (void)addTextUI{
-    return;
+//    return;
     [self.view addSubview:self.testUIView];
     [self.testUIView addSubview:self.contentFiled];
     [self.testUIView addSubview:self.countFiled];
@@ -435,17 +440,17 @@
 
 -(void)setTotleSendCount:(NSInteger)totleSendCount{
     _totleSendCount = totleSendCount;
-     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
+//     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
 }
 
 - (void)setSendSucceedCount:(NSInteger)sendSucceedCount{
     _sendSucceedCount = sendSucceedCount;
-     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
+//     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
 }
 
 - (void)setSendFailedCount:(NSInteger)sendFailedCount{
     _sendFailedCount = sendFailedCount;
-       self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
+//       self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
 }
 
 - (void)autoSendMessage:(UIButton *)sender{

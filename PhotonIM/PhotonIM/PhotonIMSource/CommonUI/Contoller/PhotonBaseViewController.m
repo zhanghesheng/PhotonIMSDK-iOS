@@ -61,6 +61,52 @@
     
 }
 
+- (void)insert:(NSArray<NSIndexPath *> *)indexPaths animated:(BOOL)animated
+{
+    if (!indexPaths.count)
+    {
+        return;
+    }
+
+    NSMutableArray *addIndexPathes = [NSMutableArray array];
+    [indexPaths enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[obj integerValue] inSection:0];
+        [addIndexPathes addObject:indexPath];
+    }];
+    
+    [self.tableView beginUpdates];
+    [self.tableView insertRowsAtIndexPaths:addIndexPathes withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    [self.tableView scrollToRowAtIndexPath:addIndexPathes.lastObject atScrollPosition:UITableViewScrollPositionTop animated:NO];
+
+    [UIView animateWithDuration:0.25 delay:0 options:7 animations:^{
+    } completion:nil];
+}
+
+- (void)remove:(NSArray<NSIndexPath *> *)indexPaths
+{
+    [self.tableView beginUpdates];
+    [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
+    NSInteger row = [self.tableView numberOfRowsInSection:0] - 1;
+    if (row > 0)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+}
+
+
+- (void)update:(NSIndexPath *)indexPath
+{
+    PhotonTableViewCell *cell = (PhotonTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    if (cell) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        CGFloat scrollOffsetY = self.tableView.contentOffset.y;
+        [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, scrollOffsetY) animated:NO];
+    }
+}
+
 - (void)loadNoDataView{
     if (!_noDataView) {
         _noDataView = [[UIView alloc] init];

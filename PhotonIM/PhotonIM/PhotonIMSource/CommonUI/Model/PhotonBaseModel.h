@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
           failure:(void (^)(PhotonErrorDescription * _Nullable))failure;
 
 - (void)wrappResponseddDict:(NSDictionary *)dict;
+
+- (NSArray *)insertItem:(id)item;
 @end
 
 NS_ASSUME_NONNULL_END
