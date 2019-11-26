@@ -61,7 +61,55 @@
     
 }
 
-- (void)insert:(NSArray<NSIndexPath *> *)indexPaths animated:(BOOL)animated
+- (void)addItem:(PhotonBaseTableItem *)item{
+    PhotonWeakSelf(self)
+    [PhotonUtil runMainThread:^{
+        [weakself _addItem:item];
+    }];
+   
+}
+- (void)_addItem:(PhotonBaseTableItem *)item{
+    NSInteger index = self.dataSource.items.count;
+    [self.model.items addObject:item];
+    [self.dataSource.items addObject:item];
+    [self insert:@[@(index)] animated:YES];
+}
+- (void)updateItem:(PhotonBaseTableItem *)item{
+    PhotonWeakSelf(self)
+    [PhotonUtil runMainThread:^{
+        [weakself _updateItem:item];
+    }];
+}
+- (void)_updateItem:(PhotonBaseTableItem *)item{
+    NSInteger index = -1;
+    if ([self.dataSource.items containsObject:item]) {
+        index = [self.dataSource.items indexOfObject:item];
+    }
+    if (index < 0) {
+        return;
+    }
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    [self update:indexPath];
+}
+- (void)removeItem:(PhotonBaseTableItem *)item{
+    PhotonWeakSelf(self)
+    [PhotonUtil runMainThread:^{
+        [weakself _removeItem:item];
+    }];
+}
+- (void)_removeItem:(PhotonBaseTableItem *)item{
+    NSInteger index = -1;
+    if ([self.dataSource.items containsObject:item]) {
+        index = [self.dataSource.items indexOfObject:item];
+    }
+    if (index < 0) {
+        return;
+    }
+    [self.dataSource.items removeObjectAtIndex:index];
+    [self remove:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+}
+
+- (void)insert:(NSArray<NSNumber *> *)indexPaths animated:(BOOL)animated
 {
     if (!indexPaths.count)
     {
@@ -78,9 +126,6 @@
     [self.tableView insertRowsAtIndexPaths:addIndexPathes withRowAnimation:UITableViewRowAnimationNone];
     [self.tableView endUpdates];
     [self.tableView scrollToRowAtIndexPath:addIndexPathes.lastObject atScrollPosition:UITableViewScrollPositionTop animated:NO];
-
-    [UIView animateWithDuration:0.25 delay:0 options:7 animations:^{
-    } completion:nil];
 }
 
 - (void)remove:(NSArray<NSIndexPath *> *)indexPaths

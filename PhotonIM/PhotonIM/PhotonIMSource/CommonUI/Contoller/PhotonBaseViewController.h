@@ -9,9 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "PotonTableViewDataSource.h"
 #import "PhotonBaseUITableView.h"
+#import "PhotonBaseTableItem.h"
+#import "PhotonBaseModel.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonBaseViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic, strong, nullable)PhotonBaseModel *model;
 @property (nonatomic, strong, nullable) PhotonBaseUITableView *tableView;
 @property (nonatomic, assign) BOOL enableWithoutScrollToTop;
 @property (nonatomic, strong, nullable) id<PotonTableViewDataSourceProtocol> dataSource;
@@ -19,9 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign) UITableViewStyle tableViewStyle;
 - (void)loadDataItems;
 - (void)reloadData;
-- (void)insert:(NSArray<NSIndexPath *> *)indexPaths animated:(BOOL)animated;
-- (void)update:(NSIndexPath *)indexPath;
-- (void)remove:(NSArray<NSIndexPath *> *)indexPaths;  
+
+- (void)addItem:(PhotonBaseTableItem *)item;
+- (void)updateItem:(PhotonBaseTableItem *)item;
+- (void)removeItem:(PhotonBaseTableItem *)item;
 
 - (void)loadNoDataView;
 - (void)removeNoDataView;

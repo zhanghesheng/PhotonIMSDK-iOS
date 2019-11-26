@@ -46,18 +46,18 @@
  @param client <#client description#>
  @param message <#message description#>
  */
-- (void)imClient:(id)client didReceiveReadMesage:(PhotonIMMessage *)message{
+- (void)imClient:(id)client di2dReceiveReadMesage:(PhotonIMMessage *)message{
     [self wrapperReadMessage:message];
 }
 
 #pragma mark ------ Private Method---------
 // 处理二人聊天收到的信息
 - (void)wrapperMessage:(PhotonIMMessage *)message{
-    id item = [self.model wrapperMessage:message];
+    id item = [(PhotonChatModel *)self.model wrapperMessage:message];
     if (!item) {
         return;
     }
-    [self.model addItem:item];
+    [(PhotonChatModel *)self.model addItem:item];
     [self reloadData];
     
     if(message.chatType == PhotonIMChatTypeGroup && message.msgAtType != PhotonIMAtTypeNoAt){
@@ -67,7 +67,7 @@
 }
 // 处理撤回消息
 - (void)wrapperWithdrawMessage:(PhotonIMMessage *)message{
-    BOOL ret = [self.model wrapperWithdrawMessage:message];
+    BOOL ret = [(PhotonChatModel *)self.model wrapperWithdrawMessage:message];
     if (ret) {
          [self reloadData];
     }
@@ -76,7 +76,7 @@
 
 // 消息已读的处理
 - (void)wrapperReadMessage:(PhotonIMMessage *)message{
-    BOOL ret = [self.model wrapperReadMessage:message];
+    BOOL ret = [(PhotonChatModel *)self.model wrapperReadMessage:message];
     if (ret) {
         [self reloadData];
     }

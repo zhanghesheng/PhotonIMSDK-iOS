@@ -81,6 +81,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (instancetype)init
 {
     if (self = [super init]) {
+        self.model = [[PhotonConversationModel alloc] init];
          [[PhotonMessageCenter sharedCenter] addObserver:self];
         _refreshCount = 0;
         [self.tabBarItem setTitle:@"消息"];
@@ -154,27 +155,63 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
-   
-    switch (envent) {
-        case PhotonIMConversationEventCreate:{
-            [self getIgnoreAlerm:chatType chatWith:chatWith];
-        }
-            break;
-        case PhotonIMConversationEventDelete:
-            break;
-        case PhotonIMConversationEventUpdate:
-            break;
-        default:
-            break;
+     PhotonIMConversation *conversation = [[PhotonMessageCenter sharedCenter] findConversation:chatType chatWith:chatWith];
+    if (!conversation) {
+        return;
     }
     [self setTabBarBadgeValue];
     if (!self.isAppeared) {
         self.needRefreshData  = YES;
         return;
     }
-    [self.dataDispatchSource addSemaphore];
-   
+    switch (envent) {
+        case PhotonIMConversationEventCreate:{
+            [self getIgnoreAlerm:chatType chatWith:chatWith];
+            [self.uiDispatchSource addSemaphore];
+        }
+            break;
+        case PhotonIMConversationEventDelete:
+            break;
+        case PhotonIMConversationEventUpdate:{
+            PhotonWeakSelf(self)
+            [[PhotonIMClient sharedClient] runInPhotonIMDBQueue:^{
+                [weakself updateConversation:conversation chatType:chatType chatWith:chatWith];
+            }];
+        }
+            break;
+        default:
+            break;
+    }
 }
+
+- (void)updateConversation:(PhotonIMConversation *)conversation chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    PhotonConversationItem *temp = nil;
+    NSInteger index = -1;
+    BOOL isToTop = NO;
+    for (PhotonConversationItem *item in self.model.items) {
+        PhotonIMConversation *conver = [item userInfo];
+        if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
+            PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
+            conversation.FAvatarPath = user.avatarURL;
+            temp = item;
+            temp.userInfo = conversation;
+            index = [self.model.items indexOfObject:item];
+            isToTop = (conversation.lastTimeStamp > conver.lastTimeStamp) && (index > 0);
+            break;
+        }
+    }
+    if (temp && isToTop) {
+        [self.model.items removeObjectAtIndex:index];
+        [self.model.items insertObject:temp atIndex:0];
+        [self.uiDispatchSource addSemaphore];
+        return;
+    }
+    if (temp && index == 0) {
+        [self.uiDispatchSource addSemaphore];
+    }
+}
+
+
 
 - (void)readyRefreshConversations{
     if (_isRefreshing) {
@@ -237,13 +274,6 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     PhotonLog(@"imClientSync:(nonnull id)client syncStatus:(PhotonIMSyncStatus)status 1");
     return YES;
-}
-
-- (PhotonConversationModel *)model{
-    if (!_model) {
-        _model = [[PhotonConversationModel alloc] init];
-    }
-    return _model;
 }
 
 #pragma mark --- 刷新数据 ------

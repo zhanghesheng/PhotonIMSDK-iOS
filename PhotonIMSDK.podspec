@@ -21,4 +21,5 @@ TODO: Add long description of the pod here.
   s.ios.libraries = 'c++','z','resolv','stdc++','sqlite3'
   s.dependency 'protobuf-lib'
   s.dependency 'MDLog'
+  s.dependency 'MMFileService'
 end

@@ -84,6 +84,7 @@
 {
     self = [super init];
     if (self) {
+        self.model = [[PhotonChatModel alloc] init];
         self.items = [NSMutableArray array];
         // 添加接收消息的监听
         [[PhotonMessageCenter sharedCenter] addObserver:self];
@@ -189,27 +190,12 @@
 
 - (void)p_reloadData{
      [self endRefreshing];
-    if (!self.model.items.count) {
-       
-        return;
-    }
-    // 刷新数据
     PhotonChatDataSource *dataSource = [[PhotonChatDataSource alloc] initWithItems:self.model.items];
     dataSource.delegate = self;
     self.dataSource = dataSource;
 }
 
-- (void)insertItem:(PhotonBaseChatItem *)item{
-    
-}
-
 #pragma mark ----- getter --------
-- (PhotonChatModel *)model{
-    if (!_model) {
-        _model = [[PhotonChatModel alloc] init];
-    }
-    return _model;
-}
 - (PhotonCharBar *)chatBar{
     return [_panelManager chatBar];
 }
@@ -440,17 +426,17 @@
 
 -(void)setTotleSendCount:(NSInteger)totleSendCount{
     _totleSendCount = totleSendCount;
-//     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
+     self.totleSendCountLable.text = [NSString stringWithFormat:@"发送数：%@",@(_totleSendCount)];
 }
 
 - (void)setSendSucceedCount:(NSInteger)sendSucceedCount{
     _sendSucceedCount = sendSucceedCount;
-//     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
+     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功数：%@",@(_sendSucceedCount)];
 }
 
 - (void)setSendFailedCount:(NSInteger)sendFailedCount{
     _sendFailedCount = sendFailedCount;
-//       self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
+    self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败数：%@",@(_sendFailedCount)];
 }
 
 - (void)autoSendMessage:(UIButton *)sender{
