@@ -57,8 +57,7 @@
     if (!item) {
         return;
     }
-    [(PhotonChatModel *)self.model addItem:item];
-    [self reloadData];
+    [self addItem:item];
     
     if(message.chatType == PhotonIMChatTypeGroup && message.msgAtType != PhotonIMAtTypeNoAt){
         [[PhotonMessageCenter sharedCenter] resetAtType:self.conversation];

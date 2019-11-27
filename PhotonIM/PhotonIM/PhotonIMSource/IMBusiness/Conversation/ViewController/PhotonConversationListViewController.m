@@ -14,16 +14,15 @@
 #import "PhotonConversationModel.h"
 #import "PhotonMessageCenter.h"
 #import "PhotonNetTableItem.h"
-
+#import "PhotonIMDispatchSource.h"
 static NSString *message_title = @"消息";
 static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";
 static NSString *message_syncing = @"消息(收取中......)";
 
 @interface PhotonConversationListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate>
-@property (nonatomic, strong, nullable)PhotonConversationModel *model;
-@property (nonatomic, strong, nullable)MFDispatchSource  *uiDispatchSource;
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
+@property (nonatomic, strong, nullable)PhotonIMDispatchSource *uiSource;
 @property (nonatomic, assign)BOOL   isAppeared;
 @property (nonatomic, assign)BOOL   needRefreshData;
 @property (nonatomic, strong)PhotonIMTimer *imTimer;
@@ -32,13 +31,14 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, assign)NSInteger lastOprationTimeStamp;
 
 @property (atomic, assign)BOOL isRefreshing;
+@property (atomic, assign)BOOL firstLoadData;
+@property (atomic, retain)dispatch_semaphore_t signa;
 @end
 
 @implementation PhotonConversationListViewController
 - (void)dealloc
 {
     [[PhotonMessageCenter sharedCenter] removeObserver:self];
-    [_uiDispatchSource clearDelegateAndCancel];
     [_dataDispatchSource clearDelegateAndCancel];
 }
 
@@ -81,19 +81,24 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (instancetype)init
 {
     if (self = [super init]) {
+        _signa = dispatch_semaphore_create(0);
         self.model = [[PhotonConversationModel alloc] init];
          [[PhotonMessageCenter sharedCenter] addObserver:self];
         _refreshCount = 0;
+        _firstLoadData = YES;
         [self.tabBarItem setTitle:@"消息"];
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
-        _uiDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_UI dataQueue:dispatch_get_main_queue()];
+        
+        _uiSource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self uiEventBlock]];
 
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.conversationdata", DISPATCH_QUEUE_SERIAL)];
 
     }
     return self;
 }
+
+
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -125,36 +130,44 @@ static NSString *message_syncing = @"消息(收取中......)";
     PhotonNetTableItem *item = [[PhotonNetTableItem alloc] init];
     item.message = @"网络断开，请检查网络配置";
     [self.model.items insertObject:item atIndex:0];
-    [self.uiDispatchSource addSemaphore];
+    [self reloadData];
 }
 - (void)removeNetStatusItem{
     id item = [self.model.items firstObject];
     if ([item isKindOfClass:[PhotonNetTableItem class]]) {
         [self.model.items removeObject:item];
     }
-    [self.uiDispatchSource addSemaphore];;
+    [self reloadData];
 }
 - (void)loadDataItems{
     __weak typeof(self)weakSlef = self;
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
         [weakSlef removeNoDataView];
-        [weakSlef.uiDispatchSource addSemaphore];
+        [weakSlef reloadData];
         [weakSlef endRefreshing];
         weakSlef.isRefreshing = NO;
     } failure:^(PhotonErrorDescription * _Nullable error) {
         [PhotonUtil showAlertWithTitle:@"加载会话列表失败" message:error.errorMessage];
-        [weakSlef.uiDispatchSource addSemaphore];
+        [weakSlef reloadData];
         [weakSlef loadNoDataView];
         [weakSlef endRefreshing];
         weakSlef.isRefreshing = NO;
     }];
 }
-- (void)reloadData{
+- (void)refreshTableView{
+    if(!_firstLoadData){
+        dispatch_semaphore_signal(_signa);
+    }
+    _firstLoadData = NO;
+    
     PhotonConversationDataSource *dataSource = [[PhotonConversationDataSource alloc] initWithItems:self.model.items];
     self.dataSource = dataSource;
 }
 
 - (void)conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    if (_firstLoadData) {
+        dispatch_semaphore_wait(_signa, DISPATCH_TIME_FOREVER);
+    }
      PhotonIMConversation *conversation = [[PhotonMessageCenter sharedCenter] findConversation:chatType chatWith:chatWith];
     if (!conversation) {
         return;
@@ -167,7 +180,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     switch (envent) {
         case PhotonIMConversationEventCreate:{
             [self getIgnoreAlerm:chatType chatWith:chatWith];
-            [self.uiDispatchSource addSemaphore];
+            [self reloadData];
         }
             break;
         case PhotonIMConversationEventDelete:
@@ -203,12 +216,23 @@ static NSString *message_syncing = @"消息(收取中......)";
     if (temp && isToTop) {
         [self.model.items removeObjectAtIndex:index];
         [self.model.items insertObject:temp atIndex:0];
-        [self.uiDispatchSource addSemaphore];
+        [self reloadData];
         return;
     }
     if (temp && index == 0) {
-        [self.uiDispatchSource addSemaphore];
+        [self updateItem:temp];
     }
+}
+
+- (PhotonIMDispatchSourceEventBlock)uiEventBlock{
+    __weak typeof(self)weakSlef = self;
+    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
+        if (userInfo) {
+           [weakSlef updateItem:userInfo];
+        }
+       
+    };
+    return eventBlock;
 }
 
 
@@ -277,10 +301,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 #pragma mark --- 刷新数据 ------
-- (void)refreshUI{
-    [self reloadData];
-}
-
 - (void)refreshData{
     [self readyRefreshConversations];
 }

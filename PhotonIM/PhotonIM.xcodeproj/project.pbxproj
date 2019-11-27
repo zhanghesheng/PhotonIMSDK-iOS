@@ -153,6 +153,7 @@
 		3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 3286B13222BB808C0032D066 /* FaceEmoji.json */; };
 		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
 		329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */; };
+		32D06775238CC507005F8FA1 /* PhotonIMDispatchSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D06774238CC507005F8FA1 /* PhotonIMDispatchSource.m */; };
 		32E0BE0122D3464300DEEFA5 /* PhotonEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */; };
 		32E0BE0422D3466A00DEEFA5 /* PhotonEmptyTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */; };
 		32E0BE0822D358DF00DEEFA5 /* PhotonRecorderIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */; };
@@ -460,6 +461,8 @@
 		328C32E322C070EC0031E948 /* PhontonMenuItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhontonMenuItem.m; sourceTree = "<group>"; };
 		329E67F72301460D0097BFDC /* PhotonBaseUITableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonBaseUITableView.h; sourceTree = "<group>"; };
 		329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonBaseUITableView.m; sourceTree = "<group>"; };
+		32D06773238CC507005F8FA1 /* PhotonIMDispatchSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonIMDispatchSource.h; sourceTree = "<group>"; };
+		32D06774238CC507005F8FA1 /* PhotonIMDispatchSource.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonIMDispatchSource.m; sourceTree = "<group>"; };
 		32E0BDFF22D3464300DEEFA5 /* PhotonEmptyTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmptyTableViewCell.h; sourceTree = "<group>"; };
 		32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmptyTableViewCell.m; sourceTree = "<group>"; };
 		32E0BE0222D3466A00DEEFA5 /* PhotonEmptyTableItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmptyTableItem.h; sourceTree = "<group>"; };
@@ -742,6 +745,8 @@
 				3270BC1022C635E5004CAA00 /* PhotonSafeMutableArray.m */,
 				3270BC1222C63670004CAA00 /* PhotonSafeMutableDictionary.h */,
 				3270BC1322C63670004CAA00 /* PhotonSafeMutableDictionary.m */,
+				32D06773238CC507005F8FA1 /* PhotonIMDispatchSource.h */,
+				32D06774238CC507005F8FA1 /* PhotonIMDispatchSource.m */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -1566,6 +1571,7 @@
 				3238ACC322D4AB8800EB3D0B /* PhotonBaseChatCell.m in Sources */,
 				3238ACBC22D4AB8800EB3D0B /* PhotonChatDataSource.m in Sources */,
 				3238ACB422D4AB8800EB3D0B /* PhotonConversationListViewController+Delegate.m in Sources */,
+				32D06775238CC507005F8FA1 /* PhotonIMDispatchSource.m in Sources */,
 				3221883422CCA5B6007E9FA3 /* PotonTableViewDataSource.m in Sources */,
 				3221883522CCA5B6007E9FA3 /* PhotonBaseTableItem.m in Sources */,
 				3221883622CCA5B6007E9FA3 /* PhotonBaseModel.m in Sources */,

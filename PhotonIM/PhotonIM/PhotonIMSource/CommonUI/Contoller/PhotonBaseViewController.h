@@ -21,7 +21,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong,nullable) NSMutableArray *items;
 @property(nonatomic,assign) UITableViewStyle tableViewStyle;
 - (void)loadDataItems;
+
 - (void)reloadData;
+
+- (void)refreshTableView;
 
 - (void)addItem:(PhotonBaseTableItem *)item;
 - (void)updateItem:(PhotonBaseTableItem *)item;

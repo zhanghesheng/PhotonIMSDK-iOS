@@ -15,14 +15,12 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 @interface PhotonChatViewController ()
-@property(nonatomic, strong, nullable)PhotonChatModel *model;
 @property(nonatomic,strong,nullable)PhotonChatPanelManager *panelManager;
 @property(nonatomic,strong,nullable)PhotonCharBar *chatBar;
 @property(nonatomic,strong,nullable)PhotonMenuView *menuView;
 
 @property(nonatomic, strong, nullable)PhotonIMConversation *conversation;
 
-@property (nonatomic, strong, nullable)MFDispatchSource  *uiDispatchSource;
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
 
 @property (nonatomic, assign)BOOL isFirstPage;
@@ -66,7 +64,6 @@
         _panelManager = [[PhotonChatPanelManager alloc] initWithIdentifier:conversation.chatWith];
         _panelManager.delegate = self;
         
-        _uiDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_UI dataQueue:dispatch_get_main_queue()];
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.chatdata", DISPATCH_QUEUE_SERIAL)];
     }
     return self;
@@ -77,7 +74,6 @@
     [[PhotonMessageCenter sharedCenter] removeObserver:self];
     [self.tableView removeObserver:self forKeyPath:@"bounds"];
     [PhotonUtil resetLastShowTimestamp];
-    [_uiDispatchSource clearDelegateAndCancel];
     [_dataDispatchSource clearDelegateAndCancel];
 }
 - (instancetype)init
@@ -169,14 +165,14 @@
 - (void)p_loadDataItems{
     PhotonWeakSelf(self);
     BOOL isEmpty = (self.model.items.count == 0);
-    [self.model loadMoreMeesages:self.conversation.chatType chatWith:self.conversation.chatWith beforeAuthor:YES asc:YES finish:^(NSDictionary * _Nullable pa) {
+    [(PhotonChatModel *)self.model loadMoreMeesages:self.conversation.chatType chatWith:self.conversation.chatWith beforeAuthor:YES asc:YES finish:^(NSDictionary * _Nullable pa) {
         if (!isEmpty) {
             weakself.enableWithoutScrollToTop = YES;
         }else{
             weakself.enableWithoutScrollToTop = NO;
         }
         if(isEmpty){
-            [weakself.uiDispatchSource addSemaphore];
+            [weakself reloadData];
         }else{
              [weakself p_reloadData];
         }
@@ -184,9 +180,6 @@
     }];
 }
 
-- (void)reloadData{
-    [self.uiDispatchSource addSemaphore];
-}
 
 - (void)p_reloadData{
      [self endRefreshing];
@@ -230,7 +223,7 @@
     
 }
 #pragma mark --- 刷新数据 ------
-- (void)refreshUI{
+- (void)refreshTableView{
     [UIView animateWithDuration:0 animations:^{
         [self p_reloadData];
     } completion:^(BOOL finished) {

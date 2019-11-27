@@ -8,9 +8,13 @@
 
 #import "PhotonBaseViewController.h"
 #import "PhotonTableViewCell.h"
+#import "PhotonIMDispatchSource.h"
 @interface PhotonBaseViewController ()
 @property (nonatomic, strong, nullable) UIView   *noDataView;
 @property (nonatomic, assign) CGPoint contentOffsetForRestore;
+@property (nonatomic, strong, nullable)PhotonIMDispatchSource *reloadDataRefreshUISource;
+@property (nonatomic, strong, nullable)PhotonIMDispatchSource *updateDataRefreshUISource;
+@property (nonatomic, strong, nullable)PhotonIMDispatchSource *addDataRefreshUISource;
 @end
 
 @implementation PhotonBaseViewController
@@ -26,6 +30,9 @@
 {
     self = [super init];
     if (self) {
+        _updateDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self updateCellEventBlock]];
+        _addDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self addCellEventBlock]];
+        _reloadDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self reloadCellEventBlock]];
         _tableViewStyle = UITableViewStylePlain;
         _tableView = [[PhotonBaseUITableView alloc] initWithFrame:CGRectZero style:_tableViewStyle];
     }
@@ -34,6 +41,7 @@
 
 - (void)dealloc
 {
+    [_updateDataRefreshUISource clearDelegateAndCancel];
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
 }
@@ -58,15 +66,31 @@
 }
 
 - (void)reloadData{
-    
+     [self.reloadDataRefreshUISource addEventSource:nil];
+}
+- (PhotonIMDispatchSourceEventBlock)reloadCellEventBlock{
+    __weak typeof(self)weakSlef = self;
+    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
+         [weakSlef refreshTableView];
+    };
+    return eventBlock;
 }
 
+- (void)refreshTableView{
+    
+}
 - (void)addItem:(PhotonBaseTableItem *)item{
-    PhotonWeakSelf(self)
-    [PhotonUtil runMainThread:^{
-        [weakself _addItem:item];
-    }];
+    [self.addDataRefreshUISource addEventSource:item];
    
+}
+- (PhotonIMDispatchSourceEventBlock)addCellEventBlock{
+    __weak typeof(self)weakSlef = self;
+    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
+        if (userInfo) {
+           [weakSlef _addItem:userInfo];
+        }
+    };
+    return eventBlock;
 }
 - (void)_addItem:(PhotonBaseTableItem *)item{
     NSInteger index = self.dataSource.items.count;
@@ -74,11 +98,20 @@
     [self.dataSource.items addObject:item];
     [self insert:@[@(index)] animated:YES];
 }
+
+
 - (void)updateItem:(PhotonBaseTableItem *)item{
-    PhotonWeakSelf(self)
-    [PhotonUtil runMainThread:^{
-        [weakself _updateItem:item];
-    }];
+     [self.updateDataRefreshUISource addEventSource:item];
+}
+
+- (PhotonIMDispatchSourceEventBlock)updateCellEventBlock{
+    __weak typeof(self)weakSlef = self;
+    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
+        if (userInfo) {
+           [weakSlef _updateItem:userInfo];
+        }
+    };
+    return eventBlock;
 }
 - (void)_updateItem:(PhotonBaseTableItem *)item{
     NSInteger index = -1;
@@ -91,6 +124,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self update:indexPath];
 }
+
 - (void)removeItem:(PhotonBaseTableItem *)item{
     PhotonWeakSelf(self)
     [PhotonUtil runMainThread:^{
