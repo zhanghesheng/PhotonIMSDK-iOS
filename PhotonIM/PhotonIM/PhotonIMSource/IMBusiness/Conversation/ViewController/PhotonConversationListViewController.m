@@ -7,6 +7,7 @@
 //
 
 #import "PhotonConversationListViewController.h"
+#import "PhotonConversationListViewController+Delegate.h"
 #import <MMFoundation/MMFoundation.h>
 #import "PhotonBaseViewController+Refresh.h"
 #import "PhotonConversationDataSource.h"
@@ -180,7 +181,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     switch (envent) {
         case PhotonIMConversationEventCreate:{
             [self getIgnoreAlerm:chatType chatWith:chatWith];
-            [self reloadData];
+            [self.dataDispatchSource addSemaphore];
         }
             break;
         case PhotonIMConversationEventDelete:
