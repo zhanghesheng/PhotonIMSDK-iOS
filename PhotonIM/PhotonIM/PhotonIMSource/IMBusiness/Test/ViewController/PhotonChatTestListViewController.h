@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "PhotonBaseViewController.h"
 #import "PhotonChatTestModel.h"
+#import "PhotonChatTestCell.h"
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PhotonChatTestListViewController : PhotonBaseViewController
+@interface PhotonChatTestListViewController : PhotonBaseViewController<PhotonChatTestBaseCellDelegate>
 @end
 
 NS_ASSUME_NONNULL_END

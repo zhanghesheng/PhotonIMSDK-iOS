@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param cell <#cell description#>
  */
 - (void)conCell:(PhotonTableViewCell *)cell didSelectAvatar:(nullable PhotonChatTestItem *)chatItem;
+
+- (void)startChatCell:(PhotonTableViewCell *)cell startChat:(nullable PhotonChatTestItem *)chatItem;
+- (void)clearChatCell:(PhotonTableViewCell *)cell clearData:(nullable PhotonChatTestItem *)chatItem;
 @end
 @interface PhotonChatTestBaseCell : PhotonTableViewCell
 @property (nonatomic, weak, nullable)id<PhotonChatTestBaseCellDelegate>delegate;

@@ -16,6 +16,8 @@
 #import "PhotonMessageCenter.h"
 #import "PhotonNetTableItem.h"
 #import "PhotonIMDispatchSource.h"
+#import "PhotonSafeMutableDictionary.h"
+#import "PhotonChatData.h"
 static NSString *message_title = @"消息";
 static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";
@@ -29,14 +31,35 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, assign)NSInteger  refreshCount;
 @property (nonatomic, assign)BOOL  isExcute;
 @property (nonatomic, assign)NSInteger lastOprationTimeStamp;
+@property (nonatomic, strong)PhotonSafeMutableDictionary *chatDataCache;
 
 @property (atomic, assign)BOOL isRefreshing;
 @property (atomic, assign)BOOL firstLoadData;
 @property (atomic, retain)dispatch_semaphore_t signa;
+@property (nonatomic, strong)dispatch_queue_t conversationChangeQueue;
 
 @property (nonatomic, strong) UIView  *headerContentView;
 @property (nonatomic, strong) UILabel *authSuccessedCountLable;
 @property (nonatomic, strong) UILabel *authFailedCountLable;
+@property (nonatomic, strong) UIButton *addConversation;
+@property (nonatomic, assign)int authSuccessedCount;
+@property (nonatomic, assign)int authFailedCount;
+
+@property (nonatomic, strong)PhotonIMConversation *currentConversation;
+
+// 内容
+@property (nonatomic, strong,nullable)UITextField  *contentFiled;
+// 间隔放松的时间
+@property (nonatomic, strong,nullable)UITextField  *intervalFiled;
+// 间隔放松的时间
+@property (nonatomic, strong,nullable)UITextField  *countFiled;
+// login内容
+@property (nonatomic, strong,nullable)UILabel  *authFiled;
+@property (nonatomic, strong,nullable)UIView  *testUIView;
+@property(nonatomic, strong)UILabel  *totleSendCountLable;
+@property(nonatomic, strong)UILabel  *sendSucceedCountLable;
+@property(nonatomic, strong)UILabel  *sendFailedCountLable;
+@property(nonatomic, strong)UILabel  *totalTimeLable;
 @end
 
 @implementation PhotonChatTestListViewController
@@ -53,14 +76,24 @@ static NSString *message_syncing = @"消息(收取中......)";
          [[PhotonMessageCenter sharedCenter] addObserver:self];
         _refreshCount = 0;
         _firstLoadData = YES;
+        _authFailedCount = 0;
+        _authSuccessedCount = 0;
         self.navigationItem.title =@"测试";
         [self.tabBarItem setTitle:@"测试"];
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
+        _conversationChangeQueue = dispatch_queue_create("com.cosmos.PhotonIM.test_conversationchange", DISPATCH_QUEUE_SERIAL);
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.conversationdata", DISPATCH_QUEUE_SERIAL)];
 
     }
     return self;
+}
+
+- (PhotonSafeMutableDictionary *)chatDataCache{
+    if (!_chatDataCache) {
+        _chatDataCache = [[PhotonSafeMutableDictionary alloc] init];
+    }
+    return _chatDataCache;
 }
 
 - (void)createHeaderContentView{
@@ -99,7 +132,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }];
     
     _authSuccessedCountLable = [[UILabel alloc] init];
-    _authSuccessedCountLable.text = @"0";
+    _authSuccessedCountLable.text = [@(_authSuccessedCount) stringValue];
     _authSuccessedCountLable.textColor = [UIColor blackColor];
     _authSuccessedCountLable.font = [UIFont systemFontOfSize:13];
     _authSuccessedCountLable.textAlignment = NSTextAlignmentLeft;
@@ -125,7 +158,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }];
     
     _authFailedCountLable = [[UILabel alloc] init];
-    _authFailedCountLable.text = @"0";
+    _authFailedCountLable.text = [@(_authFailedCount) stringValue];
     _authFailedCountLable.textColor = [UIColor blackColor];
     _authFailedCountLable.font = [UIFont systemFontOfSize:13];
     _authFailedCountLable.textAlignment = NSTextAlignmentLeft;
@@ -138,18 +171,44 @@ static NSString *message_syncing = @"消息(收取中......)";
     }];
     
     UIButton *clearBtn= [UIButton buttonWithType:UIButtonTypeCustom];
-    clearBtn = @"0";
-    _authFailedCountLable.textColor = [UIColor blackColor];
-    _authFailedCountLable.font = [UIFont systemFontOfSize:13];
-    _authFailedCountLable.textAlignment = NSTextAlignmentLeft;
-    [_headerContentView addSubview:_authFailedCountLable];
-    [_authFailedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
-           make.left.mas_equalTo(authFailedLable.mas_right).mas_offset(5);
-           make.right.mas_equalTo(self.view).mas_offset(-60);
-           make.centerY.mas_equalTo(authFailedLable.mas_centerY).mas_offset(0);
-           make.height.mas_equalTo(15);
+    [clearBtn setTitle:@"清空" forState:UIControlStateNormal];
+    [clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [clearBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [clearBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+    clearBtn.layer.cornerRadius = 3;
+    [clearBtn addTarget:self action:@selector(clearAuthCount:) forControlEvents:UIControlEventTouchUpInside];
+    [_headerContentView addSubview:clearBtn];
+    [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+           make.right.mas_equalTo(self.view).mas_offset(-10);
+           make.centerY.mas_equalTo(self.headerContentView).mas_offset(0);
+           make.height.mas_equalTo(25);
+           make.width.mas_equalTo(50);
     }];
     
+    UIButton *addConversation= [UIButton buttonWithType:UIButtonTypeCustom];
+    _addConversation = addConversation;
+    [addConversation setTitle:@"添加测试会话" forState:UIControlStateNormal];
+    [addConversation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [addConversation setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [addConversation.titleLabel setFont:[UIFont systemFontOfSize:15]];
+    addConversation.layer.cornerRadius = 5;
+    [addConversation addTarget:self action:@selector(addConversation:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:addConversation];
+    [addConversation mas_makeConstraints:^(MASConstraintMaker *make) {
+           make.centerX.mas_equalTo(self.view).mas_offset(0);
+           make.height.mas_equalTo(30);
+           make.width.mas_equalTo(100);
+           make.bottom.mas_equalTo(self.view).mas_offset(-self.tabBarController.tabBar.frame.size.height - 3);
+    }];
+    
+}
+- (void)clearAuthCount:(id)sender{
+    _authSuccessedCount = 0;
+    _authFailedCount = 0;
+    _authSuccessedCountLable.text = @"0";
+    _authFailedCountLable.text = @"0";
+}
+- (void)addConversation:(id)sender{
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -174,7 +233,8 @@ static NSString *message_syncing = @"消息(收取中......)";
     [super viewDidLoad];
     [self createHeaderContentView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-         make.bottom.and.left.and.right.mas_equalTo(self.view).mas_offset(0);
+        make.left.and.right.mas_equalTo(self.view).mas_offset(0);
+        make.bottom.mas_equalTo(self.addConversation.mas_top).mas_offset(-3);
         make.top.mas_equalTo(self.headerContentView.mas_bottom).mas_offset(0);
     }];
     [self.dataDispatchSource addSemaphore];
@@ -195,16 +255,22 @@ static NSString *message_syncing = @"消息(收取中......)";
     }];
 }
 - (void)refreshTableView{
-    if(!_firstLoadData){
-        dispatch_semaphore_signal(_signa);
-    }
-    _firstLoadData = NO;
-    
     PhotonChatTestDataSource *dataSource = [[PhotonChatTestDataSource alloc] initWithItems:self.model.items];
     self.dataSource = dataSource;
+    if(_firstLoadData){
+        dispatch_semaphore_signal(_signa);
+        _firstLoadData = NO;
+    }
+    
+}
+- (void)conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    __weak typeof(self)weakSelf = self;
+    dispatch_async(self.conversationChangeQueue, ^{
+        [weakSelf _conversationChange:envent chatType:chatType chatWith:chatWith];
+    });
 }
 
-- (void)conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+- (void)_conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     if (_firstLoadData) {
         dispatch_semaphore_wait(_signa, DISPATCH_TIME_FOREVER);
     }
@@ -227,6 +293,34 @@ static NSString *message_syncing = @"消息(收取中......)";
             [self updateConversation:conversation chatType:chatType chatWith:chatWith];
         }
             break;
+        default:
+            break;
+    }
+}
+- (void)imClientLogin:(id)client loginStatus:(PhotonIMLoginStatus)loginstatus{
+    PhotonWeakSelf(self)
+    [PhotonUtil runMainThread:^{
+        [weakself _imClientLogin:client loginStatus:loginstatus];
+    }];
+}
+- (void)_imClientLogin:(id)client loginStatus:(PhotonIMLoginStatus)loginstatus{
+    switch (loginstatus) {
+        case PhotonIMLoginStatusLogining:{
+            
+        }
+            break;
+        case PhotonIMLoginStatusLoginSucceed:{
+            _authSuccessedCount++;
+            self.authSuccessedCountLable.text = [NSString stringWithFormat:@"%@",@(_authSuccessedCount)];
+        }
+                  
+            break;
+        case PhotonIMLoginStatusLoginFailed:{
+            _authFailedCount++;
+            self.authFailedCountLable.text = [NSString stringWithFormat:@"%@",@(_authFailedCount)];
+        }
+            break;
+            
         default:
             break;
     }
@@ -280,9 +374,332 @@ static NSString *message_syncing = @"消息(收取中......)";
     [self loadDataItems];
 }
 
-
-#pragma mark --- 刷新数据 ------
 - (void)refreshData{
     [self startRefreshConversations];
 }
+
+#pragma mark --- 刷新数据 ------
+
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if ([cell isKindOfClass:[PhotonChatTestCell class]]) {
+        PhotonChatTestCell *tempCell = (PhotonChatTestCell *)cell;
+        tempCell.delegate = self;
+    }
+    
+}
+
+- (PhotonChatData *)chatData:(PhotonIMConversation *)conversation{
+    NSString *key = [NSString stringWithFormat:@"%@_%@",@(conversation.chatType),conversation.chatWith];
+    PhotonChatData *chatData = [self.chatDataCache objectForKey:key defaultValue:nil];
+    return chatData;
+}
+
+- (void)setChatData:(PhotonChatData *)chatData conversation:(PhotonIMConversation *)conversation{
+    NSString *key = [NSString stringWithFormat:@"%@_%@",@(conversation.chatType),conversation.chatWith];
+    if (!chatData) {
+        [self.chatDataCache removeObjectForKey:key];
+        return;
+    }
+    [self.chatDataCache setObject:chatData forKey:key];
+}
+- (void)chatStart:(PhotonIMConversation *)conversation{
+    PhotonChatData *chatData = [self chatData:conversation];
+    if (chatData.toStart) {
+        return;
+    }
+    chatData.toStart = YES;
+    [self _chatStart:conversation];
+}
+- (void)_chatStart:(PhotonIMConversation *)conversationn{
+    PhotonWeakSelf(self);
+      dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+          PhotonChatData *chatData = [weakself chatData:conversationn];
+          if (!chatData && !chatData.toStart) {
+              return;
+          }
+           NSTimeInterval startTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+          int index =  0;
+          while (index < chatData.totalMsgCount && chatData.toStart) {
+              chatData.sendedMessageCount ++;
+              index ++;
+              [NSThread sleepForTimeInterval:0.2];
+              NSString *sendText = [NSString stringWithFormat:@"%@-%@",chatData.sendContent,@(index)];
+              [[PhotonMessageCenter sharedCenter] sendTex:sendText conversation:conversationn completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                   if (succeed) {
+                       chatData.sendedSuccessedCount ++;
+                    }else{
+                        chatData.sendedFailedCount ++;
+                    }
+                  if ( chatData.sendedSuccessedCount + chatData.sendedFailedCount == chatData.totalMsgCount) {
+                      NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+                      int duration = endTime - startTime;
+                      chatData.msgInterval = duration;
+                  }
+                  if ([conversationn.chatWith isEqualToString:weakself.currentConversation.chatWith]) {
+                      [weakself setTestContent:chatData];
+                  }
+              }];
+          }
+      });
+}
+
+- (void)stopChat:(PhotonIMConversation *)caversation{
+    PhotonChatData *chatData = [self chatData:caversation];
+    chatData.toStart = NO;
+}
+
+
+
+- (void)startChatCell:(PhotonTableViewCell *)cell startChat:(PhotonChatTestItem *)chatItem{
+    if (chatItem.isStartChat) {
+        [self chatStart:chatItem.userInfo];
+    }else{
+        [self stopChat:chatItem.userInfo];
+    }
+}
+
+- (void)clearChatCell:(PhotonTableViewCell *)cell clearData:(PhotonChatTestItem *)chatItem{
+    [self setChatData:nil conversation:chatItem.userInfo];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row < self.model.items.count) {
+        PhotonChatTestItem *item = [[self.model.items objectAtIndex:indexPath.row] isNil];
+        if (!item) {
+            return;
+        }
+        _currentConversation = [item userInfo];
+    }
+     [[[UIApplication sharedApplication] keyWindow] addSubview:self.testUIView];
+    [self addTextUI:_currentConversation];
+    
+}
+
+
+- (void)addTextUI:(PhotonIMConversation *)conversation{
+    [self.testUIView addSubview:self.contentFiled];
+    [self.testUIView addSubview:self.countFiled];
+    [self.testUIView addSubview:self.intervalFiled];
+    [self.testUIView addSubview:self.totleSendCountLable];
+    [self.testUIView addSubview:self.sendSucceedCountLable];
+    [self.testUIView addSubview:self.sendFailedCountLable];
+    [self.testUIView addSubview:self.totalTimeLable];
+    [self.testUIView addSubview:self.authFiled];
+    
+    [self.testUIView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(10);
+        make.right.mas_equalTo(-10);
+        make.top.mas_equalTo(90);
+        make.bottom.mas_equalTo(-90);
+    }];
+    
+    [self.contentFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(0);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.countFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.contentFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.intervalFiled mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.countFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+
+    
+    [self.totleSendCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.intervalFiled.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    [self.sendSucceedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.totleSendCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.sendFailedCountLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendSucceedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    [self.totalTimeLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.mas_equalTo(0);
+        make.top.mas_equalTo(self.sendFailedCountLable.mas_bottom).mas_offset(5);
+        make.height.mas_equalTo(40);
+    }];
+    
+    
+    UIButton *setBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [setBtn setTitle:@"设置" forState:UIControlStateNormal];
+    [setBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [setBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+     setBtn.layer.cornerRadius = 3;
+    [setBtn addTarget:self action:@selector(setContent:) forControlEvents:UIControlEventTouchUpInside];
+     [self.testUIView addSubview:setBtn];
+    
+    UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [cancleBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [cancleBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+     cancleBtn.layer.cornerRadius = 3;
+    [cancleBtn addTarget:self action:@selector(cancle:) forControlEvents:UIControlEventTouchUpInside];
+    [self.testUIView addSubview:cancleBtn];
+    
+    [setBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+         make.left.mas_equalTo(self.testUIView).offset(20);
+         make.top.mas_equalTo(self.totalTimeLable.mas_bottom).mas_offset(5);
+         make.height.mas_equalTo(30);
+         make.width.mas_equalTo(50);
+    }];
+    
+    [cancleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+         make.right.mas_equalTo(self.testUIView).offset(-20);
+         make.top.mas_equalTo(self.totalTimeLable.mas_bottom).mas_offset(5);
+         make.height.mas_equalTo(30);
+         make.width.mas_equalTo(50);
+    }];
+    
+    PhotonChatData *data = [self chatData:conversation];
+    [self setTestContent:data];
+}
+
+- (void)setContent:(id)sender{
+     PhotonChatData *data = [self chatData:self.currentConversation];
+    if (!data) {
+        data = [[PhotonChatData alloc] init];
+    }
+    data.sendContent = self.contentFiled.text;
+    data.msgInterval = [self.intervalFiled.text intValue];
+    data.totalMsgCount = [self.countFiled.text intValue];
+    [self setChatData:data conversation:self.currentConversation];
+    [self cancle:nil];
+}
+
+- (void)cancle:(id)sender{
+    [self.testUIView removeFromSuperview];
+    self.currentConversation = nil;
+    self.contentFiled.text = @"测试内容";
+    self.intervalFiled.text = nil;
+    self.countFiled.text = nil;
+}
+
+- (void)setTestContent:(PhotonChatData *)chatData{
+    if(!chatData){
+        self.contentFiled.text = @"测试内容";
+        self.intervalFiled.text = nil;
+        self.countFiled.text =  nil;
+        self.totleSendCountLable.text = [NSString stringWithFormat:@"已发送总条数:"];
+        self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功条数:"];
+        self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败条数:"];
+        self.totalTimeLable.text = [NSString stringWithFormat:@"总耗时:"];
+        return;
+    }
+    self.contentFiled.text = [chatData sendContent];
+    self.intervalFiled.text = [NSString stringWithFormat:@"%@",@([chatData msgInterval])];
+    self.countFiled.text =  [NSString stringWithFormat:@"%@",@([chatData totalMsgCount])];
+    self.totleSendCountLable.text = [NSString stringWithFormat:@"已发送总条数:%@",@([chatData sendedMessageCount])];
+    self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功条数:%@",@([chatData sendedSuccessedCount])];
+    self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败条数:%@",@([chatData sendedFailedCount])];
+    self.totalTimeLable.text = [NSString stringWithFormat:@"总耗时:%@",@([chatData totalTime])];
+
+}
+
+- (UIView *)testUIView{
+    if (!_testUIView) {
+        _testUIView= [[UIView alloc] init];
+        _testUIView.backgroundColor = [UIColor whiteColor];
+        UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(uigesture)];
+        gesture.numberOfTapsRequired = 1;
+        [_testUIView addGestureRecognizer:gesture];
+    }
+    return _testUIView;
+}
+- (void)uigesture{
+    [self.countFiled resignFirstResponder];
+    [self.contentFiled resignFirstResponder];
+    [self.intervalFiled resignFirstResponder];
+}
+- (UITextField *)contentFiled{
+    if (!_contentFiled) {
+        _contentFiled = [[UITextField alloc] init];
+        _contentFiled.keyboardType = UIKeyboardTypeDefault;
+         _contentFiled.text = @"测试内容";
+        _contentFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _contentFiled;
+}
+
+- (UITextField *)intervalFiled{
+    if (!_intervalFiled) {
+        _intervalFiled = [[UITextField alloc] init];
+        _intervalFiled.keyboardType = UIKeyboardTypeNumberPad;
+        _intervalFiled.placeholder = @"时间间隔";
+        _intervalFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _intervalFiled;
+}
+
+- (UITextField *)countFiled{
+    if (!_countFiled) {
+        _countFiled = [[UITextField alloc] init];
+        _countFiled.keyboardType = UIKeyboardTypeNumberPad;
+        _countFiled.placeholder = @"发送总条数";
+        _countFiled.backgroundColor = [UIColor grayColor];
+    }
+    return _countFiled;
+}
+
+- (UILabel *)totleSendCountLable{
+    if (!_totleSendCountLable) {
+        _totleSendCountLable = [[UILabel alloc] init];
+        _totleSendCountLable.numberOfLines = 2;
+        _totleSendCountLable.text = @"已发送总条数:";
+        _totleSendCountLable.font = [UIFont systemFontOfSize:12];
+        _totleSendCountLable.textColor = [UIColor whiteColor];
+        _totleSendCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _totleSendCountLable;
+}
+- (UILabel *)sendSucceedCountLable{
+    if (!_sendSucceedCountLable) {
+        _sendSucceedCountLable = [[UILabel alloc] init];
+        _sendSucceedCountLable.numberOfLines = 2;
+        _sendSucceedCountLable.text = @"发送成功条数:";
+         _sendSucceedCountLable.font = [UIFont systemFontOfSize:12];
+        _sendSucceedCountLable.textColor = [UIColor whiteColor];
+        _sendSucceedCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _sendSucceedCountLable;
+}
+- (UILabel *)sendFailedCountLable{
+    if (!_sendFailedCountLable) {
+        _sendFailedCountLable = [[UILabel alloc] init];
+        _sendFailedCountLable.numberOfLines = 2;
+        _sendFailedCountLable.text = @"发送失败条数:";
+         _sendFailedCountLable.font = [UIFont systemFontOfSize:12];
+        _sendFailedCountLable.textColor = [UIColor whiteColor];
+        _sendFailedCountLable.backgroundColor = [UIColor grayColor];
+    }
+    return _sendFailedCountLable;
+}
+
+- (UILabel *)totalTimeLable{
+    if (!_totalTimeLable) {
+        _totalTimeLable = [[UILabel alloc] init];
+        _totalTimeLable.numberOfLines = 2;
+        _totalTimeLable.text = @"总耗时:";
+        _totalTimeLable.font = [UIFont systemFontOfSize:12];
+        _totalTimeLable.textColor = [UIColor whiteColor];
+        _totalTimeLable.backgroundColor = [UIColor grayColor];
+    }
+    return _totalTimeLable;
+}
+
 @end

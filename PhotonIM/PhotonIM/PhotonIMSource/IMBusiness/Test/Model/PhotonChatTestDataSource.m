@@ -8,11 +8,11 @@
 
 #import "PhotonChatTestDataSource.h"
 #import "PhotonChatTestItem.h"
-#import "PhotonConversationCell.h"
+#import "PhotonChatTestCell.h"
 @implementation PhotonChatTestDataSource
 - (Class)tableView:(UITableView *)tableView cellClassForObject:(id)object{
     if ([object isKindOfClass:[PhotonChatTestItem class]]) {
-        return [PhotonConversationCell class];
+        return [PhotonChatTestCell class];
     }
     return [super tableView:tableView cellClassForObject:object];
 }

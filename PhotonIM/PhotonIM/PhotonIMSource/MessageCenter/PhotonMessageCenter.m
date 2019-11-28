@@ -143,6 +143,19 @@ static PhotonMessageCenter *center = nil;
     
 }
 
+- (void)sendTex:(NSString *)text conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+    
+    // 文本消息，直接构建文本消息对象发送
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
+    NSMutableArray *uids = [[NSMutableArray alloc] init];
+    [message setAtInfoWithAtType:PhotonIMAtTypeNoAt atList:uids];
+    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:text];
+    [message setMesageBody:body];
+    
+    [self _sendMessage:message completion:completion];
+    
+}
+
 - (void)sendImageMessage:(PhotonImageMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:conversation.chatType];

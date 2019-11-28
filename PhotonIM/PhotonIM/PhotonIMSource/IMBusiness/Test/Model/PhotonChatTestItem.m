@@ -9,6 +9,14 @@
 #import "PhotonChatTestItem.h"
 
 @implementation PhotonChatTestItem
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _isStartChat = NO;
+    }
+    return self;
+}
 - (CGFloat)itemHeight{
     return 81.0;
 }

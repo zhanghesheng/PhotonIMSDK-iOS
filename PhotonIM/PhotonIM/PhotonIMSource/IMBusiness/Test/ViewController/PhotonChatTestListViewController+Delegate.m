@@ -58,19 +58,6 @@
     
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row < self.model.items.count) {
-        PhotonChatTestItem *item = [[self.model.items objectAtIndex:indexPath.row] isNil];
-        if (!item) {
-            return;
-        }
-        PhotonChatViewController *chatvc = [[PhotonChatViewController alloc] initWithConversation:item.userInfo];
-        [chatvc setHidesBottomBarWhenPushed:YES];
-        [self.navigationController pushViewController:chatvc animated:YES];
-        [[PhotonMessageCenter sharedCenter]clearConversationUnReadCount:item.userInfo];
-        [[PhotonMessageCenter sharedCenter] resetAtType:item.userInfo];
-    }
-    
-}
+
 @end
 #pragma clang diagnostic pop

@@ -23,7 +23,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 @interface PhotonConversationListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate>
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
-@property (nonatomic, strong, nullable)PhotonIMDispatchSource *uiSource;
 @property (nonatomic, assign)BOOL   isAppeared;
 @property (nonatomic, assign)BOOL   needRefreshData;
 @property (nonatomic, strong)PhotonIMTimer *imTimer;
@@ -33,7 +32,8 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 @property (atomic, assign)BOOL isRefreshing;
 @property (atomic, assign)BOOL firstLoadData;
-@property (atomic, retain)dispatch_semaphore_t signa;
+@property (nonatomic, retain)dispatch_semaphore_t signa;
+@property (nonatomic, strong)dispatch_queue_t sessionChangeQueue;
 @end
 
 @implementation PhotonConversationListViewController
@@ -91,8 +91,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
         
-        _uiSource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self uiEventBlock]];
-
+        _sessionChangeQueue = dispatch_queue_create("com.cosmos.PhotonIM.conversationchange", DISPATCH_QUEUE_SERIAL);
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.conversationdata", DISPATCH_QUEUE_SERIAL)];
 
     }
@@ -156,16 +155,21 @@ static NSString *message_syncing = @"消息(收取中......)";
     }];
 }
 - (void)refreshTableView{
-    if(!_firstLoadData){
-        dispatch_semaphore_signal(_signa);
-    }
-    _firstLoadData = NO;
-    
     PhotonConversationDataSource *dataSource = [[PhotonConversationDataSource alloc] initWithItems:self.model.items];
     self.dataSource = dataSource;
+    if(_firstLoadData){
+        dispatch_semaphore_signal(_signa);
+         _firstLoadData = NO;
+    }
+   
 }
-
 - (void)conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    __weak typeof(self)weakSelf = self;
+    dispatch_async(self.sessionChangeQueue, ^{
+        [weakSelf _conversationChange:envent chatType:chatType chatWith:chatWith];
+    });
+}
+- (void)_conversationChange:(PhotonIMConversationEvent)envent chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     if (_firstLoadData) {
         dispatch_semaphore_wait(_signa, DISPATCH_TIME_FOREVER);
     }
@@ -197,6 +201,7 @@ static NSString *message_syncing = @"消息(收取中......)";
             break;
     }
 }
+
 
 - (void)updateConversation:(PhotonIMConversation *)conversation chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     PhotonConversationItem *temp = nil;

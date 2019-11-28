@@ -156,6 +156,7 @@
 		3272588422F18D2D00842026 /* PhotonChatTransmitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588322F18D2D00842026 /* PhotonChatTransmitItem.m */; };
 		3272588722F1981B00842026 /* PhotonChatTransmitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588622F1981B00842026 /* PhotonChatTransmitCell.m */; };
 		3272588A22F1A61900842026 /* PhotonChatTransmitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588922F1A61900842026 /* PhotonChatTransmitModel.m */; };
+		32845465238FA886003C0683 /* PhotonChatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845464238FA886003C0683 /* PhotonChatData.m */; };
 		3286B10A22BB25FA0032D066 /* Chat.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3286B10922BB25FA0032D066 /* Chat.xcassets */; };
 		3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 3286B13222BB808C0032D066 /* FaceEmoji.json */; };
 		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
@@ -461,6 +462,8 @@
 		327336342371586000CEF6C2 /* libProtocolBuffers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libProtocolBuffers.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		327D8D7D23066A00006E2E90 /* PhotonCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCommonHeader.h; sourceTree = "<group>"; };
 		327D8D7E230691D6006E2E90 /* PhotonAPIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAPIMacros.h; sourceTree = "<group>"; };
+		32845463238FA886003C0683 /* PhotonChatData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatData.h; sourceTree = "<group>"; };
+		32845464238FA886003C0683 /* PhotonChatData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatData.m; sourceTree = "<group>"; };
 		3286B10922BB25FA0032D066 /* Chat.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Chat.xcassets; sourceTree = "<group>"; };
 		3286B10F22BB47040032D066 /* PhotonEmojiKeyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmojiKeyboard.h; sourceTree = "<group>"; };
 		3286B11022BB47040032D066 /* PhotonEmojiKeyboard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmojiKeyboard.m; sourceTree = "<group>"; };
@@ -1197,6 +1200,8 @@
 			children = (
 				3242C1D2238E249D00C221D2 /* PhotonChatTestItem.h */,
 				3242C1D3238E249D00C221D2 /* PhotonChatTestItem.m */,
+				32845463238FA886003C0683 /* PhotonChatData.h */,
+				32845464238FA886003C0683 /* PhotonChatData.m */,
 				3242C1D5238E249E00C221D2 /* PhotonChatTestModel.h */,
 				3242C1D4238E249D00C221D2 /* PhotonChatTestModel.m */,
 				3242C1CF238E243600C221D2 /* PhotonChatTestDataSource.h */,
@@ -1683,6 +1688,7 @@
 				3221884922CCA5B6007E9FA3 /* PhotonAudioRecorder.m in Sources */,
 				3221884A22CCA5B6007E9FA3 /* PhotonAudioPlayer.m in Sources */,
 				3272587422F140D000842026 /* PhotonSingleSettingViewController.m in Sources */,
+				32845465238FA886003C0683 /* PhotonChatData.m in Sources */,
 				3221884B22CCA5B6007E9FA3 /* PhotonNotifycationConstant.m in Sources */,
 				3221884C22CCA5B6007E9FA3 /* UIView+PhotonFrame.m in Sources */,
 				3221884D22CCA5B6007E9FA3 /* UIColor+PhotonExtensions.m in Sources */,

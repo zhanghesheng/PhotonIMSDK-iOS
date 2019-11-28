@@ -15,13 +15,12 @@
 @interface PhotonChatTestBaseCell()
 @property (nonatomic, strong, nullable) UIImageView *iconView;
 @property (nonatomic, strong, nullable) UILabel *nickLabel;
-@property (nonatomic, strong, nullable) UILabel *timeLabel;
 @property (nonatomic, strong, nullable) UILabel *contextLabel;
-@property (nonatomic, strong, nullable) PhoneBadgeView *badgeView;
 @property (nonatomic, strong, nullable) UIImageView *noalermView;
 
-@property (nonatomic, strong, nullable)UIActivityIndicatorView *indicatorView;
-@property (nonatomic, strong, nullable)UIImageView *sendStatusView;
+
+@property (nonatomic, strong, nullable)UIButton *startChatBtn;
+@property (nonatomic, strong, nullable)UIButton *clearBtn;
 @end
 
 @implementation PhotonChatTestBaseCell
@@ -32,12 +31,10 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.iconView];
         [self.contentView addSubview:self.nickLabel];
-        [self.contentView addSubview:self.timeLabel];
         [self.contentView addSubview:self.contextLabel];
-        [self.contentView addSubview:self.badgeView];
-        [self.contentView addSubview:self.sendStatusView];
-        [self.sendStatusView addSubview:self.indicatorView];
         [self.contentView addSubview:self.noalermView];
+        [self.contentView addSubview:self.startChatBtn];
+        [self.contentView addSubview:self.clearBtn];
     }
     return self;
 }
@@ -61,6 +58,12 @@
         nickName = conversation.chatWith;
     }
      self.nickLabel.text = nickName;
+    
+    if (item.isStartChat) {
+         [_startChatBtn setTitle:@"停止" forState:UIControlStateNormal];
+    }else{
+         [_startChatBtn setTitle:@"开始" forState:UIControlStateNormal];
+    }
     
     
     NSMutableAttributedString *content = [[NSMutableAttributedString alloc] init];
@@ -87,41 +90,11 @@
         [content appendAttributedString:chatContent];
     }
     self.contextLabel.attributedText = content;
-    if([conversation.lastMsgContent isNotEmpty]){
-        NSTimeInterval tempTimeStamp = (conversation.lastTimeStamp/1000.0);
-        NSDate *localeDate = [NSDate dateWithTimeIntervalSince1970:tempTimeStamp];
-        self.timeLabel.text = [localeDate chatTimeInfo];
-    }else{
-         self.timeLabel.text = @"";
-    }
-    NSInteger count = conversation.unReadCount;
-    if (count > 0) {
-        if (count > 0) {
-            NSString *valueStr = [NSString stringWithFormat:@"%@",@(count)];
-//            if (count > 99) {
-//                count = 99;
-//                valueStr = [NSString stringWithFormat:@"%@+",@(count)];
-//            }
-        [self.badgeView setBadgeValue:valueStr];
-        }
-    }
     BOOL isSending = [conversation.lastMsgContent isNotEmpty] && (conversation.lastMsgStatus == PhotonIMMessageStatusSending);
     BOOL isSentFailed = [conversation.lastMsgContent isNotEmpty] && (conversation.lastMsgStatus == PhotonIMMessageStatusFailed);
     if (!conversation.lastMsgIsReceived) {
         isSending = NO;
         isSentFailed = NO;
-    }
-    if (isSentFailed) {
-        [self.sendStatusView setImage:[UIImage imageNamed:@"send_error"]];
-    }else{
-        [self.sendStatusView setImage:nil];
-    }
-    // 发送中
-    if (isSending) {
-        self.indicatorView.hidden = NO;
-        [self.indicatorView startAnimating];
-    }else{
-        [self.indicatorView stopAnimating];
     }
     
 }
@@ -140,21 +113,10 @@
         make.centerY.mas_equalTo(self.contentView.mas_centerY);
         make.left.mas_equalTo(17.5);
     }];
-    // 时间
-   
-    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(16.5);
-        make.right.mas_equalTo(self.contentView).mas_equalTo(-15);
-    }];
     
-     CGSize size = [self.timeLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
-    [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(size.height);
-        make.width.mas_equalTo(size.width + 5);
-    }];
     
     // 昵称
-    size = [self.nickLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
+    CGSize size = [self.nickLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
     [self.nickLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(21);
         make.left.mas_equalTo(self.iconView.mas_right).mas_offset(15.5);
@@ -184,43 +146,29 @@
     }else{
         size =CGSizeZero;
     }
-    [self.badgeView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.timeLabel.mas_bottom).mas_offset(5);
-        make.right.mas_equalTo(self.contentView.mas_right).mas_offset(-21.8);
-    }];
-    
-    [self.badgeView mas_updateConstraints:^(MASConstraintMaker *make) {
-         make.size.mas_equalTo(size);
-    }];
     
     
-    [self.sendStatusView mas_makeConstraints:^(MASConstraintMaker *make) {
-       make.top.mas_equalTo(self.nickLabel.mas_bottom).mas_offset(1.5);
-       make.left.mas_equalTo(self.nickLabel.mas_left);
+    
+    [self.startChatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(25);
+        make.width.mas_equalTo(50);
+        make.top.mas_equalTo(self.contentView.mas_top).mas_offset(10);
+        make.right.mas_equalTo(self.contentView).mas_offset(-5);
     }];
+    
+    [self.clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+           make.height.mas_equalTo(25);
+           make.width.mas_equalTo(50);
+           make.bottom.mas_equalTo(self.contentView).mas_offset(-10);
+           make.right.mas_equalTo(self.contentView).mas_offset(-5);
+    }];
+           
    
     [self.contextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(18.5);
         make.top.mas_equalTo(self.nickLabel.mas_bottom).mas_offset(1.5);
-        make.left.mas_equalTo(self.sendStatusView.mas_right).mas_offset(0);
-        make.right.mas_equalTo(self.badgeView.mas_left).mas_equalTo(-5);
-    }];
-    if (!self.sendStatusView.image && !self.indicatorView.animating) {
-        [self.sendStatusView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(0);
-            make.width.mas_equalTo(0);
-        }];
-    }else{
-        [self.sendStatusView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(18.5);
-            make.width.mas_equalTo(18.5);
-        }];
-    }
-    [self.indicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(12);
-        make.width.mas_equalTo(12);
-        make.left.mas_equalTo(self.sendStatusView).mas_offset(0);
-        make.centerY.mas_equalTo(self.sendStatusView);
+        make.left.mas_equalTo(self.nickLabel.mas_left).mas_offset(0);
+        make.right.mas_equalTo(self.clearBtn.mas_left).mas_equalTo(-5);
     }];
     
 }
@@ -269,16 +217,6 @@
     return _nickLabel;
 }
 
-- (UILabel *)timeLabel{
-    if (!_timeLabel) {
-        _timeLabel = [[UILabel alloc] init];
-        _timeLabel.textColor = [UIColor colorWithHex:0xBEBEBE];
-        _timeLabel.textAlignment = NSTextAlignmentLeft;
-        _timeLabel.font = [UIFont systemFontOfSize:11.0];
-        [_timeLabel setNumberOfLines:1];
-    }
-    return _timeLabel;
-}
 
 - (UILabel *)contextLabel{
     if (!_contextLabel) {
@@ -291,29 +229,7 @@
     return _contextLabel;
 }
 
-- (PhoneBadgeView *)badgeView{
-    if (!_badgeView) {
-        _badgeView = [[PhoneBadgeView alloc] init];
-        _badgeView.titleFont = [UIFont systemFontOfSize:12];
-    }
-    return _badgeView;
-}
 
-- (UIActivityIndicatorView *)indicatorView{
-    if (!_indicatorView) {
-        _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        _indicatorView.hidden = YES;
-    }
-    return _indicatorView;
-}
-
-- (UIImageView *)sendStatusView{
-    if (!_sendStatusView) {
-        _sendStatusView = [[UIImageView alloc] init];
-        _sendStatusView.backgroundColor = [UIColor clearColor];
-    }
-    return _sendStatusView;
-}
 
 
 + (CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{
@@ -323,6 +239,51 @@
 
 + (NSString *)cellIdentifier{
     return @"PhotonChatTestBaseCell";
+}
+
+- (UIButton *)startChatBtn{
+    if (!_startChatBtn) {
+        _startChatBtn= [UIButton buttonWithType:UIButtonTypeCustom];
+        [_startChatBtn setTitle:@"开始" forState:UIControlStateNormal];
+        [_startChatBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_startChatBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_startChatBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        _startChatBtn.layer.cornerRadius = 5;
+        [_startChatBtn addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
+    }
+      return _startChatBtn;
+}
+-(UIButton *)clearBtn{
+    if (!_clearBtn) {
+           _clearBtn= [UIButton buttonWithType:UIButtonTypeCustom];
+           [_clearBtn setTitle:@"清空" forState:UIControlStateNormal];
+           [_clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+           [_clearBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+           [_clearBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+           _clearBtn.layer.cornerRadius = 5;
+           [_clearBtn addTarget:self action:@selector(clearData:) forControlEvents:UIControlEventTouchUpInside];
+       }
+         return _clearBtn;
+}
+
+- (void)startChat:(id)sender{
+    PhotonChatTestItem *item = (PhotonChatTestItem *)self.item;
+    item.isStartChat = !item.isStartChat;
+    if (item.isStartChat) {
+           [_startChatBtn setTitle:@"停止" forState:UIControlStateNormal];
+      }else{
+           [_startChatBtn setTitle:@"开始" forState:UIControlStateNormal];
+      }
+    if(self.delegate && [self.delegate respondsToSelector:@selector(startChatCell:startChat:)]){
+        [self.delegate startChatCell:self startChat:item];
+    }
+}
+
+- (void)clearData:(id)sender{
+    PhotonChatTestItem *item = (PhotonChatTestItem *)self.item;
+    if(self.delegate && [self.delegate respondsToSelector:@selector(clearChatCell:clearData:)]){
+        [self.delegate clearChatCell:self clearData:item];
+    }
 }
 
 @end

@@ -25,6 +25,6 @@
 }
 
 + (NSString *)cellIdentifier{
-    return @"PhotonConversationCell";
+    return @"PhotonChatTestCell";
 }
 @end

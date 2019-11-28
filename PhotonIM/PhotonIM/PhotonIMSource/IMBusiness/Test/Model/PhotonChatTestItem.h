@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface PhotonChatTestItem : PhotonBaseTableItem
+@property(nonatomic, assign)BOOL isStartChat;
 @end
 
 NS_ASSUME_NONNULL_END
