@@ -24,8 +24,6 @@
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
 
 @property (nonatomic, assign)BOOL isFirstPage;
-
-
 @property (nonatomic, strong,nullable)UIView  *testUIView;
 // 内容
 @property (nonatomic, strong,nullable)UITextField  *contentFiled;
@@ -35,24 +33,16 @@
 @property (nonatomic, strong,nullable)UITextField  *countFiled;
 //发送按钮
 @property (nonatomic, strong,nullable)UIButton  *autoSendMessage;
-
 //发送按钮
 @property (nonatomic, strong,nullable)UIButton  *stopSendMessage;
-
 //发送按钮
 @property (nonatomic, copy,nullable)NSString  *content;
-
 // login内容
 @property (nonatomic, strong,nullable)UILabel  *authFiled;
-
 @property (nonatomic, assign)NSTimeInterval  interval;
-
 @property (atomic, assign)BOOL  isStop;
-
 @property (nonatomic, assign)NSInteger authSucceedCount;
-
 @property (nonatomic, assign)NSInteger authFaileddCount;
-
 @property (atomic, assign)BOOL scrollTop;
 @end
 
@@ -82,18 +72,10 @@
     if (self) {
         self.model = [[PhotonChatModel alloc] init];
         self.items = [NSMutableArray array];
-        // 添加接收消息的监听
-        [[PhotonMessageCenter sharedCenter] addObserver:self];
         [self.tableView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     }
     return self;
 }
-
-
-- (void)firstLoadMessages{
-    [self loadDataItems];
-}
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -115,9 +97,12 @@
     }];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
     [self.tableView addGestureRecognizer:tap];
-    [self firstLoadMessages];
+    
+    [self startLoadData];
     
     [self addTextUI];
+    // 添加接收消息的监听
+    [[PhotonMessageCenter sharedCenter] addObserver:self];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -159,7 +144,7 @@
 }
 // 加载数据
 - (void)loadDataItems{
-    [self.dataDispatchSource addSemaphore];
+    [self p_loadDataItems];
 }
 
 - (void)p_loadDataItems{
@@ -182,7 +167,7 @@
 
 
 - (void)p_reloadData{
-     [self endRefreshing];
+    [self endRefreshing];
     PhotonChatDataSource *dataSource = [[PhotonChatDataSource alloc] initWithItems:self.model.items];
     dataSource.delegate = self;
     self.dataSource = dataSource;
@@ -232,9 +217,6 @@
     }];
 }
 
-- (void)refreshData{
-    [self p_loadDataItems];
-}
 
 
 

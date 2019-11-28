@@ -23,8 +23,6 @@
     [self wrapperMessage:message];
 }
 
-
-
 /**
  二人聊天消息的撤回
 
@@ -53,6 +51,9 @@
 #pragma mark ------ Private Method---------
 // 处理二人聊天收到的信息
 - (void)wrapperMessage:(PhotonIMMessage *)message{
+    [self _wrapperMessage:message];
+}
+- (void)_wrapperMessage:(PhotonIMMessage *)message{
     id item = [(PhotonChatModel *)self.model wrapperMessage:message];
     if (!item) {
         return;

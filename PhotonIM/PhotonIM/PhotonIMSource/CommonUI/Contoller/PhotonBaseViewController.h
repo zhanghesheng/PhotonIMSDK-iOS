@@ -20,10 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) id<PotonTableViewDataSourceProtocol> dataSource;
 @property(nonatomic, strong,nullable) NSMutableArray *items;
 @property(nonatomic,assign) UITableViewStyle tableViewStyle;
+- (void)startLoadData;
 - (void)loadDataItems;
 
 - (void)reloadData;
-
 - (void)refreshTableView;
 
 - (void)addItem:(PhotonBaseTableItem *)item;

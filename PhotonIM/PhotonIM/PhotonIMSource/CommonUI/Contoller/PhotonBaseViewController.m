@@ -8,13 +8,17 @@
 
 #import "PhotonBaseViewController.h"
 #import "PhotonTableViewCell.h"
-#import "PhotonIMDispatchSource.h"
-@interface PhotonBaseViewController ()
+@interface PhotonBaseViewController (){
+    void *IsOnPhotonLoadDataQueueKey;
+}
 @property (nonatomic, strong, nullable) UIView   *noDataView;
 @property (nonatomic, assign) CGPoint contentOffsetForRestore;
 @property (nonatomic, strong, nullable)PhotonIMDispatchSource *reloadDataRefreshUISource;
 @property (nonatomic, strong, nullable)PhotonIMDispatchSource *updateDataRefreshUISource;
 @property (nonatomic, strong, nullable)PhotonIMDispatchSource *addDataRefreshUISource;
+@property (nonatomic, strong, nullable)PhotonIMDispatchSource *loadDataSource;
+
+@property (nonatomic, strong, nullable)dispatch_queue_t dataQueue;
 @end
 
 @implementation PhotonBaseViewController
@@ -33,11 +37,15 @@
         _updateDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self updateCellEventBlock]];
         _addDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self addCellEventBlock]];
         _reloadDataRefreshUISource = [[PhotonIMDispatchSource alloc] initWithEventQueue:dispatch_get_main_queue() eventBlack:[self reloadCellEventBlock]];
+        
+        _loadDataSource = [[PhotonIMDispatchSource alloc] initWithEventQueue:self.dataQueue eventBlack:[self reloadDataEventBlock]];
+        
         _tableViewStyle = UITableViewStylePlain;
         _tableView = [[PhotonBaseUITableView alloc] initWithFrame:CGRectZero style:_tableViewStyle];
     }
     return self;
 }
+
 
 - (void)dealloc
 {
@@ -45,6 +53,36 @@
     self.tableView.delegate = nil;
     self.tableView.dataSource = nil;
 }
+
+- (dispatch_queue_t)dataQueue{
+    if (!_dataQueue) {
+          NSString *queuenName = [NSString stringWithFormat:@"com.cosmos.PhotonIM.%@.loadDataqueue",NSStringFromClass([self class])];
+             _dataQueue = dispatch_queue_create(queuenName.UTF8String, DISPATCH_QUEUE_SERIAL);
+        IsOnPhotonLoadDataQueueKey = &IsOnPhotonLoadDataQueueKey;
+        void *nonNullUnusedPointer = (__bridge void *)self;
+        dispatch_queue_set_specific(_dataQueue, IsOnPhotonLoadDataQueueKey, nonNullUnusedPointer, NULL);
+    }
+    return _dataQueue;
+}
+
+- (BOOL)currentQueuePhotonLoadDataQueue
+{
+    if (dispatch_get_specific(IsOnPhotonLoadDataQueueKey)){
+        return YES;
+    }
+    else {
+        return NO;
+    }
+}
+
+- (void)runPhotonLoadDataQueue:(dispatch_block_t)block{
+    if ([self currentQueuePhotonLoadDataQueue]) {
+        block();
+    }else{
+        dispatch_async(self.dataQueue,block);
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -61,12 +99,29 @@
 - (void)backPre{
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (PhotonIMDispatchSourceEventBlock)reloadDataEventBlock{
+    __weak typeof(self)weakSlef = self;
+    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
+         [weakSlef loadDataItems];
+    };
+    return eventBlock;
+}
+- (void)startLoadData{
+    __weak typeof(self)weakSelf = self;
+    [self runPhotonLoadDataQueue:^{
+        [weakSelf.loadDataSource addEventSource:nil];
+    }];
+}
 - (void)loadDataItems{
     
 }
 
 - (void)reloadData{
-     [self.reloadDataRefreshUISource addEventSource:nil];
+    __weak typeof(self)weakSelf = self;
+    [self runPhotonLoadDataQueue:^{
+        [weakSelf.reloadDataRefreshUISource addEventSource:nil];
+    }];
 }
 - (PhotonIMDispatchSourceEventBlock)reloadCellEventBlock{
     __weak typeof(self)weakSlef = self;
@@ -80,8 +135,10 @@
     
 }
 - (void)addItem:(PhotonBaseTableItem *)item{
-    [self.addDataRefreshUISource addEventSource:item];
-   
+    __weak typeof(self)weakSelf = self;
+       [self runPhotonLoadDataQueue:^{
+           [weakSelf.addDataRefreshUISource addEventSource:item];
+       }];
 }
 - (PhotonIMDispatchSourceEventBlock)addCellEventBlock{
     __weak typeof(self)weakSlef = self;
@@ -93,15 +150,20 @@
     return eventBlock;
 }
 - (void)_addItem:(PhotonBaseTableItem *)item{
-    NSInteger index = self.dataSource.items.count;
+    NSInteger index = self.model.items.count;
     [self.model.items addObject:item];
+    if(!self.dataSource || self.dataSource.items == 0){
+        return;
+    }
     [self.dataSource.items addObject:item];
     [self insert:@[@(index)] animated:YES];
 }
 
-
 - (void)updateItem:(PhotonBaseTableItem *)item{
-     [self.updateDataRefreshUISource addEventSource:item];
+    __weak typeof(self)weakSelf = self;
+     [self runPhotonLoadDataQueue:^{
+         [weakSelf.updateDataRefreshUISource addEventSource:@[item]];
+     }];
 }
 
 - (PhotonIMDispatchSourceEventBlock)updateCellEventBlock{
@@ -113,16 +175,20 @@
     };
     return eventBlock;
 }
-- (void)_updateItem:(PhotonBaseTableItem *)item{
+- (void)_updateItem:(NSArray<PhotonBaseTableItem *> *)items{
     NSInteger index = -1;
-    if ([self.dataSource.items containsObject:item]) {
-        index = [self.dataSource.items indexOfObject:item];
+    NSMutableArray< NSIndexPath *> *indexPaths = [NSMutableArray array];
+    for (PhotonBaseTableItem * item in items) {
+          if ([self.dataSource.items containsObject:item]) {
+              index = [self.dataSource.items indexOfObject:item];
+          }
+          if (index < 0) {
+              continue;
+          }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        [indexPaths addObject:indexPath];
     }
-    if (index < 0) {
-        return;
-    }
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-    [self update:indexPath];
+    [self update:indexPaths];
 }
 
 - (void)removeItem:(PhotonBaseTableItem *)item{
@@ -176,11 +242,11 @@
 }
 
 
-- (void)update:(NSIndexPath *)indexPath
+- (void)update:(NSArray<NSIndexPath *> *)indexPaths
 {
-    PhotonTableViewCell *cell = (PhotonTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPath];
+    PhotonTableViewCell *cell = (PhotonTableViewCell *)[self.tableView cellForRowAtIndexPath:indexPaths.lastObject];
     if (cell) {
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
         CGFloat scrollOffsetY = self.tableView.contentOffset.y;
         [self.tableView setContentOffset:CGPointMake(self.tableView.contentOffset.x, scrollOffsetY) animated:NO];
     }

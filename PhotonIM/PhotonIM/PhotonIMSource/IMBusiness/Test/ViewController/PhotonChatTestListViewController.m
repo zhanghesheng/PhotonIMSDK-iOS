@@ -15,7 +15,6 @@
 #import "PhotonChatTestModel.h"
 #import "PhotonMessageCenter.h"
 #import "PhotonNetTableItem.h"
-#import "PhotonIMDispatchSource.h"
 #import "PhotonSafeMutableDictionary.h"
 #import "PhotonChatData.h"
 static NSString *message_title = @"消息";

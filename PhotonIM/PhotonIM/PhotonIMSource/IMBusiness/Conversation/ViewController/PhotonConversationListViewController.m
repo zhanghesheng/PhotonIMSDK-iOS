@@ -15,7 +15,6 @@
 #import "PhotonConversationModel.h"
 #import "PhotonMessageCenter.h"
 #import "PhotonNetTableItem.h"
-#import "PhotonIMDispatchSource.h"
 static NSString *message_title = @"消息";
 static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";
@@ -139,7 +138,10 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     [self reloadData];
 }
+static int64_t start;
+static int64_t end;
 - (void)loadDataItems{
+    start = [[NSDate date]timeIntervalSince1970] * 1000;
     __weak typeof(self)weakSlef = self;
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
         [weakSlef removeNoDataView];
@@ -157,6 +159,8 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)refreshTableView{
     PhotonConversationDataSource *dataSource = [[PhotonConversationDataSource alloc] initWithItems:self.model.items];
     self.dataSource = dataSource;
+    end = [[NSDate date]timeIntervalSince1970] * 1000;
+    [PhotonUtil showAlertWithTitle:[NSString stringWithFormat:@"%@",@(end-start)]];
     if(_firstLoadData){
         dispatch_semaphore_signal(_signa);
          _firstLoadData = NO;
@@ -212,6 +216,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
             PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
             conversation.FAvatarPath = user.avatarURL;
+            conversation.FName = user.nickName;
             temp = item;
             temp.userInfo = conversation;
             index = [self.model.items indexOfObject:item];

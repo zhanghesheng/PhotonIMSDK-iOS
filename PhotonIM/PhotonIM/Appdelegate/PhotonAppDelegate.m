@@ -11,8 +11,10 @@
 #import <pushsdk/MoPushManager.h>
 #import "PhotonAppLaunchManager.h"
 #import "PhotonMessageCenter.h"
+#import "YYFPSLabel.h"
 @interface PhotonAppDelegate ()<UNUserNotificationCenterDelegate>
 
+@property (nonatomic, strong) YYFPSLabel *fpsLabel;
 @end
 
 @implementation PhotonAppDelegate
@@ -38,6 +40,8 @@
     
     [PhotonAppLaunchManager registerWithWindow:self.window];
     [PhotonAppLaunchManager launchInWindow];
+    
+    [self addFPSLabel];
     return YES;
 }
 
@@ -58,6 +62,14 @@
 - (void)onMoPushManagerCommand:(CallbackMessage *)message {
     PhotonLog(@"AppDelegate callback ----->> commandName:%@,  code: %d, message:%@", [message commandName],[message resultCode], [message message]);
 }
+
+- (void)addFPSLabel {
+    _fpsLabel = [YYFPSLabel new];
+    _fpsLabel.frame = CGRectMake(15, 15, 50, 30);
+    [_fpsLabel sizeToFit];
+    [self.window addSubview:_fpsLabel];
+}
+
 
 #pragma mark - Notification
 
