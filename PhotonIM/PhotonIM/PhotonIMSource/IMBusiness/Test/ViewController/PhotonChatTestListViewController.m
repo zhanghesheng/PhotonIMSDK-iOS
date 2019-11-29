@@ -22,7 +22,7 @@ static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";
 static NSString *message_syncing = @"消息(收取中......)";
 
-@interface PhotonChatTestListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate>
+@interface PhotonChatTestListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate,UITabBarDelegate,UITabBarControllerDelegate>
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
 @property (nonatomic, assign)BOOL   isAppeared;
 @property (nonatomic, assign)BOOL   needRefreshData;
@@ -40,7 +40,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property (nonatomic, strong) UIView  *headerContentView;
 @property (nonatomic, strong) UILabel *authSuccessedCountLable;
 @property (nonatomic, strong) UILabel *authFailedCountLable;
-@property (nonatomic, strong) UIButton *addConversation;
+//@property (nonatomic, strong) UIButton *addConversation;
 @property (nonatomic, assign)int authSuccessedCount;
 @property (nonatomic, assign)int authFailedCount;
 
@@ -83,7 +83,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
         _conversationChangeQueue = dispatch_queue_create("com.cosmos.PhotonIM.test_conversationchange", DISPATCH_QUEUE_SERIAL);
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.conversationdata", DISPATCH_QUEUE_SERIAL)];
-
+        
     }
     return self;
 }
@@ -97,7 +97,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)createHeaderContentView{
     _headerContentView = [[UIView alloc] init];
-    _headerContentView.backgroundColor = [UIColor redColor];
+    _headerContentView.backgroundColor = [UIColor colorWithHex:0xffb549];
     [self.view addSubview:_headerContentView];
     CGFloat navigationBarAndStatusBarHeight = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
     [_headerContentView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -172,7 +172,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     UIButton *clearBtn= [UIButton buttonWithType:UIButtonTypeCustom];
     [clearBtn setTitle:@"清空" forState:UIControlStateNormal];
     [clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [clearBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [clearBtn setBackgroundColor:[UIColor colorWithHex:0x41b6e6] forState:UIControlStateNormal];
     [clearBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
     clearBtn.layer.cornerRadius = 3;
     [clearBtn addTarget:self action:@selector(clearAuthCount:) forControlEvents:UIControlEventTouchUpInside];
@@ -184,21 +184,6 @@ static NSString *message_syncing = @"消息(收取中......)";
            make.width.mas_equalTo(50);
     }];
     
-    UIButton *addConversation= [UIButton buttonWithType:UIButtonTypeCustom];
-    _addConversation = addConversation;
-    [addConversation setTitle:@"添加测试会话" forState:UIControlStateNormal];
-    [addConversation setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [addConversation setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
-    [addConversation.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    addConversation.layer.cornerRadius = 5;
-    [addConversation addTarget:self action:@selector(addConversation:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addConversation];
-    [addConversation mas_makeConstraints:^(MASConstraintMaker *make) {
-           make.centerX.mas_equalTo(self.view).mas_offset(0);
-           make.height.mas_equalTo(30);
-           make.width.mas_equalTo(100);
-           make.bottom.mas_equalTo(self.view).mas_offset(-self.tabBarController.tabBar.frame.size.height - 3);
-    }];
     
 }
 - (void)clearAuthCount:(id)sender{
@@ -210,6 +195,13 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)addConversation:(id)sender{
 }
 
+//判断是否跳转
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+    if ([tabBarController.tabBar.selectedItem.title isEqualToString:@"测试"]) {
+        [self.dataDispatchSource addSemaphore];
+    }
+     return YES;
+}
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     if (self.needRefreshData) {
@@ -230,10 +222,11 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tabBarController.delegate = self;
     [self createHeaderContentView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.mas_equalTo(self.view).mas_offset(0);
-        make.bottom.mas_equalTo(self.addConversation.mas_top).mas_offset(-3);
+        make.bottom.mas_equalTo(self.view).mas_offset(0);
         make.top.mas_equalTo(self.headerContentView.mas_bottom).mas_offset(0);
     }];
     [self.dataDispatchSource addSemaphore];
@@ -341,14 +334,7 @@ static NSString *message_syncing = @"消息(收取中......)";
             break;
         }
     }
-    
-    if (temp && isToTop) {
-        [self.model.items removeObjectAtIndex:index];
-        [self.model.items insertObject:temp atIndex:0];
-        [self reloadData];
-        return;
-    }
-    if (temp && index == 0) {
+    if (temp) {
         [self updateItem:temp];
     }
 }
@@ -401,18 +387,20 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     [self.chatDataCache setObject:chatData forKey:key];
 }
-- (void)chatStart:(PhotonIMConversation *)conversation{
+- (void)chatStart:(PhotonChatTestItem *)item{
+    PhotonIMConversation *conversation = item.userInfo;
     PhotonChatData *chatData = [self chatData:conversation];
     if (chatData.toStart) {
         return;
     }
     chatData.toStart = YES;
-    [self _chatStart:conversation];
+    [self _chatStart:item];
 }
-- (void)_chatStart:(PhotonIMConversation *)conversationn{
+- (void)_chatStart:(PhotonChatTestItem *)item{
+      PhotonIMConversation *conversation = item.userInfo;
     PhotonWeakSelf(self);
       dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-          PhotonChatData *chatData = [weakself chatData:conversationn];
+          PhotonChatData *chatData = [weakself chatData:conversation];
           if (!chatData && !chatData.toStart) {
               return;
           }
@@ -421,20 +409,27 @@ static NSString *message_syncing = @"消息(收取中......)";
           while (index < chatData.totalMsgCount && chatData.toStart) {
               chatData.sendedMessageCount ++;
               index ++;
-              [NSThread sleepForTimeInterval:0.2];
+              [NSThread sleepForTimeInterval:chatData.msgInterval/1000.0];
               NSString *sendText = [NSString stringWithFormat:@"%@-%@",chatData.sendContent,@(index)];
-              [[PhotonMessageCenter sharedCenter] sendTex:sendText conversation:conversationn completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+              [[PhotonMessageCenter sharedCenter] sendTex:sendText conversation:conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
                    if (succeed) {
                        chatData.sendedSuccessedCount ++;
                     }else{
                         chatData.sendedFailedCount ++;
                     }
                   if ( chatData.sendedSuccessedCount + chatData.sendedFailedCount == chatData.totalMsgCount) {
+                      chatData.toStart = NO;
+                  }
+                  if (!chatData.toStart){
                       NSTimeInterval endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
                       int duration = endTime - startTime;
-                      chatData.msgInterval = duration;
-                  }
-                  if ([conversationn.chatWith isEqualToString:weakself.currentConversation.chatWith]) {
+                      chatData.totalTime = duration;
+                      chatData.toStart = NO;
+                      item.isStartChat = NO;
+                      [weakself updateItem:item];
+                     }
+                     
+                  if ([conversation.chatWith isEqualToString:weakself.currentConversation.chatWith]) {
                       [weakself setTestContent:chatData];
                   }
               }];
@@ -451,14 +446,17 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)startChatCell:(PhotonTableViewCell *)cell startChat:(PhotonChatTestItem *)chatItem{
     if (chatItem.isStartChat) {
-        [self chatStart:chatItem.userInfo];
+        [self clearChatCell:nil clearData:chatItem];
+        [self chatStart:chatItem];
     }else{
         [self stopChat:chatItem.userInfo];
     }
 }
 
-- (void)clearChatCell:(PhotonTableViewCell *)cell clearData:(PhotonChatTestItem *)chatItem{
-    [self setChatData:nil conversation:chatItem.userInfo];
+- (void)clearChatCell:(nullable PhotonTableViewCell *)cell clearData:(PhotonChatTestItem *)chatItem{
+    PhotonChatData *chatData = [self chatData:chatItem.userInfo];
+    [chatData resetRecord];
+    [self setChatData:chatData conversation:chatItem.userInfo];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -537,7 +535,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     
     UIButton *setBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [setBtn setTitle:@"设置" forState:UIControlStateNormal];
-    [setBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [setBtn setBackgroundColor:  [UIColor colorWithHex:0x41b6e6] forState:UIControlStateNormal];
     [setBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
      setBtn.layer.cornerRadius = 3;
     [setBtn addTarget:self action:@selector(setContent:) forControlEvents:UIControlEventTouchUpInside];
@@ -545,7 +543,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     
     UIButton *cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cancleBtn setTitle:@"取消" forState:UIControlStateNormal];
-    [cancleBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+    [cancleBtn setBackgroundColor:  [UIColor colorWithHex:0x41b6e6] forState:UIControlStateNormal];
     [cancleBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
      cancleBtn.layer.cornerRadius = 3;
     [cancleBtn addTarget:self action:@selector(cancle:) forControlEvents:UIControlEventTouchUpInside];
@@ -607,7 +605,6 @@ static NSString *message_syncing = @"消息(收取中......)";
     self.sendSucceedCountLable.text = [NSString stringWithFormat:@"发送成功条数:%@",@([chatData sendedSuccessedCount])];
     self.sendFailedCountLable.text = [NSString stringWithFormat:@"发送失败条数:%@",@([chatData sendedFailedCount])];
     self.totalTimeLable.text = [NSString stringWithFormat:@"总耗时:%@",@([chatData totalTime])];
-
 }
 
 - (UIView *)testUIView{

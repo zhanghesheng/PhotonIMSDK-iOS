@@ -246,7 +246,7 @@
         _startChatBtn= [UIButton buttonWithType:UIButtonTypeCustom];
         [_startChatBtn setTitle:@"开始" forState:UIControlStateNormal];
         [_startChatBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_startChatBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+        [_startChatBtn setBackgroundColor:[UIColor colorWithHex:0x41b6e6] forState:UIControlStateNormal];
         [_startChatBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
         _startChatBtn.layer.cornerRadius = 5;
         [_startChatBtn addTarget:self action:@selector(startChat:) forControlEvents:UIControlEventTouchUpInside];
@@ -258,7 +258,7 @@
            _clearBtn= [UIButton buttonWithType:UIButtonTypeCustom];
            [_clearBtn setTitle:@"清空" forState:UIControlStateNormal];
            [_clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-           [_clearBtn setBackgroundColor:[UIColor blueColor] forState:UIControlStateNormal];
+           [_clearBtn setBackgroundColor:[UIColor colorWithHex:0x41b6e6] forState:UIControlStateNormal];
            [_clearBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
            _clearBtn.layer.cornerRadius = 5;
            [_clearBtn addTarget:self action:@selector(clearData:) forControlEvents:UIControlEventTouchUpInside];

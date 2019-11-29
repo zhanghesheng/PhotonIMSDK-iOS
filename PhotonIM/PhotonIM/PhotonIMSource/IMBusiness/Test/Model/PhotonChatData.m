@@ -24,4 +24,10 @@
     }
     return self;
 }
+- (void)resetRecord{
+   _sendedMessageCount = 0;
+   _sendedSuccessedCount = 0;
+   _sendedFailedCount = 0;
+   _sendedFailedCount = 0;
+}
 @end

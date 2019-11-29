@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,assign)NSInteger sendedFailedCount;
 @property(nonatomic,assign)NSInteger totalTime;
 @property(nonatomic,assign)BOOL toStart;
+- (void)resetRecord;
 @end
 
 NS_ASSUME_NONNULL_END

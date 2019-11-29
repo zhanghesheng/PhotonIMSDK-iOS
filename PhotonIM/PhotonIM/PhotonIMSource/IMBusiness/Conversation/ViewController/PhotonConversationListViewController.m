@@ -138,10 +138,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     [self reloadData];
 }
-static int64_t start;
-static int64_t end;
 - (void)loadDataItems{
-    start = [[NSDate date]timeIntervalSince1970] * 1000;
     __weak typeof(self)weakSlef = self;
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
         [weakSlef removeNoDataView];
@@ -159,8 +156,6 @@ static int64_t end;
 - (void)refreshTableView{
     PhotonConversationDataSource *dataSource = [[PhotonConversationDataSource alloc] initWithItems:self.model.items];
     self.dataSource = dataSource;
-    end = [[NSDate date]timeIntervalSince1970] * 1000;
-    [PhotonUtil showAlertWithTitle:[NSString stringWithFormat:@"%@",@(end-start)]];
     if(_firstLoadData){
         dispatch_semaphore_signal(_signa);
          _firstLoadData = NO;
