@@ -15,6 +15,7 @@
 #import "PhotonConversationModel.h"
 #import "PhotonMessageCenter.h"
 #import "PhotonNetTableItem.h"
+#import "PhotonIMDispatchSource.h"
 static NSString *message_title = @"消息";
 static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";

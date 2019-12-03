@@ -8,6 +8,7 @@
 
 #import "PhotonBaseViewController.h"
 #import "PhotonTableViewCell.h"
+#import "PhotonIMDispatchSource.h"
 @interface PhotonBaseViewController (){
     void *IsOnPhotonLoadDataQueueKey;
 }
