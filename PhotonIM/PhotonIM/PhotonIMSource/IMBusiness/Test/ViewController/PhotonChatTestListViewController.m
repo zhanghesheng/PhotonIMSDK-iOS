@@ -59,6 +59,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 @property(nonatomic, strong)UILabel  *sendSucceedCountLable;
 @property(nonatomic, strong)UILabel  *sendFailedCountLable;
 @property(nonatomic, strong)UILabel  *totalTimeLable;
+@property(nonatomic, strong)UILabel  *titleLable;
 @end
 
 @implementation PhotonChatTestListViewController
@@ -81,11 +82,17 @@ static NSString *message_syncing = @"消息(收取中......)";
         [self.tabBarItem setTitle:@"测试"];
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
-        _conversationChangeQueue = dispatch_queue_create("com.cosmos.PhotonIM.test_conversationchange", DISPATCH_QUEUE_SERIAL);
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.conversationdata", DISPATCH_QUEUE_SERIAL)];
         
     }
     return self;
+}
+
+- (dispatch_queue_t)conversationChangeQueue{
+    if (!_conversationChangeQueue) {
+         _conversationChangeQueue = dispatch_queue_create("com.cosmos.PhotonIM.test_conversationchange", DISPATCH_QUEUE_SERIAL);
+    }
+    return _conversationChangeQueue;
 }
 
 - (PhotonSafeMutableDictionary *)chatDataCache{
@@ -327,6 +334,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
             PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
             conversation.FAvatarPath = user.avatarURL;
+             conversation.FName = user.nickName;
             temp = item;
             temp.userInfo = conversation;
             index = [self.model.items indexOfObject:item];
@@ -483,6 +491,16 @@ static NSString *message_syncing = @"消息(收取中......)";
     [self.testUIView addSubview:self.totalTimeLable];
     [self.testUIView addSubview:self.authFiled];
     
+    UILabel *title = [[UILabel alloc] init];
+    _titleLable = title;
+    title.numberOfLines = 1;
+    title.text = @"";
+    title.textAlignment = NSTextAlignmentCenter;
+    title.font = [UIFont systemFontOfSize:12];
+    title.textColor = [UIColor whiteColor];
+    title.backgroundColor = [UIColor grayColor];
+    [self.testUIView addSubview:title];
+    
     [self.testUIView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(10);
         make.right.mas_equalTo(-10);
@@ -490,9 +508,15 @@ static NSString *message_syncing = @"消息(收取中......)";
         make.bottom.mas_equalTo(-90);
     }];
     
+    [title mas_makeConstraints:^(MASConstraintMaker *make) {
+           make.left.and.right.mas_equalTo(0);
+           make.top.mas_equalTo(0);
+           make.height.mas_equalTo(20);
+       }];
+    
     [self.contentFiled mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.mas_equalTo(0);
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(title.mas_bottom).offset(2);
         make.height.mas_equalTo(40);
     }];
     
@@ -588,6 +612,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)setTestContent:(PhotonChatData *)chatData{
+    self.titleLable.text = self.currentConversation.FName;
     if(!chatData){
         self.contentFiled.text = @"测试内容";
         self.intervalFiled.text = nil;
@@ -598,6 +623,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         self.totalTimeLable.text = [NSString stringWithFormat:@"总耗时:"];
         return;
     }
+    
     self.contentFiled.text = [chatData sendContent];
     self.intervalFiled.text = [NSString stringWithFormat:@"%@",@([chatData msgInterval])];
     self.countFiled.text =  [NSString stringWithFormat:@"%@",@([chatData totalMsgCount])];

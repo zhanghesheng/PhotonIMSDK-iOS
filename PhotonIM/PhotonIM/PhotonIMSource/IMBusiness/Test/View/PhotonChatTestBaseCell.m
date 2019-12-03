@@ -16,7 +16,6 @@
 @property (nonatomic, strong, nullable) UIImageView *iconView;
 @property (nonatomic, strong, nullable) UILabel *nickLabel;
 @property (nonatomic, strong, nullable) UILabel *contextLabel;
-@property (nonatomic, strong, nullable) UIImageView *noalermView;
 
 
 @property (nonatomic, strong, nullable)UIButton *startChatBtn;
@@ -32,7 +31,6 @@
         [self.contentView addSubview:self.iconView];
         [self.contentView addSubview:self.nickLabel];
         [self.contentView addSubview:self.contextLabel];
-        [self.contentView addSubview:self.noalermView];
         [self.contentView addSubview:self.startChatBtn];
         [self.contentView addSubview:self.clearBtn];
     }
@@ -125,21 +123,6 @@
     [self.nickLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(size);
     }];
-    
-    // 秒打扰图标
-    [self.noalermView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self.nickLabel.mas_centerY);
-        make.left.mas_equalTo(self.nickLabel.mas_right).mas_offset(5);
-    }];
-    if(conversation.ignoreAlert){
-        [self.noalermView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(16, 11));
-        }];
-    }else{
-        [self.noalermView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeZero);
-        }];
-    }
    
     if(conversation.unReadCount > 0){
         size = [PhoneBadgeView badgeSizeWithValue:[@(conversation.unReadCount) stringValue]];
@@ -147,23 +130,20 @@
         size =CGSizeZero;
     }
     
-    
-    
     [self.startChatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(25);
-        make.width.mas_equalTo(50);
-        make.top.mas_equalTo(self.contentView.mas_top).mas_offset(10);
+        make.height.mas_equalTo(30);
+        make.width.mas_equalTo(55);
+        make.top.mas_equalTo(self.contentView).mas_offset(5);
         make.right.mas_equalTo(self.contentView).mas_offset(-5);
     }];
     
     [self.clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-           make.height.mas_equalTo(25);
-           make.width.mas_equalTo(50);
-           make.bottom.mas_equalTo(self.contentView).mas_offset(-10);
+           make.height.mas_equalTo(30);
+           make.width.mas_equalTo(55);
+           make.bottom.mas_equalTo(self.contentView).mas_offset(-5);
            make.right.mas_equalTo(self.contentView).mas_offset(-5);
     }];
            
-   
     [self.contextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.mas_equalTo(18.5);
         make.top.mas_equalTo(self.nickLabel.mas_bottom).mas_offset(1.5);
@@ -196,15 +176,6 @@
     return _iconView;
 }
 
-- (UIImageView *)noalermView{
-    if (!_noalermView) {
-        _noalermView = [[UIImageView alloc] init];
-        [_noalermView setImage:[UIImage imageNamed:@"noalerm"]];
-        _noalermView.contentMode = UIViewContentModeScaleAspectFit;
-        _noalermView.backgroundColor = [UIColor clearColor];
-    }
-    return _noalermView;
-}
 
 - (UILabel *)nickLabel{
     if (!_nickLabel) {

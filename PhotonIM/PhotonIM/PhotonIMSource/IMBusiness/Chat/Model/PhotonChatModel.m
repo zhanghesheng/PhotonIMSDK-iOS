@@ -17,7 +17,7 @@
 {
     self = [super init];
     if (self) {
-        self.pageSize = 20;
+        self.pageSize = 500;
         _anchorMsgId = @"";
         
     }

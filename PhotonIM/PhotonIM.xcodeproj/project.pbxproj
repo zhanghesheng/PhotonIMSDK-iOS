@@ -1219,6 +1219,7 @@
 				3242C1DA238E255C00C221D2 /* PhotonChatTestBaseCell.m */,
 				3242C1DB238E255C00C221D2 /* PhotonChatTestCell.h */,
 				3242C1D9238E255C00C221D2 /* PhotonChatTestCell.m */,
+				3242C1DF238E267B00C221D2 /* PhotonChatTestListViewController+Delegate.h */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1228,7 +1229,6 @@
 			children = (
 				3242C1E1238E267C00C221D2 /* PhotonChatTestListViewController.h */,
 				3242C1DE238E267B00C221D2 /* PhotonChatTestListViewController.m */,
-				3242C1DF238E267B00C221D2 /* PhotonChatTestListViewController+Delegate.h */,
 				3242C1E0238E267B00C221D2 /* PhotonChatTestListViewController+Delegate.m */,
 			);
 			path = ViewController;
@@ -1971,7 +1971,7 @@
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2007,7 +2007,7 @@
 					"$(PROJECT_DIR)/PhotonIM",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 2.10;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -2051,7 +2051,7 @@
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 40;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2087,7 +2087,7 @@
 					"$(PROJECT_DIR)/PhotonIM",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 2.10;
+				MARKETING_VERSION = 2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

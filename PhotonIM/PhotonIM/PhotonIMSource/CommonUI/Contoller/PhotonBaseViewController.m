@@ -179,7 +179,7 @@
     NSInteger index = -1;
     NSMutableArray< NSIndexPath *> *indexPaths = [NSMutableArray array];
     for (PhotonBaseTableItem * item in items) {
-          if ([self.dataSource.items containsObject:item]) {
+          if ([self.model.items containsObject:item]) {
               index = [self.dataSource.items indexOfObject:item];
           }
           if (index < 0) {

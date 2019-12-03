@@ -60,12 +60,12 @@
    
 }
 - (void)onMoPushManagerCommand:(CallbackMessage *)message {
-    PhotonLog(@"AppDelegate callback ----->> commandName:%@,  code: %d, message:%@", [message commandName],[message resultCode], [message message]);
+    PhotonLog(@"onMoPushManagerCommand ----->> commandName:%@,  code: %d, message:%@", [message commandName],[message resultCode], [message message]);
 }
 
 - (void)addFPSLabel {
     _fpsLabel = [YYFPSLabel new];
-    _fpsLabel.frame = CGRectMake(15, 15, 50, 30);
+    _fpsLabel.frame = CGRectMake(35, 35, 50, 30);
     [_fpsLabel sizeToFit];
     [self.window addSubview:_fpsLabel];
 }
