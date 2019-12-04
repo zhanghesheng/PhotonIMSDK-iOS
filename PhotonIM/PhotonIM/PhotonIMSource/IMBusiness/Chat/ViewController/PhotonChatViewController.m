@@ -223,7 +223,7 @@
 #pragma mark ------ demo uitextView ----
 
 - (void)addTextUI{
-//    return;
+    return;
     [self.view addSubview:self.testUIView];
     [self.testUIView addSubview:self.contentFiled];
     [self.testUIView addSubview:self.countFiled];

@@ -79,6 +79,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         _authFailedCount = 0;
         _authSuccessedCount = 0;
         self.navigationItem.title =@"测试";
+        self.tabBarItem.tag = 4;
         [self.tabBarItem setTitle:@"测试"];
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
@@ -205,7 +206,10 @@ static NSString *message_syncing = @"消息(收取中......)";
 //判断是否跳转
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     if ([tabBarController.tabBar.selectedItem.title isEqualToString:@"测试"]) {
+        self.isAppeared = YES;
         [self.dataDispatchSource addSemaphore];
+    }else{
+         self.isAppeared = NO;
     }
      return YES;
 }

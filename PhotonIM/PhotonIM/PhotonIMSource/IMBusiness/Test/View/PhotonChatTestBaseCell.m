@@ -137,6 +137,7 @@
         make.right.mas_equalTo(self.contentView).mas_offset(-5);
     }];
     
+    
     [self.clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
            make.height.mas_equalTo(30);
            make.width.mas_equalTo(55);

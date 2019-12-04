@@ -20,7 +20,7 @@ static NSString *message_connecting = @"消息(连接中...)";
 static NSString *message_no_connect = @"消息(未连接)";
 static NSString *message_syncing = @"消息(收取中......)";
 
-@interface PhotonConversationListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate>
+@interface PhotonConversationListViewController ()<PhotonMessageProtocol,MFDispatchSourceDelegate,UITabBarControllerDelegate>
 @property (nonatomic, strong, nullable)MFDispatchSource  *dataDispatchSource;
 @property (nonatomic, assign)BOOL   isAppeared;
 @property (nonatomic, assign)BOOL   needRefreshData;
@@ -87,6 +87,7 @@ static NSString *message_syncing = @"消息(收取中......)";
         _refreshCount = 0;
         _firstLoadData = YES;
         [self.tabBarItem setTitle:@"消息"];
+        self.tabBarItem.tag = 1;
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
         
@@ -97,7 +98,16 @@ static NSString *message_syncing = @"消息(收取中......)";
     return self;
 }
 
-
+//判断是否跳转
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
+    if (tabBarController.tabBar.selectedItem.tag == 1) {
+        self.isAppeared = YES;
+        [self.dataDispatchSource addSemaphore];
+    }else{
+         self.isAppeared = NO;
+    }
+     return YES;
+}
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -119,6 +129,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tabBarController.delegate = self;
     [self setNavTitle:@"消息"];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(self.view);
@@ -181,16 +192,18 @@ static NSString *message_syncing = @"消息(收取中......)";
         self.needRefreshData  = YES;
         return;
     }
+    PhotonWeakSelf(self)
     switch (envent) {
         case PhotonIMConversationEventCreate:{
             [self getIgnoreAlerm:chatType chatWith:chatWith];
-            [self.dataDispatchSource addSemaphore];
+            [[PhotonIMClient sharedClient] runInPhotonIMDBQueue:^{
+                [weakself insertConversation:conversation];
+            }];
         }
             break;
         case PhotonIMConversationEventDelete:
             break;
         case PhotonIMConversationEventUpdate:{
-            PhotonWeakSelf(self)
             [[PhotonIMClient sharedClient] runInPhotonIMDBQueue:^{
                 [weakself updateConversation:conversation chatType:chatType chatWith:chatWith];
             }];
@@ -201,6 +214,18 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
 }
 
+- (void)insertConversation:(PhotonIMConversation *)conversation{
+    if (!conversation) {
+        return;
+    }
+    PhotonConversationItem *temp = [[PhotonConversationItem alloc] init];
+    PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
+    conversation.FAvatarPath = user.avatarURL;
+    conversation.FName = user.nickName;
+    temp.userInfo = conversation;
+    [self.model.items insertObject:temp atIndex:0];
+    [self reloadData];
+}
 
 - (void)updateConversation:(PhotonIMConversation *)conversation chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
     PhotonConversationItem *temp = nil;
