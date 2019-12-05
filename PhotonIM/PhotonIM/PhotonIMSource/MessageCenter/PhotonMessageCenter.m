@@ -61,7 +61,7 @@ static PhotonMessageCenter *center = nil;
     [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
-//    [[PhotonIMClient sharedClient] supportGroup];
+    [[PhotonIMClient sharedClient] supportGroup];
     
 }
 
