@@ -255,17 +255,6 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
 }
 
-- (PhotonIMDispatchSourceEventBlock)uiEventBlock{
-    __weak typeof(self)weakSlef = self;
-    PhotonIMDispatchSourceEventBlock eventBlock = ^(id userInfo){
-        if (userInfo) {
-           [weakSlef updateItem:userInfo];
-        }
-       
-    };
-    return eventBlock;
-}
-
 
 
 - (void)readyRefreshConversations{

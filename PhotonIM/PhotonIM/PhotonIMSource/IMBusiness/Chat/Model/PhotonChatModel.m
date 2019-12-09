@@ -26,7 +26,11 @@
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
+    [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:@"" size:(int)self.pageSize beginTimeStamp:0 endTimeStamp:[NSDate date].timeIntervalSince1970 * 1000 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor, NSError * _Nullable error) {
+               
+           }];
     if (self.startSyncServer) {
+       
             [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize  beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {
                 if (error) {
                     weakself.startSyncServer = NO;

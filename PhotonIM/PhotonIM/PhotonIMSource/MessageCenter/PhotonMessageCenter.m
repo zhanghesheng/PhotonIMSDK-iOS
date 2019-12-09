@@ -68,7 +68,6 @@ static PhotonMessageCenter *center = nil;
 - (void)login{
     // 客户端登录后
     [[PhotonIMClient sharedClient] bindCurrentUserId:[PhotonContent currentUser].userID];
-//    _messages = [[[PhotonIMClient sharedClient] getAllSendingMessages] mutableCopy];
     // 获取token
     [self getToken];
 }

@@ -22,6 +22,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+   NSString *timeStamp =  [[NSUserDefaults standardUserDefaults] valueForKey:@"timeStamp_pushqq"];
     [[PhotonMessageCenter sharedCenter] initPhtonIMSDK];
     
     [self registerPushSDK];
@@ -42,6 +43,7 @@
     [PhotonAppLaunchManager launchInWindow];
     
     [self addFPSLabel];
+    
     return YES;
 }
 
@@ -56,7 +58,6 @@
 #endif
     [MoPushManager addCommandListener:@selector(onMoPushManagerCommand:) target:self];
     [MoPushManager registerToken];
-    
    
 }
 - (void)onMoPushManagerCommand:(CallbackMessage *)message {
@@ -82,11 +83,16 @@
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+     [[NSUserDefaults standardUserDefaults] setValue:[@([[NSDate date] timeIntervalSince1970]) stringValue] forKey:@"timeStamp_pushqq"];
     if ([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         NSDictionary *dict = response.notification.request.content.userInfo;
         NSLog(@"%@",dict);
     }
     completionHandler();
+}
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler __API_AVAILABLE(macos(10.14), ios(10.0), watchos(3.0), tvos(10.0)){
+    [[NSUserDefaults standardUserDefaults] setValue:[@([[NSDate date] timeIntervalSince1970]) stringValue] forKey:@"timeStamp_pushqq"];
+     NSLog(@"dsadsadsasca");
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
