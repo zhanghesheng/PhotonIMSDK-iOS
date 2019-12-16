@@ -207,7 +207,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController{
     if ([tabBarController.tabBar.selectedItem.title isEqualToString:@"测试"]) {
         self.isAppeared = YES;
-//        [self.dataDispatchSource addSemaphore];
+        [self.dataDispatchSource addSemaphore];
     }else{
          self.isAppeared = NO;
     }
@@ -419,6 +419,9 @@ static NSString *message_syncing = @"消息(收取中......)";
            NSTimeInterval startTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
           int index =  0;
           while (index < chatData.totalMsgCount && chatData.toStart) {
+//              if(![[PhotonContent currentUser] userID]){
+//                  return;
+//              }
               chatData.sendedMessageCount ++;
               index ++;
               [NSThread sleepForTimeInterval:chatData.msgInterval/1000.0];

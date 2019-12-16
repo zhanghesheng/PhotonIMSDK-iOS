@@ -51,7 +51,7 @@ static PhotonMessageCenter *center = nil;
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
 //     是否开启断言，debug模式下推荐开启
-    [[PhotonIMClient sharedClient] setAssertEnable:YES];
+    [[PhotonIMClient sharedClient] setAssertEnable:NO];
 //#else
 //    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
 //    [[PhotonIMClient sharedClient] setAssertEnable:NO];
@@ -551,15 +551,20 @@ static PhotonMessageCenter *center = nil;
     [self getToken];
 }
 - (void)getToken{
+    id en = [[NSUserDefaults standardUserDefaults] objectForKey:@"photon_im_forbid_uploadLog"];
+    NSDictionary *extra = @{};
+    if(en){
+        extra = @{@"photon_im_forbid_uploadLog":[NSString stringWithFormat:@"%@",en]};
+    }
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
     if ([token isNotEmpty]) {
-         [[PhotonIMClient sharedClient] loginWithToken:token extra:nil];
+         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
     }else{
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
-            [[PhotonIMClient sharedClient] loginWithToken:token extra:nil];
+            [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);

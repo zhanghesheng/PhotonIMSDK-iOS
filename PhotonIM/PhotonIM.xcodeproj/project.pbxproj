@@ -1375,11 +1375,11 @@
 		32FDC9FD22C4EB8400EECD24 /* IMBusiness */ = {
 			isa = PBXGroup;
 			children = (
+				3238AB9F22D4AB8700EB3D0B /* Conversation */,
 				3242C1B6238E23C100C221D2 /* Test */,
 				3272587122F1409800842026 /* Setting */,
 				3238ABE822D4AB8700EB3D0B /* Chat */,
 				3238AC3122D4AB8700EB3D0B /* Contact */,
-				3238AB9F22D4AB8700EB3D0B /* Conversation */,
 				3238AB5622D4AB8700EB3D0B /* Person */,
 			);
 			path = IMBusiness;

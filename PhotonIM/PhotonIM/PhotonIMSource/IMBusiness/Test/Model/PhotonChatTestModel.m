@@ -57,36 +57,19 @@
                 }
                 
             }
-            [PhotonUtil runMainThread:^{
-                if (finish) {
-                    finish(nil);
-                }
-            }];
+           
             
             if (chatWiths.count > 0) {
                 [[PhotonContent currentUser] loadFriendProfileBatch:chatWiths completion:^(BOOL success) {           
                 }];
             }
-           
         }
-        BOOL excute = [[MMKV defaultMMKV] getBoolForKey:[PhotonContent currentUser].userID];
-        if (conversations.count == 0 && !excute) {
-            [[MMKV defaultMMKV] setBool:YES forKey:[PhotonContent currentUser].userID];
-            __weak typeof(self)weakSelf = self;
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            if (params && params.count > 0) {
-                [dict addEntriesFromDictionary:params];
-            }
-            [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/contact/recentUser" paramter:dict completion:^(NSDictionary * _Nonnull responseDict) {
-                [weakSelf wrappResponseddDict:responseDict];
-                [PhotonUtil runMainThread:^{
-                    if (finish) {
-                        finish(nil);
-                    }
-                }];
-            } failure:^(PhotonErrorDescription * _Nonnull error) {
+        [PhotonUtil runMainThread:^{
+                if (finish) {
+                    finish(nil);
+                }
             }];
-        }
+            
 
 }
 
