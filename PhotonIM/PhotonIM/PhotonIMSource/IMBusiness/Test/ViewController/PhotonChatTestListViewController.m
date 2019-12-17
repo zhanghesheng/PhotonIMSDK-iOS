@@ -285,21 +285,58 @@ static NSString *message_syncing = @"消息(收取中......)";
         self.needRefreshData  = YES;
         return;
     }
+    PhotonWeakSelf(self)
     switch (envent) {
         case PhotonIMConversationEventCreate:{
-             [self.dataDispatchSource addSemaphore];
+            [weakself insertConversation:conversation];
         }
             break;
         case PhotonIMConversationEventDelete:
             break;
         case PhotonIMConversationEventUpdate:{
-            [self updateConversation:conversation chatType:chatType chatWith:chatWith];
+            [weakself updateConversation:conversation chatType:chatType chatWith:chatWith];
         }
             break;
         default:
             break;
     }
 }
+
+- (void)insertConversation:(PhotonIMConversation *)conversation{
+    if (!conversation) {
+        return;
+    }
+    PhotonChatTestItem *temp = [[PhotonChatTestItem alloc] init];
+    PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
+    conversation.FAvatarPath = user.avatarURL;
+    conversation.FName = user.nickName;
+    temp.userInfo = conversation;
+    [self.model.items insertObject:temp atIndex:0];
+    [self reloadData];
+}
+
+- (void)updateConversation:(PhotonIMConversation *)conversation chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    PhotonChatTestItem *temp = nil;
+    NSInteger index = -1;
+    BOOL isToTop = NO;
+    for (PhotonChatTestItem *item in self.model.items) {
+        PhotonIMConversation *conver = [item userInfo];
+        if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
+            PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
+            conversation.FAvatarPath = user.avatarURL;
+             conversation.FName = user.nickName;
+            temp = item;
+            temp.userInfo = conversation;
+            index = [self.model.items indexOfObject:item];
+            isToTop = (conversation.lastTimeStamp > conver.lastTimeStamp) && (index > 0);
+            break;
+        }
+    }
+    if (temp) {
+        [self updateItem:temp];
+    }
+}
+
 - (void)imClientLogin:(id)client loginStatus:(PhotonIMLoginStatus)loginstatus{
     PhotonWeakSelf(self)
     [PhotonUtil runMainThread:^{
@@ -329,27 +366,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
 }
 
-- (void)updateConversation:(PhotonIMConversation *)conversation chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
-    PhotonChatTestItem *temp = nil;
-    NSInteger index = -1;
-    BOOL isToTop = NO;
-    for (PhotonChatTestItem *item in self.model.items) {
-        PhotonIMConversation *conver = [item userInfo];
-        if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
-            PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
-            conversation.FAvatarPath = user.avatarURL;
-             conversation.FName = user.nickName;
-            temp = item;
-            temp.userInfo = conversation;
-            index = [self.model.items indexOfObject:item];
-            isToTop = (conversation.lastTimeStamp > conver.lastTimeStamp) && (index > 0);
-            break;
-        }
-    }
-    if (temp) {
-        [self updateItem:temp];
-    }
-}
+
 
 - (PhotonIMDispatchSourceEventBlock)uiEventBlock{
     __weak typeof(self)weakSlef = self;
@@ -419,9 +436,9 @@ static NSString *message_syncing = @"消息(收取中......)";
            NSTimeInterval startTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
           int index =  0;
           while (index < chatData.totalMsgCount && chatData.toStart) {
-//              if(![[PhotonContent currentUser] userID]){
-//                  return;
-//              }
+              if(![[PhotonContent currentUser] userID]){
+                  return;
+              }
               chatData.sendedMessageCount ++;
               index ++;
               [NSThread sleepForTimeInterval:chatData.msgInterval/1000.0];
