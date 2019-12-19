@@ -346,7 +346,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)_imClientLogin:(id)client loginStatus:(PhotonIMLoginStatus)loginstatus{
     switch (loginstatus) {
         case PhotonIMLoginStatusLogining:{
-            
         }
             break;
         case PhotonIMLoginStatusLoginSucceed:{
