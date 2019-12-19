@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../../../mmpush-ios/push-ios.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:PhotonIM.xcodeproj">
    </FileRef>
    <FileRef
