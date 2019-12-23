@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'PhotonIMSDK'
-  s.version          = '2.1.0-hw'
+  s.version          = '2.1.1-hw'
   s.summary          = 'A short description of PhotonIMSDK.'
 
   s.description      = <<-DESC
