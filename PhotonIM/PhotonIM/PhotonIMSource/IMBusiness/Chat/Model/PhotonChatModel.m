@@ -17,7 +17,7 @@
 {
     self = [super init];
     if (self) {
-        self.pageSize = 500;
+        self.pageSize = 100;
         _anchorMsgId = @"";
         _startSyncServer = NO;
     }
