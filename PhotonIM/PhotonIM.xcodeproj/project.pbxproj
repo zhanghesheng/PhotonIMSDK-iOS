@@ -163,6 +163,7 @@
 		3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 3286B13222BB808C0032D066 /* FaceEmoji.json */; };
 		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
 		329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */; };
+		32AE413423B4B7E300BCBE5C /* MDAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */; };
 		32E0BE0122D3464300DEEFA5 /* PhotonEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */; };
 		32E0BE0422D3466A00DEEFA5 /* PhotonEmptyTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */; };
 		32E0BE0822D358DF00DEEFA5 /* PhotonRecorderIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */; };
@@ -490,6 +491,7 @@
 		328C32E322C070EC0031E948 /* PhontonMenuItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhontonMenuItem.m; sourceTree = "<group>"; };
 		329E67F72301460D0097BFDC /* PhotonBaseUITableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonBaseUITableView.h; sourceTree = "<group>"; };
 		329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonBaseUITableView.m; sourceTree = "<group>"; };
+		32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MDAudioKit.framework; sourceTree = "<group>"; };
 		32E0BDFF22D3464300DEEFA5 /* PhotonEmptyTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmptyTableViewCell.h; sourceTree = "<group>"; };
 		32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmptyTableViewCell.m; sourceTree = "<group>"; };
 		32E0BE0222D3466A00DEEFA5 /* PhotonEmptyTableItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmptyTableItem.h; sourceTree = "<group>"; };
@@ -545,6 +547,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				321E45FE22F2E99A00BB9585 /* libc++abi.tbd in Frameworks */,
+				32AE413423B4B7E300BCBE5C /* MDAudioKit.framework in Frameworks */,
 				321E45FF22F2E99A00BB9585 /* libc.tbd in Frameworks */,
 				3221CD3822D7656F0029EF0A /* libc++.tbd in Frameworks */,
 				2B600B0242159150F0EA18CB /* libPods-PhotonIM.a in Frameworks */,
@@ -735,6 +738,7 @@
 		32286F8722B9F207009B6881 /* PhotonIM */ = {
 			isa = PBXGroup;
 			children = (
+				32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */,
 				327D8D7C230664B4006E2E90 /* PhotonIMSource */,
 				323D507A22F9A10600182F50 /* PhotonIM.entitlements */,
 				3286B13222BB808C0032D066 /* FaceEmoji.json */,
@@ -1977,6 +1981,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/../../photon-im-ios/Products/MDAudioKit.framework\"",
+					"$(PROJECT_DIR)/PhotonIM",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PhotonIM/Appdelegate/PhotonIM.pch";
@@ -2057,6 +2063,8 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"\"$(SRCROOT)/../../photon-im-ios/Products/MDAudioKit.framework\"",
+					"$(PROJECT_DIR)/PhotonIM",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PhotonIM/Appdelegate/PhotonIM.pch";
