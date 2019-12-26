@@ -15,7 +15,7 @@ TODO: Add long description of the pod here.
   s.static_framework = true
 
   s.framework   = 'Foundation','SystemConfiguration','CoreTelephony'
-  s.vendored_frameworks = 'Products/PhotonIMSDK.framework','Products/MDAudioKit.framework'
+  s.vendored_frameworks = 'Products/PhotonIMSDK.framework'
   s.resources = 'Products/PhotonImResource.bundle'
   s.ios.libraries = 'c++','z','resolv','stdc++','sqlite3'
   s.dependency 'protobuf-lib'
