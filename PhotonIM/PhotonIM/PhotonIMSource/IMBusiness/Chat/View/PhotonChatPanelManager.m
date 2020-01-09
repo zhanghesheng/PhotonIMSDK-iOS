@@ -123,6 +123,7 @@ PhotonAudioRecorderDelegate>
 - (PhotonCharBar *)chatBar{
     if (!_chatBar) {
         _chatBar = [[PhotonCharBar alloc]init];
+        [_chatBar addContent:self.draft];
         [_chatBar setDelegate:self];
     }
     return _chatBar;
@@ -219,7 +220,6 @@ PhotonAudioRecorderDelegate>
 #pragma mark ---- PhotonCharBarDelegate -------
 
 - (void)chatBarTextViewDidChange:(PhotonCharBar *)charBar{
-  
     if ([charBar.currentInputText isEqualToString:ATCharater]) {
           // 如果是@
         if(self.delegate && [self.delegate respondsToSelector:@selector(processAtAction:)]){
@@ -351,6 +351,12 @@ PhotonAudioRecorderDelegate>
    
 }
 
+- (void)textViewDidEndEditing:(PhotonCharBar *)charBar{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]) {
+        [self.delegate textViewDidEndEditing:charBar.textView.text];
+    }
+}
+
 // 录制时间太短
 - (void)audioRecorderTimeTooShort:(PhotonAudioRecorder *)recorder{
      [self.recorderIndicatorView setStatus:PhotonRecorderStatusTooShort];
@@ -457,7 +463,7 @@ PhotonAudioRecorderDelegate>
     [self.chatBar sendCurrentText];
 }
 - (void)emojiKeyboard:(PhotonEmojiKeyboard *)emojiView selectEmojiWithText:(NSString *)emojiText{
-    [self.chatBar addEmojiString:emojiText];
+    [self.chatBar addContent:emojiText];
 }
 
 

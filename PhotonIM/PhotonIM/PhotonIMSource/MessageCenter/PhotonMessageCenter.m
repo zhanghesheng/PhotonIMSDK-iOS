@@ -435,7 +435,9 @@ static PhotonMessageCenter *center = nil;
     return [self.imClient findConversation:chatType chatWith:chatWith];
 }
 
-
+- (void)alterConversationDraft:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith draft:(NSString *)draft{
+    [self.imClient alterConversationDraft:chatType chatWith:chatWith draft:draft];
+}
 
 #pragma mark --------- 文件操作相关 ----------------
 

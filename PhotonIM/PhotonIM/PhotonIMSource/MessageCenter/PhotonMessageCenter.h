@@ -129,6 +129,8 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 
 - (void)updateConversationIgnoreAlert:(PhotonIMConversation *)conversation;
 
+- (void)alterConversationDraft:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith draft:(NSString *)draft;
+
 - (PhotonIMConversation *)findConversation:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
 
 - (void)resetAtType:(PhotonIMConversation *)conversation;

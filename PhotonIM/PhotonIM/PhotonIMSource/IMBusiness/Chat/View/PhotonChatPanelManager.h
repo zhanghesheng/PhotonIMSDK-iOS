@@ -26,11 +26,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 //初始输入at的处理
 - (void)processAtAction:(PhotonCharBar *)charBar;
+
+
+/**
+* 编辑结束
+*/
+- (void)textViewDidEndEditing:(NSString *)text;
 @end
 
 @interface PhotonChatPanelManager : NSObject
 @property(nonatomic, weak)id<PhotonChatPanelDelegate> delegate;
 @property(nonatomic,strong,readonly)PhotonCharBar *chatBar;
+@property(nonatomic,copy, nullable)NSString *draft;
 - (instancetype)initWithIdentifier:(NSString *)identifier;
 - (void)addChatPanelWithSuperView:(UIView *)superView;
 - (void)dismissKeyboard;

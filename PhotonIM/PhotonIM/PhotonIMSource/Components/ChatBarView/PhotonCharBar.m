@@ -123,6 +123,19 @@
     [self hiddentTextViewLabel];
     [self p_reloadTextViewWithAnimation:YES];
 }
+- (void)addContent:(NSString *)content{
+    if (!content) {
+        return;
+    }
+    NSString *str = [NSString stringWithFormat:@"%@%@", self.textView.text, content];
+    NSInteger length = [self getTextLength:self.textView.text];
+    if (length > _maxTextWordCount) {
+        return;
+    }
+    [self.textView setText:str];
+    [self hiddentTextViewLabel];
+    [self p_reloadTextViewWithAnimation:YES];
+}
 
 - (void)deleteLastCharacter
 {
@@ -216,6 +229,7 @@
 
 - (void)characterDidRemovedWith:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    NSLog(@"text = %@",text);
     NSInteger endLocation = range.location;
     if(endLocation > 0 && endLocation <= [textView.text length]){
         NSRange atRange = [textView.text rangeOfString:@"@" options:NSBackwardsSearch range:NSMakeRange(0, endLocation)];
@@ -247,6 +261,9 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
+    if(self.delegate && [self.delegate respondsToSelector:@selector(textViewDidEndEditing:)]){
+        [self.delegate textViewDidEndEditing:self];
+    }
     [self p_reloadTextViewWithAnimation:YES];
 }
 

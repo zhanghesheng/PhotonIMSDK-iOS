@@ -10,6 +10,10 @@
 #import "PhotonAtMemberListViewController.h"
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
+
+- (void)textViewDidEndEditing:(NSString *)text{
+    [[PhotonMessageCenter sharedCenter] alterConversationDraft:self.conversation.chatType chatWith:self.conversation.chatWith draft:text];
+}
 // 发送文本消息
 - (void)sendTextMessage:(NSString *)text atItems:(nonnull NSArray<PhotonChatAtInfo *> *)atItems type:(AtType)atType{
     PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
@@ -183,7 +187,7 @@
             [items addObjectsFromArray:resultItems];
             charBar.atInfos = [items copy];
             for (PhotonChatAtInfo *item in resultItems) {
-                [charBar addAtContent:item.nickName];
+                [charBar addContent:item.nickName];
             }
         }];
         [self.navigationController pushViewController:memberListCtl animated:YES];

@@ -91,7 +91,7 @@
         [content appendAttributedString:chatContent];
     }
     self.contextLabel.attributedText = content;
-    if([conversation.lastMsgContent isNotEmpty]){
+    if(conversation.lastTimeStamp > 0){
         NSTimeInterval tempTimeStamp = (conversation.lastTimeStamp/1000.0);
         NSDate *localeDate = [NSDate dateWithTimeIntervalSince1970:tempTimeStamp];
         self.timeLabel.text = [localeDate chatTimeInfo];

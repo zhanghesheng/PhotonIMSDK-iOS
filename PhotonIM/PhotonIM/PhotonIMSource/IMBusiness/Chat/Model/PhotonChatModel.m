@@ -26,6 +26,8 @@
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
+    NSArray *items = [imclient searchMessagesWithChatType:chatType chatWith:chatWith startIdentifier:@"[" andIdentifier:@"]" maxCharacterLenth:5 matchQuery:@"哈哈"];
+    NSLog(@"%@",items);
     if (self.startSyncServer) {
        
             [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith size:(int)self.pageSize  beginTimeStamp:(int64_t)(([NSDate date].timeIntervalSince1970 * 1000) - (2* 24 * 60 * 60 * 1000)) reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable an, NSError * _Nullable error ) {

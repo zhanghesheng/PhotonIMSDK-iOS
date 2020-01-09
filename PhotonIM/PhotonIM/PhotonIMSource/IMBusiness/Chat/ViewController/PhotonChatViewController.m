@@ -52,6 +52,7 @@
     if (self) {
         _conversation = conversation;
         _panelManager = [[PhotonChatPanelManager alloc] initWithIdentifier:conversation.chatWith];
+        _panelManager.draft = conversation.draft;
         _panelManager.delegate = self;
         
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.chatdata", DISPATCH_QUEUE_SERIAL)];
