@@ -20,8 +20,9 @@ FOUNDATION_EXPORT const unsigned char PhotonIMSDKVersionString[];
 #import <PhotonIMSDK/PhotonIMClient.h>
 #import <PhotonIMSDK/PhotonIMClient+HandleReceiveMessge.h>
 #import <PhotonIMSDK/PhotonIMClient+HandleSendMessage.h>
-#import <PhotonIMSDK/PhotonIMClient+HandleDB.h>
 #import <PhotonIMSDK/PhotonIMClient+HandleLog.h>
+#import <PhotonIMSDK/PhotonIMClient+ConversationManager.h>
+#import <PhotonIMSDK/PhotonIMClient+MessageManager.h>
 // conversation
 #import <PhotonIMSDK/PhotonIMConversation.h>
 
