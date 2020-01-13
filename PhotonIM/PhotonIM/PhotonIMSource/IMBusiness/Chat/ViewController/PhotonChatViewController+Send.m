@@ -129,6 +129,31 @@
     }];
 }
 
+- (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate{
+    PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];
+    locationItem.fromType = PhotonChatMessageFromSelf;
+    locationItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    locationItem.address = address;
+    locationItem.detailAddress = detailAddress;
+    locationItem.locationCoordinate = locationCoordinate;
+    locationItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
+    [self addItem:locationItem];
+    PhotonWeakSelf(self)
+    [[PhotonMessageCenter sharedCenter] sendLocationMessage:locationItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        if (!succeed && error.em) {
+            locationItem.tipText = error.em;
+        }else if (!succeed){
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
+        }
+        if (succeed) {
+            locationItem.tipText = @"";
+        }
+        [weakself updateItem:locationItem];
+    }];
+}
+
 // 发送消息已读
 
 - (void)sendReadMsgs:(NSArray *)msgids completion:(void (^)(BOOL, PhotonIMError * _Nullable))completion{

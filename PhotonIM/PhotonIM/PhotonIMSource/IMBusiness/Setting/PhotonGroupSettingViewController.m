@@ -58,10 +58,10 @@
         make.top.and.left.and.right.mas_equalTo(self.view).mas_equalTo(0);
         make.bottom.mas_equalTo(self.view).mas_equalTo(-SAFEAREA_INSETS_BOTTOM);
     }];
-    [self loadDataItems];
+    [self loadPreDataItems];
 }
 
-- (void)loadDataItems{
+- (void)loadPreDataItems{
     PhotonWeakSelf(self);
     [[PhotonContent currentUser] loadGroupProfile:self.conversation.chatWith completion:^(NSString * _Nonnull gid, BOOL success) {
         NSString *gid_ = gid;

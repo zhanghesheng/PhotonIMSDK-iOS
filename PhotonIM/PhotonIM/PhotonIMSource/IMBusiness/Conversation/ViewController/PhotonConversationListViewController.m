@@ -149,7 +149,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     [self reloadData];
 }
-- (void)loadDataItems{
+- (void)loadPreDataItems{
     __weak typeof(self)weakSlef = self;
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
         [weakSlef removeNoDataView];
@@ -265,7 +265,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)startRefreshConversations{
-    [self loadDataItems];
+    [self loadPreDataItems];
 }
 
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{

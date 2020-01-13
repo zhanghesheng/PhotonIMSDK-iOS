@@ -11,6 +11,7 @@
 #import "PhotonVoiceMessageChatItem.h"
 #import "PhotonImageMessageChatItem.h"
 #import "PhotonTextMessageChatItem.h"
+#import "PhotonChatLocationItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
@@ -62,6 +63,9 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 
 // 发送语音消息
 - (void)sendVoiceMessage:(nullable PhotonVoiceMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+
+// 发送位置消息
+- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
 
 // 重发消息
 - (void)resendMessage:(nullable PhotonBaseChatItem *)item completion:(nullable CompletionBlock)completion;
@@ -122,6 +126,8 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 - (void)insertOrUpdateMessage:(PhotonIMMessage *)message;
 
 - (void)deleteMessage:(PhotonIMMessage *)message;
+
+- (void)deleteMessage:(PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 
 - (void)deleteConversation:(PhotonIMConversation *)conversation clearChatMessage:(BOOL)clearChatMessage;
 

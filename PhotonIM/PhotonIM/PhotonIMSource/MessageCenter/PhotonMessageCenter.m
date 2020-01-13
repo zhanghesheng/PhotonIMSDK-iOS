@@ -185,7 +185,13 @@ static PhotonMessageCenter *center = nil;
     [self p_sendVoiceMessage:message completion:completion];
 }
 
-
+- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeLocation chatType:conversation.chatType];
+    PhotonIMLocationBody *locationBody = [PhotonIMLocationBody locationBodyWithCoordinateSystem:CoordinateSystem_BD09 address:item.address detailedAddress:item.detailAddress lng:item.locationCoordinate.longitude lat:item.locationCoordinate.latitude];
+    [message setMesageBody:locationBody];
+    item.userInfo = message;
+    [self _sendMessage:message completion:completion];
+}
 
 
 #pragma mark  -------- Private ---------------
@@ -413,6 +419,9 @@ static PhotonMessageCenter *center = nil;
 }
 - (void)deleteMessage:(PhotonIMMessage *)message{
     [self.imClient deleteMessage:message];
+}
+- (void)deleteMessage:(PhotonIMMessage *)message completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
+    [self.imClient sendDeleteMessageWithChatType:message.chatType chatWith:message.chatWith delMsgIds:@[message.messageID] completion:completion];
 }
 - (void)deleteConversation:(PhotonIMConversation *)conversation clearChatMessage:(BOOL)clearChatMessage{
     [self.imClient deleteConversation:conversation clearChatMessage:clearChatMessage];

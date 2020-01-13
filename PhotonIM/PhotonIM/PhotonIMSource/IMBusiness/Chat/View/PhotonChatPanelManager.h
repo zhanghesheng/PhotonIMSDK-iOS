@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 #import "PhotonCharBar.h"
 #import <UIKit/UIKit.h>
 NS_ASSUME_NONNULL_BEGIN
@@ -23,15 +24,18 @@ NS_ASSUME_NONNULL_BEGIN
 // 发送语音信息
 - (void)sendVoiceMessage:(NSString *)fileName duraion:(CGFloat)duraion;
 
-
 //初始输入at的处理
 - (void)processAtAction:(PhotonCharBar *)charBar;
 
+// 发送位置
+- (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate;
 
 /**
 * 编辑结束
 */
 - (void)textViewDidEndEditing:(NSString *)text;
+
+- (void)keyboardWillShow;
 @end
 
 @interface PhotonChatPanelManager : NSObject

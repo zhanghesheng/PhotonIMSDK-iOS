@@ -13,6 +13,7 @@
 #import "PhotonBaseContactItem.h"
 #import "PhotonBaseContactCell.h"
 #import "PhotonEmptyTableItem.h"
+#import "PhotonChatSearchReultTableViewController.h"
 @interface PhotonSingleSettingDataSource ()
 @end
 
@@ -52,10 +53,10 @@
         make.top.and.left.and.right.mas_equalTo(self.view).mas_equalTo(0);
         make.bottom.mas_equalTo(self.view).mas_equalTo(-SAFEAREA_INSETS_BOTTOM);
     }];
-    [self loadDataItems];
+    [self loadPreDataItems];
 }
 
-- (void)loadDataItems{
+- (void)loadPreDataItems{
     PhotonEmptyTableItem *emptyItem = [[PhotonEmptyTableItem alloc] init];
     emptyItem.itemHeight = 11;
     emptyItem.backgroudColor = [UIColor clearColor];
@@ -70,14 +71,25 @@
     
     [self.items addObject:emptyItem];
     
+    PhotonMessageSettingItem *searchItem = [[PhotonMessageSettingItem alloc] init];
+    searchItem.settingName = @"查找聊天内容";
+    searchItem.showSwitch = NO;
+    searchItem.icon = @"right_arrow";
+    searchItem.type = PhotonMessageSettingTypeSearch;
+    [self.items addObject:searchItem];
+    
+     [self.items addObject:emptyItem];
+    
     PhotonMessageSettingItem *settionItem = [[PhotonMessageSettingItem alloc] init];
     settionItem.settingName = @"消息免打扰";
+     settionItem.showSwitch = YES;
     settionItem.open = _conversation.ignoreAlert;
     settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
     [self.items addObject:settionItem];
     
     PhotonMessageSettingItem *stickyItem = [[PhotonMessageSettingItem alloc] init];
     stickyItem.settingName = @"置顶";
+     stickyItem.showSwitch = YES;
     stickyItem.open = _conversation.sticky;
     stickyItem.type = PhotonMessageSettingTypeIgnorSticky;
     [self.items addObject:stickyItem];
@@ -86,6 +98,16 @@
     self.dataSource = dataSource;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    id item = self.items[indexPath.row];
+    if ([item isKindOfClass:[PhotonMessageSettingItem class]]) {
+        PhotonMessageSettingItem *tempItem = (PhotonMessageSettingItem *)item;
+        if (tempItem.type == PhotonMessageSettingTypeSearch) {
+            PhotonChatSearchReultTableViewController *contr = [[PhotonChatSearchReultTableViewController alloc] initWithChatType:_conversation.chatType chatWith:_conversation.chatWith];
+            [self.navigationController pushViewController:contr animated:YES];
+        }
+    }
+}
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([cell isKindOfClass:[PhotonMessageSettingCell class]]) {
         PhotonMessageSettingCell *tempCell = (PhotonMessageSettingCell *)cell;

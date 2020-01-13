@@ -662,7 +662,6 @@ static NSString *textRec = @"";
         make.bottom.mas_equalTo(self).mas_offset(-9);
         make.left.mas_equalTo(self.voiceButton.mas_right).mas_offset(4);
         make.right.mas_equalTo(self.emojiButton.mas_left).mas_offset(-4);
-//        make.height.mas_equalTo(HEIGHT_CHATBAR_TEXTVIEW);
     }];
     
     [self.talkButton mas_makeConstraints:^(MASConstraintMaker *make) {

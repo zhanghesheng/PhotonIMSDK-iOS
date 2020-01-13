@@ -149,6 +149,7 @@
 		324FE2BA233B959D00F996D0 /* PhotonGroupMemberTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FE2B9233B959D00F996D0 /* PhotonGroupMemberTableItem.m */; };
 		324FE2BD233C5CE900F996D0 /* PhotonAtMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FE2BC233C5CE900F996D0 /* PhotonAtMemberListViewController.m */; };
 		324FE2C0233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FE2BF233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m */; };
+		3259F3FF23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */; };
 		3272587422F140D000842026 /* PhotonSingleSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587322F140D000842026 /* PhotonSingleSettingViewController.m */; };
 		3272587722F1433500842026 /* PhotonMessageSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587622F1433500842026 /* PhotonMessageSettingItem.m */; };
 		3272587A22F1437100842026 /* PhotonMessageSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587922F1437100842026 /* PhotonMessageSettingCell.m */; };
@@ -156,11 +157,16 @@
 		3272588422F18D2D00842026 /* PhotonChatTransmitItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588322F18D2D00842026 /* PhotonChatTransmitItem.m */; };
 		3272588722F1981B00842026 /* PhotonChatTransmitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588622F1981B00842026 /* PhotonChatTransmitCell.m */; };
 		3272588A22F1A61900842026 /* PhotonChatTransmitModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272588922F1A61900842026 /* PhotonChatTransmitModel.m */; };
+		32740A4D23C827730089F318 /* PhotonLocationViewContraller.m in Sources */ = {isa = PBXBuildFile; fileRef = 32740A4C23C827730089F318 /* PhotonLocationViewContraller.m */; };
+		32740A4F23C8290B0089F318 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32740A4E23C8290B0089F318 /* CoreLocation.framework */; };
+		32740A5123C829110089F318 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32740A5023C829110089F318 /* MapKit.framework */; };
+		32740A5423C831EE0089F318 /* PhotonChatLocationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */; };
 		32845465238FA886003C0683 /* PhotonChatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845464238FA886003C0683 /* PhotonChatData.m */; };
 		32845474238FD1D1003C0683 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845470238FD1D1003C0683 /* YYWeakProxy.m */; };
 		32845475238FD1D1003C0683 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845472238FD1D1003C0683 /* YYFPSLabel.m */; };
 		3286B10A22BB25FA0032D066 /* Chat.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3286B10922BB25FA0032D066 /* Chat.xcassets */; };
 		3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 3286B13222BB808C0032D066 /* FaceEmoji.json */; };
+		3289091023C85371002C45CC /* PhotonChatLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3289090F23C85371002C45CC /* PhotonChatLocationCell.m */; };
 		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
 		329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */; };
 		32AE413423B4B7E300BCBE5C /* MDAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */; };
@@ -438,6 +444,8 @@
 		324FE2BC233C5CE900F996D0 /* PhotonAtMemberListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotonAtMemberListViewController.m; sourceTree = "<group>"; };
 		324FE2BE233C5D5E00F996D0 /* PhotonGroupMemberListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupMemberListViewController.h; sourceTree = "<group>"; };
 		324FE2BF233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupMemberListViewController.m; sourceTree = "<group>"; };
+		3259F3FD23C88B9300701C3F /* PhotonChatSearchReultTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatSearchReultTableViewController.h; sourceTree = "<group>"; };
+		3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatSearchReultTableViewController.m; sourceTree = "<group>"; };
 		3270BBFC22C5BA8D004CAA00 /* NSObject+PhotonExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+PhotonExtensions.h"; sourceTree = "<group>"; };
 		3270BBFD22C5BA8D004CAA00 /* NSObject+PhotonExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PhotonExtensions.m"; sourceTree = "<group>"; };
 		3270BC0622C5F5AD004CAA00 /* PhotonNotifycationConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonNotifycationConstant.h; sourceTree = "<group>"; };
@@ -462,6 +470,12 @@
 		3272588922F1A61900842026 /* PhotonChatTransmitModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatTransmitModel.m; sourceTree = "<group>"; };
 		327336322371583A00CEF6C2 /* PhotonIMSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PhotonIMSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		327336342371586000CEF6C2 /* libProtocolBuffers.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libProtocolBuffers.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		32740A4B23C827730089F318 /* PhotonLocationViewContraller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonLocationViewContraller.h; sourceTree = "<group>"; };
+		32740A4C23C827730089F318 /* PhotonLocationViewContraller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonLocationViewContraller.m; sourceTree = "<group>"; };
+		32740A4E23C8290B0089F318 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		32740A5023C829110089F318 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		32740A5223C831EE0089F318 /* PhotonChatLocationItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatLocationItem.h; sourceTree = "<group>"; };
+		32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatLocationItem.m; sourceTree = "<group>"; };
 		327D8D7D23066A00006E2E90 /* PhotonCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCommonHeader.h; sourceTree = "<group>"; };
 		327D8D7E230691D6006E2E90 /* PhotonAPIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAPIMacros.h; sourceTree = "<group>"; };
 		32845463238FA886003C0683 /* PhotonChatData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatData.h; sourceTree = "<group>"; };
@@ -480,6 +494,8 @@
 		3286B12622BB675A0032D066 /* PhotonEmojiKeyboardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonEmojiKeyboardCell.h; sourceTree = "<group>"; };
 		3286B12722BB675A0032D066 /* PhotonEmojiKeyboardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmojiKeyboardCell.m; sourceTree = "<group>"; };
 		3286B13222BB808C0032D066 /* FaceEmoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = FaceEmoji.json; sourceTree = "<group>"; };
+		3289090E23C85371002C45CC /* PhotonChatLocationCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatLocationCell.h; sourceTree = "<group>"; };
+		3289090F23C85371002C45CC /* PhotonChatLocationCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatLocationCell.m; sourceTree = "<group>"; };
 		328A764B2339D517009F0668 /* PhotonAtMemberListViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAtMemberListViewController.h; sourceTree = "<group>"; };
 		328A76512339D8EB009F0668 /* PhotonGroupMemberListModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonGroupMemberListModel.h; sourceTree = "<group>"; };
 		328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupMemberListModel.m; sourceTree = "<group>"; };
@@ -546,6 +562,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32740A5123C829110089F318 /* MapKit.framework in Frameworks */,
+				32740A4F23C8290B0089F318 /* CoreLocation.framework in Frameworks */,
 				321E45FE22F2E99A00BB9585 /* libc++abi.tbd in Frameworks */,
 				32AE413423B4B7E300BCBE5C /* MDAudioKit.framework in Frameworks */,
 				321E45FF22F2E99A00BB9585 /* libc.tbd in Frameworks */,
@@ -1067,10 +1085,10 @@
 				3238ACF222D4AEA200EB3D0B /* Items */,
 				3238ABFA22D4AB8700EB3D0B /* PhotonChatModel.h */,
 				3238ABF522D4AB8700EB3D0B /* PhotonChatModel.m */,
+				3238ABFC22D4AB8700EB3D0B /* PhotonChatDataSource.m */,
 				3272588822F1A61900842026 /* PhotonChatTransmitModel.h */,
 				3272588922F1A61900842026 /* PhotonChatTransmitModel.m */,
 				3238ABF622D4AB8700EB3D0B /* PhotonChatDataSource.h */,
-				3238ABFC22D4AB8700EB3D0B /* PhotonChatDataSource.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1090,6 +1108,8 @@
 				321A0FF022E6A4BD000AF586 /* PhotonChatNoticCell.m */,
 				3238AC1722D4AB8700EB3D0B /* PhotonChatPanelManager.h */,
 				3238AC1B22D4AB8700EB3D0B /* PhotonChatPanelManager.m */,
+				3289090E23C85371002C45CC /* PhotonChatLocationCell.h */,
+				3289090F23C85371002C45CC /* PhotonChatLocationCell.m */,
 				3272588522F1981B00842026 /* PhotonChatTransmitCell.h */,
 				3272588622F1981B00842026 /* PhotonChatTransmitCell.m */,
 			);
@@ -1109,6 +1129,8 @@
 				3223E58822D8283C007B77A9 /* PhotonChatViewController+Receive.m */,
 				3238AC1F22D4AB8700EB3D0B /* PhotonChatViewController+Delegate.m */,
 				3238AC2122D4AB8700EB3D0B /* PhotonChatViewController+Delegate.h */,
+				32740A4B23C827730089F318 /* PhotonLocationViewContraller.h */,
+				32740A4C23C827730089F318 /* PhotonLocationViewContraller.m */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -1183,6 +1205,8 @@
 				3238ABFF22D4AB8700EB3D0B /* PhotonImageMessageChatItem.m */,
 				3238ABF922D4AB8700EB3D0B /* PhotonVoiceMessageChatItem.h */,
 				3238ABFE22D4AB8700EB3D0B /* PhotonVoiceMessageChatItem.m */,
+				32740A5223C831EE0089F318 /* PhotonChatLocationItem.h */,
+				32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */,
 				321A0FEC22E6A447000AF586 /* PhotonChatNoticItem.h */,
 				321A0FED22E6A447000AF586 /* PhotonChatNoticItem.m */,
 				3272588222F18D2D00842026 /* PhotonChatTransmitItem.h */,
@@ -1236,6 +1260,15 @@
 				3242C1E0238E267B00C221D2 /* PhotonChatTestListViewController+Delegate.m */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		3259F3FC23C88B4E00701C3F /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				3259F3FD23C88B9300701C3F /* PhotonChatSearchReultTableViewController.h */,
+				3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		3270BBFF22C5F049004CAA00 /* FileManager */ = {
@@ -1379,6 +1412,7 @@
 		32FDC9FD22C4EB8400EECD24 /* IMBusiness */ = {
 			isa = PBXGroup;
 			children = (
+				3259F3FC23C88B4E00701C3F /* Search */,
 				3238AB9F22D4AB8700EB3D0B /* Conversation */,
 				3242C1B6238E23C100C221D2 /* Test */,
 				3272587122F1409800842026 /* Setting */,
@@ -1401,6 +1435,8 @@
 		F643BDE099CB9A2C77E9CC5E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32740A5023C829110089F318 /* MapKit.framework */,
+				32740A4E23C8290B0089F318 /* CoreLocation.framework */,
 				327336342371586000CEF6C2 /* libProtocolBuffers.a */,
 				327336322371583A00CEF6C2 /* PhotonIMSDK.framework */,
 				32E7927E22FAC3A900CB3E76 /* CoreServices.framework */,
@@ -1644,6 +1680,7 @@
 				3221882A22CCA5B6007E9FA3 /* PhotonContent.m in Sources */,
 				3242C1DD238E255C00C221D2 /* PhotonChatTestBaseCell.m in Sources */,
 				3238ACCD22D4AB8800EB3D0B /* PhotonChatViewController.m in Sources */,
+				32740A4D23C827730089F318 /* PhotonLocationViewContraller.m in Sources */,
 				321FE3D722CF0F8E00020CCE /* UINavigation+FixSpace.m in Sources */,
 				3221882B22CCA5B6007E9FA3 /* PhotonUser.m in Sources */,
 				3221882C22CCA5B6007E9FA3 /* PhotonAppDelegate.m in Sources */,
@@ -1664,6 +1701,7 @@
 				3238ACB422D4AB8800EB3D0B /* PhotonConversationListViewController+Delegate.m in Sources */,
 				3221883422CCA5B6007E9FA3 /* PotonTableViewDataSource.m in Sources */,
 				3221883522CCA5B6007E9FA3 /* PhotonBaseTableItem.m in Sources */,
+				3289091023C85371002C45CC /* PhotonChatLocationCell.m in Sources */,
 				3221883622CCA5B6007E9FA3 /* PhotonBaseModel.m in Sources */,
 				3238ACC722D4AB8800EB3D0B /* PhotonImageMessageChatCell.m in Sources */,
 				3221883722CCA5B6007E9FA3 /* PotonBaseTableViewCell.m in Sources */,
@@ -1695,6 +1733,7 @@
 				324FE2B7233B93D300F996D0 /* PhotonGroupMemberCell.m in Sources */,
 				324FE2B1233B85D000F996D0 /* PhotonGroupTitleTableViewCell.m in Sources */,
 				3272588122F18B8900842026 /* PhotonChatTransmitListViewController.m in Sources */,
+				32740A5423C831EE0089F318 /* PhotonChatLocationItem.m in Sources */,
 				3221884522CCA5B6007E9FA3 /* PhotonScreenImageCell.m in Sources */,
 				3238ACC622D4AB8800EB3D0B /* PhotonVoiceMessageChatCell.m in Sources */,
 				3221884622CCA5B6007E9FA3 /* PhotonMenuView.m in Sources */,
@@ -1712,6 +1751,7 @@
 				3221884E22CCA5B6007E9FA3 /* UIButton+PhotonExtensions.m in Sources */,
 				3223E58922D8283C007B77A9 /* PhotonChatViewController+Receive.m in Sources */,
 				3221884F22CCA5B6007E9FA3 /* UIImage+PhotonExtensions.m in Sources */,
+				3259F3FF23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m in Sources */,
 				328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */,
 				3272588A22F1A61900842026 /* PhotonChatTransmitModel.m in Sources */,
 				324FE2AE233B83CD00F996D0 /* PhotonGroupSettingViewController.m in Sources */,

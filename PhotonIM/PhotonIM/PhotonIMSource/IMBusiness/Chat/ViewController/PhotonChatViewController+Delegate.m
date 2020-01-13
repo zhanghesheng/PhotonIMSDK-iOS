@@ -31,6 +31,10 @@
 #import "PhotonDownLoadFileManager.h"
 
 #import "PhotonChatTransmitListViewController.h"
+#import "PhotonChatLocationCell.h"
+#import "PhotonChatLocationItem.h"
+#import "PhotonLocationViewContraller.h"
+#import "PhotonUINavigationController.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 @interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate>
@@ -59,6 +63,10 @@
         tempCell.delegate = self;
     }else if([cell isKindOfClass:[PhotonVoiceMessageChatCell class]]){
         PhotonVoiceMessageChatCell *tempCell = (PhotonVoiceMessageChatCell *)cell;
+        tempCell.delegate = self;
+    }
+    else if([cell isKindOfClass:[PhotonChatLocationCell class]]){
+        PhotonChatLocationCell *tempCell = (PhotonChatLocationCell *)cell;
         tempCell.delegate = self;
     }
     
@@ -120,6 +128,12 @@
                 }];
             }
         }
+    }
+    if([cell isKindOfClass:[PhotonChatLocationCell class]]){
+          PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)chatItem;
+        PhotonLocationViewContraller *locationVC = [[PhotonLocationViewContraller alloc]  initWithLocation:locationItem.locationCoordinate];
+              PhotonUINavigationController *navController = [[PhotonUINavigationController alloc] initWithRootViewController:locationVC];
+              [self presentViewController:navController animated:YES completion:nil];
     }
 }
 
@@ -256,9 +270,28 @@
     if (item == nil) {
         return;
     }
-    [self.model.items removeObject:item];
-    [self removeItem:item];
-    [[PhotonMessageCenter sharedCenter] deleteMessage:item.userInfo];
+   
+    BOOL server = YES;
+    if (server) {
+        PhotonWeakSelf(self);
+        [[PhotonMessageCenter sharedCenter] deleteMessage:item.userInfo completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+            [weakself.model.items removeObject:item];
+            if (succeed) {
+               [weakself removeItem:item];
+            }else{
+                [PhotonUtil runMainThread:^{
+                   [PhotonUtil showErrorHint:@"删除失败"];
+                }];
+            }
+           
+        }];
+    }else{
+        [self.model.items removeObject:item];
+        [self removeItem:item];
+        [[PhotonMessageCenter sharedCenter] deleteMessage:item.userInfo];
+    }
+    
+    
 }
 #pragma mark ---- 撤回消息操作 ----------
 - (void)withDrawChatMessage:(PhotonBaseChatItem *)item{

@@ -15,6 +15,8 @@
 #import "PhotonUtil.h"
 #import "PhotonRecorderIndicator.h"
 #import "PhotonMessageCenter.h"
+#import "PhotonLocationViewContraller.h"
+#import "PhotonUINavigationController.h"
 
 static NSString  *ATCharater = @"@";
 
@@ -99,12 +101,17 @@ PhotonAudioRecorderDelegate>
     PhotonMoreKeyboardItem *cameraItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeCamera
                                                                         title:@"拍摄"
                                                                     imagePath:@"moreKB_capture"];
+    
+    PhotonMoreKeyboardItem *locationItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeLocation
+        title:@"位置"
+    imagePath:@"moreKB_capture"];
+    
     [self.moreKeyboard setDelegate:self];
     [self.moreKeyboard setKeyboardDelegate:self];
     [self.emojiKeyboard setDelegate:self];
     [self.emojiKeyboard setKeyboardDelegate:self];
     
-    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem] mutableCopy]];
+    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem,locationItem] mutableCopy]];
     [self.emojiKeyboard setChatEmojiKeyboardItems:nil];
     
     [self addMasonry];
@@ -163,6 +170,10 @@ PhotonAudioRecorderDelegate>
     else if (lastStatus == PhotonChatBarStatusEmoji) {
         [self.emojiKeyboard dismissWithAnimation:NO];
     }
+    
+    if ([self.delegate respondsToSelector:@selector(keyboardWillShow)]) {
+           [self.delegate keyboardWillShow];
+       }
     
     if ([self.delegate respondsToSelector:@selector(scrollToBottomWithAnimation:)]) {
         [self.delegate scrollToBottomWithAnimation:YES];
@@ -400,21 +411,33 @@ PhotonAudioRecorderDelegate>
 #pragma mark ---------- PhotonMoreKeyBoardDelegate -------
 - (void)moreKeyboard:(id)keyboard didSelectedKeyboardItem:(PhotonMoreKeyboardItem *)item{
     
-    UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
-    if (item.type == PhotonMoreKeyboardItemTypeCamera) {
-        if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-            [imagePickerController setSourceType:UIImagePickerControllerSourceTypeCamera];
+    if (item.type == PhotonMoreKeyboardItemTypeLocation){
+        PhotonLocationViewContraller *locationVC = [[PhotonLocationViewContraller alloc]  init];
+        __weak typeof(self)weakSelf = self;
+        [locationVC setSendCompletion:^(CLLocationCoordinate2D aCoordinate, NSString * _Nullable address, NSString * _Nullable detailAddress) {
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(sendLocationMessage:detailAddress:locationCoordinate:)]) {
+                [weakSelf.delegate sendLocationMessage:address detailAddress:detailAddress locationCoordinate:aCoordinate];
+            }
+        }];
+        PhotonUINavigationController *navController = [[PhotonUINavigationController alloc] initWithRootViewController:locationVC];
+        [[self getCurrentVC] presentViewController:navController animated:YES completion:nil];
+    }else{
+        UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
+        if (item.type == PhotonMoreKeyboardItemTypeCamera) {
+            if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                [imagePickerController setSourceType:UIImagePickerControllerSourceTypeCamera];
+            }
+            else {
+                return;
+            }
         }
         else {
-            return;
+            [imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
         }
+        [imagePickerController setDelegate:self];
+        
+        [[self getCurrentVC] presentViewController:imagePickerController animated:YES completion:nil];
     }
-    else {
-        [imagePickerController setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-    }
-    [imagePickerController setDelegate:self];
-    
-    [[self getCurrentVC] presentViewController:imagePickerController animated:YES completion:nil];
 }
 
 //MARK: UIImagePickerDelegate

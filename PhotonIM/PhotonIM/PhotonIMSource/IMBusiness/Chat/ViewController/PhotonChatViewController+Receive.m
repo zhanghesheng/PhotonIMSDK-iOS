@@ -82,4 +82,8 @@
     }
     
 }
+
+- (void)imClient:(id)client didReceiveDeleteMesage:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith delMsgIds:(NSArray<NSString *> *)delMsgIds userInfo:(NSDictionary<NSString *,id> *)userInfo{
+    NSLog(@"%@",[delMsgIds description]);
+}
 @end

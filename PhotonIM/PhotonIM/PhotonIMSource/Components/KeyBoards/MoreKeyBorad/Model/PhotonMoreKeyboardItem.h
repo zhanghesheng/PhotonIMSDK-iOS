@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, PhotonMoreKeyboardItemType) {
     PhotonMoreKeyboardItemTypeImage,
     PhotonMoreKeyboardItemTypeCamera,
+    PhotonMoreKeyboardItemTypeLocation,
 };
 
 @interface PhotonMoreKeyboardItem : NSObject

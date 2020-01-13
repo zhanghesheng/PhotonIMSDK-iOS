@@ -37,6 +37,10 @@
 	<string>如果不允许，你将无法发送系统相册里的照片给朋友，也无法将图片或视频保存到相册。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>如果不允许，你将无法发送系统相册里的照片给朋友，也无法将图片或视频保存到相册。</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>光子需要使用您的位置信息</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>光子需要使用您的位置信息</string>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>UILaunchStoryboardName</key>
