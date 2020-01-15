@@ -11,7 +11,7 @@
 @implementation PhotonChatLocationItem
 - (CGSize)contentSize{
     CGFloat defaultWith = PhotoScreenWidth * 0.58;
-    return CGSizeMake(defaultWith, 80);
+    return CGSizeMake(defaultWith, 160);
 }
 
 - (CGFloat)itemHeight{

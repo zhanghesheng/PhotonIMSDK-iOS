@@ -241,6 +241,7 @@
 
 - (void)uploadRequestMethodWithMutiFile:(NSString *)queryString
                                paramter:(nonnull NSDictionary *)paramter
+                                 header:(nonnull NSDictionary *)header
                               fromFiles:(NSArray *)fileItems
                                progress:(void(^)(NSProgress *))progress
                              completion:(void (^)(NSDictionary *))completion
@@ -250,7 +251,8 @@
     request.delegate = self;
     request.requestMethod = PhotonRequesUpLoadMultiFile;
     self.uploadRequest = request;
-    [request setRequestHeaders:self.requestHeaders];
+    [request.requestHeaders addEntriesFromDictionary:header];
+    [request.requestHeaders  addEntriesFromDictionary:self.requestHeaders];
     [request.mutifileItems addObjectsFromArray:fileItems];
     __weak typeof(self)instance = self;
     __weak PhotonNetworkRequest *pRequest = request;

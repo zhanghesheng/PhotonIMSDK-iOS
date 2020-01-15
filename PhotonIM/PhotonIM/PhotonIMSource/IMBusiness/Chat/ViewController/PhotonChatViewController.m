@@ -56,11 +56,6 @@
         _panelManager.draft = conversation.draft;
         _panelManager.delegate = self;
         
-        self.model = [[PhotonChatModel alloc] init];
-        if (_conversation.lastMsgId) {
-             [(PhotonChatModel *)self.model setAnchorMsgId:_conversation.lastMsgId];
-        }
-        
         _dataDispatchSource = [MFDispatchSource sourceWithDelegate:self type:refreshType_Data dataQueue:dispatch_queue_create("com.cosmos.PhotonIM.chatdata", DISPATCH_QUEUE_SERIAL)];
     }
     return self;
@@ -69,6 +64,9 @@
     self = [self initWithConversation:conversation];
     if (self) {
         _loadFtsRet = loadFtsRet;
+        if (_conversation.lastMsgId && _loadFtsRet) {
+             [(PhotonChatModel *)self.model setAnchorMsgId:_conversation.lastMsgId];
+        }
          [(PhotonChatModel *)self.model setLoadFtsData:_loadFtsRet];
     }
     return self;
@@ -85,6 +83,7 @@
 {
     self = [super init];
     if (self) {
+        self.model = [[PhotonChatModel alloc] init];
         self.items = [NSMutableArray array];
         [self.tableView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     }

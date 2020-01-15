@@ -8,11 +8,12 @@
 
 #import "PhotonChatLocationCell.h"
 #import "PhotonChatLocationItem.h"
+#import <MapKit/MapKit.h>
 @interface PhotonChatLocationCell()
 @property(nonatomic, strong)UILabel  *addressLabel;
 @property(nonatomic, strong)UILabel  *detailAddressLabel;
-@property(nonatomic, strong)UILabel  *lntLabel;
-@property(nonatomic, strong)UILabel  *latLabel;
+@property (nonatomic, strong) MKMapView *mapView;
+@property (nonatomic, strong) MKPointAnnotation *annotation;
 @end
 
 @implementation PhotonChatLocationCell
@@ -23,8 +24,7 @@
         
         [self.contentBackgroundView addSubview:self.addressLabel];
         [self.contentBackgroundView addSubview:self.detailAddressLabel];
-        [self.contentBackgroundView addSubview:self.lntLabel];
-        [self.contentBackgroundView addSubview:self.latLabel];
+        [self.contentBackgroundView addSubview:self.mapView];
       
     }
     return self;
@@ -38,8 +38,7 @@
     PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)object;
     self.addressLabel.text = locationItem.address;
     self.detailAddressLabel.text = locationItem.detailAddress;
-    self.latLabel.text = [NSString stringWithFormat:@"经度:%.2f",locationItem.locationCoordinate.latitude];
-    self.lntLabel.text = [NSString stringWithFormat:@"纬度:%.2f",locationItem.locationCoordinate.longitude];
+    [self p_moveToLocation:locationItem.locationCoordinate];
     
 }
 
@@ -47,8 +46,6 @@
     [super prepareForReuse];
     self.addressLabel.text = nil;
     self.detailAddressLabel.text = nil;
-    self.lntLabel.text = nil;
-    self.latLabel.text = nil;
 }
 
 - (void)layoutSubviews{
@@ -56,7 +53,7 @@
     PhotonChatLocationItem *item = (PhotonChatLocationItem *)self.item;
     CGFloat bgViewWidth = PhotoScreenWidth/2.0;
     PhotonChatMessageFromType fromType = item.fromType;
-    CGSize bgViewSize = CGSizeMake(bgViewWidth, 80);
+    CGSize bgViewSize = CGSizeMake(bgViewWidth, item.contentSize.height);
     CGRect contentBackgroundViewFrame = self.contentBackgroundView.frame;
     contentBackgroundViewFrame.size = bgViewSize;
     CGFloat contentBackgroundViewLeft = 0;
@@ -68,34 +65,37 @@
     contentBackgroundViewFrame.origin.x = contentBackgroundViewLeft;
     self.contentBackgroundView.frame = contentBackgroundViewFrame;
     
+    
+    
     CGRect addressLabelFrame = self.addressLabel.frame;
     addressLabelFrame.size =CGSizeMake(bgViewWidth - 10, 20);
     
     CGRect detailAddressLabelFrame = self.detailAddressLabel.frame;
-    detailAddressLabelFrame.size =CGSizeMake(bgViewWidth - 10, 15);
+    detailAddressLabelFrame.size = CGSizeMake(bgViewWidth - 10, 15);
     
-    CGFloat latWidth = (bgViewWidth - 10)/2;
-    CGRect latLabelFrame = self.latLabel.frame;
-    latLabelFrame.size =CGSizeMake(latWidth, 15);
+    CGRect mapFrame = self.mapView.frame;
+    mapFrame.size = CGSizeMake(bgViewWidth - 10, 105);
+    mapFrame.origin = CGPointMake(5, 50);
     
-    CGRect lntLabelFrame = self.lntLabel.frame;
-    lntLabelFrame.size =CGSizeMake(latWidth, 15);
-    
-//    if (fromType == PhotonChatMessageFromSelf) {
-        addressLabelFrame.origin = CGPointMake(5, 5);
-        detailAddressLabelFrame.origin = CGPointMake(5, 27);
-        latLabelFrame.origin = CGPointMake(5, 50);
-        lntLabelFrame.origin = CGPointMake(5+latWidth, 50);
-//       
-//    }else if(fromType == PhotonChatMessageFromFriend){
-//       
-//    }
+    addressLabelFrame.origin = CGPointMake(5, 5);
+    detailAddressLabelFrame.origin = CGPointMake(5, 27);
+
     self.addressLabel.frame = addressLabelFrame;
     self.detailAddressLabel.frame = detailAddressLabelFrame;
-    self.latLabel.frame = latLabelFrame;
-    self.lntLabel.frame = lntLabelFrame;
+    self.mapView.frame = mapFrame;
     
     [self subview_layout];
+}
+
+- (void)p_moveToLocation:(CLLocationCoordinate2D)locationCoordinate
+{
+    float zoomLevel = 0.01;
+    MKCoordinateRegion region = MKCoordinateRegionMake(locationCoordinate, MKCoordinateSpanMake(zoomLevel, zoomLevel));
+    [self.mapView setRegion:[self.mapView regionThatFits:region] animated:YES];
+    
+    [self.mapView removeAnnotation:self.annotation];
+    self.annotation.coordinate = locationCoordinate;
+    [self.mapView addAnnotation:self.annotation];
 }
 
 - (UILabel *)addressLabel{
@@ -117,26 +117,21 @@
     }
     return _detailAddressLabel;
 }
-- (UILabel *)lntLabel{
-    if (_lntLabel == nil) {
-        _lntLabel = [[UILabel alloc] init];
-        [_lntLabel setFont:[UIFont systemFontOfSize:13.0]];
-        _lntLabel.textAlignment = NSTextAlignmentCenter;
-        [_lntLabel setNumberOfLines:0];
-    }
-    return _lntLabel;
-}
 
-- (UILabel *)latLabel{
-    if (_latLabel == nil) {
-        _latLabel = [[UILabel alloc] init];
-        [_latLabel setFont:[UIFont systemFontOfSize:13.0]];
-        _latLabel.textAlignment = NSTextAlignmentCenter;
-        [_latLabel setNumberOfLines:0];
+- (MKMapView *)mapView{
+    if (!_mapView) {
+         _mapView= [[MKMapView alloc] init];
+         _mapView.mapType = MKMapTypeStandard;
+         _mapView.zoomEnabled = NO;
+        _mapView.rotateEnabled = NO;
+        _mapView.pitchEnabled = NO;
+        _mapView.scrollEnabled = NO;
+        _mapView.layer.cornerRadius = 5;
+        _mapView.clipsToBounds = YES;
+        _annotation = [[MKPointAnnotation alloc] init];
     }
-    return _latLabel;
+    return _mapView;
 }
-
 
 
 @end

@@ -8,9 +8,9 @@
 
 #import "PhotonBaseModel.h"
 #import "PhotonMessageCenter.h"
-#import "PhotonTextMessageChatItem.h"
-#import "PhotonImageMessageChatItem.h"
-#import "PhotonVoiceMessageChatItem.h"
+#import "PhotonChatTextMessageItem.h"
+#import "PhotonChatImageMessageItem.h"
+#import "PhotonChatVoiceMessageItem.h"
 #import "PhotonConversationItem.h"
 #import "PhotonChatNoticItem.h"
 #import "PhotonChatLocationItem.h"

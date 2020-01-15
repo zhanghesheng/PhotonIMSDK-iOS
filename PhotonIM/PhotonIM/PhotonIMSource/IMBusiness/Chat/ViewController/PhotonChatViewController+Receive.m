@@ -44,7 +44,7 @@
  @param client <#client description#>
  @param message <#message description#>
  */
-- (void)imClient:(id)client di2dReceiveReadMesage:(PhotonIMMessage *)message{
+- (void)imClient:(id)client didReceiveReadMesage:(PhotonIMMessage *)message{
     [self wrapperReadMessage:message];
 }
 

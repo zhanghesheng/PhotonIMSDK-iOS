@@ -6,11 +6,11 @@
 //  Copyright © 2020 Bruce. All rights reserved.
 //
 
-#import "PhotonBaseChatItem.h"
+#import "PhotonChatBaseItem.h"
 #import <CoreLocation/CoreLocation.h>
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PhotonChatLocationItem : PhotonBaseChatItem
+@interface PhotonChatLocationItem : PhotonChatBaseItem
 @property(nonatomic, copy,nullable)NSString *address;
 @property(nonatomic, copy,nullable)NSString *detailAddress;
 @property(nonatomic, assign)CLLocationCoordinate2D locationCoordinate;

@@ -123,7 +123,7 @@ static PhotonMessageCenter *center = nil;
     }
 }
 
-- (void)sendTextMessage:(PhotonTextMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+- (void)sendTextMessage:(PhotonChatTextMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
     // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
@@ -156,7 +156,7 @@ static PhotonMessageCenter *center = nil;
     
 }
 
-- (void)sendImageMessage:(PhotonImageMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+- (void)sendImageMessage:(PhotonChatImageMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:conversation.chatType];
     
@@ -170,7 +170,7 @@ static PhotonMessageCenter *center = nil;
     [self p_sendImageMessage:message completion:completion];
 }
 
-- (void)sendVoiceMessage:(PhotonVoiceMessageChatItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+- (void)sendVoiceMessage:(PhotonChatVoiceMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
     
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeAudio chatType:conversation.chatType];
     
@@ -183,6 +183,20 @@ static PhotonMessageCenter *center = nil;
     [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
     // 先做语音上传处理，获得资源地址后构建图片消息对象发送消息
     [self p_sendVoiceMessage:message completion:completion];
+}
+
+- (void)sendVideoMessage:(nullable PhotonChatVideoMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeVideo chatType:conversation.chatType];
+    PhotonIMVideoBody *body = [[PhotonIMVideoBody alloc] init];
+    body.localFileName = item.fileName;
+    body.mediaTime = item.duration;
+    [message setMesageBody:body];
+    item.userInfo = message;
+    [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
+    [self p_sendVideoMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        
+    }];
+    
 }
 
 - (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
@@ -206,7 +220,7 @@ static PhotonMessageCenter *center = nil;
     fileInfo.mimeType = @"image/jpeg";
     fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:body.localFileName];
     PhotonWeakSelf(self)
-    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_IMAGE_UPLOAD_PATH paramter:nil fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
+    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_IMAGE_UPLOAD_PATH paramter:nil header:@{} fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
     } completion:^(NSDictionary * _Nonnull dict) {
         [weakself p_sendMessag:message result:dict completion:completion];
     } failure:^(PhotonErrorDescription * _Nonnull error) {
@@ -223,9 +237,9 @@ static PhotonMessageCenter *center = nil;
     fileInfo.name = @"fileUpload";
     fileInfo.fileName = @"chataudio.opus";
     fileInfo.mimeType = @"audio/opus";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:message.chatWith fileName:body.localFileName];
+    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
     PhotonWeakSelf(self)
-    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_AUDIO_UPLOAD_PATH paramter:nil fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
+    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_AUDIO_UPLOAD_PATH  paramter:nil header:@{} fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
     } completion:^(NSDictionary * _Nonnull dict) {
         [weakself p_sendMessag:message result:dict completion:completion];
     } failure:^(PhotonErrorDescription * _Nonnull error) {
@@ -242,6 +256,7 @@ static PhotonMessageCenter *center = nil;
         if(message.messageType == PhotonIMMessageTypeImage){
             PhotonIMImageBody *body = (PhotonIMImageBody *)message.messageBody;
             body.url = fileURL;
+            [message setMesageBody:body];
         }else if(message.messageType == PhotonIMMessageTypeAudio){
             PhotonIMAudioBody *body = (PhotonIMAudioBody *)message.messageBody;
             body.url = fileURL;
@@ -262,8 +277,48 @@ static PhotonMessageCenter *center = nil;
     }
 }
 
+- (void)p_sendVideoMessage:(PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
+    // 存储文件上传前的message
+    [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
+    // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
+    PhotonIMVideoBody *body =(PhotonIMVideoBody *)message.messageBody;
+    PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
+    fileInfo.name = @"file";
+    fileInfo.fileName = @"chataudio.mp4";
+    fileInfo.mimeType = @"video/mp4";
+    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:message.chatWith fileName:body.localFileName];
+    PhotonWeakSelf(self)
+    
+    // 处理header
+      NSMutableDictionary *header = [NSMutableDictionary dictionary];
+      [header setValue:@"multipart/form-data" forKey:@"Content-Type"];
+      [header setValue:APP_ID forKey:@"appId"];
+      NSString *timestamp = [NSString stringWithFormat:@"%@",@((int64_t)[NSDate date].timeIntervalSince1970)];
+      [header setValue:timestamp forKey:@"timestamp"];
+     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
+      NSString *signString = [NSString stringWithFormat:@"%@%@%@",APP_ID,token,timestamp];
+      signString = [signString md5];
+      [header setValue:signString forKey:@"sign"];
+      [header setValue:[PhotonContent currentUser].userID forKey:@"userId"];
+    // 处理parameter
+    NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
+    [paramter setValue:@"1" forKey:@"fileType"];
+    [paramter setValue:@(1) forKey:@"coverOffset"];
+    
+    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_FILE_UPLOAD_PATH paramter:paramter header:header fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
+        
+    } completion:^(NSDictionary * _Nonnull dict) {
+        
+        [weakself p_sendMessag:message result:dict completion:completion];
+        
+    } failure:^(PhotonErrorDescription * _Nonnull error) {
+        
+        [weakself p_sendMessag:message result:nil completion:completion];
+    }];
+}
+
 // 重发消息
-- (void)resendMessage:(nullable PhotonBaseChatItem *)item completion:(nullable CompletionBlock)completion{
+- (void)resendMessage:(nullable PhotonChatBaseItem *)item completion:(nullable CompletionBlock)completion{
     PhotonIMMessage *message = (PhotonIMMessage *)item.userInfo;
     if(message.messageStatus != PhotonIMMessageStatusDefault){
         message.messageStatus = PhotonIMMessageStatusSending;
@@ -340,7 +395,7 @@ static PhotonMessageCenter *center = nil;
         }];
     }];
 }
-- (void)sendWithDrawMessage:(nullable PhotonBaseChatItem *)item completion:(nullable CompletionBlock)completion{
+- (void)sendWithDrawMessage:(nullable PhotonChatBaseItem *)item completion:(nullable CompletionBlock)completion{
     id message = item.userInfo;
     if ([message isKindOfClass:[PhotonIMMessage class]]) {
         [self.imClient sendWithDrawMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
@@ -455,6 +510,28 @@ static PhotonMessageCenter *center = nil;
         return nil;
     }
     NSString *path = [NSString stringWithFormat:@"%@/PhotonIM/File/%@/%@/voices", [NSFileManager documentsPath], [PhotonContent currentUser].userID,chatWith];
+    if (![PhotonUtil createDirectoryIfExit:path]) {
+        return nil;
+    }
+    return [path stringByAppendingPathComponent:fileName];
+}
+
+- (NSURL *)getVideoFileURL:(NSString *)chatWith fileName:(nullable NSString *)fileName{
+    if(!fileName || fileName.length == 0){
+        return nil;
+    }
+    NSString * path =  [self getVoiceFilePath:chatWith fileName:fileName];
+    if ([path isNotEmpty]) {
+        return [NSURL fileURLWithPath:path];
+    }
+    return nil;
+}
+
+- (NSString *)getVideoFilePath:(NSString *)chatWith fileName:(nullable NSString *)fileName{
+    if(!fileName || fileName.length == 0){
+        return nil;
+    }
+    NSString *path = [NSString stringWithFormat:@"%@/PhotonIM/File/%@/%@/videos", [NSFileManager documentsPath], [PhotonContent currentUser].userID,chatWith];
     if (![PhotonUtil createDirectoryIfExit:path]) {
         return nil;
     }

@@ -16,7 +16,7 @@
 }
 // 发送文本消息
 - (void)sendTextMessage:(NSString *)text atItems:(nonnull NSArray<PhotonChatAtInfo *> *)atItems type:(AtType)atType{
-    PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
+    PhotonChatTextMessageItem *textItem = [[PhotonChatTextMessageItem alloc] init];
     textItem.fromType = PhotonChatMessageFromSelf;
     textItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     textItem.messageText = text;
@@ -78,7 +78,7 @@
     NSString *imagePath = [[PhotonMessageCenter sharedCenter] getImageFilePath:self.conversation.chatWith fileName:imageName];
    
     BOOL res =  [[NSFileManager defaultManager] createFileAtPath:imagePath contents:imageData attributes:nil];
-    PhotonImageMessageChatItem *imageItem = [[PhotonImageMessageChatItem alloc] init];
+    PhotonChatImageMessageItem *imageItem = [[PhotonChatImageMessageItem alloc] init];
     imageItem.fromType = PhotonChatMessageFromSelf;
     imageItem.fileName = imageName;
     imageItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
@@ -106,7 +106,7 @@
 }
 // 发送语音消息
 - (void)sendVoiceMessage:(nonnull NSString *)fileName duraion:(CGFloat)duraion{
-    PhotonVoiceMessageChatItem *audioItem = [[PhotonVoiceMessageChatItem alloc] init];
+    PhotonChatVoiceMessageItem *audioItem = [[PhotonChatVoiceMessageItem alloc] init];
     audioItem.fromType = PhotonChatMessageFromSelf;
     audioItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     audioItem.fileName = fileName;
@@ -128,6 +128,47 @@
         [weakself updateItem:audioItem];
     }];
 }
+
+- (void)sendVideoMessage:(NSString *)fileName duraion:(CGFloat)duraion{
+    PhotonChatVideoMessageItem *vedioItem = [[PhotonChatVideoMessageItem alloc] init];
+    vedioItem.fromType = PhotonChatMessageFromSelf;
+    vedioItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    vedioItem.fileName = fileName;
+    vedioItem.duration = duraion;
+    vedioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
+    [self addItem:vedioItem];
+    PhotonWeakSelf(self)
+    [[PhotonMessageCenter sharedCenter] sendVideoMessage:vedioItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        if (!succeed && error.em) {
+            vedioItem.tipText = error.em;
+        }else if (!succeed){
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
+        }
+        if (succeed) {
+            vedioItem.tipText = @"";
+        }
+        [weakself updateItem:vedioItem];
+    }];
+}
+
+//#pragma mark ---- 获取图片第一帧
+//- (UIImage *)firstFrameWithVideoURL:(NSURL *)url size:(CGSize)size
+//{
+//    // 获取视频第一帧
+//    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+//    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
+//    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
+//    generator.appliesPreferredTrackTransform = YES;
+//    generator.maximumSize = CGSizeMake(size.width, size.height);
+//    NSError *error = nil;
+//    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
+//    {
+//        return [UIImage imageWithCGImage:img];
+//    }
+//    return nil;
+//}
 
 - (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate{
     PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];
@@ -164,7 +205,7 @@
     }];
 }
 
-- (void)resendMessage:(PhotonBaseChatItem *)item{
+- (void)resendMessage:(PhotonChatBaseItem *)item{
     [self.model.items removeObject:item];
     PhotonWeakSelf(self)
     item.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
@@ -189,7 +230,7 @@
 - (void)sendMessageResultCallBack:(PhotonIMMessage *)message{
     BOOL ret  = NO;
     NSArray *tempItems = [self.model.items copy];
-    for (PhotonBaseChatItem *item in tempItems) {
+    for (PhotonChatBaseItem *item in tempItems) {
         if ([[item.userInfo messageID] isEqualToString:[message messageID]]) {
             ((PhotonIMMessage *)item.userInfo).messageStatus = [message messageStatus];
             ((PhotonIMMessage *)item.userInfo).notic = [message notic];

@@ -24,6 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 // 发送语音信息
 - (void)sendVoiceMessage:(NSString *)fileName duraion:(CGFloat)duraion;
 
+//  发送视频信息
+- (void)sendVideoMessage:(NSString *)fileName duraion:(CGFloat)duraion;
+
 //初始输入at的处理
 - (void)processAtAction:(PhotonCharBar *)charBar;
 

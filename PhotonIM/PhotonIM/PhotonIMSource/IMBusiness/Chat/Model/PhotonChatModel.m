@@ -19,7 +19,7 @@
     if (self) {
         self.pageSize = 20;
         _anchorMsgId = @"";
-        _startSyncServer = NO;
+        _startSyncServer = YES;
     }
     return self;
 }
@@ -146,7 +146,7 @@
 
 // 处理二人聊天收到的信息
 - (PhotonBaseTableItem *)wrapperMessage:(PhotonIMMessage *)message{
-    PhotonBaseChatItem * resultItem = nil;
+    PhotonChatBaseItem * resultItem = nil;
     PhotonChatMessageFromType fromeType = [message.fr isEqualToString:[PhotonContent currentUser].userID]?PhotonChatMessageFromSelf:PhotonChatMessageFromFriend;
     // 处理撤回的消息
     if (message.messageStatus == PhotonIMMessageStatusRecall) {
@@ -163,7 +163,7 @@
     }
     switch (message.messageType) {
         case PhotonIMMessageTypeText:{// 文本
-            PhotonTextMessageChatItem *textItem = [[PhotonTextMessageChatItem alloc] init];
+            PhotonChatTextMessageItem *textItem = [[PhotonChatTextMessageItem alloc] init];
             textItem.fromType = fromeType;
             textItem.timeStamp = message.timeStamp;
             PhotonIMTextBody * body = (PhotonIMTextBody *)message.messageBody;
@@ -174,7 +174,7 @@
         }
             break;
         case PhotonIMMessageTypeImage:{// 图片
-            PhotonImageMessageChatItem *imageItem = [[PhotonImageMessageChatItem alloc] init];
+            PhotonChatImageMessageItem *imageItem = [[PhotonChatImageMessageItem alloc] init];
             imageItem.fromType = fromeType;
             imageItem.timeStamp = message.timeStamp;
             imageItem.avatalarImgaeURL = avatarUrl;
@@ -196,7 +196,7 @@
         }
             break;
         case PhotonIMMessageTypeAudio:{// 语音
-            PhotonVoiceMessageChatItem *audioItem = [[PhotonVoiceMessageChatItem alloc] init];
+            PhotonChatVoiceMessageItem *audioItem = [[PhotonChatVoiceMessageItem alloc] init];
             audioItem.fromType = fromeType;
             audioItem.timeStamp = message.timeStamp;
             PhotonIMAudioBody *audioBody = (PhotonIMAudioBody *)message.messageBody;
@@ -218,6 +218,7 @@
             PhotonIMLocationBody *audioBody = (PhotonIMLocationBody *)message.messageBody;
             locationItem.address = audioBody.address;
             locationItem.detailAddress = audioBody.detailedAddress;
+            locationItem.avatalarImgaeURL = avatarUrl;
             locationItem.locationCoordinate = CLLocationCoordinate2DMake(audioBody.lat, audioBody.lng);
             locationItem.userInfo = message;
             resultItem = locationItem;
@@ -256,9 +257,9 @@
 
 
 - (BOOL)wrapperWithdrawMessage:(PhotonIMMessage *)messag{
-    PhotonBaseChatItem *tempItem = nil;
+    PhotonChatBaseItem *tempItem = nil;
     NSArray *items=[self.items copy];
-    for (PhotonBaseChatItem *item in items) {
+    for (PhotonChatBaseItem *item in items) {
         PhotonIMMessage *tempMsg = item.userInfo;
         if ([tempMsg.messageID isEqualToString:messag.withdrawMsgID]) {
             tempItem = item;
@@ -280,7 +281,7 @@
     if (readMsgIds.count > 0) {
         NSArray *items=[self.items copy];
         for (NSString *msgID in readMsgIds) {
-            for (PhotonBaseChatItem *item in items) {
+            for (PhotonChatBaseItem *item in items) {
                 PhotonIMMessage *tempMsg = item.userInfo;
                 if ([tempMsg.messageID isEqualToString:msgID]) {
                     tempMsg.messageStatus = PhotonIMMessageStatusSentRead;

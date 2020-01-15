@@ -18,6 +18,9 @@
 #import "PhotonLocationViewContraller.h"
 #import "PhotonUINavigationController.h"
 
+#import "UIViewController+HXExtension.h"
+#import "HXPhotoPicker.h"
+
 static NSString  *ATCharater = @"@";
 
 @interface PhotonChatPanelManager()<PhotonCharBarDelegate,
@@ -47,6 +50,8 @@ PhotonAudioRecorderDelegate>
 @property(nonatomic, strong, nullable)PhotonRecorderIndicator *recorderIndicatorView;
 
 @property(nonatomic, copy, nullable)NSString *identifier;
+
+@property (strong, nonatomic) HXPhotoManager *manager;
 
 @end
 @implementation PhotonChatPanelManager
@@ -99,19 +104,23 @@ PhotonAudioRecorderDelegate>
                                                                        title:@"照片"
                                                                    imagePath:@"moreKB_image"];
     PhotonMoreKeyboardItem *cameraItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeCamera
-                                                                        title:@"拍摄"
+                                                                        title:@"拍照"
                                                                     imagePath:@"moreKB_capture"];
     
+    PhotonMoreKeyboardItem *vedioItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeVideo
+                                                                       title:@"短视频"
+                                                                   imagePath:@"moreKB_capture"];
+    
     PhotonMoreKeyboardItem *locationItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeLocation
-        title:@"位置"
-    imagePath:@"moreKB_capture"];
+                                                                          title:@"位置"
+                                                                      imagePath:@"moreKB_capture"];
     
     [self.moreKeyboard setDelegate:self];
     [self.moreKeyboard setKeyboardDelegate:self];
     [self.emojiKeyboard setDelegate:self];
     [self.emojiKeyboard setKeyboardDelegate:self];
     
-    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem,locationItem] mutableCopy]];
+    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem,vedioItem,locationItem] mutableCopy]];
     [self.emojiKeyboard setChatEmojiKeyboardItems:nil];
     
     [self addMasonry];
@@ -421,7 +430,66 @@ PhotonAudioRecorderDelegate>
         }];
         PhotonUINavigationController *navController = [[PhotonUINavigationController alloc] initWithRootViewController:locationVC];
         [[self getCurrentVC] presentViewController:navController animated:YES completion:nil];
-    }else{
+    }else if (item.type == PhotonMoreKeyboardItemTypeVideo){
+            if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                [self.view hx_showImageHUDText:@"此设备不支持相机!"];
+                return;
+            }
+            AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+            if (authStatus == AVAuthorizationStatusRestricted || authStatus == AVAuthorizationStatusDenied) {
+                 [self.view hx_showImageHUDText:@"无法使用相机,请在设置-隐私-相机中允许访问相机中设置"];
+                return;
+            }
+        __weak typeof(self)weakSelf = self;
+            [[self getCurrentVC] hx_presentCustomCameraViewControllerWithManager:self.manager done:^(HXPhotoModel *model, HXCustomCameraViewController *viewController) {
+
+                [weakSelf compressVideo:model.videoURL completion:^(NSURL * videoURL) {
+                     NSString *fileName = [NSString stringWithFormat:@"%.0lf.mp4", [NSDate date].timeIntervalSince1970 * 1000];
+                     NSString *path = [[PhotonMessageCenter sharedCenter] getVideoFilePath:weakSelf.identifier fileName:fileName];
+                     if (![path isNotEmpty]) {
+                         return;
+                     }
+                     NSURL *pathurl = [NSURL fileURLWithPath:path];
+                     NSError *error;
+                     BOOL res = [[NSFileManager defaultManager] moveItemAtURL:videoURL toURL:pathurl error:&error];
+                     if (res) {
+                         [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
+                         [[NSFileManager defaultManager] removeItemAtURL:videoURL error:nil];
+                     }
+                     if (self.delegate && [self.delegate respondsToSelector:@selector(sendVideoMessage:duraion:)]) {
+                         [self.delegate sendVideoMessage:fileName duraion:model.videoDuration];
+                    
+                     }
+                }];
+                // sAVURLAsset *avAsset = [[AVURLAsset alloc] initWithURL:model.videoURL options:nil];
+//                [HXPhotoTools exportEditVideoForAVAsset:avAsset timeRange:CMTimeRangeMake(kCMTimeZero,kCMTimePositiveInfinity) presetName:self.manager.configuration.editVideoExportPresetName success:^(NSURL *videoURL) {
+//
+//                    NSString *fileName = [NSString stringWithFormat:@"%.0lf.mp4", [NSDate date].timeIntervalSince1970 * 1000];
+//                    NSString *path = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:weakSelf.identifier fileName:fileName];
+//                    if (![path isNotEmpty]) {
+//                        return;
+//                    }
+//                    NSURL *pathurl = [NSURL fileURLWithPath:path];
+//                    NSError *error;
+//                   BOOL res = [[NSFileManager defaultManager] moveItemAtURL:videoURL toURL:pathurl error:&error];
+//                    if (res) {
+//                        [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
+//                        [[NSFileManager defaultManager] removeItemAtURL:videoURL error:nil];
+//                    }
+////                    if (self.delegate && [self.delegate respondsToSelector:@selector(sendVoiceMessage:duraion:)]) {
+////
+////                    }
+//                    NSLog(@"%@",videoURL);
+//                } failed:^(NSError *error) {
+//
+//                }];
+            } cancel:^(HXCustomCameraViewController *viewController) {
+                NSSLog(@"取消了");
+            }];
+        
+        
+        
+    }else if(item.type == PhotonMoreKeyboardItemTypeImage || item.type == PhotonMoreKeyboardItemTypeCamera){
         UIImagePickerController *imagePickerController = [[UIImagePickerController alloc] init];
         if (item.type == PhotonMoreKeyboardItemTypeCamera) {
             if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
@@ -437,7 +505,52 @@ PhotonAudioRecorderDelegate>
         [imagePickerController setDelegate:self];
         
         [[self getCurrentVC] presentViewController:imagePickerController animated:YES completion:nil];
+        
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                if(status != PHAuthorizationStatusAuthorized){
+                    [imagePickerController dismissViewControllerAnimated:YES completion:nil];
+                }
+            }];
+        });
+       
     }
+}
+
+// 压缩视频
+- (void)compressVideo:(NSURL *)videoUrl completion:(void (^)(NSURL*))completion{
+    NSURL *saveUrl=videoUrl;
+
+    // 通过文件的 url 获取到这个文件的资源
+    AVURLAsset *avAsset = [[AVURLAsset alloc] initWithURL:saveUrl options:nil];
+    // 用 AVAssetExportSession 这个类来导出资源中的属性
+    NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+
+    // 压缩视频
+    if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) { // 导出属性是否包含低分辨率
+    // 通过资源（AVURLAsset）来定义 AVAssetExportSession，得到资源属性来重新打包资源 （AVURLAsset, 将某一些属性重新定义
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
+    // 设置导出文件的存放路径
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+    NSDate    *date = [[NSDate alloc] init];
+    NSString *outPutPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"output-%@.mp4",[formatter stringFromDate:date]]];
+    exportSession.outputURL = [NSURL fileURLWithPath:outPutPath];
+    // 是否对网络进行优化
+    exportSession.shouldOptimizeForNetworkUse = true;
+    // 转换成MP4格式
+    exportSession.outputFileType = AVFileTypeMPEG4;
+    // 开始导出,导出后执行完成的block
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        // 如果导出的状态为完成
+        if ([exportSession status] == AVAssetExportSessionStatusCompleted) {
+            if (completion) {
+                completion(exportSession.outputURL);
+            }
+        }
+    }];
+}
 }
 
 //MARK: UIImagePickerDelegate
@@ -512,5 +625,15 @@ PhotonAudioRecorderDelegate>
         currentVC = rootVC;
     }
     return currentVC;
+}
+
+- (HXPhotoManager *)manager {
+    if (!_manager) {
+        _manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhotoAndVideo];
+        _manager.configuration.openCamera = YES;
+        _manager.configuration.saveSystemAblum = NO;
+        _manager.configuration.themeColor = [UIColor blackColor];
+    }
+    return _manager;
 }
 @end
