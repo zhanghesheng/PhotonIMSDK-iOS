@@ -8,7 +8,7 @@
 
 #import "PhotonLocationViewContraller.h"
 
-@interface PhotonLocationViewContraller ()<MKMapViewDelegate, CLLocationManagerDelegate>
+@interface PhotonLocationViewContraller ()<MKMapViewDelegate, CLLocationManagerDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic) BOOL canSend;
 
 @property (nonatomic) CLLocationCoordinate2D locationCoordinate;
@@ -18,6 +18,7 @@
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MKPointAnnotation *annotation;
 @property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, assign)BOOL initLocation;
 @end
 
 @implementation PhotonLocationViewContraller
@@ -26,6 +27,7 @@
     self = [super init];
     if (self) {
         _canSend = YES;
+        _initLocation = NO;
     }
     
     return self;
@@ -54,22 +56,32 @@
 
 - (void)_setupSubviews
 {
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navbar_white"] forBarMetrics:UIBarMetricsDefault];
-    [self.navigationController.navigationBar.layer setMasksToBounds:YES];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"nav_back"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] style:UIBarButtonItemStylePlain target:self action:@selector(closeAction)];
+
     if (self.canSend) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendAction)];
+    }else{
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"location"] style:UIBarButtonItemStylePlain target:self action:@selector(shared)];
     }
     
     
-    self.mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
+    self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, NavAndStatusHight, PhotoScreenWidth, PhotoScreenHeight -NavAndStatusHight)];
     self.mapView.delegate = self;
     self.mapView.mapType = MKMapTypeStandard;
+    self.mapView.userTrackingMode=MKUserTrackingModeFollow;
+    _mapView.showsUserLocation = YES;
     self.mapView.zoomEnabled = YES;
     [self.view addSubview:self.mapView];
+    
+    if (self.canSend) {
+        UILongPressGestureRecognizer *lpGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(lpgrClick:)];
+        [lpGesture setDelegate:self];
+        [self.mapView addGestureRecognizer:lpGesture];
+        
+        UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panClick:)];
+        [panGesture setDelegate:self];
+        [self.mapView addGestureRecognizer:panGesture];
+    }
     
     self.annotation = [[MKPointAnnotation alloc] init];
 }
@@ -103,31 +115,39 @@
     [self.mapView removeAnnotation:self.annotation];
     self.annotation.coordinate = locationCoordinate;
     [self.mapView addAnnotation:self.annotation];
+
+    
 }
 
 #pragma mark - MKMapViewDelegate
 
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
+    if (self.initLocation) {
+        return;
+    }
     __weak typeof(self) weakself = self;
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:userLocation.location completionHandler:^(NSArray *array, NSError *error) {
         if (!error && array.count > 0) {
-            CLPlacemark *placemark = [array objectAtIndex:0];
+            CLPlacemark *placemark = [array firstObject];
+            //设置标题
+            userLocation.title=placemark.locality;
+            //设置子标题
+            userLocation.subtitle=placemark.name;
+            
             weakself.address = placemark.name;
             weakself.detailAddress = [placemark.addressDictionary[@"FormattedAddressLines"] firstObject];
+            
             [weakself _moveToLocation:userLocation.coordinate];
+            
         }
     }];
+    self.initLocation = YES;
 }
-
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
      [PhotonUtil hiddenLoading];
-    if (error.code == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:[error.userInfo objectForKey:NSLocalizedRecoverySuggestionErrorKey] delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-        [alertView show];
-    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
@@ -145,20 +165,88 @@
     }
 }
 
+- (void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
+}
+
+- (void)lpgrClick:(UILongPressGestureRecognizer *)lpgr
+{
+    __weak typeof(self)weakSelf = self;
+    if(lpgr.state == UIGestureRecognizerStateBegan)
+    {
+        [_mapView removeAnnotations:_mapView.annotations];
+        CGPoint point = [lpgr locationInView:_mapView];
+        CLLocationCoordinate2D center = [_mapView convertPoint:point toCoordinateFromView:_mapView];
+        self.locationCoordinate = center;
+        MKPointAnnotation *pinAnnotation = [[MKPointAnnotation alloc] init];
+        pinAnnotation.coordinate = center;
+        pinAnnotation.title = @"长按";
+        CLGeocoder *geocoder=[[CLGeocoder alloc]init];
+        [geocoder reverseGeocodeLocation:[[CLLocation alloc]initWithLatitude:center.latitude longitude:center.longitude] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+            if (error!=nil || placemarks.count==0) {
+                return ;
+            }
+            CLPlacemark *placemark=[placemarks firstObject];
+            pinAnnotation.title=placemark.locality;
+            pinAnnotation.subtitle=placemark.name;
+            weakSelf.address = placemark.name;
+            weakSelf.detailAddress = [placemark.addressDictionary[@"FormattedAddressLines"] firstObject];
+            [weakSelf.mapView addAnnotation:pinAnnotation];
+        }];
+        
+    }
+}
+
+- (void)panClick:(UIPanGestureRecognizer *)panG
+{
+    __weak typeof(self)weakSelf = self;
+    if(panG.state == UIGestureRecognizerStateEnded)
+    {
+        [_mapView removeAnnotations:_mapView.annotations];
+        CGPoint point = _mapView.center;
+        CLLocationCoordinate2D center = [_mapView convertPoint:point toCoordinateFromView:_mapView];
+        self.locationCoordinate = center;
+        MKPointAnnotation *pinAnnotation = [[MKPointAnnotation alloc] init];
+        pinAnnotation.coordinate = center;
+        pinAnnotation.title = @"长按";
+        CLGeocoder *geocoder=[[CLGeocoder alloc]init];
+        [geocoder reverseGeocodeLocation:[[CLLocation alloc]initWithLatitude:center.latitude longitude:center.longitude] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+            if (error!=nil || placemarks.count==0) {
+                return ;
+            }
+            CLPlacemark *placemark=[placemarks firstObject];
+            pinAnnotation.title=placemark.locality;
+            pinAnnotation.subtitle=placemark.name;
+            weakSelf.address = placemark.name;
+            weakSelf.detailAddress = [placemark.addressDictionary[@"FormattedAddressLines"] firstObject];
+            [weakSelf.mapView addAnnotation:pinAnnotation];
+        }];
+        
+    }
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
 #pragma mark - Action
 
 - (void)closeAction
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)sendAction
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        if (self.sendCompletion) {
-            self.sendCompletion(self.locationCoordinate, self.address,self.detailAddress);
-        }
-    }];
+    if (self.sendCompletion) {
+           self.sendCompletion(self.locationCoordinate, self.address,self.detailAddress);
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+   
+}
+
+- (void)shared{
+    
 }
 
 @end

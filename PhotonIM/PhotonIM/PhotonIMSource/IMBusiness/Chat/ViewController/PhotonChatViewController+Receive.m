@@ -84,6 +84,21 @@
 }
 
 - (void)imClient:(id)client didReceiveDeleteMesage:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith delMsgIds:(NSArray<NSString *> *)delMsgIds userInfo:(NSDictionary<NSString *,id> *)userInfo{
-    NSLog(@"%@",[delMsgIds description]);
+     BOOL ret = [self wrapperWithDelMsgIds:delMsgIds];
+       if (ret) {
+            [self reloadData];
+       }
+}
+- (BOOL)wrapperWithDelMsgIds:(NSArray *)delMsgIds{
+    NSArray *items=[self.model.items copy];
+    BOOL rec = NO;
+    for (PhotonChatBaseItem *item in items) {
+        PhotonIMMessage *tempMsg = item.userInfo;
+        if ([delMsgIds containsObject:tempMsg.messageID]) {
+            [self.model.items removeObject:item];
+            rec = YES;
+        }
+    }
+    return rec;
 }
 @end

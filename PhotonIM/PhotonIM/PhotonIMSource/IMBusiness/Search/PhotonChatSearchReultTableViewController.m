@@ -105,6 +105,7 @@
         _searchBar.delegate = self;
         _searchBar.searchBarStyle = UISearchBarStyleMinimal;
         _searchBar.showsCancelButton = YES;
+        _searchBar.placeholder = @"搜索";
         [_searchBar becomeFirstResponder];
         _searchBar.backgroundColor = [UIColor whiteColor];
         _searchBar.returnKeyType = UIReturnKeyDone;

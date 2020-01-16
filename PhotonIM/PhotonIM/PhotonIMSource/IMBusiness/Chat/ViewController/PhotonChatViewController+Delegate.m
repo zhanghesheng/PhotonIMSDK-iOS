@@ -130,10 +130,9 @@
         }
     }
     if([cell isKindOfClass:[PhotonChatLocationCell class]]){
-          PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)chatItem;
+        PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)chatItem;
         PhotonLocationViewContraller *locationVC = [[PhotonLocationViewContraller alloc]  initWithLocation:locationItem.locationCoordinate];
-              PhotonUINavigationController *navController = [[PhotonUINavigationController alloc] initWithRootViewController:locationVC];
-              [self presentViewController:navController animated:YES completion:nil];
+        [self.navigationController pushViewController:locationVC animated:YES];
     }
 }
 

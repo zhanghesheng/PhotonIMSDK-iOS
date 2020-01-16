@@ -131,11 +131,21 @@
 }
 
 - (void)more{
+    PhotonWeakSelf(self)
     if (self.conversation.chatType == PhotonIMChatTypeSingle) {
-        PhotonSingleSettingViewController *msgSetting = [[PhotonSingleSettingViewController alloc] initWithConversation:self.conversation];
+        PhotonSingleSettingViewController *msgSetting = [[PhotonSingleSettingViewController alloc] initWithConversation:self.conversation compeltion:^(BOOL deleteMsg) {
+            if (deleteMsg) {
+                [weakself clearLoadData];
+            }
+            
+        }];
         [self.navigationController pushViewController:msgSetting animated:YES];
     }else if (self.conversation.chatType == PhotonIMChatTypeGroup){
-        PhotonGroupSettingViewController *msgSetting = [[PhotonGroupSettingViewController alloc] initWithGroupID:self.conversation];
+        PhotonGroupSettingViewController *msgSetting = [[PhotonGroupSettingViewController alloc] initWithGroupID:self.conversation compeltion:^(BOOL deleteMsg) {
+            if (deleteMsg) {
+                 [weakself clearLoadData];
+            }
+        }];
         [self.navigationController pushViewController:msgSetting animated:YES];
     }
    
@@ -202,6 +212,10 @@
     self.dataSource = dataSource;
 }
 
+- (void)clearLoadData{
+    [self.model.items removeAllObjects];
+    [self reloadData];
+}
 #pragma mark ----- getter --------
 - (PhotonCharBar *)chatBar{
     return [_panelManager chatBar];

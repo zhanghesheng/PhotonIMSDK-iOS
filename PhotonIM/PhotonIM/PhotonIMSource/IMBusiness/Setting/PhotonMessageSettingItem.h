@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, PhotonMessageSettingType){
     PhotonMessageSettingTypeIgnorSticky = 1,
     PhotonMessageSettingTypeIgnoreAlert,
-    PhotonMessageSettingTypeSearch
+    PhotonMessageSettingTypeSearch,
+    PhotonMessageSettingTypeClearHistory
 };
 @interface PhotonMessageSettingItem : PhotonBaseTableItem
 @property (nonatomic, copy, nullable) NSString *settingName;

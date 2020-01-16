@@ -14,6 +14,7 @@
 #import "PhotonBaseContactCell.h"
 #import "PhotonEmptyTableItem.h"
 #import "PhotonChatSearchReultTableViewController.h"
+typedef void(^Compention)(BOOL deleteMsg);
 @interface PhotonSingleSettingDataSource ()
 @end
 
@@ -30,14 +31,16 @@
 @interface PhotonSingleSettingViewController ()<UITableViewDelegate,PhotonMessageSettingCellDelegate>
 @property (nonatomic, weak, nullable)PhotonIMConversation *conversation;
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
+@property (nonatomic, copy ,nullable)Compention completion;
 @end
 
 @implementation PhotonSingleSettingViewController
 
-- (instancetype)initWithConversation:(PhotonIMConversation *)conversation{
+- (instancetype)initWithConversation:(PhotonIMConversation *)conversation compeltion:(void(^)(BOOL deleteMsg))completion{
     self = [super init];
     if (self) {
         _conversation = conversation;
+        _completion = completion;
     }
     return self;
 }
@@ -94,6 +97,13 @@
     stickyItem.type = PhotonMessageSettingTypeIgnorSticky;
     [self.items addObject:stickyItem];
     
+    [self.items addObject:emptyItem];
+    PhotonMessageSettingItem *clearItem = [[PhotonMessageSettingItem alloc] init];
+    clearItem.settingName = @"清空聊天记录";
+    clearItem.showSwitch = NO;
+    clearItem.type = PhotonMessageSettingTypeClearHistory;
+    [self.items addObject:clearItem];
+    
     PhotonSingleSettingDataSource *dataSource = [[PhotonSingleSettingDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
 }
@@ -105,6 +115,31 @@
         if (tempItem.type == PhotonMessageSettingTypeSearch) {
             PhotonChatSearchReultTableViewController *contr = [[PhotonChatSearchReultTableViewController alloc] initWithChatType:_conversation.chatType chatWith:_conversation.chatWith];
             [self.navigationController pushViewController:contr animated:YES];
+        }else if (tempItem.type == PhotonMessageSettingTypeClearHistory){
+            UIAlertController *alertCv = [UIAlertController alertControllerWithTitle:@"删除聊天记录" message:@"清空后不可恢复，请谨慎操作"
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+            __weak typeof(self)weakSelf = self;
+            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [PhotonUtil showLoading:@"删除中...,请等待"];
+                [[PhotonMessageCenter sharedCenter] clearMessagesWithChatType:weakSelf.conversation.chatType chatWith:weakSelf.conversation.chatWith syncServer:YES completion:^(BOOL finish) {
+                    [PhotonUtil hiddenLoading];
+                    if (finish) {
+                        if (weakSelf.completion) {
+                            weakSelf.completion(YES);
+                        }
+                        [PhotonUtil showSuccessHint:@"删除成功"];
+                    }else{
+                        [PhotonUtil showErrorHint:@"删除失败，请重试"];
+                    }
+                     
+                }];
+            }];
+            UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                   
+            }];
+            [alertCv addAction:action1];
+            [alertCv addAction:action2];
+            [self presentViewController:alertCv animated:YES completion:nil];
         }
     }
 }

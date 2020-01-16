@@ -53,6 +53,11 @@
     if(!conversation){
            return;
     }
+    if (conversation.sticky) {
+        self.contentView.backgroundColor = [UIColor colorWithHex:0xf6f6f6];
+    }else{
+        self.contentView.backgroundColor = [UIColor whiteColor];
+    }
     [self.iconView sd_setImageWithURL:[NSURL URLWithString:conversation.FAvatarPath] placeholderImage:[UIImage imageWithColor:RGBAColor(0, 0, 0, 0.6)]];
     
     NSString *nickName = @"";

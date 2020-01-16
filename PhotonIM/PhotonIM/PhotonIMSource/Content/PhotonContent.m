@@ -13,6 +13,7 @@
 #import "PhotonAppLaunchManager.h"
 @interface PhotonContent()
 @property(nonatomic, strong, nullable)PhotonUser *currentUser;
+@property(nonatomic, strong, nullable)PhotonLoadDataSetModel *setModel;
 @end
 @implementation PhotonContent
 + (instancetype)sharedInstance{
@@ -55,6 +56,10 @@
 }
 + (PhotonUser *)currentUser{
     return [PhotonContent sharedInstance].currentUser;
+}
+
++ (PhotonLoadDataSetModel *)currentSettingModel{
+    return [PhotonContent sharedInstance].setModel;
 }
 
 + (void)persistenceCurrentUser{

@@ -109,11 +109,11 @@ PhotonAudioRecorderDelegate>
     
     PhotonMoreKeyboardItem *vedioItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeVideo
                                                                        title:@"短视频"
-                                                                   imagePath:@"moreKB_capture"];
+                                                                   imagePath:@"video"];
     
     PhotonMoreKeyboardItem *locationItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeLocation
                                                                           title:@"位置"
-                                                                      imagePath:@"moreKB_capture"];
+                                                                      imagePath:@"location"];
     
     [self.moreKeyboard setDelegate:self];
     [self.moreKeyboard setKeyboardDelegate:self];
@@ -428,8 +428,7 @@ PhotonAudioRecorderDelegate>
                 [weakSelf.delegate sendLocationMessage:address detailAddress:detailAddress locationCoordinate:aCoordinate];
             }
         }];
-        PhotonUINavigationController *navController = [[PhotonUINavigationController alloc] initWithRootViewController:locationVC];
-        [[self getCurrentVC] presentViewController:navController animated:YES completion:nil];
+        [[self getCurrentVC].navigationController pushViewController:locationVC animated:YES];
     }else if (item.type == PhotonMoreKeyboardItemTypeVideo){
             if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
                 [self.view hx_showImageHUDText:@"此设备不支持相机!"];

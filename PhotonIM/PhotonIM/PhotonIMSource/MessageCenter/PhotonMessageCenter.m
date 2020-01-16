@@ -215,7 +215,7 @@ static PhotonMessageCenter *center = nil;
     // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
     PhotonIMImageBody *body =(PhotonIMImageBody *)message.messageBody;
     PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
-    fileInfo.name = @"fileUpload";
+    fileInfo.name = @"file";
     fileInfo.fileName = @"chatimage.jpg";
     fileInfo.mimeType = @"image/jpeg";
     fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:body.localFileName];
@@ -226,6 +226,30 @@ static PhotonMessageCenter *center = nil;
     } failure:^(PhotonErrorDescription * _Nonnull error) {
         [weakself p_sendMessag:message result:nil completion:completion];
     }];
+//     // 处理header
+//          NSMutableDictionary *header = [NSMutableDictionary dictionary];
+//          [header setValue:APP_ID forKey:@"appId"];
+//          NSString *timestamp = [NSString stringWithFormat:@"%@",@((int64_t)[NSDate date].timeIntervalSince1970)];
+//          [header setValue:timestamp forKey:@"timestamp"];
+//         NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
+//          NSString *signString = [NSString stringWithFormat:@"%@%@%@",APP_ID,token,timestamp];
+//          signString = [signString md5];
+//          [header setValue:signString forKey:@"sign"];
+//          [header setValue:[PhotonContent currentUser].userID forKey:@"userId"];
+//        // 处理parameter
+//        NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
+//        [paramter setValue:@"2" forKey:@"fileType"];
+//
+//        [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_FILE_UPLOAD_PATH paramter:paramter header:header fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
+//
+//        } completion:^(NSDictionary * _Nonnull dict) {
+//
+//            [weakself p_sendMessag:message result:dict completion:completion];
+//
+//        } failure:^(PhotonErrorDescription * _Nonnull error) {
+//
+//            [weakself p_sendMessag:message result:nil completion:completion];
+//        }];
 }
 
 - (void)p_sendVoiceMessage:(PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
@@ -234,7 +258,7 @@ static PhotonMessageCenter *center = nil;
     // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
     PhotonIMAudioBody *body =(PhotonIMAudioBody *)message.messageBody;
     PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
-    fileInfo.name = @"fileUpload";
+    fileInfo.name = @"file";
     fileInfo.fileName = @"chataudio.opus";
     fileInfo.mimeType = @"audio/opus";
     fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
@@ -245,6 +269,7 @@ static PhotonMessageCenter *center = nil;
     } failure:^(PhotonErrorDescription * _Nonnull error) {
         [weakself p_sendMessag:message result:nil completion:completion];
     }];
+
 }
 
 - (void)p_sendMessag:(PhotonIMMessage *)message result:(NSDictionary *)result completion:(nullable CompletionBlock)completion{
@@ -285,13 +310,12 @@ static PhotonMessageCenter *center = nil;
     PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
     fileInfo.name = @"file";
     fileInfo.fileName = @"chataudio.mp4";
-    fileInfo.mimeType = @"video/mp4";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:message.chatWith fileName:body.localFileName];
+    fileInfo.mimeType = @"multipart/form-data";
+    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
     PhotonWeakSelf(self)
     
     // 处理header
       NSMutableDictionary *header = [NSMutableDictionary dictionary];
-      [header setValue:@"multipart/form-data" forKey:@"Content-Type"];
       [header setValue:APP_ID forKey:@"appId"];
       NSString *timestamp = [NSString stringWithFormat:@"%@",@((int64_t)[NSDate date].timeIntervalSince1970)];
       [header setValue:timestamp forKey:@"timestamp"];
@@ -300,6 +324,7 @@ static PhotonMessageCenter *center = nil;
       signString = [signString md5];
       [header setValue:signString forKey:@"sign"];
       [header setValue:[PhotonContent currentUser].userID forKey:@"userId"];
+      [header setValue:token forKey:@"Token"];
     // 处理parameter
     NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
     [paramter setValue:@"1" forKey:@"fileType"];
@@ -468,6 +493,42 @@ static PhotonMessageCenter *center = nil;
     }];
 }
 
+- (void)clearMessagesWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith syncServer:(BOOL)syncServer completion:(void(^)(BOOL finish))completion{
+    if (!syncServer) {
+        [self clearMessagesWithChatType:chatType chatWith:chatWith];
+    }else{
+        [self  clear:@"" chatType:chatType chatWith:chatWith completion:completion];
+    }
+}
+
+- (void)clear:(NSString *)anchorMsgId chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith completion:(void(^)(BOOL finish))completion{
+    PhotonWeakSelf(self)
+    [self.imClient loadHistoryMessages:chatType chatWith:chatWith anchor:anchorMsgId size:100 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messages, NSString * _Nullable an, BOOL remainHistoryInServer) {
+        if (!messages || messages.count == 0) {
+            if (completion) {
+                completion(YES);
+            }
+            return;
+        }
+        NSMutableArray *msgIds = [NSMutableArray arrayWithCapacity:messages.count];
+        for (PhotonIMMessage *msg in messages) {
+            [msgIds addObject:msg.messageID];
+        }
+        [weakself.imClient sendDeleteMessageWithChatType:chatType chatWith:chatWith delMsgIds:msgIds completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+            if (!succeed) {
+                if (completion) {
+                    completion(NO);
+                }
+                return;
+            }else{
+                [weakself clear:an chatType:chatType chatWith:chatWith completion:completion];
+            }
+            
+        }];
+    }];
+              
+}
+
 #pragma mark ---  数据操作相关 -----
 - (void)insertOrUpdateMessage:(PhotonIMMessage *)message{
     [self.imClient insertOrUpdateMessage:message updateConversion:YES];
@@ -501,6 +562,10 @@ static PhotonMessageCenter *center = nil;
 
 - (void)alterConversationDraft:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith draft:(NSString *)draft{
     [self.imClient alterConversationDraft:chatType chatWith:chatWith draft:draft];
+}
+
+- (void)clearMessagesWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
+    [self.imClient clearMessagesWithChatType:chatType chatWith:chatWith];
 }
 
 #pragma mark --------- 文件操作相关 ----------------
