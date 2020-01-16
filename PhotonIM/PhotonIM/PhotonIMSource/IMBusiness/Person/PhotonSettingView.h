@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonSettingView : UIView
-
+- (void)showViewInSuperView:(UIView *)superView;
 @end
 
 NS_ASSUME_NONNULL_END

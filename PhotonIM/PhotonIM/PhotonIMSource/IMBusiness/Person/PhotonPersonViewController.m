@@ -10,6 +10,7 @@
 #import "PhotonPersonCell.h"
 #import "PhotonEmptyTableItem.h"
 #import "PhotonMessageCenter.h"
+#import "PhotonSettingView.h"
 @interface PhotonPersonDataSource ()
 @end
 
@@ -69,6 +70,14 @@
        personItem2.value = [user.nickName isNotEmpty]?user.nickName:@"未设置";
        personItem2.type = PhotonPersonItemTypeNick;
        personItem2.valueColor = [UIColor colorWithHex:0x5D5C6F];
+    
+       
+        PhotonPersonItem *settingItem = [[PhotonPersonItem alloc] init];
+        settingItem.key = @"拉取历史设置";
+        settingItem.shorArrow = YES;
+        settingItem.value = @"";
+        settingItem.type = PhotonPersonItemTypeLoadHistorySetting;
+        settingItem .valueColor = [UIColor colorWithHex:0x5D5C6F];
        
        
        
@@ -83,6 +92,7 @@
        [self.items addObject:personItem];
        [self.items addObject:personItem1];
        [self.items addObject:personItem2];
+       [self.items addObject:settingItem];
        
        [self.items addObject:emptyitem];
        
@@ -104,6 +114,12 @@
         switch (tempItem.type) {
             case PhotonPersonItemTypeNick:
                 [self modifiedNickName];
+                break;
+            case PhotonPersonItemTypeLoadHistorySetting:{
+                
+                PhotonSettingView *view = [[PhotonSettingView alloc] initWithFrame:CGRectMake(50, 150, 300, 300)];
+                [view showViewInSuperView:self.view];
+            }
                 break;
                 
             default:
