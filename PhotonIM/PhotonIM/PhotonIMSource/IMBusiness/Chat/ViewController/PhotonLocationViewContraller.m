@@ -7,7 +7,7 @@
 //
 
 #import "PhotonLocationViewContraller.h"
-
+typedef void(^ActiobBlcok)(void);
 @interface PhotonLocationViewContraller ()<MKMapViewDelegate, CLLocationManagerDelegate,UIGestureRecognizerDelegate>
 @property (nonatomic) BOOL canSend;
 
@@ -18,7 +18,9 @@
 @property (nonatomic, strong) MKMapView *mapView;
 @property (nonatomic, strong) MKPointAnnotation *annotation;
 @property (nonatomic, strong) CLLocationManager *locationManager;
-@property (nonatomic, assign)BOOL initLocation;
+
+@property (nonatomic, assign) BOOL initLocation;
+@property (nonatomic, copy)ActiobBlcok actionBlock;
 @end
 
 @implementation PhotonLocationViewContraller
@@ -41,6 +43,9 @@
        
        return self;
 }
+- (void)setActionBlock:(void(^)(void))actionBlock{
+    _actionBlock = actionBlock;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"地理位置";
@@ -56,8 +61,6 @@
 
 - (void)_setupSubviews
 {
-    
-
     if (self.canSend) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendAction)];
     }else{
@@ -242,11 +245,13 @@
            self.sendCompletion(self.locationCoordinate, self.address,self.detailAddress);
     }
     [self.navigationController popViewControllerAnimated:YES];
-   
 }
 
 - (void)shared{
-    
+    [self.navigationController popViewControllerAnimated:YES];
+    if (self.actionBlock) {
+        self.actionBlock();
+    }
 }
 
 @end

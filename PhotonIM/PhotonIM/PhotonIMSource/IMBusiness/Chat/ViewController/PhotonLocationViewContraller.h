@@ -10,12 +10,14 @@
 #import <CoreLocation/CoreLocation.h>
 #import <MapKit/MapKit.h>
 #import "PhotonBaseViewController.h"
-
+#import "PhotonChatTransmitListViewController.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonLocationViewContraller : PhotonBaseViewController
 @property (nonatomic, copy) void (^sendCompletion)(CLLocationCoordinate2D aCoordinate, NSString  *_Nullable address, NSString * _Nullable detailAddress);
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)locationCoordinate;
+
+- (void)setActionBlock:(void(^)(void))actionBlock;
 @end
 
 NS_ASSUME_NONNULL_END
