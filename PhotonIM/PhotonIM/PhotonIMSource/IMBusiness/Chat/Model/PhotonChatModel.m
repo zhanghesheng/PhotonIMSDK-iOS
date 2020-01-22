@@ -198,7 +198,7 @@
             }
             imageItem.fileName = imgBody.localFileName;
             if(fromeType == PhotonChatMessageFromSelf){
-                imageItem.localPath = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:imageItem.fileName];
+                imageItem.localPath = imgBody.localFilePath;
             }
             imageItem.whRatio = imgBody.whRatio;
             
@@ -216,6 +216,7 @@
             }
             audioItem.fileName = audioBody.localFileName;
             audioItem.duration = audioBody.mediaTime;
+            audioItem.fileLocalPath = audioBody.localFilePath;
             audioItem.userInfo = message;
             audioItem.isPlayed = audioBody.localMediaPlayed;
             audioItem.avatalarImgaeURL = avatarUrl;

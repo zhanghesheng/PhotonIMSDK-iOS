@@ -88,9 +88,15 @@
         imageItem.orignURL = imagePath;
         imageItem.thumURL = imagePath;
     }
-    [self addItem:imageItem];
+  
      PhotonWeakSelf(self)
-    [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+    [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
+        [PhotonUtil runMainThread:^{
+            imageItem.avatalarImgaeURL = message.messageBody.localFilePath;
+            [self addItem:imageItem];
+        }];
+        
+    } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.code >=1000 && error.em) {
             imageItem.tipText = error.em;
         }else if (!succeed){
@@ -112,9 +118,12 @@
     audioItem.fileName = fileName;
     audioItem.duration = duraion;
     audioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    [self addItem:audioItem];
+
     PhotonWeakSelf(self)
-    [[PhotonMessageCenter sharedCenter] sendVoiceMessage:audioItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+    [[PhotonMessageCenter sharedCenter] sendVoiceMessage:audioItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
+        audioItem.fileLocalPath = message.messageBody.localFilePath;
+        [self addItem:audioItem];
+    } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
             audioItem.tipText = error.em;
         }else if (!succeed){
@@ -138,7 +147,9 @@
     vedioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     [self addItem:vedioItem];
     PhotonWeakSelf(self)
-    [[PhotonMessageCenter sharedCenter] sendVideoMessage:vedioItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+    [[PhotonMessageCenter sharedCenter] sendVideoMessage:vedioItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
+        
+    } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
             vedioItem.tipText = error.em;
         }else if (!succeed){
@@ -180,7 +191,9 @@
     locationItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     [self addItem:locationItem];
     PhotonWeakSelf(self)
-    [[PhotonMessageCenter sharedCenter] sendLocationMessage:locationItem conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+    [[PhotonMessageCenter sharedCenter] sendLocationMessage:locationItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
+        
+    } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
             locationItem.tipText = error.em;
         }else if (!succeed){

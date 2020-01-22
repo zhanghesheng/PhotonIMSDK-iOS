@@ -55,21 +55,21 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 //-------- 消息发送相关 -----------
 
 // 发送文本表情消息
-- (void)sendTextMessage:(nullable PhotonChatTextMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendTextMessage:(nullable PhotonChatTextMessageItem *)item  conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
 
-- (void)sendTex:(NSString *)text conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendTex:(NSString *)text conversation:(nullable PhotonIMConversation *)conversation  completion:(nullable CompletionBlock)completion;
 
 // 发送图片消息
-- (void)sendImageMessage:(nullable PhotonChatImageMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendImageMessage:(nullable PhotonChatImageMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion;
 
 // 发送语音消息
-- (void)sendVoiceMessage:(nullable PhotonChatVoiceMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendVoiceMessage:(nullable PhotonChatVoiceMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion;
 
 // 发送视频消息
-- (void)sendVideoMessage:(nullable PhotonChatVideoMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendVideoMessage:(nullable PhotonChatVideoMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion;
 
 // 发送位置消息
-- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion;
+- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion;
 
 // 重发消息
 - (void)resendMessage:(nullable PhotonChatBaseItem *)item completion:(nullable CompletionBlock)completion;

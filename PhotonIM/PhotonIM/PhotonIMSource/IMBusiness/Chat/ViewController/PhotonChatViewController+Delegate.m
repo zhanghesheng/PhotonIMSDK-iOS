@@ -103,7 +103,7 @@
         PhotonChatVoiceMessageCell *voiceCell = (PhotonChatVoiceMessageCell *)cell;
         PhotonChatVoiceMessageItem *voiceItem = (PhotonChatVoiceMessageItem *)chatItem;
         if(voiceItem.fromType == PhotonChatMessageFromSelf){// 自己发送的语音消息，直接播放
-            NSString *path = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:self.conversation.chatWith fileName:voiceItem.fileName];
+            NSString *path = voiceItem.fileLocalPath;//[[PhotonMessageCenter sharedCenter] getVoiceFilePath:self.conversation.chatWith fileName:voiceItem.fileName];
            [self playAudioSource:path cell:voiceCell];
         }else if(voiceItem.fromType == PhotonChatMessageFromFriend){// 来自好友的消息，先判断本地是否已缓存，已缓存
             PhotonIMMessage *message = (PhotonIMMessage *)voiceItem.userInfo;
