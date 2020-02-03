@@ -92,7 +92,7 @@
        [self.items addObject:personItem];
        [self.items addObject:personItem1];
        [self.items addObject:personItem2];
-       [self.items addObject:settingItem];
+//       [self.items addObject:settingItem];
        
        [self.items addObject:emptyitem];
        
