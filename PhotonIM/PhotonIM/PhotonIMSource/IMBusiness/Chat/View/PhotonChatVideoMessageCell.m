@@ -10,6 +10,10 @@
 #import "PhotonChatVideoMessageItem.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "PhotonMacros.h"
+//
+@interface PhotonChatVideoMessageCell()
+@property(nonatomic,strong)UIImageView *playIconView;
+@end
 @implementation PhotonChatVideoMessageCell
 
 - (void)dealloc
@@ -28,6 +32,8 @@
         return;
     }
     PhotonChatVideoMessageItem *videoItem = (PhotonChatVideoMessageItem *)object;
+    self.contentBackgroundView.contentMode = UIViewContentModeScaleAspectFill;
+    [self.contentBackgroundView addSubview:self.playIconView];
     NSURL *fileURL = nil;
     if (videoItem.coverURL) {
         if ([videoItem.coverURL hasPrefix:@"http"]) {
@@ -55,6 +61,12 @@
     }
     contentBackgroundViewFrame.origin.x = contentBackgroundViewLeft;
     self.contentBackgroundView.frame = contentBackgroundViewFrame;
+    
+    CGRect playFrame = self.playIconView.frame;
+    CGSize size = playFrame.size;
+    CGPoint playOrigin = CGPointMake((contentBackgroundViewFrame.size.width - size.width)/2, (contentBackgroundViewFrame.size.height - size.height)/2);
+    playFrame.origin = playOrigin;
+    self.playIconView.frame = playFrame;
 }
 
 - (void)layoutSubviews{
@@ -65,6 +77,18 @@
 
 - (void)prepareForReuse{
     [super prepareForReuse];
+}
+
+- (UIImageView *)playIconView{
+    if (!_playIconView) {
+        UIImage *image = [UIImage imageNamed:@"video_play"];
+        CGFloat hwRatio = image.size.height/image.size.width;
+        _playIconView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30.0, 30.0*hwRatio)];
+        _playIconView.image = image;
+        _playIconView.userInteractionEnabled = NO;
+        _playIconView.backgroundColor = [UIColor clearColor];
+    }
+    return _playIconView;
 }
 
 #pragma mark ----- Getter ---------

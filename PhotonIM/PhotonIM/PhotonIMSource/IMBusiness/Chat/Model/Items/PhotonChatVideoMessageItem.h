@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable)NSString *coverURL;
 
 @property (nonatomic, strong, nullable)UIImage *coverImage;
+@property (nonatomic, assign)CGFloat whRatio;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,7 +8,7 @@
 
 #import "PhotonChatViewController+Send.h"
 #import "PhotonAtMemberListViewController.h"
-#import <AVFoundation/AVFoundation.h>
+#import "PhotonUtil.h"
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
 
@@ -67,7 +67,6 @@
 // 发送图片消息
 - (void)sendImageMessage:(NSData *)imageData{
     UIImage *image = [UIImage imageWithData:imageData];
-    
     double dataLength = [imageData length] * 1.0;
     dataLength = (dataLength/1024.0)/1024.0;
     if(dataLength > 10){
@@ -83,7 +82,6 @@
     imageItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     imageItem.whRatio = image.size.width/image.size.height;
     imageItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-  
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
         [PhotonUtil runMainThread:^{
@@ -112,7 +110,6 @@
     audioItem.fileName = fileName;
     audioItem.duration = duraion;
     audioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendVoiceMessage:audioItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
         audioItem.fileLocalPath = message.messageBody.localFilePath;
@@ -142,7 +139,7 @@
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendVideoMessage:vedioItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
         vedioItem.fileLocalPath = message.messageBody.localFilePath;
-        vedioItem.coverImage = [weakself firstFrameWithVideoURL:vedioItem.fileLocalPath size:vedioItem.contentSize];
+        vedioItem.coverImage = [PhotonUtil firstFrameWithVideoURL:vedioItem.fileLocalPath size:vedioItem.contentSize];
         [self addItem:vedioItem];
     } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
@@ -157,24 +154,6 @@
         }
         [weakself updateItem:vedioItem];
     }];
-}
-
-#pragma mark ---- 获取图片第一帧
-- (UIImage *)firstFrameWithVideoURL:(NSString *)fileUrl size:(CGSize)size
-{
-    // 获取视频第一帧
-    NSURL *url = [NSURL fileURLWithPath:fileUrl];
-    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
-    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
-    generator.appliesPreferredTrackTransform = YES;
-    generator.maximumSize = CGSizeMake(size.width, size.height);
-    NSError *error = nil;
-    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
-    {
-        return [UIImage imageWithCGImage:img];
-    }
-    return nil;
 }
 
 - (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate{

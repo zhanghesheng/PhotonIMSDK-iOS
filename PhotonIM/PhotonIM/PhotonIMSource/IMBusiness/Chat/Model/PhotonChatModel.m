@@ -222,7 +222,12 @@
                 videoItem.url = [NSURL URLWithString:videoBody.url];
             }
             videoItem.duration = videoBody.mediaTime;
-            videoItem.coverURL = videoBody.coverUrl?:[videoBody.url stringByReplacingOccurrencesOfString:@".mp4" withString:@"_L.jpg"];
+            videoItem.coverURL = videoBody.coverUrl;
+            videoItem.whRatio = videoBody.whRatio;
+            if (![videoItem.coverURL isNotEmpty]) {
+                videoItem.coverImage = [PhotonUtil firstFrameWithVideoURL:videoBody.localFilePath size:videoItem.contentSize];
+                videoItem.whRatio = videoItem.coverImage.size.width/videoItem.coverImage.size.height;
+            }
             videoItem.userInfo = message;
             resultItem = videoItem;
         }
