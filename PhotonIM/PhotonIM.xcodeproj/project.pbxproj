@@ -172,6 +172,7 @@
 		3289091023C85371002C45CC /* PhotonChatLocationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3289090F23C85371002C45CC /* PhotonChatLocationCell.m */; };
 		328A76532339D8EB009F0668 /* PhotonGroupMemberListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 328A76522339D8EB009F0668 /* PhotonGroupMemberListModel.m */; };
 		329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */; };
+		32A8D9DF23E911ED009F2120 /* PhotonChatVideoMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A8D9DE23E911ED009F2120 /* PhotonChatVideoMessageCell.m */; };
 		32AE413423B4B7E300BCBE5C /* MDAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */; };
 		32C5575E23CDD936007F06CE /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C5575C23CDD936007F06CE /* PhotosUI.framework */; };
 		32C5575F23CDD936007F06CE /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32C5575D23CDD936007F06CE /* Photos.framework */; };
@@ -576,6 +577,8 @@
 		328C32E322C070EC0031E948 /* PhontonMenuItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhontonMenuItem.m; sourceTree = "<group>"; };
 		329E67F72301460D0097BFDC /* PhotonBaseUITableView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonBaseUITableView.h; sourceTree = "<group>"; };
 		329E67F82301460D0097BFDC /* PhotonBaseUITableView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonBaseUITableView.m; sourceTree = "<group>"; };
+		32A8D9DD23E911ED009F2120 /* PhotonChatVideoMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatVideoMessageCell.h; sourceTree = "<group>"; };
+		32A8D9DE23E911ED009F2120 /* PhotonChatVideoMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatVideoMessageCell.m; sourceTree = "<group>"; };
 		32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MDAudioKit.framework; sourceTree = "<group>"; };
 		32C5575C23CDD936007F06CE /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		32C5575D23CDD936007F06CE /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
@@ -1300,6 +1303,8 @@
 				3238AC1122D4AB8700EB3D0B /* PhotonChatImageMessageCell.m */,
 				3238AC0C22D4AB8700EB3D0B /* PhotonChatVoiceMessageCell.h */,
 				3238AC1022D4AB8700EB3D0B /* PhotonChatVoiceMessageCell.m */,
+				32A8D9DD23E911ED009F2120 /* PhotonChatVideoMessageCell.h */,
+				32A8D9DE23E911ED009F2120 /* PhotonChatVideoMessageCell.m */,
 				321A0FEF22E6A4BD000AF586 /* PhotonChatNoticCell.h */,
 				321A0FF022E6A4BD000AF586 /* PhotonChatNoticCell.m */,
 				3238AC1722D4AB8700EB3D0B /* PhotonChatPanelManager.h */,
@@ -2051,6 +2056,7 @@
 				32C557FE23CDD9E0007F06CE /* HXPreviewContentView.m in Sources */,
 				3221882B22CCA5B6007E9FA3 /* PhotonUser.m in Sources */,
 				3221882C22CCA5B6007E9FA3 /* PhotonAppDelegate.m in Sources */,
+				32A8D9DF23E911ED009F2120 /* PhotonChatVideoMessageCell.m in Sources */,
 				3221882D22CCA5B6007E9FA3 /* PhotonAppLaunchManager.m in Sources */,
 				32C5580923CDD9E0007F06CE /* HXAlbumModel.m in Sources */,
 				3221882E22CCA5B6007E9FA3 /* PhotonUploadFileInfo.m in Sources */,

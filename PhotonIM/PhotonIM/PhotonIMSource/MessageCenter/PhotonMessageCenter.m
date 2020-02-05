@@ -160,14 +160,11 @@ static PhotonMessageCenter *center = nil;
             conversation:(nullable PhotonIMConversation *)conversation
          readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion
               completion:(nullable CompletionBlock)completion{
-    // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeImage chatType:conversation.chatType];
-    
-    NSString *filePath = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:item.fileName];
-    PhotonIMImageBody *body = [PhotonIMImageBody imageBodyWithImagePath:filePath imageName:item.fileName whRatio:item.whRatio];
+    PhotonIMImageBody *body = [PhotonIMImageBody imageBodyWithData:item.imageData imageName:item.fileName whRatio:item.whRatio];
     [message setMesageBody:body];
     item.userInfo = message;
-    [self _sendMessage:message readyCompletion:readyCompletion  completion:completion];
+    [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
 }
 
 - (void)sendVoiceMessage:(PhotonChatVoiceMessageItem *)item
@@ -213,115 +210,6 @@ static PhotonMessageCenter *center = nil;
 
 
 #pragma mark  -------- Private ---------------
-- (void)p_sendImageMessage:(PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
-    // 存储文件上传前的message
-    [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
-    // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
-    PhotonIMImageBody *body =(PhotonIMImageBody *)message.messageBody;
-    PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
-    fileInfo.name = @"file";
-    fileInfo.fileName = @"chatimage.jpg";
-    fileInfo.mimeType = @"image/jpeg";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getImageFilePath:message.chatWith fileName:body.localFileName];
-    PhotonWeakSelf(self)
-    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_IMAGE_UPLOAD_PATH paramter:nil header:@{} fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
-    } completion:^(NSDictionary * _Nonnull dict) {
-        [weakself p_sendMessag:message result:dict completion:completion];
-    } failure:^(PhotonErrorDescription * _Nonnull error) {
-        [weakself p_sendMessag:message result:nil completion:completion];
-    }];
-}
-
-- (void)p_sendVoiceMessage:(PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
-    // 存储文件上传前的message
-    [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
-    // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
-    PhotonIMAudioBody *body =(PhotonIMAudioBody *)message.messageBody;
-    PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
-    fileInfo.name = @"file";
-    fileInfo.fileName = @"chataudio.opus";
-    fileInfo.mimeType = @"audio/opus";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
-    PhotonWeakSelf(self)
-    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_AUDIO_UPLOAD_PATH  paramter:nil header:@{} fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
-    } completion:^(NSDictionary * _Nonnull dict) {
-        [weakself p_sendMessag:message result:dict completion:completion];
-    } failure:^(PhotonErrorDescription * _Nonnull error) {
-        [weakself p_sendMessag:message result:nil completion:completion];
-    }];
-
-}
-
-- (void)p_sendMessag:(PhotonIMMessage *)message result:(NSDictionary *)result completion:(nullable CompletionBlock)completion{
-    NSString *fileURL = [[[[result objectForKey:@"data"] isNil] objectForKey:@"url"] isNil];
-    if (!message) {
-        return;
-    }
-    if ([fileURL isNotEmpty]) {
-        if(message.messageType == PhotonIMMessageTypeImage){
-            PhotonIMImageBody *body = (PhotonIMImageBody *)message.messageBody;
-            body.url = fileURL;
-            [message setMesageBody:body];
-        }else if(message.messageType == PhotonIMMessageTypeAudio){
-            PhotonIMAudioBody *body = (PhotonIMAudioBody *)message.messageBody;
-            body.url = fileURL;
-        }
-        // 文件下载成功
-        if (completion) {
-            completion(YES,nil);
-        }
-        [self _sendMessage:message readyCompletion:nil completion:completion];
-    }else{
-        message.messageStatus = PhotonIMMessageStatusFailed;
-        [self insertOrUpdateMessage:message];
-        PhotonIMError *error = [PhotonIMError errorWithDomain:@"photoimdomain" code:-1 errorMessage:@"文件上传失败" userInfo:@{}];
-        if (completion) {
-            completion(NO,error);
-        }
-        
-    }
-}
-
-- (void)p_sendVideoMessage:(PhotonIMMessage *)message completion:(nullable CompletionBlock)completion{
-    // 存储文件上传前的message
-    [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
-    // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
-    PhotonIMVideoBody *body =(PhotonIMVideoBody *)message.messageBody;
-    PhotonUploadFileInfo *fileInfo = [[PhotonUploadFileInfo alloc]init];
-    fileInfo.name = @"file";
-    fileInfo.fileName = @"chataudio.mp4";
-    fileInfo.mimeType = @"multipart/form-data";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
-    PhotonWeakSelf(self)
-    
-    // 处理header
-      NSMutableDictionary *header = [NSMutableDictionary dictionary];
-      [header setValue:APP_ID forKey:@"appId"];
-      NSString *timestamp = [NSString stringWithFormat:@"%@",@((int64_t)[NSDate date].timeIntervalSince1970)];
-      [header setValue:timestamp forKey:@"timestamp"];
-     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
-      NSString *signString = [NSString stringWithFormat:@"%@%@%@",APP_ID,token,timestamp];
-      signString = [signString md5];
-      [header setValue:signString forKey:@"sign"];
-      [header setValue:[PhotonContent currentUser].userID forKey:@"userId"];
-      [header setValue:token forKey:@"Token"];
-    // 处理parameter
-    NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
-    [paramter setValue:@"1" forKey:@"fileType"];
-    [paramter setValue:@(1) forKey:@"coverOffset"];
-    
-    [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_FILE_UPLOAD_PATH paramter:paramter header:header fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
-        
-    } completion:^(NSDictionary * _Nonnull dict) {
-        
-        [weakself p_sendMessag:message result:dict completion:completion];
-        
-    } failure:^(PhotonErrorDescription * _Nonnull error) {
-        
-        [weakself p_sendMessag:message result:nil completion:completion];
-    }];
-}
-
 // 重发消息
 - (void)resendMessage:(nullable PhotonChatBaseItem *)item completion:(nullable CompletionBlock)completion{
     PhotonIMMessage *message = (PhotonIMMessage *)item.userInfo;
@@ -332,59 +220,7 @@ static PhotonMessageCenter *center = nil;
     if (completion) {
         completion(YES,nil);
     }
-    if(message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio){
-        PhotonIMBaseBody *body = message.messageBody;
-        if ([body.url isNotEmpty]) {// 文件上传完成，直接发送
-            [self _sendMessage:message readyCompletion:nil completion:completion];
-        }else{// 文件上传未完成，先上再发送
-            if (message.messageType == PhotonIMMessageTypeImage) {
-                [self p_sendImageMessage:message completion:completion];
-            }else if (message.messageType == PhotonIMMessageTypeAudio){
-                [self p_sendVoiceMessage:message completion:completion];
-            }
-        }
-    }else if(message.messageType == PhotonIMMessageTypeText){//文本直接发送
-        [self _sendMessage:message readyCompletion:nil completion:completion];
-    }
-}
-
-// 重新发送未发送完成的消息
-- (void)reSendAllSendingMessages{
-    if(self.messages){
-        __weak typeof(self)weakSelf = self;
-        NSArray<PhotonIMMessage *> *messages = [self.messages copy];
-        for(PhotonIMMessage *message in messages){
-            message.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-            if(message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio){
-                PhotonIMBaseBody *body = message.messageBody;
-                if ([body.url isNotEmpty]) {// 文件上传完成，直接发送
-                    [self _sendMessage:message readyCompletion:nil completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-                        if (succeed) {
-                             [weakSelf.messages removeObject:message];
-                        }
-                       
-                    }];
-                }else{// 文件上传未完成，先上再发送
-                    if (message.messageType == PhotonIMMessageTypeImage) {
-                        [self p_sendImageMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-                            if (succeed) {
-                                [weakSelf.messages removeObject:message];
-                            }
-                        }];
-                    }else if (message.messageType == PhotonIMMessageTypeAudio){
-                        [self p_sendVoiceMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-                            if (succeed) {
-                                [weakSelf.messages removeObject:message];
-                            }
-                        }];
-                    }
-                }
-            }else if(message.messageType == PhotonIMMessageTypeText){//文本直接发送
-                [self _sendMessage:message readyCompletion:nil completion:nil];
-            }
-        }
-    }
-   
+    [self _sendMessage:message readyCompletion:nil completion:completion];
 }
 
 // 发送已读消息
@@ -443,7 +279,9 @@ static PhotonMessageCenter *center = nil;
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
     PhotonWeakSelf(self);
-    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion fileUploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    }  completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
             if (!succeed && error.code >= 1000) {
                 message.notic = error.em;

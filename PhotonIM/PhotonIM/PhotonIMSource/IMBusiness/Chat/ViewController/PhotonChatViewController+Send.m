@@ -8,6 +8,7 @@
 
 #import "PhotonChatViewController+Send.h"
 #import "PhotonAtMemberListViewController.h"
+#import <AVFoundation/AVFoundation.h>
 @implementation PhotonChatViewController (Send)
 #pragma mark ------ 发送消息相关 ----------
 
@@ -75,27 +76,20 @@
     }
     
     NSString *imageName = [NSString stringWithFormat:@"%.0lf.jpg", [NSDate date].timeIntervalSince1970];
-    NSString *imagePath = [[PhotonMessageCenter sharedCenter] getImageFilePath:self.conversation.chatWith fileName:imageName];
-   
-    BOOL res =  [[NSFileManager defaultManager] createFileAtPath:imagePath contents:imageData attributes:nil];
     PhotonChatImageMessageItem *imageItem = [[PhotonChatImageMessageItem alloc] init];
+    imageItem.imageData = imageData;
     imageItem.fromType = PhotonChatMessageFromSelf;
     imageItem.fileName = imageName;
     imageItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     imageItem.whRatio = image.size.width/image.size.height;
     imageItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
-    if (res) {
-        imageItem.orignURL = imagePath;
-        imageItem.thumURL = imagePath;
-    }
   
-     PhotonWeakSelf(self)
+    PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendImageMessage:imageItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
         [PhotonUtil runMainThread:^{
-            imageItem.avatalarImgaeURL = message.messageBody.localFilePath;
+            imageItem.localPath = message.messageBody.localFilePath;
             [self addItem:imageItem];
         }];
-        
     } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.code >=1000 && error.em) {
             imageItem.tipText = error.em;
@@ -145,10 +139,11 @@
     vedioItem.fileName = fileName;
     vedioItem.duration = duraion;
     vedioItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
-    [self addItem:vedioItem];
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendVideoMessage:vedioItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
-        
+        vedioItem.fileLocalPath = message.messageBody.localFilePath;
+        vedioItem.coverImage = [weakself firstFrameWithVideoURL:vedioItem.fileLocalPath size:vedioItem.contentSize];
+        [self addItem:vedioItem];
     } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
             vedioItem.tipText = error.em;
@@ -164,22 +159,23 @@
     }];
 }
 
-//#pragma mark ---- 获取图片第一帧
-//- (UIImage *)firstFrameWithVideoURL:(NSURL *)url size:(CGSize)size
-//{
-//    // 获取视频第一帧
-//    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
-//    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
-//    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
-//    generator.appliesPreferredTrackTransform = YES;
-//    generator.maximumSize = CGSizeMake(size.width, size.height);
-//    NSError *error = nil;
-//    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
-//    {
-//        return [UIImage imageWithCGImage:img];
-//    }
-//    return nil;
-//}
+#pragma mark ---- 获取图片第一帧
+- (UIImage *)firstFrameWithVideoURL:(NSString *)fileUrl size:(CGSize)size
+{
+    // 获取视频第一帧
+    NSURL *url = [NSURL fileURLWithPath:fileUrl];
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:url options:opts];
+    AVAssetImageGenerator *generator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlAsset];
+    generator.appliesPreferredTrackTransform = YES;
+    generator.maximumSize = CGSizeMake(size.width, size.height);
+    NSError *error = nil;
+    CGImageRef img = [generator copyCGImageAtTime:CMTimeMake(0, 10) actualTime:NULL error:&error];
+    {
+        return [UIImage imageWithCGImage:img];
+    }
+    return nil;
+}
 
 - (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate{
     PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];

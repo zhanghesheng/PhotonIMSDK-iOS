@@ -23,6 +23,9 @@
 
 #import "PhotonChatLocationItem.h"
 #import "PhotonChatLocationCell.h"
+
+#import "PhotonChatVideoMessageItem.h"
+#import "PhotonChatVideoMessageCell.h"
 @interface PhotonChatDataSource()
 @property (nonatomic, strong, nullable)PhotonIMThreadSafeArray *readMsgIdscCache;
 @property (nonatomic, strong, nullable)PhotonIMTimer   *timer;
@@ -47,6 +50,8 @@
         return [PhotonChatNoticCell class];
     }else if ([object isKindOfClass:[PhotonChatLocationItem class]]){
         return [PhotonChatLocationCell class];
+    }else if ([object isKindOfClass:[PhotonChatVideoMessageItem class]]){
+        return [PhotonChatVideoMessageCell class];
     }
      return [super tableView:tableView cellClassForObject:object];
 }

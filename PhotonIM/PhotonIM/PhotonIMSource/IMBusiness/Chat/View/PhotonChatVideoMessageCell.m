@@ -1,19 +1,17 @@
 //
-//  PhotonImageMessageChatCellTableViewCell.m
+//  PhotonChatVideoMessageCell.m
 //  PhotonIM
 //
-//  Created by Bruce on 2019/6/24.
-//  Copyright © 2019 Bruce. All rights reserved.
+//  Created by Bruce on 2020/2/4.
+//  Copyright © 2020 Bruce. All rights reserved.
 //
 
-#import "PhotonChatImageMessageCell.h"
-#import "PhotonChatImageMessageItem.h"
+#import "PhotonChatVideoMessageCell.h"
+#import "PhotonChatVideoMessageItem.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "PhotonMacros.h"
-@interface PhotonChatImageMessageCell()
-@end
+@implementation PhotonChatVideoMessageCell
 
-@implementation PhotonChatImageMessageCell
 - (void)dealloc
 {
 }
@@ -29,27 +27,19 @@
     if (!self.item) {
         return;
     }
-    PhotonChatImageMessageItem *imageItem = (PhotonChatImageMessageItem *)object;
+    PhotonChatVideoMessageItem *videoItem = (PhotonChatVideoMessageItem *)object;
     NSURL *fileURL = nil;
-    if (imageItem.localPath) {
-        [self.contentBackgroundView setImage:[UIImage imageWithContentsOfFile:imageItem.localPath?:@""]];
+    if (videoItem.coverURL) {
+        if ([videoItem.coverURL hasPrefix:@"http"]) {
+            fileURL = [NSURL URLWithString:videoItem.coverURL];
+        }else{
+            fileURL = [NSURL fileURLWithPath:videoItem.coverURL];
+        }
+    }
+    if (fileURL) {
+        [self.contentBackgroundView sd_setImageWithURL:fileURL placeholderImage:nil];
     }else{
-        if (imageItem.thumURL) {
-               if ([imageItem.thumURL hasPrefix:@"http"]) {
-                   fileURL = [NSURL URLWithString:imageItem.thumURL?:@""];
-               }else{
-                   fileURL = [NSURL fileURLWithPath:imageItem.thumURL?:@""];
-               }
-           }
-           if (fileURL) {
-               [self.contentBackgroundView sd_setImageWithURL:fileURL placeholderImage:nil];
-           }else{
-               if (imageItem.localPath) {
-                   [self.contentBackgroundView setImage:[UIImage imageWithContentsOfFile:imageItem.localPath?:@""]];
-               }else{
-                  
-               }
-           }
+        [self.contentBackgroundView setImage:videoItem.coverImage];
     }
 }
 
@@ -89,12 +79,12 @@
 }
 
 +(CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{
-    PhotonChatImageMessageItem *item = (PhotonChatImageMessageItem *)object;
+    PhotonChatVideoMessageItem *item = (PhotonChatVideoMessageItem *)object;
     return item.itemHeight;
 }
 
 + (NSString *)cellIdentifier{
-    return @"PhotonImageMessageChatCell";
+    return @"PhotonChatVideoMessageCell";
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -102,3 +92,6 @@
 }
 
 @end
+
+
+
