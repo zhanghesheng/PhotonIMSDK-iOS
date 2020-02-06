@@ -64,7 +64,6 @@
     if ([CLLocationManager authorizationStatus] != kCLAuthorizationStatusDenied) {
         [self.locationManager startUpdatingLocation];
     }
-//    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.cancelBtn];
     if (self.manager.configuration.videoMaximumDuration > self.manager.configuration.videoMaximumSelectDuration) {
         self.manager.configuration.videoMaximumDuration = self.manager.configuration.videoMaximumSelectDuration;
     }else if (self.manager.configuration.videoMaximumDuration < 3.f) {
@@ -100,11 +99,13 @@
     });
     
     [self.view addSubview:self.bottomView];
+    [self.bottomView addSubview:self.changeCameraBtn];
     [self.view addSubview:self.topView];
-    
+    [self.view addSubview:self.flashBtn];
+    [self.view addSubview:self.cancelBtn];
     [self changeSubviewFrame];
     
-    [self.view addSubview:self.customNavigationBar];
+//    [self.view addSubview:self.customNavigationBar];
     
     if (self.manager.configuration.navigationBar) {
         self.manager.configuration.navigationBar(self.customNavigationBar, self);
@@ -173,15 +174,16 @@
     self.previewView.tapToFocusEnabled = self.cameraController.cameraSupportsTapToFocus;
     self.previewView.tapToExposeEnabled = self.cameraController.cameraSupportsTapToExpose;
     
-    UIBarButtonItem *rightBtn1 = [[UIBarButtonItem alloc] initWithCustomView:self.changeCameraBtn];
-    UIBarButtonItem *rightBtn2 = [[UIBarButtonItem alloc] initWithCustomView:self.flashBtn];
-    if ([self.cameraController canSwitchCameras] && [self.cameraController cameraHasFlash]) {
-        self.navItem.rightBarButtonItems = @[rightBtn1,rightBtn2];
-    }else {
-        if ([self.cameraController cameraHasTorch] || [self.cameraController cameraHasFlash]) {
-            self.navItem.rightBarButtonItems = @[rightBtn2];
-        }
-    }
+//    UIBarButtonItem *rightBtn1 = [[UIBarButtonItem alloc] initWithCustomView:self.changeCameraBtn];
+//    UIBarButtonItem *rightBtn2 = [[UIBarButtonItem alloc] initWithCustomView:self.flashBtn];
+//    if ([self.cameraController canSwitchCameras] && [self.cameraController cameraHasFlash]) {
+//        self.navItem.rightBarButtonItems = @[rightBtn2];
+//    }else {
+//        if ([self.cameraController cameraHasTorch] || [self.cameraController cameraHasFlash]) {
+//            self.navItem.rightBarButtonItems = @[rightBtn2];
+//        }
+//    }
+    
     
     self.previewView.maxScale = [self.cameraController maxZoomFactor];
     if ([self.cameraController cameraSupportsZoom]) {
@@ -246,8 +248,14 @@
         self.customNavigationBar.hx_y = self.previewView.hx_y + 10;
         self.topView.hx_y = -10;
     }
+
+    self.flashBtn.hx_origin = CGPointMake((self.view.hx_w-self.flashBtn.hx_w)/2.0, hxStatusBarHeight);
+    self.cancelBtn.hx_origin = CGPointMake(hxStatusBarHeight, hxStatusBarHeight);
     self.topMaskLayer.frame = self.topView.bounds;
     self.bottomView.frame = CGRectMake(0, self.view.hx_h - 120 - self.previewView.hx_y, self.view.hx_w, 120);
+    CGRect changeCameraBtnFrame = self.changeCameraBtn.frame;
+    changeCameraBtnFrame.origin = CGPointMake((self.bottomView.hx_w/2.0+changeCameraBtnFrame.size.width * 2), (self.bottomView.hx_h - changeCameraBtnFrame.size.height/2.0)/2.0);
+    self.changeCameraBtn.frame = changeCameraBtnFrame;
 }
 - (BOOL)prefersStatusBarHidden {
     return self.statusBarShouldBeHidden;
@@ -300,7 +308,7 @@
         self.playVideoView.playerLayer.hidden = YES;
         self.flashBtn.hidden = NO;
         self.changeCameraBtn.hidden = NO;
-        self.cancelBtn.selected = NO;
+        [self setCancelBtnSelect:NO];
         self.bottomView.hidden = NO;
         self.previewView.tapToFocusEnabled = YES;
         self.previewView.pinchToZoomEnabled = [self.cameraController cameraSupportsZoom];
@@ -415,7 +423,7 @@
     self.cancelBtn.hidden = NO;
     self.flashBtn.hidden = NO;
     self.changeCameraBtn.hidden = NO;
-    self.cancelBtn.selected = NO;
+    [self setCancelBtnSelect:NO];
     self.bottomView.hidden = NO;
     self.previewView.tapToFocusEnabled = YES;
     self.previewView.pinchToZoomEnabled = [self.cameraController cameraSupportsZoom];
@@ -452,7 +460,7 @@
 }
 - (void)videoNeedHideViews {
     self.cancelBtn.hidden = YES;
-    self.cancelBtn.selected = YES;
+    [self setCancelBtnSelect:YES];
     self.flashBtn.hidden = YES;
     self.changeCameraBtn.hidden = YES;
 }
@@ -460,7 +468,7 @@
     [self.bottomView stopRecord];
     if (self.time < 3) {
         self.bottomView.hidden = NO;
-        self.cancelBtn.selected = NO;
+        [self setCancelBtnSelect:NO];
         self.flashBtn.hidden = NO;
         self.changeCameraBtn.hidden = NO;
         [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"3秒内的视频无效哦~"]];
@@ -484,7 +492,7 @@
     [self.bottomView stopRecord];
     [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"录制视频失败!"]];
     self.bottomView.hidden = NO;
-    self.cancelBtn.selected = NO;
+    [self setCancelBtnSelect:NO];
     self.flashBtn.hidden = NO;
     self.changeCameraBtn.hidden = NO;
     self.cancelBtn.hidden = NO;
@@ -518,7 +526,7 @@
     }
 }
 - (void)needHideViews {
-    self.cancelBtn.selected = YES;
+    [self setCancelBtnSelect:YES];
     self.flashBtn.hidden = YES;
     self.changeCameraBtn.hidden = YES;
     self.bottomView.hidden = YES;
@@ -623,9 +631,21 @@
         [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         [_cancelBtn addTarget:self action:@selector(cancelClick:) forControlEvents:UIControlEventTouchUpInside];
         _cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _cancelBtn.hx_size = CGSizeMake(50, 50);
+        _cancelBtn.hx_size = CGSizeMake(40,40);
     }
     return _cancelBtn;
+}
+
+- (void)setCancelBtnSelect:(BOOL)selected{
+    self.cancelBtn.selected = selected;
+    if (selected) {
+        self.cancelBtn.hx_size = CGSizeMake(60,30);
+        self.cancelBtn.hx_origin = CGPointMake(15, self.doneBtn.hx_y);
+
+    }else{
+       self.cancelBtn.hx_size = self.cancelBtn.currentImage.size;
+       self.cancelBtn.hx_origin = CGPointMake(hxStatusBarHeight, hxStatusBarHeight);
+    }
 }
 - (UIButton *)changeCameraBtn {
     if (!_changeCameraBtn) {
@@ -644,6 +664,7 @@
         UIImage *selectedImage = [UIImage hx_imageNamed:@"hx_flash_pic_nopreview"];
         [_flashBtn setImage:selectedImage forState:UIControlStateSelected];
         [_flashBtn addTarget:self action:@selector(didFlashClick:) forControlEvents:UIControlEventTouchUpInside];
+         _flashBtn.hx_size = _flashBtn.currentImage.size;
     }
     return _flashBtn;
 }
