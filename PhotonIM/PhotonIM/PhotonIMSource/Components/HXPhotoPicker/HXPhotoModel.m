@@ -724,7 +724,6 @@
         }
         return 0;
     }
-//    [[PHImageManager defaultManager] cancelImageRequest:self.iCloudRequestID];
     
     PHImageRequestOptions *option = [self imageHighQualityRequestOptions];
     option.networkAccessAllowed = NO;

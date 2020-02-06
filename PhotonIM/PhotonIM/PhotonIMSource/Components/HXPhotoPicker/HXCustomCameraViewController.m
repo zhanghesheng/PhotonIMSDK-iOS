@@ -673,7 +673,7 @@
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_doneBtn setTitle:[NSBundle hx_localizedStringForKey:@"完成"] forState:UIControlStateNormal];
+        [_doneBtn setTitle:[NSBundle hx_localizedStringForKey:@"发送"] forState:UIControlStateNormal];
         [_doneBtn setTitleShadowColor:[[UIColor blackColor] colorWithAlphaComponent:0.4] forState:UIControlStateNormal];
         [_doneBtn.titleLabel setShadowOffset:CGSizeMake(1, 2)];
         _doneBtn.hx_h = 40;

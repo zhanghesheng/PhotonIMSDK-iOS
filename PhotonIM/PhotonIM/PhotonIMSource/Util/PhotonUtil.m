@@ -195,6 +195,9 @@ static NSTimeInterval lastDateInterval = 0;
 #pragma mark ---- 获取图片第一帧
 + (UIImage *)firstFrameWithVideoURL:(NSString *)fileUrl size:(CGSize)size
 {
+    if (!fileUrl) {
+        return nil;
+    }
     // 获取视频第一帧
     NSURL *url = [NSURL fileURLWithPath:fileUrl];
     NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
