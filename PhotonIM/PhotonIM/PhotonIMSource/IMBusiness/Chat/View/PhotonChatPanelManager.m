@@ -124,7 +124,7 @@ PhotonAudioRecorderDelegate>
     [self.emojiKeyboard setDelegate:self];
     [self.emojiKeyboard setKeyboardDelegate:self];
     
-    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem,vedioItem,locationItem] mutableCopy]];
+    [self.moreKeyboard setChatMoreKeyboardItems:[@[imageItem,cameraItem,locationItem] mutableCopy]];
     [self.emojiKeyboard setChatEmojiKeyboardItems:nil];
     
     [self addMasonry];

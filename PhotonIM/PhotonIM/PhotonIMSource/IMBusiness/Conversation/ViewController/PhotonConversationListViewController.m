@@ -269,7 +269,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 }
 
 - (void)getIgnoreAlerm:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith{
-    [[PhotonContent currentUser] getIgnoreAlert:chatType chatWith:chatWith completion:^(BOOL success, BOOL open) {
+    [[PhotonContent currentUser] getIgnoreAlert:(int)chatType chatWith:chatWith completion:^(BOOL success, BOOL open) {
          PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
         conversation.ignoreAlert = !open;
         [[PhotonMessageCenter sharedCenter] updateConversationIgnoreAlert:conversation];

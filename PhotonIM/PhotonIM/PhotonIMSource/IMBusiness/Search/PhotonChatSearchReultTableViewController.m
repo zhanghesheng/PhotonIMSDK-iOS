@@ -7,6 +7,7 @@
 //
 
 #import "PhotonChatSearchReultTableViewController.h"
+#import "PhotonBaseViewController+Refresh.h"
 #import "NSString+PhotonExtensions.h"
 #import "PhotonConversationItem.h"
 #import "PhotonConversationBaseCell.h"
@@ -24,6 +25,9 @@
 @property (nonatomic, strong) NSString *searchKeyword;
 @property (nonatomic, assign) PhotonIMChatType chatType;
 @property (nonatomic, copy) NSString *chatWith;
+@property (nonatomic,copy, nullable) NSString *anchor;
+@property (nonatomic,assign) int pageSize;
+@property (nonatomic,assign) BOOL hasNext;
 @end
 
 @implementation PhotonChatSearchReultTableViewController
@@ -32,6 +36,8 @@
     if (self) {
         _chatType = chatType;
         _chatWith = chatWith;
+        _anchor = @"";
+        _pageSize = 20;
     }
     return self;
 }
@@ -39,7 +45,7 @@
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    
+   
     [self _initSubviews];
 }
 - (void)viewWillAppear:(BOOL)animated{
@@ -75,8 +81,23 @@
         return;
     }
     _searchKeyword = query;
-    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:10 matchQuery:[NSString stringWithFormat:@"%@*",query]];
+    _hasNext = YES;
     [self.items removeAllObjects];
+    [self loadMoreDataItems];
+}
+- (void)loadMoreDataItems{
+    if (!self.hasNext) {
+        return;
+    }
+    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:10 matchQuery:[NSString stringWithFormat:@"content:*%@*",_searchKeyword] anchor:_anchor pageSize:_pageSize];
+    PhotonIMMessage *lastMsg = msgList.lastObject;
+    _anchor = lastMsg.messageID?lastMsg.messageID:@"";
+    self.hasNext = msgList.count >= self.pageSize;
+    if (self.hasNext) {
+        [self addLoadMoreFooter];
+    }else{
+       [self removeLoadMoreFooter];
+    }
     for (PhotonIMMessage *msg in msgList) {
         NSAttributedString *attrString = [msg.snippetContent toAttributedString];
         if (!attrString) {
@@ -96,6 +117,7 @@
     
     PhotonChatSearchReultDataSource *dataSource = [[PhotonChatSearchReultDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
+    [self endLoadMore];
 }
 
 - (UISearchBar *)searchBar
@@ -215,4 +237,7 @@
     [self.navigationController pushViewController:chatVc animated:YES];
 }
 
+-(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
+    [self.searchBar resignFirstResponder];
+}
 @end
