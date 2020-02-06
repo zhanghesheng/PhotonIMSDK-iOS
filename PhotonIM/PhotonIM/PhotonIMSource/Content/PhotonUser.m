@@ -116,7 +116,7 @@
     }];
 }
 
-- (void)mod:(int)chatType
+- (void)getIgnoreAlert:(int)chatType
               chatWith:(NSString *)chatWith
             completion:(void(^)(BOOL success,BOOL open))completion{
     NSMutableDictionary *paramter = [NSMutableDictionary dictionary];

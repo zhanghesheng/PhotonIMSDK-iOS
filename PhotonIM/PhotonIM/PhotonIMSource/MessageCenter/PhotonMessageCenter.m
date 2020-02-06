@@ -237,7 +237,7 @@ static PhotonMessageCenter *center = nil;
     fileInfo.name = @"fileUpload";
     fileInfo.fileName = @"chataudio.opus";
     fileInfo.mimeType = @"audio/opus";
-    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVideoFilePath:message.chatWith fileName:body.localFileName];
+    fileInfo.fileURLString = [[PhotonMessageCenter sharedCenter] getVoiceFilePath:message.chatWith fileName:body.localFileName];
     PhotonWeakSelf(self)
     [[PhotonFileUploadManager defaultManager] uploadRequestMethodWithMutiFile:PHOTON_AUDIO_UPLOAD_PATH  paramter:nil header:@{} fromFiles:@[fileInfo] progressBlock:^(NSProgress * _Nonnull progress) {
     } completion:^(NSDictionary * _Nonnull dict) {
