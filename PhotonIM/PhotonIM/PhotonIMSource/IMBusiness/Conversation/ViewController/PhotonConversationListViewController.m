@@ -231,6 +231,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     PhotonConversationItem *temp = nil;
     NSInteger index = -1;
     BOOL isToTop = NO;
+    PhotonIMConversation *firstConver = [self.model.items.firstObject userInfo];
     for (PhotonConversationItem *item in self.model.items) {
         PhotonIMConversation *conver = [item userInfo];
         if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
@@ -240,7 +241,7 @@ static NSString *message_syncing = @"消息(收取中......)";
             temp = item;
             temp.userInfo = conversation;
             index = [self.model.items indexOfObject:item];
-            isToTop = (conversation.lastTimeStamp > conver.lastTimeStamp) && (index > 0);
+            isToTop = (conversation.lastTimeStamp > conver.lastTimeStamp) && (conversation.lastTimeStamp > firstConver.lastTimeStamp) && (index > 0);
             break;
         }
     }
@@ -291,6 +292,7 @@ static NSString *message_syncing = @"消息(收取中......)";
             break;
         case PhotonIMLoginStatusLoginSucceed:// 登录成功
              [self setNavTitle:message_title];
+            [(PhotonConversationModel *)self.model loadConversationMessage];
             break;
         case PhotonIMLoginStatusConnectFailed:// 连接失败
              [self setNavTitle:message_no_connect];

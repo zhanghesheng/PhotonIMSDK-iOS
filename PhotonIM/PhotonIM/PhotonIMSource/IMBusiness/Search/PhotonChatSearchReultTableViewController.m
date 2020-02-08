@@ -85,19 +85,29 @@
     [self.items removeAllObjects];
     [self loadMoreDataItems];
 }
+
+- (void)loadFirst{
+       NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:5 matchQuery:[NSString stringWithFormat:@"%@*",_searchKeyword] anchor:@"" pageSize:_pageSize];
+      [self _reloadData:msgList];
+}
 - (void)loadMoreDataItems{
     if (!self.hasNext) {
         return;
     }
-    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:10 matchQuery:[NSString stringWithFormat:@"content:*%@*",_searchKeyword] anchor:_anchor pageSize:_pageSize];
+    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:5 matchQuery:[NSString stringWithFormat:@"%@*",_searchKeyword] anchor:_anchor pageSize:_pageSize];
+    [self _reloadData:msgList];
+}
+
+- (void)_reloadData:(NSArray<PhotonIMMessage *> *)msgList{
     PhotonIMMessage *lastMsg = msgList.lastObject;
-    _anchor = lastMsg.messageID?lastMsg.messageID:@"";
     self.hasNext = msgList.count >= self.pageSize;
+     _anchor = lastMsg.messageID?lastMsg.messageID:@"";
     if (self.hasNext) {
         [self addLoadMoreFooter];
     }else{
        [self removeLoadMoreFooter];
     }
+    
     for (PhotonIMMessage *msg in msgList) {
         NSAttributedString *attrString = [msg.snippetContent toAttributedString];
         if (!attrString) {
@@ -114,7 +124,6 @@
         item.userInfo = conver;
         [self.items addObject:item];
     }
-    
     PhotonChatSearchReultDataSource *dataSource = [[PhotonChatSearchReultDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
     [self endLoadMore];
