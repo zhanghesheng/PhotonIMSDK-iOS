@@ -12,6 +12,8 @@
 #import <MMKV/MMKV.h>
 @interface PhotonConversationModel()
 @property (nonatomic, strong)PhotonIMThreadSafeArray  *cache;
+@property (nonatomic, assign)BOOL  loadConverationMessage;
+@property (nonatomic,strong) NSArray<PhotonIMConversation *> *conversations;
 @end
 
 @implementation PhotonConversationModel
@@ -139,17 +141,25 @@
     }
     
     if (conversations.count) {
-         [[PhotonIMClient sharedClient] saveConversationBatch:conversations];
-        
-        for (PhotonIMConversation *conversation in conversations) {
-              [[PhotonIMClient sharedClient] syncHistoryMessagesFromServer:conversation.chatType chatWith:conversation.chatWith size:20 beginTimeStamp:0 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor, NSError * _Nullable error) {
-                              
-                          }];
+        [[PhotonIMClient sharedClient] saveConversationBatch:conversations];
+        self.conversations = [conversations copy];
+        if(self.loadConverationMessage){
+            [self loadConversationMessage];
         }
     }
 }
 
-
+- (void)loadConversationMessage{
+    self.loadConverationMessage = YES;
+    if (self.conversations.count) {
+        for (PhotonIMConversation *conversation in self.conversations) {
+                   [[PhotonIMClient sharedClient] syncHistoryMessagesFromServer:conversation.chatType chatWith:conversation.chatWith anchor:nil size:20 beginTimeStamp:0 endTimeStamp:[[NSDate date] timeIntervalSince1970] * 1000.0 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor,BOOL haveNext, NSError * _Nullable error) {
+                   }];
+            }
+        
+        self.conversations = nil;
+    }
+}
 
 - (PhotonIMThreadSafeArray *)cache{
     if (!_cache) {

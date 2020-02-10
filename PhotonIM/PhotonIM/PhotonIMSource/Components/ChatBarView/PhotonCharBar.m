@@ -229,7 +229,6 @@
 
 - (void)characterDidRemovedWith:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    NSLog(@"text = %@",text);
     NSInteger endLocation = range.location;
     if(endLocation > 0 && endLocation <= [textView.text length]){
         NSRange atRange = [textView.text rangeOfString:@"@" options:NSBackwardsSearch range:NSMakeRange(0, endLocation)];

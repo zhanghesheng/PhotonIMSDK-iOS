@@ -42,7 +42,7 @@
               }
             return;
         }
-        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:self.anchorMsgId size:(int)self.pageSize beginTimeStamp:([[NSDate date] timeIntervalSince1970] * 1000 - 7 * 24 *60 * 60 * 1000) endTimeStamp:[[NSDate date] timeIntervalSince1970] * 1000 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor,BOOL haveNext, NSError * _Nullable error) {
+        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:self.anchorMsgId size:(int)self.pageSize beginTimeStamp:0 endTimeStamp:[[NSDate date] timeIntervalSince1970] * 1000.0 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor,BOOL haveNext, NSError * _Nullable error) {
              weakself.haveNext = haveNext;
             if (error) {
                 weakself.startSyncServer = NO;
