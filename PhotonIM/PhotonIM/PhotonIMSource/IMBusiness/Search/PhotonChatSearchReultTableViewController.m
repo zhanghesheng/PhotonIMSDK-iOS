@@ -83,7 +83,7 @@
     _searchKeyword = query;
     _hasNext = YES;
     [self.items removeAllObjects];
-    [self loadMoreDataItems];
+    [self loadFirst];
 }
 
 - (void)loadFirst{
@@ -94,7 +94,7 @@
     if (!self.hasNext) {
         return;
     }
-    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:10 matchQuery:[NSString stringWithFormat:@"%@*",_searchKeyword] anchor:_anchor pageSize:_pageSize];
+    NSArray<PhotonIMMessage *> *msgList = [[PhotonIMClient sharedClient] searchMessagesWithChatType:_chatType chatWith:_chatWith startIdentifier:@"<a>" andIdentifier:@"</a>" maxCharacterLenth:2 matchQuery:[NSString stringWithFormat:@"%@*",_searchKeyword] anchor:_anchor pageSize:_pageSize];
     [self _reloadData:msgList];
 }
 

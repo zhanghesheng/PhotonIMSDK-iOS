@@ -223,7 +223,14 @@ static NSString *message_syncing = @"消息(收取中......)";
     conversation.FAvatarPath = user.avatarURL;
     conversation.FName = user.nickName;
     temp.userInfo = conversation;
-    [self.model.items insertObject:temp atIndex:0];
+    int count = 0;
+    for (PhotonConversationItem *item in self.model.items) {
+        PhotonIMConversation *conver = [item userInfo];
+        if(conver.sticky && !conversation.sticky){
+            count ++;
+        }
+    }
+    [self.model.items insertObject:temp atIndex:count];
     [self reloadData];
 }
 
@@ -232,8 +239,12 @@ static NSString *message_syncing = @"消息(收取中......)";
     NSInteger index = -1;
     BOOL isToTop = NO;
     PhotonIMConversation *firstConver = [self.model.items.firstObject userInfo];
+    int count = 0;
     for (PhotonConversationItem *item in self.model.items) {
         PhotonIMConversation *conver = [item userInfo];
+        if(conver.sticky && !conversation.sticky){
+            count ++;
+        }
         if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
             PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
             conversation.FAvatarPath = user.avatarURL;
@@ -247,7 +258,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     }
     if (temp && isToTop) {
         [self.model.items removeObjectAtIndex:index];
-        [self.model.items insertObject:temp atIndex:0];
+        [self.model.items insertObject:temp atIndex:count];
         [self reloadData];
         return;
     }else{
