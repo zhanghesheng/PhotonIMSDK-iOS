@@ -237,6 +237,7 @@
 		32E0BE0122D3464300DEEFA5 /* PhotonEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */; };
 		32E0BE0422D3466A00DEEFA5 /* PhotonEmptyTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */; };
 		32E0BE0822D358DF00DEEFA5 /* PhotonRecorderIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */; };
+		32E2347523F2574D00040336 /* PhotonPhotoPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E2347423F2574C00040336 /* PhotonPhotoPreviewViewController.m */; };
 		32E7927F22FAC3AA00CB3E76 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32E7927E22FAC3A900CB3E76 /* CoreServices.framework */; };
 		32F94D8C23387D06002DF468 /* PhotonContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D8B23387D06002DF468 /* PhotonContactViewController.m */; };
 		32F94D8F23388353002DF468 /* PhotonGroupContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D8E23388353002DF468 /* PhotonGroupContactViewController.m */; };
@@ -706,6 +707,8 @@
 		32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonEmptyTableItem.m; sourceTree = "<group>"; };
 		32E0BE0622D358DF00DEEFA5 /* PhotonRecorderIndicator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonRecorderIndicator.h; sourceTree = "<group>"; };
 		32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonRecorderIndicator.m; sourceTree = "<group>"; };
+		32E2347323F2574C00040336 /* PhotonPhotoPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonPhotoPreviewViewController.h; sourceTree = "<group>"; };
+		32E2347423F2574C00040336 /* PhotonPhotoPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonPhotoPreviewViewController.m; sourceTree = "<group>"; };
 		32E7927E22FAC3A900CB3E76 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		32ECA8F122E06B6000C9A899 /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		32F0571D23682EF70075D7A7 /* PhotonIM copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PhotonIM copy-Info.plist"; path = "/Users/momo/work/TOB_IM/PhotonIMSDK-iOS/PhotonIM/PhotonIM copy-Info.plist"; sourceTree = "<absolute>"; };
@@ -1147,10 +1150,12 @@
 				32286FFF22BA47CB009B6881 /* BadgeView */,
 				32286FEC22BA32A2009B6881 /* KeyBoards */,
 				32286FCA22BA1184009B6881 /* ChatBarView */,
-				322B426222C1D18F0027C1A3 /* ImageBrowser */,
 				328C32DE22C069FD0031E948 /* MenuView */,
+				322B426222C1D18F0027C1A3 /* ImageBrowser */,
 				322B428F22C234150027C1A3 /* AnimatedImageView */,
 				322B427D22C211350027C1A3 /* Media */,
+				32E2347323F2574C00040336 /* PhotonPhotoPreviewViewController.h */,
+				32E2347423F2574C00040336 /* PhotonPhotoPreviewViewController.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1639,11 +1644,11 @@
 				32C557C023CDD9DF007F06CE /* HXPhotoSubViewCell.m */,
 				32C557C123CDD9DF007F06CE /* HXPhotoTools.h */,
 				32C557C223CDD9DF007F06CE /* HXPhotoPreviewViewController.h */,
+				32C557C723CDD9E0007F06CE /* HXPhotoPreviewVideoViewCell.h */,
 				32C557C323CDD9DF007F06CE /* HXAlbumModel.m */,
 				32C557C423CDD9E0007F06CE /* HXPhotoBottomConfiguration.m */,
 				32C557C523CDD9E0007F06CE /* HXPhotoBottomSelectView.h */,
 				32C557C623CDD9E0007F06CE /* HXPhotoCustomNavigationBar.h */,
-				32C557C723CDD9E0007F06CE /* HXPhotoPreviewVideoViewCell.h */,
 				32C557C823CDD9E0007F06CE /* HXAlbumlistView.m */,
 				32C557C923CDD9E0007F06CE /* HXCustomPreviewView.m */,
 				32C557CA23CDD9E0007F06CE /* HXPreviewVideoView.m */,
@@ -2212,6 +2217,7 @@
 				3238ACC422D4AB8800EB3D0B /* PhotonChatTextMessageCell.m in Sources */,
 				3221887922CCA5B7007E9FA3 /* ViewController.m in Sources */,
 				3242C1E2238E267C00C221D2 /* PhotonChatTestListViewController.m in Sources */,
+				32E2347523F2574D00040336 /* PhotonPhotoPreviewViewController.m in Sources */,
 				3221887A22CCA5B7007E9FA3 /* main.m in Sources */,
 				3238ACB522D4AB8800EB3D0B /* PhotonConversationListViewController.m in Sources */,
 				3238ACDF22D4AB8800EB3D0B /* PhotonBaseContactItem.m in Sources */,

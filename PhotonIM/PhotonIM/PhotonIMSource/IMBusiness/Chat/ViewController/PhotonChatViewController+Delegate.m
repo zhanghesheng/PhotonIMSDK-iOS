@@ -38,9 +38,11 @@
 #import "PhotonChatVideoMessageItem.h"
 #import "PhotonLocationViewContraller.h"
 #import "PhotonUINavigationController.h"
+
+#import "PhotonPhotoPreviewViewController.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
-@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate>
+@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate,PhotonPhotoPreviewViewControllerDelegate>
 @end
 @implementation PhotonChatViewController (Delegate)
 
@@ -83,31 +85,55 @@
 - (void)chatCell:(PhotonChatBaseCell *)cell chatMessageCellTap:(PhotonChatBaseItem *)chatItem{
     
     // 图片单击事件（预览大图）
-    if([cell isKindOfClass:[PhotonChatImageMessageCell class]]){
+    if([cell isKindOfClass:[PhotonChatImageMessageCell class]] || [cell isKindOfClass:[PhotonChatVideoMessageCell class]]){
         PhotonIMMessage *message = (PhotonIMMessage *)chatItem.userInfo;
-        PhotonWeakSelf(self);
-        [[PhotonIMClient sharedClient] downloadFileWithMessage:message progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
-             NSLog(@"filePath%@",filePath);
-        }];
-//        // 查看大图
-//        NSString *defaultImage = [chatItem localPath];
-//        if (defaultImage.length == 0) {
-//            defaultImage = [(PhotonChatImageMessageItem *)chatItem orignURL];
-//        }
-//        NSMutableArray<NSString *> *imageItems = [[NSMutableArray alloc] init];
-//        for (PhotonChatBaseItem *item in self.dataSource.items) {
-//            if ([item isKindOfClass:[PhotonChatImageMessageItem class]]) {
-//                PhotonChatImageMessageItem *imgItem = (PhotonChatImageMessageItem *)item;
-//                if ([imgItem localPath]) {
-//                    [imageItems addObject:[imgItem localPath]];
-//                }else if ([imgItem orignURL]) {
-//                     [imageItems addObject:[imgItem orignURL]];
-//                }
-//            }
-//        }
-
-//        PhotonChatImageMessageCell *imageCell = (PhotonChatImageMessageCell *)cell;
-//        [imageCell.contentBackgroundView enterBrowserModeWithImageURLs:imageItems defaultImageURL:defaultImage placeholderImage:nil];
+        NSMutableArray *imageItems = [[NSMutableArray alloc] init];
+        int count = 0;
+        int index = -1;
+        for (PhotonChatBaseItem *item in self.dataSource.items) {
+           
+            if ([item isKindOfClass:[PhotonChatImageMessageItem class]]) {
+                index ++;
+                 if(chatItem == item){
+                     count = index;
+                 }
+                PhotonChatImageMessageItem *imgItem = (PhotonChatImageMessageItem *)item;
+                if ([imgItem localPath]) {
+                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL fileURLWithPath:[imgItem localPath]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                    [imageItems addObject:model];
+                }else if ([imgItem orignURL]) {
+                        HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[imgItem orignURL]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                     [imageItems addObject:model];
+                }
+            }else if ([item isKindOfClass:[PhotonChatVideoMessageItem class]]){
+                index ++;
+                 if(chatItem == item){
+                     count = index;
+                 }
+                PhotonIMVideoBody *videoBody = (PhotonIMVideoBody *)[item.userInfo messageBody];
+                          HXPhotoModel *model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
+                          [imageItems addObject:model];
+            }
+        }
+        
+        HXPhotoManager *manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhotoAndVideo];
+        [manager addModelArray:imageItems];
+        PhotonPhotoPreviewViewController *previewVC = [[PhotonPhotoPreviewViewController alloc] init];
+           if (HX_IOS9Earlier) {
+               previewVC.photoViewController = self;
+           }
+        previewVC.delegate = self;
+        previewVC.modelArray = [NSMutableArray arrayWithArray:imageItems];
+        previewVC.manager = manager;
+        previewVC.selectPreview = YES;
+        previewVC.currentModelIndex = count;
+        previewVC.previewShowDeleteButton = YES;
+        previewVC.outside = YES;
+        previewVC.exteriorPreviewStyle = HXPhotoViewPreViewShowStyleDark;
+        previewVC.previewShowPageControl = NO;
+        previewVC.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        previewVC.modalPresentationCapturesStatusBarAppearance = YES;
+        [self presentViewController:previewVC animated:YES completion:nil];
     }
     // 语音点击事件 (播放语音)
     if([cell isKindOfClass:[PhotonChatVoiceMessageCell class]]){
