@@ -74,7 +74,6 @@
             [imclient loadHistoryMessages:chatType chatWith:chatWith anchor:weakself.anchorMsgId size:(int)weakself.pageSize reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messages, NSString * _Nullable an, BOOL remainHistoryInServer) {
                 NSMutableArray *items = [NSMutableArray array];
                 weakself.anchorMsgId = [an copy];
-                weakself.startSyncServer = remainHistoryInServer;
                 for (PhotonIMMessage *msg in messages) {
                     id item =  [weakself wrapperMessage:msg];
                     if (item) {
