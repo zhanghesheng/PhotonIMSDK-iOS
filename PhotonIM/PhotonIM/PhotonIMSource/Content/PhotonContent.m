@@ -28,6 +28,7 @@
 {
     self = [super init];
     if (self) {
+        _setModel = [[PhotonLoadDataSetModel alloc] init];
         _currentUser = [[PhotonUser alloc] init];
        id user = [[NSUserDefaults standardUserDefaults] objectForKey:@"photon_current_user"];
         if ([user isKindOfClass:[NSDictionary class]]) {

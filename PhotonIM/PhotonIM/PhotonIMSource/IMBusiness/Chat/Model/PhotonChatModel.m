@@ -11,6 +11,9 @@
 @property (nonatomic,assign)BOOL startSyncServer;
 @property (nonatomic,assign)BOOL haveNext;
 @property (nonatomic,assign)NSInteger ftsIndex;
+
+@property (nonatomic)NSTimeInterval beginTime;
+@property (nonatomic)NSTimeInterval endTime;
 @end
 
 @implementation PhotonChatModel
@@ -18,10 +21,16 @@
 {
     self = [super init];
     if (self) {
-        self.pageSize = 20;
+        self.pageSize = [PhotonContent currentSettingModel].size?:20;
         _anchorMsgId = @"";
-        _startSyncServer = NO;
+        _startSyncServer = [PhotonContent currentSettingModel].onlyLoadService;
         _haveNext = YES;
+        _beginTime = 0;
+        _endTime = [[NSDate date] timeIntervalSince1970] * 1000.0;
+        if (_startSyncServer) {
+            _beginTime = [PhotonContent currentSettingModel].beginTime?:_beginTime;
+            _endTime = [PhotonContent currentSettingModel].endTime?:_endTime;
+        }
     }
     return self;
 }
@@ -42,7 +51,7 @@
               }
             return;
         }
-        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:self.anchorMsgId size:(int)self.pageSize beginTimeStamp:0 endTimeStamp:[[NSDate date] timeIntervalSince1970] * 1000.0 reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor,BOOL haveNext, NSError * _Nullable error) {
+        [imclient syncHistoryMessagesFromServer:chatType chatWith:chatWith anchor:self.anchorMsgId size:(int)self.pageSize beginTimeStamp:_beginTime endTimeStamp:_endTime reaultBlock:^(NSArray<PhotonIMMessage *> * _Nullable messageList, NSString * _Nullable anchor,BOOL haveNext, NSError * _Nullable error) {
              weakself.haveNext = haveNext;
             if (error) {
                 weakself.startSyncServer = NO;
