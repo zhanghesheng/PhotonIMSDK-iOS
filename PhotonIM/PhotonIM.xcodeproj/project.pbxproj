@@ -153,6 +153,7 @@
 		324FE2BD233C5CE900F996D0 /* PhotonAtMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FE2BC233C5CE900F996D0 /* PhotonAtMemberListViewController.m */; };
 		324FE2C0233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 324FE2BF233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m */; };
 		3259F3FF23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */; };
+		32664EB323F3A67E00201947 /* PAirSandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 32664EB123F3A67D00201947 /* PAirSandbox.m */; };
 		3272587422F140D000842026 /* PhotonSingleSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587322F140D000842026 /* PhotonSingleSettingViewController.m */; };
 		3272587722F1433500842026 /* PhotonMessageSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587622F1433500842026 /* PhotonMessageSettingItem.m */; };
 		3272587A22F1437100842026 /* PhotonMessageSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587922F1437100842026 /* PhotonMessageSettingCell.m */; };
@@ -517,6 +518,8 @@
 		324FE2BF233C5D5E00F996D0 /* PhotonGroupMemberListViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonGroupMemberListViewController.m; sourceTree = "<group>"; };
 		3259F3FD23C88B9300701C3F /* PhotonChatSearchReultTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatSearchReultTableViewController.h; sourceTree = "<group>"; };
 		3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatSearchReultTableViewController.m; sourceTree = "<group>"; };
+		32664EB123F3A67D00201947 /* PAirSandbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAirSandbox.m; sourceTree = "<group>"; };
+		32664EB223F3A67D00201947 /* PAirSandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAirSandbox.h; sourceTree = "<group>"; };
 		3270BBFC22C5BA8D004CAA00 /* NSObject+PhotonExtensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+PhotonExtensions.h"; sourceTree = "<group>"; };
 		3270BBFD22C5BA8D004CAA00 /* NSObject+PhotonExtensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PhotonExtensions.m"; sourceTree = "<group>"; };
 		3270BC0622C5F5AD004CAA00 /* PhotonNotifycationConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonNotifycationConstant.h; sourceTree = "<group>"; };
@@ -1144,6 +1147,7 @@
 		322B428E22C234150027C1A3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				32664EB023F3A67D00201947 /* AirSandbox */,
 				32C5576023CDD9DF007F06CE /* HXPhotoPicker */,
 				3284546F238FD1D1003C0683 /* YYFPSLabel */,
 				32E0BE0522D3574D00DEEFA5 /* RecordIndicator */,
@@ -1477,6 +1481,15 @@
 				3259F3FE23C88B9300701C3F /* PhotonChatSearchReultTableViewController.m */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		32664EB023F3A67D00201947 /* AirSandbox */ = {
+			isa = PBXGroup;
+			children = (
+				32664EB123F3A67D00201947 /* PAirSandbox.m */,
+				32664EB223F3A67D00201947 /* PAirSandbox.h */,
+			);
+			path = AirSandbox;
 			sourceTree = "<group>";
 		};
 		3270BBFF22C5F049004CAA00 /* FileManager */ = {
@@ -2178,6 +2191,7 @@
 				3238ACCB22D4AB8800EB3D0B /* PhotonChatPanelManager.m in Sources */,
 				32C557F123CDD9E0007F06CE /* UILabel+HXExtension.m in Sources */,
 				3221885422CCA5B6007E9FA3 /* UIWindow+PhotonExtensions.m in Sources */,
+				32664EB323F3A67E00201947 /* PAirSandbox.m in Sources */,
 				32C5580323CDD9E0007F06CE /* HXCustomCollectionReusableView.m in Sources */,
 				3221885522CCA5B6007E9FA3 /* NSObject+PhotonExtensions.m in Sources */,
 				3242C1D7238E249E00C221D2 /* PhotonChatTestModel.m in Sources */,
