@@ -45,6 +45,7 @@
 @property (nonatomic, assign)NSInteger authFaileddCount;
 @property (atomic, assign)BOOL scrollTop;
 @property (nonatomic,assign)BOOL loadFtsRet;
+@property (nonatomic, assign)BOOL isLoading;
 @end
 
 @implementation PhotonChatViewController
@@ -83,6 +84,7 @@
 {
     self = [super init];
     if (self) {
+        _isLoading = NO;
         self.model = [[PhotonChatModel alloc] init];
         self.items = [NSMutableArray array];
         [self.tableView addObserver:self forKeyPath:@"bounds" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -177,9 +179,14 @@
 }
 
 - (void)p_loadDataItems:(BOOL)beforeAuthor{
+    if (self.isLoading) {
+        return;
+    }
     PhotonWeakSelf(self);
     BOOL isEmpty = (self.model.items.count == 0);
+    self.isLoading = YES;
     [(PhotonChatModel *)self.model loadMoreMeesages:self.conversation.chatType chatWith:self.conversation.chatWith beforeAuthor:beforeAuthor asc:YES finish:^(NSDictionary * _Nullable pa) {
+        self.isLoading = NO;
         if (!isEmpty) {
             weakself.enableWithoutScrollToTop = YES;
         }else{

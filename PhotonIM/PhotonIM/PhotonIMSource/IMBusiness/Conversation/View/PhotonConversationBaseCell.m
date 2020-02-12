@@ -85,11 +85,25 @@
            }
            NSMutableAttributedString *chatContent;
            if(conversation.chatType == PhotonIMChatTypeGroup && conversation.lastMsgContent && conversation.lastMsgContent.length > 0){
-                PhotonUser *user =  [PhotonContent findUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
-                chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@:%@",user.nickName,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+               PhotonUser *user =  [PhotonContent findUserWithGroupId:conversation.lastMsgTo uid:conversation.lastMsgFr];
+               NSString *preConetnt = [NSString stringWithFormat:@"%@:",user.nickName];
+               if ([conversation.draft isNotEmpty]) {
+                   preConetnt = @"[草稿]";
+                   chatContent = [[NSMutableAttributedString alloc] initWithString:preConetnt attributes:@{NSForegroundColorAttributeName:[UIColor greenColor]}];
+                   [chatContent appendAttributedString:[[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}]];
+               }else{
+                    chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@",preConetnt,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+               }
+               
            }else{
                if(conversation.lastMsgContent){
-                    chatContent = [[NSMutableAttributedString alloc] initWithString:[conversation.lastMsgContent trim] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+                   if ([conversation.draft isNotEmpty]) {
+                       chatContent = [[NSMutableAttributedString alloc] initWithString:@"[草稿]" attributes:@{NSForegroundColorAttributeName:[UIColor greenColor]}];
+                       [chatContent appendAttributedString:[[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}]];
+                   }else{
+                         chatContent = [[NSMutableAttributedString alloc] initWithString:[conversation.lastMsgContent trim] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+                   }
+                   
                }
               
            }
@@ -163,7 +177,9 @@
     self.timeLabel.frame = timeFrame;
     
 //    // 昵称
+    CGFloat width = self.contentView.width - (self.timeLabel.width + self.iconView.x + self.iconView.width + 15.5 + 5.0 + 15.0);
     size = [self.nickLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
+    size.width = width;
     CGRect nickFrame = self.nickLabel.frame;
     nickFrame.size = size;
     CGFloat nickX = iconFrame.size.width + iconFrame.origin.x + 15.5;

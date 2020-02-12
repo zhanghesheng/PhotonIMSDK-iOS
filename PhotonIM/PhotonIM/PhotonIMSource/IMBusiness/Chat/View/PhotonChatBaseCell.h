@@ -54,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly, nullable)UIButton *avatarBtn;
 
+@property (nonatomic, strong, readonly,nullable)UILabel  *timeLabel;
+
 - (void)longPressBGView:(UIGestureRecognizer *)gestureRecognizer;
 
 - (void)tapBackgroundView;
