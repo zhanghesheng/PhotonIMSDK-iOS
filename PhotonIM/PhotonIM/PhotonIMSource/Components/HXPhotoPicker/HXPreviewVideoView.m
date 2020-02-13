@@ -15,6 +15,7 @@
 #import "NSString+HXExtension.h"
 #import "HXPhotoTools.h"
 #import "UIButton+HXExtension.h"
+#import <PhotonIMSDK/PhotonIMSDK.h>
 
 @interface HXPreviewVideoView ()
 @property (strong, nonatomic) AVPlayer *player;
@@ -33,6 +34,7 @@
 @property (assign, nonatomic) BOOL isDismiss;
 
 @property (strong, nonatomic) NSURLSessionDownloadTask *videoDownloadTask;
+@property (strong, nonatomic) id<PhotonIMDataTaskProtocol> photonIMFileTask;
 @end
 
 @implementation HXPreviewVideoView
@@ -78,6 +80,25 @@
     self.canRemovePlayerObservers = NO;
     HXWeakSelf
     if (model.cameraVideoType == HXPhotoModelMediaTypeCameraVideoTypeNetWork) {
+        
+        if (self.model.userInfo && [self.model.userInfo isKindOfClass:[PhotonIMMessage class]]) {
+             [self showLoading];
+            self.photonIMFileTask = [[PhotonIMClient sharedClient] downloadFileWithMessage:self.model.userInfo progress:^(NSProgress * _Nonnull downloadProgress) {
+
+            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                if (error) {
+                    weakSelf.videoLoadFailed = YES;
+                    [weakSelf hideLoading];
+                    [weakSelf showLoadFailedView];
+                }else{
+                    if (filePath) {
+                        [weakSelf requestAVAssetComplete:[AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]]];
+                    }
+
+                }
+            }];
+            return;
+        }
         NSString *videoFilePath = [HXPhotoTools getVideoURLFilePath:model.videoURL];
         NSURL *videoFileURL = [NSURL fileURLWithPath:videoFilePath];
         if ([HXPhotoTools FileExistsAtVideoURL:model.videoURL]) {
@@ -85,27 +106,27 @@
             return;
         }
         self.playBtn.hidden = YES;
-        [self showLoading];
+       
         if ([HXPhotoCommon photoCommon].downloadNetworkVideo) {
             self.videoDownloadTask = [[HXPhotoCommon photoCommon] downloadVideoWithURL:model.videoURL progress:^(float progress, long long downloadLength, long long totleLength, NSURL * _Nullable videoURL) {
-                if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
-                    return;
-                }
-            } downloadSuccess:^(NSURL * _Nullable filePath, NSURL * _Nullable videoURL) {
-                if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
-                    return;
-                }
-                [weakSelf requestAVAssetComplete:[AVAsset assetWithURL:videoFileURL]];
-            } downloadFailure:^(NSError * _Nullable error, NSURL * _Nullable videoURL) {
-                if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
-                    return;
-                }
-                weakSelf.videoLoadFailed = YES;
-                [weakSelf hideLoading];
-                [weakSelf showLoadFailedView];
-            }];
-            return;
-        }
+                    if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
+                        return;
+                    }
+                } downloadSuccess:^(NSURL * _Nullable filePath, NSURL * _Nullable videoURL) {
+                    if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
+                        return;
+                    }
+                    [weakSelf requestAVAssetComplete:[AVAsset assetWithURL:videoFileURL]];
+                } downloadFailure:^(NSError * _Nullable error, NSURL * _Nullable videoURL) {
+                    if (![videoURL.absoluteString isEqualToString:weakSelf.model.videoURL.absoluteString]) {
+                        return;
+                    }
+                    weakSelf.videoLoadFailed = YES;
+                    [weakSelf hideLoading];
+                    [weakSelf showLoadFailedView];
+                }];
+            }
+        return;
     }
     [self.model requestAVAssetStartRequestICloud:^(PHImageRequestID iCloudRequestId, HXPhotoModel *model) {
         if (weakSelf.model != model) return;
@@ -123,6 +144,7 @@
         [weakSelf showLoadFailedView];
     }];
 }
+
 - (void)requestAVAssetComplete:(AVAsset *)avAsset {
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategorySoloAmbient error: nil];
@@ -139,6 +161,10 @@
     if (!self.stopCancel && self.videoDownloadTask) {
         [self.videoDownloadTask cancel];
         self.videoDownloadTask = nil;
+    }
+    if (self.photonIMFileTask) {
+        [self.photonIMFileTask cancelTask];
+        self.photonIMFileTask = nil;
     }
     if (self.requestID) {
         [[PHImageManager defaultManager] cancelImageRequest:self.requestID];

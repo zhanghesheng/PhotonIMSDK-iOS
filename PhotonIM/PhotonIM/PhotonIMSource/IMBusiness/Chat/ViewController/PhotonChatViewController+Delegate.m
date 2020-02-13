@@ -42,7 +42,7 @@
 #import "PhotonPhotoPreviewViewController.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
-@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate,PhotonPhotoPreviewViewControllerDelegate>
+@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate,PhotonPhotoPreviewViewControllerDelegate,PhotonPhotoPreviewViewControllerDelegate>
 @end
 @implementation PhotonChatViewController (Delegate)
 
@@ -100,9 +100,11 @@
                 PhotonChatImageMessageItem *imgItem = (PhotonChatImageMessageItem *)item;
                 if ([imgItem localPath]) {
                     HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL fileURLWithPath:[imgItem localPath]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                    model.userInfo = imgItem.userInfo;
                     [imageItems addObject:model];
                 }else if ([imgItem orignURL]) {
-                        HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[imgItem orignURL]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[imgItem orignURL]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                    model.userInfo = imgItem.userInfo;
                      [imageItems addObject:model];
                 }
             }else if ([item isKindOfClass:[PhotonChatVideoMessageItem class]]){
@@ -111,17 +113,18 @@
                      count = index;
                  }
                 PhotonIMVideoBody *videoBody = (PhotonIMVideoBody *)[item.userInfo messageBody];
-                          HXPhotoModel *model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
-                          [imageItems addObject:model];
+                HXPhotoModel *model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
+                model.userInfo = item.userInfo;
+                [imageItems addObject:model];
             }
         }
         
         HXPhotoManager *manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhotoAndVideo];
         [manager addModelArray:imageItems];
         PhotonPhotoPreviewViewController *previewVC = [[PhotonPhotoPreviewViewController alloc] init];
-           if (HX_IOS9Earlier) {
-               previewVC.photoViewController = self;
-           }
+        if (HX_IOS9Earlier) {
+            previewVC.photoViewController = self;
+        }
         previewVC.delegate = self;
         previewVC.modelArray = [NSMutableArray arrayWithArray:imageItems];
         previewVC.manager = manager;
@@ -162,15 +165,6 @@
                 }];
             }
         }
-    }
-    
-    if([cell isKindOfClass:[PhotonChatVideoMessageCell class]]){
-        PhotonChatVideoMessageItem *videoItem = (PhotonChatVideoMessageItem *)chatItem;
-        PhotonIMMessage *message = chatItem.userInfo;
-        [[PhotonIMClient sharedClient] downloadFileWithMessage:message progress:^(NSProgress * _Nonnull downloadProgress) {
-        } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
-            NSLog(@"filePath%@",filePath);
-        }];
     }
     if([cell isKindOfClass:[PhotonChatLocationCell class]]){
         PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)chatItem;
@@ -364,6 +358,18 @@
     NSInteger index = [self.dataSource.items indexOfObject:item];
     [self.model.items replaceObjectAtIndex:index withObject:noticItem];
     [self reloadData];
+}
+
+#pragma mark ----- PhotonPhotoPreviewViewControllerDelegate ---
+- (void)share:(HXPhotoModel *)model{
+    PhotonIMMessage *message = model.userInfo;
+    if ([message isKindOfClass:[PhotonIMMessage class]]) {
+        PhotonWeakSelf(self)
+        PhotonChatTransmitListViewController *transmitVc = [[PhotonChatTransmitListViewController alloc] initWithMessage:message block:^(id  _Nonnull msg) {
+            [weakself addItems:msg];
+        }];
+        [self.navigationController pushViewController:transmitVc animated:YES];
+    }
 }
 @end
 #pragma clang diagnostic pop

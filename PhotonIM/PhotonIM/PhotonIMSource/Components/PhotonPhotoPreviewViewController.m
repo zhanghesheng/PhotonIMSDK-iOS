@@ -22,6 +22,7 @@
 
 #import "UIImageView+HXExtension.h"
 #import "Masonry/Masonry.h"
+#import <PhotonIMSDK/PhotonIMSDK.h>
 @interface PhotonPhotoPreviewViewController ()
 <
 UICollectionViewDataSource,
@@ -308,13 +309,13 @@ HXVideoEditViewControllerDelegate
     
     [self.darkCancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(30, 30));
-        make.top.mas_equalTo(15);
+        make.top.mas_equalTo(20);
         make.left.mas_equalTo(10);
     }];
     
     [self.sharedBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(30, 30));
-        make.top.mas_equalTo(15);
+        make.top.mas_equalTo(20);
         make.right.mas_equalTo(-10);
     }];
     
@@ -351,13 +352,7 @@ HXVideoEditViewControllerDelegate
     self.view.backgroundColor = [UIColor blackColor];
     self.firstChangeFrame = YES;
 }
-- (void)didSharedClick:(UIButton *)button {
-    if (self.modelArray.count <= 0) {
-        return;
-    }
-    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
-    
-}
+
 - (void)dismissClick {
     self.manager.selectPhotoing = NO;
     if ([self.delegate respondsToSelector:@selector(photoPreviewControllerDidCancel:model:)]) {
@@ -371,10 +366,35 @@ HXVideoEditViewControllerDelegate
 }
 
 - (void)downloadClick:(UIButton *)sender{
-    
+    if (self.modelArray.count <= 0) {
+        return;
+    }
+    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
 }
 
 - (void)viewOriginClick:(UIButton *)sender{
+    if (self.modelArray.count <= 0) {
+        return;
+    }
+    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
+    if (!model) {
+        return;
+    }
+    
+}
+
+- (void)didSharedClick:(UIButton *)button {
+    if (self.modelArray.count <= 0) {
+        return;
+    }
+    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
+    if (!model) {
+        return;
+    }
+    if (self.delegate && [self.delegate respondsToSelector:@selector(share:)]) {
+        [self dismissClick];
+        [self.delegate share:model];
+    }
     
 }
 #pragma mark - < public >

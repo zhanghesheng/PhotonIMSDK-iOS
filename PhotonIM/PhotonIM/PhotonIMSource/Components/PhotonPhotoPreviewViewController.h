@@ -20,6 +20,9 @@ PhotonPhotoPreviewViewController,
 HXPhotoPreviewBottomView,
 HXPhotoPreviewViewCell;
 @protocol PhotonPhotoPreviewViewControllerDelegate <NSObject>
+
+- (void)share:(HXPhotoModel *)model;
+- (void)download:(HXPhotoModel *)model;
 @optional
 
 /// 选择某个model
