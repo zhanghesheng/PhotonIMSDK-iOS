@@ -222,7 +222,7 @@ typedef NS_ENUM(NSUInteger, HXPhotoModelFormat) {
 @property (strong, nonatomic) id _Nullable tempAsset;
 @property (assign, nonatomic) BOOL loadOriginalImage;
 
-@property (nonatomic, strong, nullable)id userInfo;
+@property (nonatomic, strong,nullable)id userInfo;
 
 #pragma mark - < init >
 /**  通过image初始化 */

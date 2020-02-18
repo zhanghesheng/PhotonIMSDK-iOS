@@ -83,7 +83,7 @@
         
         if (self.model.userInfo && [self.model.userInfo isKindOfClass:[PhotonIMMessage class]]) {
              [self showLoading];
-            self.photonIMFileTask = [[PhotonIMClient sharedClient] downloadFileWithMessage:self.model.userInfo progress:^(NSProgress * _Nonnull downloadProgress) {
+            self.photonIMFileTask = [[PhotonIMClient sharedClient] getLocalFileWithMessage:self.model.userInfo fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
 
             } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                 if (error) {

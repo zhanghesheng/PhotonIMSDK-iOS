@@ -129,6 +129,7 @@
     }];
 }
 
+// 发送视频消息
 - (void)sendVideoMessage:(NSString *)fileName duraion:(CGFloat)duraion{
     PhotonChatVideoMessageItem *vedioItem = [[PhotonChatVideoMessageItem alloc] init];
     vedioItem.fromType = PhotonChatMessageFromSelf;
@@ -156,6 +157,7 @@
     }];
 }
 
+// 发送位置消息
 - (void)sendLocationMessage:(NSString *)address detailAddress:(NSString *)detailAddress locationCoordinate:(CLLocationCoordinate2D)locationCoordinate{
     PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];
     locationItem.fromType = PhotonChatMessageFromSelf;
@@ -183,6 +185,33 @@
     }];
 }
 
+// 发送文件消息
+- (void)sendFileMessage:(PhotonIMFileBody *)body{
+    PhotonChatFileMessagItem *fileItem = [[PhotonChatFileMessagItem alloc] init];
+    fileItem.fromType = PhotonChatMessageFromSelf;
+    fileItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    fileItem.fileName = body.fileDisplayName;
+    fileItem.fileSize = [NSString stringWithFormat:@"%.2f k",(float)body.fileSize/1024.0];
+    fileItem.fileICon = [UIImage imageNamed:@"chatfile"];
+    fileItem.filePath = body.localFilePath;
+    [self addItem:fileItem];
+    PhotonWeakSelf(self)
+    [[PhotonMessageCenter sharedCenter] sendFileMessage:fileItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
+        
+    } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        if (!succeed && error.em) {
+            fileItem.tipText = error.em;
+        }else if (!succeed){
+            if (error.code != -1 && error.code != -2) {
+                [PhotonUtil showErrorHint:error.em];
+            }
+        }
+        if (succeed) {
+            fileItem.tipText = @"";
+        }
+        [weakself updateItem:fileItem];
+    }];
+}
 // 发送消息已读
 - (void)sendReadMsgs:(NSArray *)msgids completion:(void (^)(BOOL, PhotonIMError * _Nullable))completion{
     [[PhotonMessageCenter sharedCenter] sendReadMessage:msgids conversation:self.conversation completion:^(BOOL succeed, PhotonIMError * _Nullable error) {

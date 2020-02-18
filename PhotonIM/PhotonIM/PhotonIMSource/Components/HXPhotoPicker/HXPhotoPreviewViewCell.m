@@ -59,20 +59,14 @@
 }
 - (CGSize)getImageSize {
     CGFloat width = self.frame.size.width;
-//    CGFloat height = self.frame.size.height;
     CGFloat imgWidth = self.model.imageSize.width;
     CGFloat imgHeight = self.model.imageSize.height;
     CGFloat w;
     CGFloat h;
 
     imgHeight = width / imgWidth * imgHeight;
-//    if (imgHeight > height) {
-//        w = height / self.model.imageSize.height * imgWidth;
-//        h = height;
-//    }else {
-        w = width;
-        h = imgHeight;
-//    }
+     w = width;
+     h = imgHeight;
     return CGSizeMake(w, h);
 }
 - (void)refreshImageSize {
@@ -84,15 +78,9 @@
     CGFloat h;
 
     imgHeight = width / imgWidth * imgHeight;
-//    if (imgHeight > height) {
-//        w = height / self.model.imageSize.height * imgWidth;
-//        h = height;
-//        self.scrollView.maximumZoomScale = width / w + 0.5;
-//    }else {
-        w = width;
-        h = imgHeight;
-        self.scrollView.maximumZoomScale = 2.5;
-//    }
+    w = width;
+    h = imgHeight;
+    self.scrollView.maximumZoomScale = 2.5;
 
     self.previewContentView.frame = CGRectMake(0, 0, w, h);
     if (h < height) {
@@ -115,15 +103,9 @@
     CGFloat h;
     
     imgHeight = width / imgWidth * imgHeight;
-//    if (imgHeight > height) {
-//        w = height / self.model.imageSize.height * imgWidth;
-//        h = height;
-//        self.scrollView.maximumZoomScale = width / w + 0.5;
-//    }else {
-        w = width;
-        h = imgHeight;
-        self.scrollView.maximumZoomScale = 2.5;
-//    }
+    w = width;
+    h = imgHeight;
+    self.scrollView.maximumZoomScale = 2.5;
 
     self.previewContentView.frame = CGRectMake(0, 0, w, h);
     if (h < height) {

@@ -44,6 +44,8 @@
 
 #define HasSDWebImage (__has_include(<SDWebImage/UIImageView+WebCache.h>) || __has_include("UIImageView+WebCache.h"))
 
+#define HasPhotonIMSDK __has_include(<PhotonIMSDK/PhotonIMSDK.h>)
+
 #define HX_ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define HX_ScreenHeight [UIScreen mainScreen].bounds.size.height
 

@@ -251,13 +251,13 @@
         }
             break;
         case PhotonIMMessageTypeFile:{// 文件
-            PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];
-            PhotonIMLocationBody *audioBody = (PhotonIMLocationBody *)message.messageBody;
-            locationItem.address = audioBody.address;
-            locationItem.detailAddress = audioBody.detailedAddress;
-            locationItem.locationCoordinate = CLLocationCoordinate2DMake(audioBody.lat, audioBody.lng);
-            locationItem.userInfo = message;
-            resultItem = locationItem;
+            PhotonChatFileMessagItem *fileItem = [[PhotonChatFileMessagItem alloc] init];
+            PhotonIMFileBody *fileBody = (PhotonIMFileBody *)message.messageBody;
+            fileItem.fileSize = [NSString stringWithFormat:@"%.1f k",(float)fileBody.fileSize/1024.0];
+            fileItem.fileName = fileBody.fileDisplayName;
+            fileItem.fileICon = [UIImage imageNamed:@"chatfile"];
+            fileItem.userInfo = message;
+            resultItem = fileItem;
         }
             break;
         case PhotonIMMessageTypeRaw:{// 自定义

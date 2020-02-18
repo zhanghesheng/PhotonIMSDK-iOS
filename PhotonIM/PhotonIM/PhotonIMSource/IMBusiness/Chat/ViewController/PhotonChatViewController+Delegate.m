@@ -86,23 +86,27 @@
     
     // 图片单击事件（预览大图）
     if([cell isKindOfClass:[PhotonChatImageMessageCell class]] || [cell isKindOfClass:[PhotonChatVideoMessageCell class]]){
-        PhotonIMMessage *message = (PhotonIMMessage *)chatItem.userInfo;
         NSMutableArray *imageItems = [[NSMutableArray alloc] init];
         int count = 0;
         int index = -1;
         for (PhotonChatBaseItem *item in self.dataSource.items) {
            
             if ([item isKindOfClass:[PhotonChatImageMessageItem class]]) {
-                index ++;
-                 if(chatItem == item){
-                     count = index;
-                 }
+                
                 PhotonChatImageMessageItem *imgItem = (PhotonChatImageMessageItem *)item;
                 if ([imgItem localPath]) {
+                    index ++;
+                    if(chatItem == item){
+                        count = index;
+                    }
                     HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL fileURLWithPath:[imgItem localPath]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
                     model.userInfo = imgItem.userInfo;
                     [imageItems addObject:model];
                 }else if ([imgItem orignURL]) {
+                    index ++;
+                    if(chatItem == item){
+                        count = index;
+                    }
                     HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[imgItem orignURL]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
                     model.userInfo = imgItem.userInfo;
                      [imageItems addObject:model];
@@ -160,7 +164,7 @@
             }else{
                 [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
                 PhotonWeakSelf(self);
-                [[PhotonIMClient sharedClient] downloadFileWithMessage:message progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                     [weakself playAudioSource:filePath cell:voiceCell];
                 }];
             }

@@ -16,6 +16,7 @@
 #import "UIImage+HXExtension.h"
 #import <CoreLocation/CoreLocation.h>
 #import "HXPhotoCustomNavigationBar.h"
+#import <Masonry/Masonry.h>
 
 @interface HXCustomCameraViewController ()<HXCustomPreviewViewDelegate,HXCustomCameraBottomViewDelegate,HXCustomCameraControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) HXCustomCameraController *cameraController;
@@ -24,6 +25,7 @@
 @property (strong, nonatomic) CAGradientLayer *topMaskLayer;
 @property (strong, nonatomic) UIView *topView;
 @property (strong, nonatomic) UIButton *cancelBtn;
+@property (strong, nonatomic) UIButton *resetBtn;
 @property (strong, nonatomic) UIButton *changeCameraBtn;
 @property (strong, nonatomic) UIButton *flashBtn;
 @property (strong, nonatomic) HXCustomCameraBottomView *bottomView;
@@ -105,8 +107,7 @@
     [self.view addSubview:self.cancelBtn];
     [self changeSubviewFrame];
     
-//    [self.view addSubview:self.customNavigationBar];
-    
+
     if (self.manager.configuration.navigationBar) {
         self.manager.configuration.navigationBar(self.customNavigationBar, self);
     }
@@ -173,18 +174,6 @@
     
     self.previewView.tapToFocusEnabled = self.cameraController.cameraSupportsTapToFocus;
     self.previewView.tapToExposeEnabled = self.cameraController.cameraSupportsTapToExpose;
-    
-//    UIBarButtonItem *rightBtn1 = [[UIBarButtonItem alloc] initWithCustomView:self.changeCameraBtn];
-//    UIBarButtonItem *rightBtn2 = [[UIBarButtonItem alloc] initWithCustomView:self.flashBtn];
-//    if ([self.cameraController canSwitchCameras] && [self.cameraController cameraHasFlash]) {
-//        self.navItem.rightBarButtonItems = @[rightBtn2];
-//    }else {
-//        if ([self.cameraController cameraHasTorch] || [self.cameraController cameraHasFlash]) {
-//            self.navItem.rightBarButtonItems = @[rightBtn2];
-//        }
-//    }
-    
-    
     self.previewView.maxScale = [self.cameraController maxZoomFactor];
     if ([self.cameraController cameraSupportsZoom]) {
         self.previewView.effectiveScale = 1.0f;
@@ -249,13 +238,26 @@
         self.topView.hx_y = -10;
     }
 
-    self.flashBtn.hx_origin = CGPointMake((self.view.hx_w-self.flashBtn.hx_w)/2.0, hxStatusBarHeight);
-    self.cancelBtn.hx_origin = CGPointMake(hxStatusBarHeight, hxStatusBarHeight);
+   
     self.topMaskLayer.frame = self.topView.bounds;
     self.bottomView.frame = CGRectMake(0, self.view.hx_h - 120 - self.previewView.hx_y, self.view.hx_w, 120);
-    CGRect changeCameraBtnFrame = self.changeCameraBtn.frame;
-    changeCameraBtnFrame.origin = CGPointMake((self.bottomView.hx_w/2.0+changeCameraBtnFrame.size.width * 2), (self.bottomView.hx_h - changeCameraBtnFrame.size.height/2.0)/2.0);
-    self.changeCameraBtn.frame = changeCameraBtnFrame;
+    
+    [self.changeCameraBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.bottomView.mas_centerY).offset(3);
+        make.centerX.mas_equalTo(self.bottomView.mas_centerX).offset(90);
+    }];
+    
+    [self.flashBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(hxStatusBarHeight);
+        make.centerX.mas_equalTo(self.view);
+        make.size.mas_equalTo(CGSizeMake(40, 46));
+    }];
+    
+    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(hxStatusBarHeight);
+        make.left.mas_equalTo(hxStatusBarHeight);
+        make.size.mas_equalTo(CGSizeMake(40, 40));
+    }];
 }
 - (BOOL)prefersStatusBarHidden {
     return self.statusBarShouldBeHidden;
@@ -299,10 +301,11 @@
     if (HXShowLog) NSSLog(@"dealloc");
 }
 - (void)cancelClick:(UIButton *)button {
-    if (button.selected) {
+    if (button.tag == 1002) {
         [self.cameraController startSession];
         [self.imageView removeFromSuperview];
         [self.doneBtn removeFromSuperview];
+        [self.resetBtn removeFromSuperview];
         [self.playVideoView stopPlay];
         self.playVideoView.hidden = YES;
         self.playVideoView.playerLayer.hidden = YES;
@@ -416,6 +419,7 @@
     self.imageView.image = image;
     [self.view insertSubview:self.imageView belowSubview:self.bottomView];
     [self.view addSubview:self.doneBtn];
+    [self.view addSubview:self.resetBtn];
     [self.cameraController stopSession];
     self.cancelBtn.hidden = NO;
 }
@@ -482,6 +486,7 @@
         self.playVideoView.playerLayer.hidden = NO;
         self.playVideoView.videoURL = self.videoURL;
         [self.view addSubview:self.doneBtn];
+        [self.view addSubview:self.resetBtn];
     }
     self.cancelBtn.hidden = NO;
 //    NSSLog(@"%@",videoURL);
@@ -624,10 +629,10 @@
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_cancelBtn setTitle:[NSBundle hx_localizedStringForKey:@"重拍"] forState:UIControlStateSelected];
-        [_cancelBtn setTitle:@"" forState:UIControlStateNormal];
+        _cancelBtn.tag = 1001;
         [_cancelBtn setImage:[UIImage hx_imageNamed:@"hx_faceu_cancel"] forState:UIControlStateNormal];
         [_cancelBtn setImage:[[UIImage alloc] init] forState:UIControlStateSelected];
+        _cancelBtn.contentMode = UIViewContentModeScaleAspectFit;
         [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateSelected];
         [_cancelBtn addTarget:self action:@selector(cancelClick:) forControlEvents:UIControlEventTouchUpInside];
         _cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -636,16 +641,44 @@
     return _cancelBtn;
 }
 
+- (UIButton *)resetBtn {
+    if (!_resetBtn) {
+        _resetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _resetBtn.tag = 1002;
+        [_resetBtn setImage:[UIImage hx_imageNamed:@"media_back"] forState:UIControlStateNormal];
+        _resetBtn.contentMode = UIViewContentModeScaleAspectFit;
+        [_resetBtn setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.30]];
+       
+        [_resetBtn addTarget:self action:@selector(cancelClick:) forControlEvents:UIControlEventTouchUpInside];
+        _resetBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _resetBtn.hx_size = CGSizeMake(42,42);
+        _resetBtn.layer.cornerRadius = _resetBtn.hx_size.width/2.0;
+        _resetBtn.clipsToBounds = YES;
+        _resetBtn.hx_centerX = self.view.hx_centerX - _resetBtn.hx_size.width;
+        _resetBtn.hx_y = self.view.hx_h - _resetBtn.hx_size.width - 20;
+    }
+    return _resetBtn;
+}
+
+- (UIButton *)doneBtn {
+    if (!_doneBtn) {
+           _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+           [_doneBtn setImage:[UIImage hx_imageNamed:@"media_ok"] forState:UIControlStateNormal];
+           _doneBtn.contentMode = UIViewContentModeScaleAspectFit;
+           [_doneBtn setBackgroundColor:[UIColor whiteColor]];
+           [_doneBtn addTarget:self action:@selector(didDoneBtnClick) forControlEvents:UIControlEventTouchUpInside];
+           _doneBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+           _doneBtn.hx_size = CGSizeMake(42,42);
+            _doneBtn.layer.cornerRadius = _doneBtn.hx_size.width/2.0;
+            _doneBtn.clipsToBounds = YES;
+           _doneBtn.hx_centerX = self.view.hx_centerX + _doneBtn.hx_size.width;
+           _doneBtn.hx_y = self.view.hx_h - _doneBtn.hx_size.width - 20;
+       }
+       return _doneBtn;
+}
+
 - (void)setCancelBtnSelect:(BOOL)selected{
     self.cancelBtn.selected = selected;
-    if (selected) {
-        self.cancelBtn.hx_size = CGSizeMake(60,30);
-        self.cancelBtn.hx_origin = CGPointMake(15, self.doneBtn.hx_y);
-
-    }else{
-       self.cancelBtn.hx_size = self.cancelBtn.currentImage.size;
-       self.cancelBtn.hx_origin = CGPointMake(hxStatusBarHeight, hxStatusBarHeight);
-    }
 }
 - (UIButton *)changeCameraBtn {
     if (!_changeCameraBtn) {
@@ -664,7 +697,7 @@
         UIImage *selectedImage = [UIImage hx_imageNamed:@"hx_flash_pic_nopreview"];
         [_flashBtn setImage:selectedImage forState:UIControlStateSelected];
         [_flashBtn addTarget:self action:@selector(didFlashClick:) forControlEvents:UIControlEventTouchUpInside];
-         _flashBtn.hx_size = _flashBtn.currentImage.size;
+         _flashBtn.hx_size = CGSizeMake(40,40);
     }
     return _flashBtn;
 }
@@ -691,20 +724,7 @@
     }
     return _playVideoView;
 }
-- (UIButton *)doneBtn {
-    if (!_doneBtn) {
-        _doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_doneBtn setTitle:[NSBundle hx_localizedStringForKey:@"发送"] forState:UIControlStateNormal];
-        [_doneBtn setTitleShadowColor:[[UIColor blackColor] colorWithAlphaComponent:0.4] forState:UIControlStateNormal];
-        [_doneBtn.titleLabel setShadowOffset:CGSizeMake(1, 2)];
-        _doneBtn.hx_h = 40;
-        _doneBtn.hx_w = [_doneBtn.titleLabel hx_getTextWidth];
-        _doneBtn.hx_x = self.view.hx_w - 15 - _doneBtn.hx_w;
-        _doneBtn.hx_y = self.view.hx_h - self.previewView.hx_y - _doneBtn.hx_h;
-        [_doneBtn addTarget:self action:@selector(didDoneBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _doneBtn;
-}
+
 - (UIVisualEffectView *)effectView {
     if (!_effectView) {
         UIBlurEffect *effect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
@@ -1019,6 +1039,7 @@
         _playView = [[HXFullScreenCameraPlayView alloc] initWithFrame:CGRectMake(0, 0, 70, 70) color:self.manager.configuration.themeColor];
         self.tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(takePictures)];
         [_playView addGestureRecognizer:self.tap];
+        _playView.color = [UIColor whiteColor];
     }
     return _playView;
 }

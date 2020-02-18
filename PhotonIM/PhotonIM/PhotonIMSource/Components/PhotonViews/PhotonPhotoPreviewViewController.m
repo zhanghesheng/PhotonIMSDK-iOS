@@ -7,6 +7,7 @@
 //
 
 #import "PhotonPhotoPreviewViewController.h"
+#import <Photos/Photos.h>
 #import "UIImage+HXExtension.h"
 #import "HXPhotoPreviewBottomView.h"
 #import "UIButton+HXExtension.h"
@@ -200,6 +201,7 @@ HXVideoEditViewControllerDelegate
         }
         self.isAddInteractiveTransition = YES;
     }
+    [self showViewOriginBtn:model];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -214,7 +216,6 @@ HXVideoEditViewControllerDelegate
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.edgesForExtendedLayout = UIRectEdgeAll;
     [self setupUI];
@@ -337,7 +338,7 @@ HXVideoEditViewControllerDelegate
     
     
     [self.viewOrigindBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-           make.size.mas_equalTo(CGSizeMake(90, 30));
+           make.size.mas_equalTo(CGSizeMake(150, 30));
            make.top.mas_equalTo(2);
            make.centerX.mas_equalTo(self.view.mas_centerX);
     }];
@@ -370,8 +371,22 @@ HXVideoEditViewControllerDelegate
         return;
     }
     HXPhotoModel *model = self.modelArray[self.currentModelIndex];
+    if (!model) {
+        return;
+    }
+    
+   
 }
-
+- (void)saeveMessage:(UIImage *)image{
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+     //写入图片到相册
+     [PHAssetChangeRequest creationRequestForAssetFromImage:image];
+     } completionHandler:^(BOOL success, NSError * _Nullable error) {
+         if(success){
+             
+         }
+    }];
+}
 - (void)viewOriginClick:(UIButton *)sender{
     if (self.modelArray.count <= 0) {
         return;
@@ -573,6 +588,7 @@ HXVideoEditViewControllerDelegate
         HXPhotoModel *model = self.modelArray[self.currentModelIndex];
         model.previewContentOffsetX = scrollView.contentOffset.x;
         self.currentModel = model;
+        [self showViewOriginBtn:model];
         [cell requestHDImage];
     }
 }
@@ -642,12 +658,24 @@ HXVideoEditViewControllerDelegate
         _viewOrigindBtn.clipsToBounds = YES;
         _viewOrigindBtn.backgroundColor = [UIColor clearColor];
         _viewOrigindBtn.layer.cornerRadius = 5;
+        [_viewOrigindBtn.titleLabel setFont:[UIFont systemFontOfSize:13.0]];
         _viewOrigindBtn.layer.borderColor = [[UIColor whiteColor] CGColor];
         _viewOrigindBtn.layer.borderWidth = 1.0/[UIScreen mainScreen].scale;
         [_viewOrigindBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_viewOrigindBtn addTarget:self action:@selector(viewOriginClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _viewOrigindBtn;
+}
+
+- (void)showViewOriginBtn:(HXPhotoModel *)model{
+    if(model){
+        PhotonIMMessage *message = model.userInfo;
+        if (message && [message isKindOfClass:[PhotonIMMessage class]]) {
+            NSInteger fileSize = [message messageBody].fileSize;
+            float size = fileSize/1024.0;
+            [self.viewOrigindBtn setTitle:[NSString stringWithFormat:@"查看原图(%.2lf k)",size] forState:UIControlStateNormal];
+        }
+    }
 }
 - (void)showBtnView:(BOOL)show{
     [UIView animateWithDuration:0.3 animations:^{
