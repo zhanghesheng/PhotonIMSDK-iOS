@@ -185,7 +185,7 @@ typedef NS_ENUM(NSInteger, PhotonIMNetworkType) {
     PhotonIMNetworkTypeWIFI    = 1,
     PhotonIMNetworkType2G      = 2,
     PhotonIMNetworkType3G      = 3,
-    PhotonIMNetworkType4g      = 4,
+    PhotonIMNetworkType4G      = 4,
 };
 
 /**

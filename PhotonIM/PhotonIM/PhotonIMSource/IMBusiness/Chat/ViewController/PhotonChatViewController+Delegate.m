@@ -131,7 +131,7 @@
     }
     if([cell isKindOfClass:[PhotonChatLocationCell class]]){
         PhotonChatLocationItem *locationItem = (PhotonChatLocationItem *)chatItem;
-        PhotonLocationViewContraller *locationVC = [[PhotonLocationViewContraller alloc]  initWithLocation:locationItem.locationCoordinate];
+        PhotonLocationViewContraller *locationVC = [[PhotonLocationViewContraller alloc]  initWithLocation:locationItem];
         PhotonWeakSelf(self)
         [locationVC setActionBlock:^{
             PhotonChatTransmitListViewController *transmitVc = [[PhotonChatTransmitListViewController alloc] initWithMessage:locationItem.userInfo block:^(id  _Nonnull msg) {

@@ -21,6 +21,8 @@ typedef void(^ActiobBlcok)(void);
 
 @property (nonatomic, assign) BOOL initLocation;
 @property (nonatomic, copy)ActiobBlcok actionBlock;
+
+@property (nonatomic, strong)PhotonChatLocationItem *locationItem;
 @end
 
 @implementation PhotonLocationViewContraller
@@ -34,11 +36,12 @@ typedef void(^ActiobBlcok)(void);
     
     return self;
 }
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)locationCoordinate{
+- (instancetype)initWithLocation:(PhotonChatLocationItem *)locationItem{
     self = [super init];
        if (self) {
            _canSend = NO;
-           _locationCoordinate = locationCoordinate;
+           _locationCoordinate = locationItem.locationCoordinate;
+           _locationItem = locationItem;
        }
        
        return self;
@@ -71,12 +74,13 @@ typedef void(^ActiobBlcok)(void);
     self.mapView = [[MKMapView alloc] initWithFrame:CGRectMake(0, NavAndStatusHight, PhotoScreenWidth, PhotoScreenHeight -NavAndStatusHight)];
     self.mapView.delegate = self;
     self.mapView.mapType = MKMapTypeStandard;
-    self.mapView.userTrackingMode=MKUserTrackingModeFollow;
-    _mapView.showsUserLocation = YES;
+
     self.mapView.zoomEnabled = YES;
     [self.view addSubview:self.mapView];
     
     if (self.canSend) {
+        self.mapView.userTrackingMode=MKUserTrackingModeFollow;
+        self.mapView.showsUserLocation = YES;
         UILongPressGestureRecognizer *lpGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(lpgrClick:)];
         [lpGesture setDelegate:self];
         [self.mapView addGestureRecognizer:lpGesture];
@@ -117,6 +121,8 @@ typedef void(^ActiobBlcok)(void);
     
     [self.mapView removeAnnotation:self.annotation];
     self.annotation.coordinate = locationCoordinate;
+    self.annotation.title = self.locationItem.address;
+    self.annotation.subtitle = self.locationItem.detailAddress;
     [self.mapView addAnnotation:self.annotation];
 
     
