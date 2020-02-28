@@ -23,6 +23,8 @@ typedef void(^ActiobBlcok)(void);
 @property (nonatomic, copy)ActiobBlcok actionBlock;
 
 @property (nonatomic, strong)PhotonChatLocationItem *locationItem;
+
+@property (nonatomic, assign) BOOL locationSucceed;
 @end
 
 @implementation PhotonLocationViewContraller
@@ -32,6 +34,7 @@ typedef void(^ActiobBlcok)(void);
     if (self) {
         _canSend = YES;
         _initLocation = NO;
+        _locationSucceed = YES;
     }
     
     return self;
@@ -40,6 +43,7 @@ typedef void(^ActiobBlcok)(void);
     self = [super init];
        if (self) {
            _canSend = NO;
+            _locationSucceed = YES;
            _locationCoordinate = locationItem.locationCoordinate;
            _locationItem = locationItem;
        }
@@ -77,7 +81,6 @@ typedef void(^ActiobBlcok)(void);
 
     self.mapView.zoomEnabled = YES;
     [self.view addSubview:self.mapView];
-    
     if (self.canSend) {
         self.mapView.userTrackingMode=MKUserTrackingModeFollow;
         self.mapView.showsUserLocation = YES;
@@ -156,6 +159,7 @@ typedef void(^ActiobBlcok)(void);
 }
 - (void)mapView:(MKMapView *)mapView didFailToLocateUserWithError:(NSError *)error
 {
+     _locationSucceed = NO;
      [PhotonUtil hiddenLoading];
 }
 
@@ -247,8 +251,10 @@ typedef void(^ActiobBlcok)(void);
 
 - (void)sendAction
 {
-    if (self.sendCompletion) {
-           self.sendCompletion(self.locationCoordinate, self.address,self.detailAddress);
+    if (self.sendCompletion && _locationSucceed) {
+        self.sendCompletion(self.locationCoordinate, self.address,self.detailAddress);
+    }else{
+        [PhotonUtil showErrorHint:@"位置信息获取失败,请确定开启位置权限重新获取位置信息"];
     }
     [self.navigationController popViewControllerAnimated:YES];
 }
