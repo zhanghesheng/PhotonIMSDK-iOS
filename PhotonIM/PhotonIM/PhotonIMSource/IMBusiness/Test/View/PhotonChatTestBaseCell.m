@@ -44,6 +44,9 @@
     }
     PhotonChatTestItem *item = (PhotonChatTestItem *)object;
     PhotonIMConversation *conversation = (PhotonIMConversation *)item.userInfo;
+    if(!conversation){
+        return;
+    }
     [self.iconView sd_setImageWithURL:[NSURL URLWithString:conversation.FAvatarPath] placeholderImage:[UIImage imageWithColor:RGBAColor(0, 0, 0, 0.6)]];
     
     NSString *nickName = @"";
@@ -103,53 +106,46 @@
 }
 
 - (void)p_layoutViews{
-    PhotonChatTestItem *item = (PhotonChatTestItem *)self.item;
-    PhotonIMConversation *conversation = (PhotonIMConversation *)item.userInfo;
+    CGRect contentFrame = self.contentView.frame;
     // 头像
-    [self.iconView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(56, 56));
-        make.centerY.mas_equalTo(self.contentView.mas_centerY);
-        make.left.mas_equalTo(17.5);
-    }];
-    
+    CGRect iconFrame = self.iconView.frame;
+    iconFrame.size = CGSizeMake(56.0, 56.0);
+    CGFloat iconY = (contentFrame.size.height - 56.0)/2.0;
+    iconFrame.origin = CGPointMake(17.5, iconY);
+    self.iconView.frame = iconFrame;
     
     // 昵称
     CGSize size = [self.nickLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
-    [self.nickLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(21);
-        make.left.mas_equalTo(self.iconView.mas_right).mas_offset(15.5);
-    }];
+    CGRect nickFrame = self.nickLabel.frame;
+    nickFrame.size = size;
+    CGFloat nickX = iconFrame.size.width + iconFrame.origin.x + 15.5;
+    nickFrame.origin = CGPointMake(nickX, 21.0);
+    self.nickLabel.frame = nickFrame;
     
-    [self.nickLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(size);
-    }];
-   
-    if(conversation.unReadCount > 0){
-        size = [PhoneBadgeView badgeSizeWithValue:[@(conversation.unReadCount) stringValue]];
-    }else{
-        size =CGSizeZero;
-    }
+    CGRect startChatFrame = self.startChatBtn.frame;
+    startChatFrame.size = CGSizeMake(55.0, 30.0);
+    CGFloat startChatY = 5.0;
+    CGFloat startChatX = contentFrame.size.width - startChatFrame.size.width - 5;
+    startChatFrame.origin = CGPointMake(startChatX, startChatY);
+    self.startChatBtn.frame = startChatFrame;
     
-    [self.startChatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(30);
-        make.width.mas_equalTo(55);
-        make.top.mas_equalTo(self.contentView).mas_offset(5);
-        make.right.mas_equalTo(self.contentView).mas_offset(-5);
-    }];
+    CGRect clearFrame = self.startChatBtn.frame;
+    clearFrame.size = CGSizeMake(55.0, 30.0);
+    CGFloat clearY = contentFrame.size.height - startChatFrame.size.height - 5;;
+    CGFloat clearX = contentFrame.size.width - startChatFrame.size.width - 5;
+    clearFrame.origin = CGPointMake(clearX, clearY);
+    self.clearBtn.frame = clearFrame;
     
-    [self.clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-           make.height.mas_equalTo(30);
-           make.width.mas_equalTo(55);
-           make.bottom.mas_equalTo(self.contentView).mas_offset(-5);
-           make.right.mas_equalTo(self.contentView).mas_offset(-5);
-    }];
+    
+    CGRect contextFrame = self.startChatBtn.frame;
+    contextFrame.size = CGSizeMake(55.0, 30.0);
+    CGFloat contextHeight = 18.5;
+    CGFloat contextWith = contentFrame.size.width - (iconFrame.size.width + clearFrame.size.width + iconFrame.origin.x + 5);
+    CGFloat contextY = nickFrame.size.height + nickFrame.origin.y + 1.5;
+    CGFloat contextX = nickFrame.origin.x;
+    contextFrame = CGRectMake(contextX, contextY, contextWith, contextHeight);
+    self.contextLabel.frame = contextFrame;
            
-    [self.contextLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_equalTo(18.5);
-        make.top.mas_equalTo(self.nickLabel.mas_bottom).mas_offset(1.5);
-        make.left.mas_equalTo(self.nickLabel.mas_left).mas_offset(0);
-        make.right.mas_equalTo(self.clearBtn.mas_left).mas_equalTo(-5);
-    }];
     
 }
 

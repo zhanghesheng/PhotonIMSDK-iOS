@@ -17,12 +17,13 @@
 @implementation PhotonChatTestModel
 - (void)loadItems:(nullable NSDictionary *)params finish:(void (^)(NSDictionary * _Nullable))finish failure:(void (^)(PhotonErrorDescription * _Nullable))failure{
     PhotonWeakSelf(self);
-        [super loadItems:params finish:finish failure:failure];
+        NSArray *items =  [weakself.items copy];
         NSArray<PhotonIMConversation *> *conversations = [[PhotonIMClient sharedClient] findConversationList:0 size:200 asc:NO];
-        [weakself.items removeAllObjects];
+    NSInteger index = -1;
         if (conversations.count > 0) {
             NSMutableArray *chatWiths = [NSMutableArray array];
             for (PhotonIMConversation *conversation in  conversations) {
+                index++;
                 PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
                 if (conversation.chatType == PhotonIMChatTypeSingle) {
                     if (!user) {
@@ -35,38 +36,40 @@
                 conversation.FName = user.nickName;
                 PhotonChatTestItem *conItem = [[PhotonChatTestItem alloc] init];
                 conItem.userInfo = conversation;
-                [weakself.items addObject:conItem];
-            }
-            [PhotonUtil runMainThread:^{
-                if (finish) {
-                    finish(nil);
+                if (items.count == 0) {
+                     [weakself.items addObject:conItem];
+                }else{
+                    BOOL isNotExist = YES;
+                    for (PhotonChatTestItem *item in items) {
+                        if ([[[item userInfo] chatWith] isEqualToString:conversation.chatWith]) {
+                            isNotExist = NO;
+                        }
+                       
+                       
+                    }
+                    if(isNotExist){
+                        if (weakself.items.count > index) {
+                              [weakself.items insertObject:conItem atIndex:index];
+                          }else{
+                               [weakself.items addObject:conItem];
+                          }
+                    }
                 }
-            }];
+                
+            }
+           
             
             if (chatWiths.count > 0) {
                 [[PhotonContent currentUser] loadFriendProfileBatch:chatWiths completion:^(BOOL success) {           
                 }];
             }
-           
         }
-        BOOL excute = [[MMKV defaultMMKV] getBoolForKey:[PhotonContent currentUser].userID];
-        if (conversations.count == 0 && !excute) {
-            [[MMKV defaultMMKV] setBool:YES forKey:[PhotonContent currentUser].userID];
-            __weak typeof(self)weakSelf = self;
-            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-            if (params && params.count > 0) {
-                [dict addEntriesFromDictionary:params];
-            }
-            [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:@"photonimdemo/contact/recentUser" paramter:dict completion:^(NSDictionary * _Nonnull responseDict) {
-                [weakSelf wrappResponseddDict:responseDict];
-                [PhotonUtil runMainThread:^{
-                    if (finish) {
-                        finish(nil);
-                    }
-                }];
-            } failure:^(PhotonErrorDescription * _Nonnull error) {
+        [PhotonUtil runMainThread:^{
+                if (finish) {
+                    finish(nil);
+                }
             }];
-        }
+            
 
 }
 

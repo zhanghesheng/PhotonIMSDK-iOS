@@ -14,6 +14,8 @@ target :PhotonIM do
     pod 'FMDB', '2.7.2'
     pod 'MMKV','1.0.22'
     pod 'MMBase-iOS'
-    pod 'PhotonPushSDK','0.1.0'
-    pod 'PhotonIMSDK','2.0.2'
+    pod 'Protobuf','3.10.0'
+    pod 'PhotonPushSDK','1.0.0'
+#    pod 'PhotonIMSDK','2.1.2'
+    pod 'PhotonIMSDK',:path=>'../'
 end

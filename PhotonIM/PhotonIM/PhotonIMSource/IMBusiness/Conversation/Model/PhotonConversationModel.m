@@ -37,18 +37,19 @@
                 conItem.userInfo = conversation;
                 [weakself.items addObject:conItem];
             }
-            [PhotonUtil runMainThread:^{
-                if (finish) {
-                    finish(nil);
-                }
-            }];
-            
             if (chatWiths.count > 0) {
-                [[PhotonContent currentUser] loadFriendProfileBatch:chatWiths completion:^(BOOL success) {           
+                [[PhotonContent currentUser] loadFriendProfileBatch:chatWiths completion:^(BOOL success) {
                 }];
             }
            
         }
+        [PhotonUtil runMainThread:^{
+            if (finish) {
+                finish(nil);
+            }
+        }];
+    
+
         BOOL excute = [[MMKV defaultMMKV] getBoolForKey:[PhotonContent currentUser].userID];
         if (conversations.count == 0 && !excute) {
             [[MMKV defaultMMKV] setBool:YES forKey:[PhotonContent currentUser].userID];

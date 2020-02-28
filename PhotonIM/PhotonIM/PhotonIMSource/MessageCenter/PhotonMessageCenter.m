@@ -49,9 +49,9 @@ static PhotonMessageCenter *center = nil;
    
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
-    [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
+    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
 //     是否开启断言，debug模式下推荐开启
-    [[PhotonIMClient sharedClient] setAssertEnable:YES];
+    [[PhotonIMClient sharedClient] setAssertEnable:NO];
 //#else
 //    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
 //    [[PhotonIMClient sharedClient] setAssertEnable:NO];
@@ -61,13 +61,13 @@ static PhotonMessageCenter *center = nil;
     [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
+    [[PhotonIMClient sharedClient] supportGroup];
     
 }
 
 - (void)login{
     // 客户端登录后
     [[PhotonIMClient sharedClient] bindCurrentUserId:[PhotonContent currentUser].userID];
-//    _messages = [[[PhotonIMClient sharedClient] getAllSendingMessages] mutableCopy];
     // 获取token
     [self getToken];
 }
@@ -542,6 +542,9 @@ static PhotonMessageCenter *center = nil;
     NSLog(@"[pim sendResultWithMsgID msgID=%@,chatType=%@,chatWith=%@,errorCode=%@",msgID,@(chatType),chatWith,@(error.code));
 }
 
+- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend{
+    return PhotonIMForbidenAutoResendTypeNO;
+}
 
 
 #pragma mark ---- 登录相关 ----
@@ -551,15 +554,20 @@ static PhotonMessageCenter *center = nil;
     [self getToken];
 }
 - (void)getToken{
+    id en = [[NSUserDefaults standardUserDefaults] objectForKey:@"photon_im_forbid_uploadLog"];
+    NSDictionary *extra = @{};
+    if(en){
+        extra = @{@"photon_im_forbid_uploadLog":[NSString stringWithFormat:@"%@",en]};
+    }
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
     if ([token isNotEmpty]) {
-         [[PhotonIMClient sharedClient] loginWithToken:token extra:nil];
+         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
     }else{
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
-            [[PhotonIMClient sharedClient] loginWithToken:token extra:nil];
+            [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);
