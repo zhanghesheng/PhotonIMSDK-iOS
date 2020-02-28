@@ -58,7 +58,7 @@ static PhotonMessageCenter *center = nil;
 //#endif
     
     // 通过注册appid 完成sdk的初始化
-    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
+    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_INLAND];
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
     [[PhotonIMClient sharedClient] supportGroup];

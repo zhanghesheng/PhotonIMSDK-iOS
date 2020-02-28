@@ -9,7 +9,10 @@
 #import "PhotonPersonViewController.h"
 #import "PhotonPersonCell.h"
 #import "PhotonEmptyTableItem.h"
+#import "PhotonMessageSettingItem.h"
+#import "PhotonMessageSettingCell.h"
 #import "PhotonMessageCenter.h"
+#import <MMKV/MMKV.h>
 @interface PhotonPersonDataSource ()
 @end
 
@@ -17,11 +20,13 @@
 - (Class)tableView:(UITableView *)tableView cellClassForObject:(id)object{
     if ([object isKindOfClass:[PhotonPersonItem class]]) {
         return [PhotonPersonCell class];
+    }else if ([object isKindOfClass:[PhotonMessageSettingItem class]]) {
+        return [PhotonMessageSettingCell class];
     }
     return [super tableView:tableView cellClassForObject:object];
 }
 @end
-@interface PhotonPersonViewController()<PhotonPersonCellDelegate>
+@interface PhotonPersonViewController()<PhotonPersonCellDelegate,PhotonMessageSettingCellDelegate>
 
 @end
 @implementation PhotonPersonViewController
@@ -81,6 +86,16 @@
     [self.items addObject:emptyitem];
     
     [self.items addObject:personItem4];
+    
+     [self.items addObject:emptyitem];
+    
+    NSInteger serverType = [[MMKV defaultMMKV] getBoolForKey:@"PhotonIMServerType()"];
+    PhotonMessageSettingItem *settionItem = [[PhotonMessageSettingItem alloc] init];
+    settionItem.settingName = @"消息免打扰";
+    settionItem.open = serverType;
+    settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
+    [self.items addObject:settionItem];
+    
     PhotonPersonDataSource *dataSource = [[PhotonPersonDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
 }
@@ -88,6 +103,9 @@
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
     if ([cell isKindOfClass:[PhotonPersonCell class]]) {
         PhotonPersonCell *tempCell = (PhotonPersonCell *)cell;
+        tempCell.delegate = self;
+    }else if ([cell isKindOfClass:[PhotonMessageSettingCell class]]) {
+        PhotonMessageSettingCell *tempCell = (PhotonMessageSettingCell *)cell;
         tempCell.delegate = self;
     }
 }

@@ -16,6 +16,5 @@ target :PhotonIM do
     pod 'MMBase-iOS'
     pod 'PhotonPushSDK','1.0.0'
     pod 'PhotonIMSDK','2.1.2'
-#    pod 'PhotonIMSDK',:path=>'../'
 
 end

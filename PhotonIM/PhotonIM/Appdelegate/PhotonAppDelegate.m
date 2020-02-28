@@ -48,7 +48,7 @@
 }
 
 - (void)registerPushSDK{
-     [MoPushManager initSDK:APP_ID];
+     [MoPushManager initSDK:APP_ID_INLAND];
 #ifdef DEBUG
     [MoPushManager setBuildStat:MOBuildStat_DEBUG];
 #elif INHOUSE
