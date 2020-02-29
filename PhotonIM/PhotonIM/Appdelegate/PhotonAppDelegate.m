@@ -9,6 +9,7 @@
 #import "PhotonAppDelegate.h"
 #import <UserNotifications/UserNotifications.h>
 #import <pushsdk/MoPushManager.h>
+#import "PhotonContent.h"
 #import "PhotonAppLaunchManager.h"
 #import "PhotonMessageCenter.h"
 #import "YYFPSLabel.h"
@@ -47,7 +48,14 @@
 }
 
 - (void)registerPushSDK{
-     [MoPushManager initSDK:APP_ID_INLAND];
+    if ([PhotonContent getServerSwitch] == PhotonIMServerTypeInland) {
+        [MoPushManager setServerType:MOPushServerTypeInland];
+        [MoPushManager initSDK:APP_ID_INLAND];
+    }else if ([PhotonContent getServerSwitch] == PhotonIMServerTypeOverseas){
+        [MoPushManager setServerType:MOPushServerTypeOverseas];
+        [MoPushManager initSDK:APP_ID_OVERSEAS];
+    }
+    
 #ifdef DEBUG
     [MoPushManager setBuildStat:MOBuildStat_DEBUG];
 #elif INHOUSE

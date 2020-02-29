@@ -46,7 +46,8 @@ static PhotonMessageCenter *center = nil;
 
 - (void)initPhtonIMSDK{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
-   [[PhotonIMClient sharedClient] setServerType:[PhotonContent getServerSwitch]];
+    PhotonIMServerType serverType = [PhotonContent getServerSwitch];
+   [[PhotonIMClient sharedClient] setServerType:serverType];
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
@@ -59,7 +60,12 @@ static PhotonMessageCenter *center = nil;
 //#endif
     
     // 通过注册appid 完成sdk的初始化
-    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_INLAND];
+    if (serverType == PhotonIMServerTypeInland) {
+        [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_INLAND];
+    }else if (serverType == PhotonIMServerTypeOverseas){
+         [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_OVERSEAS];
+    }
+    
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
     [[PhotonIMClient sharedClient] supportGroup];
