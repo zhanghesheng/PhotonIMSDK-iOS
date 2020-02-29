@@ -12,7 +12,6 @@
 #import "PhotonMessageSettingItem.h"
 #import "PhotonMessageSettingCell.h"
 #import "PhotonMessageCenter.h"
-#import <MMKV/MMKV.h>
 @interface PhotonPersonDataSource ()
 @end
 
@@ -83,18 +82,25 @@
     [self.items addObject:personItem1];
     [self.items addObject:personItem2];
     
-    [self.items addObject:emptyitem];
+   
+
     
-    [self.items addObject:personItem4];
+    NSString *name = @"国内服务";
+    BOOL open = false;
+    if([PhotonContent getServerSwitch] == PhotonIMServerTypeOverseas){
+        name = @"海外服务";
+        open = true;
+    }
     
-     [self.items addObject:emptyitem];
-    
-    NSInteger serverType = [[MMKV defaultMMKV] getBoolForKey:@"PhotonIMServerType()"];
     PhotonMessageSettingItem *settionItem = [[PhotonMessageSettingItem alloc] init];
-    settionItem.settingName = @"消息免打扰";
-    settionItem.open = serverType;
-    settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
+    settionItem.settingName = name;
+     settionItem.open = open;
+    settionItem.type = PhotonMessageSettingTypeDefault;
+    [self.items addObject:emptyitem];
     [self.items addObject:settionItem];
+    
+    [self.items addObject:emptyitem];
+    [self.items addObject:personItem4];
     
     PhotonPersonDataSource *dataSource = [[PhotonPersonDataSource alloc] initWithItems:self.items];
     self.dataSource = dataSource;
@@ -109,8 +115,22 @@
         tempCell.delegate = self;
     }
 }
+
 - (void)logout:(id)cell{
     [[PhotonMessageCenter sharedCenter]  logout];
+}
+
+- (void)cell:(id)cell switchItem:(PhotonMessageSettingItem *)item{
+    if (item.type == PhotonMessageSettingTypeDefault) {
+        PhotonMessageSettingCell *tempCell = (PhotonMessageSettingCell *)cell;
+        if (item.open) {
+            tempCell.titleLabel.text = @"海外服务";
+            [PhotonContent setServerSwitch:PhotonIMServerTypeOverseas];
+        }else{
+            tempCell.titleLabel.text = @"国内服务";
+            [PhotonContent setServerSwitch:PhotonIMServerTypeInland];
+        }
+    }
 }
 
 @end

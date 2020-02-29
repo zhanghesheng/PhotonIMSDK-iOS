@@ -22,7 +22,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-   NSString *timeStamp =  [[NSUserDefaults standardUserDefaults] valueForKey:@"timeStamp_pushqq"];
     [[PhotonMessageCenter sharedCenter] initPhtonIMSDK];
     
     [self registerPushSDK];

@@ -46,10 +46,11 @@ static PhotonMessageCenter *center = nil;
 
 - (void)initPhtonIMSDK{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
-   
+   [[PhotonIMClient sharedClient] setServerType:[PhotonContent getServerSwitch]];
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
-    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
+    [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
+    
 //     是否开启断言，debug模式下推荐开启
     [[PhotonIMClient sharedClient] setAssertEnable:NO];
 //#else
@@ -580,7 +581,7 @@ static PhotonMessageCenter *center = nil;
 - (PhotonNetworkService *)netService{
     if (!_netService) {
         _netService = [[PhotonNetworkService alloc] init];
-        _netService.baseUrl = PHOTON_BASE_URL;
+        _netService.baseUrl = [PhotonContent baseUrlString];;
         
     }
     return _netService;

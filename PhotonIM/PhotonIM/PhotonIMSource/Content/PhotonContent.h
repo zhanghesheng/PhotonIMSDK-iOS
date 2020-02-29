@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "PhotonAppDelegate.h"
 #import "PhotonUser.h"
+#import <PhotonIMSDK/PhotonIMSDK.h>
 NS_ASSUME_NONNULL_BEGIN
 
 //  国内
@@ -48,8 +49,10 @@ static NSString* APP_ID_OVERSEAS = @"326a7a61d5e8f170957f9bf6591a7c9b";
 + (void)logout;
 + (void)login;
 
++ (void)setServerSwitch:(PhotonIMServerType)serverType;
++ (PhotonIMServerType)getServerSwitch;
 
-
++ (NSString *)baseUrlString;
 @end
 
 NS_ASSUME_NONNULL_END
