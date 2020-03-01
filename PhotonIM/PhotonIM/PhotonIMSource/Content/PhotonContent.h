@@ -47,6 +47,7 @@ static NSString* APP_ID_OVERSEAS = @"326a7a61d5e8f170957f9bf6591a7c9b";
 + (BOOL)deleteaAllUserFromGroupWithGid:(NSString *)gid;
 
 + (void)logout;
++ (void)autoLogout;
 + (void)login;
 
 + (void)setServerSwitch:(PhotonIMServerType)serverType;

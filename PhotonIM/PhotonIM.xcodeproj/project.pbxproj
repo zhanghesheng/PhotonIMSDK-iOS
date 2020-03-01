@@ -274,7 +274,7 @@
 		32258AE022CD9F4E002D56E5 /* PhotonDownLoadFileManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonDownLoadFileManager.m; sourceTree = "<group>"; };
 		32258AE522CDA417002D56E5 /* PhotonDownloadFileReceipt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonDownloadFileReceipt.h; sourceTree = "<group>"; };
 		32258AE622CDA417002D56E5 /* PhotonDownloadFileReceipt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonDownloadFileReceipt.m; sourceTree = "<group>"; };
-		32286F8522B9F207009B6881 /* PhotonIM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotonIM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		32286F8522B9F207009B6881 /* PhotonIMMerge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PhotonIMMerge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32286F8B22B9F207009B6881 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		32286F8C22B9F207009B6881 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		32286F8F22B9F207009B6881 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -728,7 +728,7 @@
 		32286F8622B9F207009B6881 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				32286F8522B9F207009B6881 /* PhotonIM.app */,
+				32286F8522B9F207009B6881 /* PhotonIMMerge.app */,
 				32286F9D22B9F208009B6881 /* PhotonIMUITests.xctest */,
 				321838BB22F84B3F005CCB00 /* PhotonIMNotificationService.appex */,
 			);
@@ -1451,7 +1451,7 @@
 			);
 			name = PhotonIM;
 			productName = PhotonIM;
-			productReference = 32286F8522B9F207009B6881 /* PhotonIM.app */;
+			productReference = 32286F8522B9F207009B6881 /* PhotonIMMerge.app */;
 			productType = "com.apple.product-type.application";
 		};
 		32286F9C22B9F208009B6881 /* PhotonIMUITests */ = {
@@ -1833,7 +1833,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
@@ -1845,9 +1845,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.photonim.push;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim.push;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = push;
+				PROVISIONING_PROFILE_SPECIFIER = hwphotonimpushhoc;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2043,7 +2043,7 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = PhotonIMMerge;
 				PROVISIONING_PROFILE_SPECIFIER = PhotonimHWdemo;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2055,7 +2055,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 45;
 				DEVELOPMENT_TEAM = 4BXE593ED8;
@@ -2125,8 +2125,8 @@
 					"\"UIKit\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = Photonimdemo;
+				PRODUCT_NAME = PhotonIMMerge;
+				PROVISIONING_PROFILE_SPECIFIER = hwphotonimhoc;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

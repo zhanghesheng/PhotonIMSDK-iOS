@@ -161,6 +161,15 @@
    
 }
 
++ (void)autoLogout{
+    [PhotonUtil runMainThread:^{
+        [PhotonDBManager closeDB];
+        [MoPushManager unAlias:[PhotonContent currentUser].userID];
+        [self clearCurrentUser];
+    }];
+   
+}
+
 + (void)login{
    
     [PhotonUtil runMainThread:^{

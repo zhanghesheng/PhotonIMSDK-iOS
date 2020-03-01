@@ -25,7 +25,7 @@
     return [super tableView:tableView cellClassForObject:object];
 }
 @end
-@interface PhotonPersonViewController()<PhotonPersonCellDelegate,PhotonMessageSettingCellDelegate>
+@interface PhotonPersonViewController()<PhotonPersonCellDelegate,PhotonMessageSettingCellDelegate,UIAlertViewDelegate>
 
 @end
 @implementation PhotonPersonViewController
@@ -121,16 +121,29 @@
 }
 
 - (void)cell:(id)cell switchItem:(PhotonMessageSettingItem *)item{
+    NSString *name = @"";
     if (item.type == PhotonMessageSettingTypeDefault) {
         PhotonMessageSettingCell *tempCell = (PhotonMessageSettingCell *)cell;
         if (item.open) {
-            tempCell.titleLabel.text = @"海外服务";
+            name = @"海外服务";
+            
             [PhotonContent setServerSwitch:PhotonIMServerTypeOverseas];
         }else{
-            tempCell.titleLabel.text = @"国内服务";
+            name = @"国内服务";
             [PhotonContent setServerSwitch:PhotonIMServerTypeInland];
         }
+        [PhotonContent autoLogout];
+        tempCell.titleLabel.text = name;
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"切换到" message:name delegate:self cancelButtonTitle:@"退出程序" otherButtonTitles:nil];
+        [alertView show];
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+         exit(0);
+    });
+   
 }
 
 @end
