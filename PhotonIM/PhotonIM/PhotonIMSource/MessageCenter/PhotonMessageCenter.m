@@ -13,6 +13,7 @@
 #import "PhotonDBManager.h"
 #import "PhotonNetworkService.h"
 #import "PhotonCharBar.h"
+#import <PhotonIMSDK/PhotonIMSDK.h>
 static PhotonMessageCenter *center = nil;
 @interface PhotonMessageCenter()<PhotonIMClientProtocol>
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
@@ -201,6 +202,7 @@ static PhotonMessageCenter *center = nil;
 
 - (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeLocation chatType:conversation.chatType];
+    
     PhotonIMLocationBody *locationBody = [PhotonIMLocationBody locationBodyWithCoordinateSystem:CoordinateSystem_BD09 address:item.address detailedAddress:item.detailAddress lng:item.locationCoordinate.longitude lat:item.locationCoordinate.latitude];
     [message setMesageBody:locationBody];
     item.userInfo = message;

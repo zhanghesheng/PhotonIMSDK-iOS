@@ -139,13 +139,12 @@ NS_ASSUME_NONNULL_BEGIN
 
  @param message 以此消息为锚点进行查询
  @param beforeAuthor 是否查找锚点之前的数据
- @param asc 是否为升序
  @param size 以锚点为中心，要查找的消息的个数
  @return <#return value description#>
  */
 - (NSArray<PhotonIMMessage *> *)findMessageListByIdRange:(PhotonIMMessage *)message
                                             beforeAuthor:(BOOL)beforeAuthor
-                                                     asc:(BOOL)asc size:(int)size;
+                                                     size:(int)size;
 
 /**
 查找消息
@@ -173,7 +172,7 @@ NS_ASSUME_NONNULL_BEGIN
                                                 chatWith:(NSString *)chatWith
                                              anchorMsgId:(nullable NSString *)anchorMsgId
                                             beforeAuthor:(BOOL)beforeAnchor
-                                                     asc:(BOOL)asc size:(int)size;
+                                                    size:(int)size;
 
 /**
  按消息的状态查找数据
@@ -239,7 +238,10 @@ NS_ASSUME_NONNULL_BEGIN
                                anchor:(nullable NSString *)anchor
                                  size:(int)size beginTimeStamp:(int64_t)beginTimeStamp
                          endTimeStamp:(int64_t)endTimeStamp
-                          reaultBlock:(void (^)(NSArray<PhotonIMMessage *> * _Nullable messageList,NSString * _Nullable anchor, NSError * _Nullable error))result;
+                          reaultBlock:(void (^)(NSArray<PhotonIMMessage *> * _Nullable messageList,
+                                                NSString * _Nullable anchor,
+                                                BOOL haveNext,
+                                                NSError * _Nullable error))result;
 
 
 
@@ -253,7 +255,16 @@ NS_ASSUME_NONNULL_BEGIN
                                          startIdentifier:(NSString *)startIdentifier
                                            andIdentifier:(NSString *)andIdentifier
                                        maxCharacterLenth:(NSInteger)maxCharacterLenth
-                                              matchQuery:(NSString *)matchQuery ;
+                                              matchQuery:(NSString *)matchQuery;
+
+- (NSArray<PhotonIMMessage *> *)searchMessagesWithChatType:(PhotonIMChatType)chatType
+                                                  chatWith:(NSString *)chatWith
+                                           startIdentifier:(NSString *)startIdentifier
+                                             andIdentifier:(NSString *)andIdentifier
+                                         maxCharacterLenth:(NSInteger)maxCharacterLenth
+                                                matchQuery:(NSString *)matchQuery
+                                                    anchor:(NSString *)anchor
+                                                  pageSize:(int)pageSize;
 @end
 
 NS_ASSUME_NONNULL_END
