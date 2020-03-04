@@ -104,13 +104,22 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendReadMessage:(NSArray<NSString *> *)readMsgIDs fromid:(NSString *)fromid toid:(NSString *)toid completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 
 
+/**
+删除消息
+@param chatType 删除这批消息的所属的会话类型
+@param chatWith 删除这批消息的所属的会话id
+@param delMsgIds 删除消息的消息id的集合
+@param completion 删除操作的回调
+*/
+- (void)sendDeleteMessageWithChatType:(PhotonIMChatType)chatType
+                     chatWith:(NSString *)chatWith
+                    delMsgIds:(NSArray<NSString *> *)delMsgIds
+                   completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 /*!
  
 @abstract 发送推送通知icon上展示的角标
 
 @discussion 角标数由业务端决定
-
-@param count 角标展示的数字
  
 */
 - (void)sendCurrentBadge:(NSInteger)count;

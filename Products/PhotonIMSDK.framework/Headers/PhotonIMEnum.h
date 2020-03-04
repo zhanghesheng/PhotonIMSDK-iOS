@@ -133,6 +133,8 @@ typedef enum{
     PhotonIMMessageTypeImage = 3,
     PhotonIMMessageTypeAudio = 4,
     PhotonIMMessageTypeVideo = 5,
+    PhotonIMMessageTypeFile = 6,
+    PhotonIMMessageTypeLocation = 7,
 
 }PhotonIMMessageType;
 

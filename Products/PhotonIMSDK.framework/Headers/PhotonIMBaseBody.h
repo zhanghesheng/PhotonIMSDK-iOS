@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property localFileName
 
-@abstract 本地资源名称
+@abstract  本地资源名称或者路径
  */
 @property (nonatomic, copy, nullable)NSString *localFileName;
 @end
