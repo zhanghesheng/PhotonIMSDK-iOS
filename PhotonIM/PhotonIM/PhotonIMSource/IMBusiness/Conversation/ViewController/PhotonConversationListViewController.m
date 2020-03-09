@@ -86,6 +86,7 @@ static NSString *message_syncing = @"消息(收取中......)";
          [[PhotonMessageCenter sharedCenter] addObserver:self];
         _refreshCount = 0;
         _firstLoadData = YES;
+        self.isAppeared = YES;
         [self.tabBarItem setTitle:@"消息"];
         self.tabBarItem.tag = 1;
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
@@ -111,10 +112,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    if (self.needRefreshData) {
-        [self.dataDispatchSource addSemaphore];
-        self.needRefreshData = YES;
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -124,7 +121,6 @@ static NSString *message_syncing = @"消息(收取中......)";
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    self.isAppeared = NO;
 }
 
 - (void)viewDidLoad {
@@ -246,6 +242,10 @@ static NSString *message_syncing = @"消息(收取中......)";
             count ++;
         }
         if ([[conver chatWith] isEqualToString:chatWith] && ([conver chatType] == chatType)) {
+            if (conversation.sticky != conver.sticky) {
+                 [self.dataDispatchSource addSemaphore];
+                 return;
+            }
             PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
             conversation.FAvatarPath = user.avatarURL;
             conversation.FName = user.nickName;

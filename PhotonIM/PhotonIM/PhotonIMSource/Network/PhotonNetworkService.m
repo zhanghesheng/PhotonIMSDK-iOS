@@ -28,9 +28,9 @@
     if ([[PhotonUtil getCookie] isNotEmpty]) {
         [_requestHeaders setValue:[PhotonUtil getCookie] forKey:@"Cookie"];
     }
-//    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"host"];
-//    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"HOST"];
-//    [_requestHeaders setValue:@"cosmos-im-demo.immomo.com" forKey:@"Host"];
+    if ([[PhotonUtil getAppid] isNotEmpty]) {
+        [_requestHeaders setValue:[PhotonUtil getAppid] forKey:@"appId"];
+    }
     return _requestHeaders;
 }
 - (void)setRequestHeader:(NSString *)value key:(NSString *)key{

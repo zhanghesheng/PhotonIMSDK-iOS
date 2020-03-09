@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PhotonLocationViewContraller : PhotonBaseViewController
 @property (nonatomic, copy) void (^sendCompletion)(CLLocationCoordinate2D aCoordinate, NSString  *_Nullable address, NSString * _Nullable detailAddress);
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)locationCoordinate;
+- (instancetype)initWithLocation:(PhotonChatLocationItem *)locationItem;
 
 - (void)setActionBlock:(void(^)(void))actionBlock;
 @end

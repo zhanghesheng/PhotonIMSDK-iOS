@@ -13,6 +13,7 @@
 #import "PhotonDBManager.h"
 #import "PhotonNetworkService.h"
 #import "PhotonCharBar.h"
+#import <PhotonIMSDK/PhotonIMSDK.h>
 static PhotonMessageCenter *center = nil;
 @interface PhotonMessageCenter()<PhotonIMClientProtocol>
 @property (nonatomic, strong, nullable)PhotonNetworkService *netService;
@@ -46,10 +47,12 @@ static PhotonMessageCenter *center = nil;
 
 - (void)initPhtonIMSDK{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
-   
+    PhotonIMServerType serverType = [PhotonContent getServerSwitch];
+   [[PhotonIMClient sharedClient] setServerType:serverType];
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
     [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
+    
 //     是否开启断言，debug模式下推荐开启
     [[PhotonIMClient sharedClient] setAssertEnable:NO];
 //#else
@@ -58,7 +61,12 @@ static PhotonMessageCenter *center = nil;
 //#endif
     
     // 通过注册appid 完成sdk的初始化
-    [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID];
+    if (serverType == PhotonIMServerTypeInland) {
+        [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_INLAND];
+    }else if (serverType == PhotonIMServerTypeOverseas){
+         [[PhotonIMClient sharedClient] registerIMClientWithAppid:APP_ID_OVERSEAS];
+    }
+    
     // 指定使用sdk内的数据库模式，推荐使用异步模式
     [[PhotonIMClient sharedClient] setPhotonIMDBMode:PhotonIMDBModeDBAsync];
     [[PhotonIMClient sharedClient] supportGroup];
@@ -197,6 +205,7 @@ static PhotonMessageCenter *center = nil;
     
 }
 
+<<<<<<< HEAD
 - (void)sendFileMessage:(PhotonChatFileMessagItem *)item
                conversation:(nullable PhotonIMConversation *)conversation
             readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion
@@ -204,6 +213,13 @@ static PhotonMessageCenter *center = nil;
      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeFile chatType:conversation.chatType];
     PhotonIMFileBody *fileBody = [PhotonIMFileBody fileBodyWithFilePath:item.filePath displayName:item.fileName];
     [message setMesageBody:fileBody];
+=======
+- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeLocation chatType:conversation.chatType];
+    
+    PhotonIMLocationBody *locationBody = [PhotonIMLocationBody locationBodyWithCoordinateSystem:CoordinateSystem_BD09 address:item.address detailedAddress:item.detailAddress lng:item.locationCoordinate.longitude lat:item.locationCoordinate.latitude];
+    [message setMesageBody:locationBody];
+>>>>>>> dev_2.2
     item.userInfo = message;
     [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
 }
@@ -551,7 +567,7 @@ static PhotonMessageCenter *center = nil;
 - (PhotonNetworkService *)netService{
     if (!_netService) {
         _netService = [[PhotonNetworkService alloc] init];
-        _netService.baseUrl = PHOTON_BASE_URL;
+        _netService.baseUrl = [PhotonContent baseUrlString];;
         
     }
     return _netService;

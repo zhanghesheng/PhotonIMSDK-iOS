@@ -73,6 +73,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark ---- 获取图片第一帧
 + (UIImage *)firstFrameWithVideoURL:(NSString *)fileUrl size:(CGSize)size;
 
+
++ (NSString *)getAppid;
 @end
 
 NS_ASSUME_NONNULL_END

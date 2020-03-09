@@ -71,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 @param delMsgIds 删除消息的消息id的集合
 @param completion 删除操作的回调
 */
-- (void)sendDeleteMessageWith:(PhotonIMChatType)chatType
+- (void)sendDeleteMessageWithChatType:(PhotonIMChatType)chatType
                      chatWith:(NSString *)chatWith
                     delMsgIds:(NSArray<NSString *> *)delMsgIds
                    completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;

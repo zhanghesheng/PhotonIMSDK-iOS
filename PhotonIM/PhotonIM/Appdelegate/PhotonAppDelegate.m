@@ -9,6 +9,7 @@
 #import "PhotonAppDelegate.h"
 #import <UserNotifications/UserNotifications.h>
 #import <pushsdk/MoPushManager.h>
+#import "PhotonContent.h"
 #import "PhotonAppLaunchManager.h"
 #import "PhotonMessageCenter.h"
 #import "YYFPSLabel.h"
@@ -22,7 +23,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-   NSString *timeStamp =  [[NSUserDefaults standardUserDefaults] valueForKey:@"timeStamp_pushqq"];
     [[PhotonMessageCenter sharedCenter] initPhtonIMSDK];
     
     [self registerPushSDK];
@@ -48,7 +48,14 @@
 }
 
 - (void)registerPushSDK{
-     [MoPushManager initSDK:APP_ID];
+    if ([PhotonContent getServerSwitch] == PhotonIMServerTypeInland) {
+        [MoPushManager setServerType:MOPushServerTypeInland];
+        [MoPushManager initSDK:APP_ID_INLAND];
+    }else if ([PhotonContent getServerSwitch] == PhotonIMServerTypeOverseas){
+        [MoPushManager setServerType:MOPushServerTypeOverseas];
+        [MoPushManager initSDK:APP_ID_OVERSEAS];
+    }
+    
 #ifdef DEBUG
     [MoPushManager setBuildStat:MOBuildStat_DEBUG];
 #elif INHOUSE
@@ -73,7 +80,12 @@
 
 
 #pragma mark - Notification
-
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    PhotonLog(@"获取到deviceToken --"); //SDK内部hook，业务层无需配置
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"cdscds" message:@"vxvsd" delegate:self cancelButtonTitle:@"" otherButtonTitles:@"ok", nil];
+    [alert show];
+    
+}
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     PhotonLog(@"获取到deviceToken -- %@", deviceToken); //SDK内部hook，业务层无需配置
 }

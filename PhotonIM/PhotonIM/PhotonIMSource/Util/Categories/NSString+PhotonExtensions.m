@@ -322,7 +322,6 @@
     return attributeString;
 }
 
-// 解析带表情的文本信息
 - (NSAttributedString *)toAttributedString;
 {
     __block NSMutableString *text = [NSMutableString string];

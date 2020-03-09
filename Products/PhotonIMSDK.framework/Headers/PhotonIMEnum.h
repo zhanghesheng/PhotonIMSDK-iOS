@@ -185,7 +185,7 @@ typedef NS_ENUM(NSInteger, PhotonIMNetworkType) {
     PhotonIMNetworkTypeWIFI    = 1,
     PhotonIMNetworkType2G      = 2,
     PhotonIMNetworkType3G      = 3,
-    PhotonIMNetworkType4g      = 4,
+    PhotonIMNetworkType4G      = 4,
 };
 
 /**
@@ -218,5 +218,10 @@ typedef NS_ENUM(NSInteger, PhotonIMForbidenAutoResendType){
     PhotonIMForbidenAutoResendTypeNO = 0,
     PhotonIMForbidenAutoResendTypeLogin = 2,
     PhotonIMForbidenAutoResendTypeColdStart = 3,
+};
+
+typedef NS_ENUM(NSInteger, PhotonIMServerType){
+    PhotonIMServerTypeInland = 0,
+    PhotonIMServerTypeOverseas = 1,
 };
 #endif /* PhotonIMEnum_h */
