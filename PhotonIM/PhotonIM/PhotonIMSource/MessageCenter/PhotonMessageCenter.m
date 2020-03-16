@@ -205,7 +205,6 @@ static PhotonMessageCenter *center = nil;
     
 }
 
-<<<<<<< HEAD
 - (void)sendFileMessage:(PhotonChatFileMessagItem *)item
                conversation:(nullable PhotonIMConversation *)conversation
             readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion
@@ -213,15 +212,18 @@ static PhotonMessageCenter *center = nil;
      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeFile chatType:conversation.chatType];
     PhotonIMFileBody *fileBody = [PhotonIMFileBody fileBodyWithFilePath:item.filePath displayName:item.fileName];
     [message setMesageBody:fileBody];
-=======
+    item.userInfo = message;
+    [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
+
+}
+
 - (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeLocation chatType:conversation.chatType];
     
     PhotonIMLocationBody *locationBody = [PhotonIMLocationBody locationBodyWithCoordinateSystem:CoordinateSystem_BD09 address:item.address detailedAddress:item.detailAddress lng:item.locationCoordinate.longitude lat:item.locationCoordinate.latitude];
     [message setMesageBody:locationBody];
->>>>>>> dev_2.2
     item.userInfo = message;
-    [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
+    [self _sendMessage:message readyCompletion:nil completion:completion];
 }
 
 
