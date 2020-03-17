@@ -187,7 +187,7 @@
 
 // 发送文件消息
 - (void)sendFileMessage:(PhotonIMFileBody *)body{
-    PhotonChatFileMessagItem *fileItem = [[PhotonChatFileMessagItem alloc] init];
+    PhotonChatFileMessageItem *fileItem = [[PhotonChatFileMessageItem alloc] init];
     fileItem.fromType = PhotonChatMessageFromSelf;
     fileItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
     fileItem.fileName = body.fileDisplayName;

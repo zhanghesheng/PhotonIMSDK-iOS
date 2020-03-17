@@ -34,15 +34,19 @@
 #import "PhotonChatLocationCell.h"
 #import "PhotonChatLocationItem.h"
 
+#import "PhotonChatFileMessageCell.h"
+#import "PhotonChatFileMessageItem.h"
 #import "PhotonChatVideoMessageCell.h"
 #import "PhotonChatVideoMessageItem.h"
 #import "PhotonLocationViewContraller.h"
 #import "PhotonUINavigationController.h"
 
 #import "PhotonPhotoPreviewViewController.h"
+
+#import "PhotonIMSwift-Swift.h"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
-@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate,PhotonPhotoPreviewViewControllerDelegate,PhotonPhotoPreviewViewControllerDelegate>
+@interface PhotonChatViewController()<PhotonBaseChatCellDelegate,UIActionSheetDelegate,PhotonMenuViewDelegate,PhotonPhotoPreviewViewControllerDelegate,PhotonPhotoPreviewViewControllerDelegate,FileExplorerViewControllerDelegate>
 @end
 @implementation PhotonChatViewController (Delegate)
 
@@ -76,6 +80,10 @@
     else if([cell isKindOfClass:[PhotonChatLocationCell class]]){
         PhotonChatLocationCell *tempCell = (PhotonChatLocationCell *)cell;
         tempCell.delegate = self;
+    }
+    else if([cell isKindOfClass:[PhotonChatFileMessageCell class]]){
+           PhotonChatFileMessageCell *tempCell = (PhotonChatFileMessageCell *)cell;
+           tempCell.delegate = self;
     }
     
 }
@@ -181,6 +189,15 @@
             [self.navigationController pushViewController:transmitVc animated:YES];
         }];
         [self.navigationController pushViewController:locationVC animated:YES];
+    }
+    
+    if([cell isKindOfClass:[PhotonChatFileMessageCell class]]){
+        PhotonChatFileMessageItem *fileItem = (PhotonChatFileMessageItem *)chatItem;
+        PhotonWeakSelf(self)
+        FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:fileItem.filePath] title:fileItem.fileName compeltion:^{
+            [weakself _share:fileItem.userInfo];
+        }];
+        [self.navigationController pushViewController:fileExpore animated:YES];
     }
 }
 
@@ -367,6 +384,10 @@
 #pragma mark ----- PhotonPhotoPreviewViewControllerDelegate ---
 - (void)share:(HXPhotoModel *)model{
     PhotonIMMessage *message = model.userInfo;
+    [self _share:message];
+}
+
+- (void)_share:(PhotonIMMessage *)message{
     if ([message isKindOfClass:[PhotonIMMessage class]]) {
         PhotonWeakSelf(self)
         PhotonChatTransmitListViewController *transmitVc = [[PhotonChatTransmitListViewController alloc] initWithMessage:message block:^(id  _Nonnull msg) {

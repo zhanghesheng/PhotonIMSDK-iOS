@@ -6,9 +6,9 @@
 //  Copyright © 2020 Bruce. All rights reserved.
 //
 
-#import "PhotonChatFileMessagItem.h"
+#import "PhotonChatFileMessageItem.h"
 
-@implementation PhotonChatFileMessagItem
+@implementation PhotonChatFileMessageItem
 - (CGSize)contentSize{
     CGSize imageSize = CGSizeMake(200, 65);
     return imageSize;

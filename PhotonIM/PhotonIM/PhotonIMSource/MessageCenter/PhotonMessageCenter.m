@@ -205,7 +205,7 @@ static PhotonMessageCenter *center = nil;
     
 }
 
-- (void)sendFileMessage:(PhotonChatFileMessagItem *)item
+- (void)sendFileMessage:(PhotonChatFileMessageItem *)item
                conversation:(nullable PhotonIMConversation *)conversation
             readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion
                  completion:(nullable CompletionBlock)completion{
@@ -217,7 +217,7 @@ static PhotonMessageCenter *center = nil;
 
 }
 
-- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation completion:(nullable CompletionBlock)completion{
+- (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion{
      PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeLocation chatType:conversation.chatType];
     
     PhotonIMLocationBody *locationBody = [PhotonIMLocationBody locationBodyWithCoordinateSystem:CoordinateSystem_BD09 address:item.address detailedAddress:item.detailAddress lng:item.locationCoordinate.longitude lat:item.locationCoordinate.latitude];

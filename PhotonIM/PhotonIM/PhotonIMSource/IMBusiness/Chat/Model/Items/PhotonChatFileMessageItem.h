@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PhotonChatFileMessagItem : PhotonChatBaseItem
+@interface PhotonChatFileMessageItem : PhotonChatBaseItem
 @property(nonatomic, copy)NSString *filePath;
 @property(nonatomic, copy)NSString *fileName;
 @property(nonatomic, copy)NSString *fileSize;

@@ -251,11 +251,12 @@
         }
             break;
         case PhotonIMMessageTypeFile:{// 文件
-            PhotonChatFileMessagItem *fileItem = [[PhotonChatFileMessagItem alloc] init];
+            PhotonChatFileMessageItem *fileItem = [[PhotonChatFileMessageItem alloc] init];
             PhotonIMFileBody *fileBody = (PhotonIMFileBody *)message.messageBody;
             fileItem.fileSize = [NSString stringWithFormat:@"%.1f k",(float)fileBody.fileSize/1024.0];
             fileItem.fileName = fileBody.fileDisplayName;
             fileItem.fileICon = [UIImage imageNamed:@"chatfile"];
+            fileItem.filePath = fileBody.localFilePath;
             fileItem.userInfo = message;
             resultItem = fileItem;
         }

@@ -7,7 +7,7 @@
 //
 
 #import "PhotonChatFileMessageCell.h"
-#import "PhotonChatFileMessagItem.h"
+#import "PhotonChatFileMessageItem.h"
 @interface PhotonChatFileMessageCell()
 @property(nonatomic,strong)UILabel *fileNameLabel;
 @property(nonatomic,strong)UILabel *fileSizeLabel;
@@ -33,7 +33,7 @@
         return;
     }
     
-    PhotonChatFileMessagItem *item = (PhotonChatFileMessagItem *)object;
+    PhotonChatFileMessageItem *item = (PhotonChatFileMessageItem *)object;
     if (item.fromType == PhotonChatMessageFromSelf) {
         self.contentBackgroundView.backgroundColor = [UIColor whiteColor];
     }
@@ -132,7 +132,7 @@
 }
 
 +(CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{
-    PhotonChatFileMessagItem *item = (PhotonChatFileMessagItem *)object;
+    PhotonChatFileMessageItem *item = (PhotonChatFileMessageItem *)object;
     return item.itemHeight;
 }
 

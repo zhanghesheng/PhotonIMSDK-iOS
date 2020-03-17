@@ -13,7 +13,7 @@
 #import "PhotonChatTextMessageItem.h"
 #import "PhotonChatLocationItem.h"
 #import "PhotonChatVideoMessageItem.h"
-#import "PhotonChatFileMessagItem.h"
+#import "PhotonChatFileMessageItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
@@ -72,7 +72,7 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 // 发送位置消息
 - (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion;
 
-- (void)sendFileMessage:(PhotonChatFileMessagItem *)item
+- (void)sendFileMessage:(PhotonChatFileMessageItem *)item
            conversation:(nullable PhotonIMConversation *)conversation
         readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion
              completion:(nullable CompletionBlock)completion;

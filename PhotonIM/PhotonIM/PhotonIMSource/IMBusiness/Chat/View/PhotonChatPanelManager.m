@@ -121,7 +121,7 @@ PhotonAudioRecorderDelegate>
                                                                       imagePath:@"location"];
     
     PhotonMoreKeyboardItem *fileItem = [PhotonMoreKeyboardItem createByType:PhotonMoreKeyboardItemTypeFile
-                                                                             title:@"位置"
+                                                                             title:@"文件"
                                                                          imagePath:@"chatfile"];
     
     [self.moreKeyboard setDelegate:self];
