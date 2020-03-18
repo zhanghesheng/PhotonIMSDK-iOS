@@ -24,6 +24,7 @@
 #import "UIImageView+HXExtension.h"
 #import "Masonry/Masonry.h"
 #import <PhotonIMSDK/PhotonIMSDK.h>
+#import "PhotonUtil.h"
 @interface PhotonPhotoPreviewViewController ()
 <
 UICollectionViewDataSource,
@@ -95,7 +96,7 @@ HXVideoEditViewControllerDelegate
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
     return [HXPhotoViewPresentTransition transitionWithTransitionType:HXPhotoViewPresentTransitionTypeDismiss photoView:self.photoView];
 }
-- (id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
+-(id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
     return self.persentInteractiveTransition.interation ? self.persentInteractiveTransition : nil;
 }
 #pragma mark - < life cycle >
@@ -111,7 +112,6 @@ HXVideoEditViewControllerDelegate
     if (self.photoViewController && HX_IOS9Earlier) {
         // 处理ios8 导航栏转场动画崩溃问题
         self.photoViewController.navigationController.delegate = nil;
-        self.photoViewController = nil;
     }
     if (_collectionView) {
         HXPhotoPreviewViewCell *cell = (HXPhotoPreviewViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentModelIndex inSection:0]];
@@ -120,6 +120,7 @@ HXVideoEditViewControllerDelegate
     if ([UIApplication sharedApplication].statusBarHidden) {
         [self changeStatusBarWithHidden:NO];
         [self.navigationController setNavigationBarHidden:NO animated:NO];
+
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
     }
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -374,16 +375,23 @@ HXVideoEditViewControllerDelegate
     if (!model) {
         return;
     }
-    
-   
+    if (self.delegate && [self.delegate respondsToSelector:@selector(downloadImage:completion:)]) {
+        __weak typeof(self)weakSelf = self;
+        [self.delegate downloadImage:model completion:^(UIImage * _Nonnull image) {
+            [PhotonUtil runMainThread:^{
+                [weakSelf saveMessage:image];
+            }];
+           
+        }];
+    }
 }
-- (void)saeveMessage:(UIImage *)image{
+- (void)saveMessage:(UIImage *)image{
     [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
      //写入图片到相册
      [PHAssetChangeRequest creationRequestForAssetFromImage:image];
      } completionHandler:^(BOOL success, NSError * _Nullable error) {
          if(success){
-             
+             [PhotonUtil showSuccessHint:@"图片已存储到相册"];
          }
     }];
 }
@@ -395,7 +403,17 @@ HXVideoEditViewControllerDelegate
     if (!model) {
         return;
     }
-    
+    HXPhotoPreviewViewCell *cell = (HXPhotoPreviewViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentModelIndex inSection:0]];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(viewOriginImage:completion:)]) {
+        [self.delegate viewOriginImage:model completion:^(UIImage * _Nonnull image) {
+            [PhotonUtil runMainThread:^{
+                if (cell){
+                      [cell setImage:image];
+                }
+            }];
+           
+        }];
+    }
 }
 
 - (void)didSharedClick:(UIButton *)button {
@@ -671,9 +689,13 @@ HXVideoEditViewControllerDelegate
     if(model){
         PhotonIMMessage *message = model.userInfo;
         if (message && [message isKindOfClass:[PhotonIMMessage class]]) {
-            NSInteger fileSize = [message messageBody].fileSize;
+            NSInteger fileSize = (NSInteger)[message messageBody].fileSize;
             float size = fileSize/1024.0;
-            [self.viewOrigindBtn setTitle:[NSString stringWithFormat:@"查看原图(%.2lf k)",size] forState:UIControlStateNormal];
+            if(size > 0){
+                [self.viewOrigindBtn setTitle:[NSString stringWithFormat:@"查看原图(%.2lf k)",size] forState:UIControlStateNormal];
+            }else{
+                [self.viewOrigindBtn setTitle:[NSString stringWithFormat:@"查看原图"] forState:UIControlStateNormal];
+            }
         }
     }
 }

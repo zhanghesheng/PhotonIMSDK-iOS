@@ -66,6 +66,11 @@
     }
     self.stopCancel = NO;
 }
+- (void)loadImage:(UIImage *)image{
+    if (self.type == HXPreviewContentViewTypeImage) {
+           [self.imageView setImage:image];
+    }
+}
 - (void)requestHD {
     HXWeakSelf
     if (self.type == HXPreviewContentViewTypeImage) {

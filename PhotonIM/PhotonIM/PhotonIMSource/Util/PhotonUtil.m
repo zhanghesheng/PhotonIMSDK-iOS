@@ -136,17 +136,26 @@
 
 + (void)showSuccessHint:(nullable NSString *)hintText
 {
-    [SVProgressHUD showSuccessWithStatus:hintText];
+    [self runMainThread:^{
+        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD showSuccessWithStatus:hintText];
+    }];
 }
 
 + (void)showErrorHint:(nullable NSString *)hintText
 {
-    [SVProgressHUD showErrorWithStatus:hintText];
+    [self runMainThread:^{
+        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD showErrorWithStatus:hintText];
+    }];
 }
 
 + (void)showInfoHint:(nullable NSString *)hintText
 {
-    [SVProgressHUD showInfoWithStatus:hintText];
+    [self runMainThread:^{
+        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD showInfoWithStatus:hintText];
+    }];
 }
 
 + (BOOL)isShowLoading

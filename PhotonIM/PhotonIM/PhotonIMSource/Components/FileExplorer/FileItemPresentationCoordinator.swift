@@ -48,7 +48,6 @@ final class FileItemPresentationCoordinator {
                 guard let strongSelf = self else { fatalError() }
                 let castedLoadedItem = loadedItem.cast() as LoadedItem<Data>
                 let viewController = strongSelf.fileSpecifications.itemSpecification(for: strongSelf.item).viewControllerForItem(at: loadedItem.url, data: castedLoadedItem.resource, attributes: loadedItem.attributes)
-                viewController.navigationItem.title = strongSelf.item.name
                 return viewController
             }
             navigationController?.pushViewController(viewController, animated: animated)

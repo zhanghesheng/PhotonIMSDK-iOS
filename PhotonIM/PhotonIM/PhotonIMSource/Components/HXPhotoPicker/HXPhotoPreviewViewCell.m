@@ -123,6 +123,9 @@
         [weakSelf downloadICloudAssetComplete];
     };
 }
+- (void)setImage:(UIImage *)image{
+    [self.previewContentView loadImage:image];
+}
 - (void)downloadICloudAssetComplete {
     if (self.model.isICloud) {
         self.model.iCloudDownloading = NO;

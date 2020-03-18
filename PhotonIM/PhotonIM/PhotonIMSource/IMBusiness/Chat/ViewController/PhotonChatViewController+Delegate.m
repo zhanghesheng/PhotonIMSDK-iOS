@@ -115,9 +115,10 @@
                     if(chatItem == item){
                         count = index;
                     }
-                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[imgItem orignURL]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
+                    PhotonIMImageBody *msgBody = (PhotonIMImageBody *)[imgItem.userInfo messageBody];
+                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]] thumbURL:[NSURL URLWithString:[msgBody bigURL]]];
                     model.userInfo = imgItem.userInfo;
-                     [imageItems addObject:model];
+                    [imageItems addObject:model];
                 }
             }else if ([item isKindOfClass:[PhotonChatVideoMessageItem class]]){
                 index ++;
@@ -192,13 +193,36 @@
     }
     
     if([cell isKindOfClass:[PhotonChatFileMessageCell class]]){
+         PhotonWeakSelf(self)
         PhotonChatFileMessageItem *fileItem = (PhotonChatFileMessageItem *)chatItem;
-        PhotonWeakSelf(self)
-        FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:fileItem.filePath] title:fileItem.fileName compeltion:^{
-            [weakself _share:fileItem.userInfo];
-        }];
-        [self.navigationController pushViewController:fileExpore animated:YES];
+        PhotonIMMessage *message = fileItem.userInfo;
+        NSString *filePath = @"";
+        NSString *fileName = fileItem.fileName;
+        if (fileItem.fromType == PhotonChatMessageFromSelf) {
+            filePath = fileItem.filePath;
+        }
+        if (filePath.length == 0) {
+            [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
+                
+            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                [PhotonUtil runMainThread:^{
+                     [weakself previewFile:filePath fileName:fileName message:message];
+                }];
+            }];
+        }else{
+             [self previewFile:filePath fileName:fileName message:message];
+        }
+
     }
+}
+
+- (void)previewFile:(NSString *)filePath fileName:(NSString *)fileName message:(PhotonIMMessage *)message{
+    PhotonWeakSelf(self)
+    FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:filePath] title:fileName compeltion:^{
+            [weakself _share:message];
+    }];
+    [self.navigationController pushViewController:fileExpore animated:YES];
+                  
 }
 
 - (void)playAudioSource:(NSString *)path cell:(PhotonChatVoiceMessageCell *)cell{
@@ -394,6 +418,28 @@
             [weakself addItems:msg];
         }];
         [self.navigationController pushViewController:transmitVc animated:YES];
+    }
+}
+- (void)viewOriginImage:(HXPhotoModel *)model completion:(void (^)(UIImage * _Nonnull))completion{
+    [self _downloadImage:model completion:completion];
+}
+
+- (void)downloadImage:(HXPhotoModel *)model completion:(void (^)(UIImage * _Nonnull))completion{
+    [self _downloadImage:model completion:completion];
+}
+- (void)_downloadImage:(HXPhotoModel *)model completion:(void (^)(UIImage * _Nonnull))completion{
+    id message = model.userInfo;
+    if (message && [message isKindOfClass:[PhotonIMMessage class]]) {
+        id msgBody = [message messageBody];
+        if (msgBody && [msgBody isKindOfClass:[PhotonIMImageBody class]]) {
+            [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                NSLog(@"image local File %@",filePath);
+                UIImage *image = [UIImage imageWithContentsOfFile:filePath];
+                if (completion) {
+                    completion(image);
+                }
+            }];
+        }
     }
 }
 @end

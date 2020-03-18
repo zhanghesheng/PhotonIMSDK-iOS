@@ -42,7 +42,7 @@ final class LoadingViewController<T>: UIViewController {
             case .success(let item):
                 
                 let contentViewController = builder(item)!
-                let heigth:CGFloat = (strongSelf.parent?.parent?.navigationController?.navigationBar.frame.size.height ?? 44) + UIApplication.shared.statusBarFrame.size.height
+                let heigth:CGFloat = (strongSelf.parent?.parent?.navigationController?.navigationBar.frame.size.height ?? 44) + UIApplication.shared.statusBarFrame.size.height - UIScreen.main.widthOfSafeAreaInsetsBottom()
                 strongSelf.addContentChildViewController(contentViewController,insets: UIEdgeInsets(top: heigth, left: 0, bottom: 0, right: 0))
                 strongSelf.navigationItem.title = contentViewController.navigationItem.title
                 strongSelf.navigationItem.rightBarButtonItems = contentViewController.navigationItem.rightBarButtonItems
@@ -59,11 +59,20 @@ final class LoadingViewController<T>: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated);
+        self.navigationController?.setNavigationBarHidden(true, animated: false);
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated);
+        self.navigationController?.setNavigationBarHidden(false, animated: false);
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         view.backgroundColor = .white
     }
+    
 }
 
 extension LoadingViewController {

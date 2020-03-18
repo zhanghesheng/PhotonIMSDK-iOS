@@ -209,6 +209,7 @@
 		32740A5123C829110089F318 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32740A5023C829110089F318 /* MapKit.framework */; };
 		32740A5423C831EE0089F318 /* PhotonChatLocationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */; };
 		3275F89A2420659100E50E9F /* PhotonFilePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3275F8992420659100E50E9F /* PhotonFilePreviewViewController.swift */; };
+		327E50F82421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E50F72421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift */; };
 		32845465238FA886003C0683 /* PhotonChatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845464238FA886003C0683 /* PhotonChatData.m */; };
 		32845474238FD1D1003C0683 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845470238FD1D1003C0683 /* YYWeakProxy.m */; };
 		32845475238FD1D1003C0683 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845472238FD1D1003C0683 /* YYFPSLabel.m */; };
@@ -645,6 +646,7 @@
 		3275F8992420659100E50E9F /* PhotonFilePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonFilePreviewViewController.swift; sourceTree = "<group>"; };
 		327D8D7D23066A00006E2E90 /* PhotonCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCommonHeader.h; sourceTree = "<group>"; };
 		327D8D7E230691D6006E2E90 /* PhotonAPIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAPIMacros.h; sourceTree = "<group>"; };
+		327E50F72421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PhotonExtension.swift"; sourceTree = "<group>"; };
 		32845463238FA886003C0683 /* PhotonChatData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatData.h; sourceTree = "<group>"; };
 		32845464238FA886003C0683 /* PhotonChatData.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatData.m; sourceTree = "<group>"; };
 		32845470238FD1D1003C0683 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
@@ -1213,6 +1215,7 @@
 				322932C8241F5D60000A79C9 /* UIView+Extension.swift */,
 				322932C9241F5D60000A79C9 /* Item.swift */,
 				322932CA241F5D60000A79C9 /* UIImage+Extension.swift */,
+				327E50F72421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift */,
 				322932CB241F5D60000A79C9 /* ItemPresentationCoordinator.swift */,
 				322932CC241F5D60000A79C9 /* Resources */,
 				322932CE241F5D60000A79C9 /* Result.swift */,
@@ -2222,6 +2225,7 @@
 				322607FE23CEAF5200C9E393 /* PhotonChatVideoMessageItem.m in Sources */,
 				322932FC241F5D60000A79C9 /* URL+Extension.swift in Sources */,
 				32C557E323CDD9E0007F06CE /* HXPhotoPersentInteractiveTransition.m in Sources */,
+				327E50F82421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift in Sources */,
 				3221882522CCA5B6007E9FA3 /* PhotonAccountItem.m in Sources */,
 				324FE2B4233B865300F996D0 /* PhotonGroupTitleTableItem.m in Sources */,
 				321A0FF122E6A4BD000AF586 /* PhotonChatNoticCell.m in Sources */,

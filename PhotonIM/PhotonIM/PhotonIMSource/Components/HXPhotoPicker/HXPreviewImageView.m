@@ -53,6 +53,13 @@
     }
     return self;
 }
+- (void)setImage:(UIImage *)image{
+#if HasYYKitOrWebImage || HasPhotonIMSDK
+    self.animatedImageView.image = image;
+#else
+    self.imageView.image = image;
+#endif
+}
 - (UIImage *)image {
     UIImage *image;
 #if HasYYKitOrWebImage || HasPhotonIMSDK

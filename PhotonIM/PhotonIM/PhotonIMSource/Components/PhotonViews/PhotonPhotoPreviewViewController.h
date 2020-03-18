@@ -21,9 +21,14 @@ HXPhotoPreviewBottomView,
 HXPhotoPreviewViewCell;
 @protocol PhotonPhotoPreviewViewControllerDelegate <NSObject>
 
+// 转发
 - (void)share:(HXPhotoModel *)model;
-- (void)download:(HXPhotoModel *)model;
-@optional
+
+// 下载原图
+- (void)downloadImage:(HXPhotoModel *)model completion:(void(^)(UIImage *image))completion;
+
+// 查看原图
+- (void)viewOriginImage:(HXPhotoModel *)model completion:(void(^)(UIImage *image))completion;
 
 /// 选择某个model
 /// 根据 model.selected 来判断是否选中

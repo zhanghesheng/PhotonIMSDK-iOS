@@ -112,6 +112,7 @@ typealias CompletionBlock = ()->Void
         view.backgroundColor = UIColor.white
         
         let navigationController = UINavigationController()
+        navigationController.setNavigationBarHidden(false, animated: false);
         addContentChildViewController(navigationController)
         coordinator = ItemPresentationCoordinator(navigationController: navigationController)
         coordinator.delegate = self
@@ -132,7 +133,6 @@ typealias CompletionBlock = ()->Void
             if (strongSelf.comBlock != nil){
                 strongSelf.navigationController?.popViewController(animated: false)
                 strongSelf.comBlock();
-               
             }
             
         })
