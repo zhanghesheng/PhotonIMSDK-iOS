@@ -25,6 +25,7 @@
 #import "Masonry/Masonry.h"
 #import <PhotonIMSDK/PhotonIMSDK.h>
 #import "PhotonUtil.h"
+#import "PhotonMacros.h"
 @interface PhotonPhotoPreviewViewController ()
 <
 UICollectionViewDataSource,
@@ -223,7 +224,12 @@ HXVideoEditViewControllerDelegate
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceOrientationWillChanged:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
-    
+    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
+    if (model.subType == HXPhotoModelMediaSubTypeVideo) {// 视频
+           [self showBtnView:NO];
+       }else {// 图片
+           [self showBtnView:YES];
+       }
     [self addGesture];
 }
 #pragma mark - < private >
@@ -304,7 +310,7 @@ HXVideoEditViewControllerDelegate
    
    
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(SAFEAREA_INSETS_BOTTOM);
         make.height.mas_equalTo(64);
         make.left.right.mas_equalTo(0);
     }];
@@ -326,7 +332,7 @@ HXVideoEditViewControllerDelegate
     [self.view addSubview:self.btnView];
     
     [self.btnView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(0);
+        make.bottom.mas_equalTo(-SAFEAREA_INSETS_BOTTOM);
         make.height.mas_equalTo(44);
         make.left.right.mas_equalTo(0);
     }];
