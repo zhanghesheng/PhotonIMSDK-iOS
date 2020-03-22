@@ -128,6 +128,9 @@ typedef NS_ENUM(NSUInteger, HXPhotoModelFormat) {
 @property (copy, nonatomic) NSURL * _Nullable networkPhotoUrl;
 /**  网络图片缩略图地址  */
 @property (strong, nonatomic) NSURL * _Nullable networkThumbURL;
+
+/**  网络图片缩略图地址  */
+@property (strong, nonatomic) NSURL * _Nullable fileLocalURL;
 /// 网络图片的大小
 //@property (assign, nonatomic) NSUInteger networkImageSize;
 /**  临时的列表小图 - 本地图片才用这个上传  */

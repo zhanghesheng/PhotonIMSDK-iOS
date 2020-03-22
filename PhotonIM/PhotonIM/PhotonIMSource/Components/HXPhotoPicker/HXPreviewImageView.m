@@ -97,7 +97,11 @@
             self.progressView.progress = progress;
 #if HasPhotonIMSDK
             if (model.userInfo) {
-                NSString *cacheKey = [[SDWebImageManager sharedManager] cacheKeyForURL:model.networkPhotoUrl];
+                PhotonIMDownloadFileQuality fileQuality = PhotonIMDownloadFileQualityHight;
+                if (model.cameraPhotoType == HXPhotoModelMediaTypeCameraPhotoTypeLocal) {
+                    fileQuality = PhotonIMDownloadFileQualityOrigin;
+                }
+                NSString *cacheKey = model.fileLocalURL.lastPathComponent;
                 UIImage *image = [[SDWebImageManager sharedManager].imageCache imageFromCacheForKey:cacheKey];
                 if (image) {
                     self.progressView.progress = 1;
@@ -111,7 +115,7 @@
                         self.downloadNetworkImageComplete();
                     }
                 }else{
-                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:PhotonIMDownloadFileQualityLow progress:^(NSProgress * _Nonnull downloadProgress) {
+                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:fileQuality progress:^(NSProgress * _Nonnull downloadProgress) {
                          CGFloat pro = (CGFloat)downloadProgress.completedUnitCount / downloadProgress.totalUnitCount;
                          weakSelf.progressView.progress = pro;
                     } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
@@ -129,7 +133,8 @@
                             }
                             UIImage *image = [UIImage imageWithContentsOfFile:filePath];
                             weakSelf.animatedImageView.image = image;
-                            [[SDWebImageManager sharedManager].imageCache storeImage:image forKey:cacheKey toDisk:NO completion:nil];
+                            model.fileLocalURL = [NSURL fileURLWithPath:filePath];
+                            [[SDWebImageManager sharedManager].imageCache storeImage:image forKey:filePath.lastPathComponent toDisk:NO completion:nil];
                         }
                     }];
                 }
@@ -406,7 +411,9 @@
     if (!_animatedImageView) {
         _animatedImageView = [[YYAnimatedImageView alloc] init];
         _animatedImageView.clipsToBounds = YES;
-        _animatedImageView.contentMode = UIViewContentModeScaleAspectFill;
+        _animatedImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+        _animatedImageView.contentScaleFactor = [UIScreen mainScreen].scale;
+        _animatedImageView.contentMode =  UIViewContentModeScaleAspectFit;
     }
     return _animatedImageView;
 }

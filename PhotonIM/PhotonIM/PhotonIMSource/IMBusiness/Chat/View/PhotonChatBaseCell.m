@@ -9,7 +9,8 @@
 #import "PhotonChatBaseCell.h"
 #import "PhotonMessageCenter.h"
 #import <SDWebImage/UIButton+WebCache.h>
-@interface PhotonChatBaseCell()
+#import "PhotonCircleProgressView.h"
+@interface PhotonChatBaseCell()<PhotonCircleProgressViewDelegate>
 /**
  头像
  */
@@ -42,7 +43,7 @@
 
 @property (nonatomic, strong, nullable)UIActivityIndicatorView *indicatorView;
 
-
+@property (nonatomic, strong, nullable)PhotonCircleProgressView *progressView;
 @end
 
 @implementation PhotonChatBaseCell
@@ -57,7 +58,8 @@
         [self.contentView addSubview:self.tipLable];
         [self.contentView addSubview:self.msgStatusLable];
         [self.contentView addSubview:self.timeLabel];
-       
+        
+        [self.contentBackgroundView addSubview:self.progressView];
         
     }
     return self;
@@ -161,6 +163,8 @@
     }
     CGRect contentBackgroundViewFrame = CGRectMake(contentBackgroundViewLeft, contentBackgroundViewTop, contentBackgroundViewWidth, contentBackgroundViewHeight);
     self.contentBackgroundView.frame = contentBackgroundViewFrame;
+    
+  
 }
 
 - (void)subview_layout{
@@ -230,6 +234,15 @@
         self.tipLable.frame = CGRectZero;
         
     }
+    
+    CGRect progressViewFrame = self.progressView.frame;
+    CGFloat progressHeight = self.contentBackgroundView.height/2.0;
+    CGFloat progressWidth = progressHeight;
+    progressViewFrame.size =CGSizeMake(progressWidth, progressHeight);
+    CGFloat y = (self.contentBackgroundView.height/2.0)/2.0;
+    CGFloat x= (self.contentBackgroundView.width - progressWidth)/2.0;
+    progressViewFrame.origin = CGPointMake(x, y);
+    self.progressView.frame = progressViewFrame;
 }
 
 - (void)prepareForReuse{
@@ -355,7 +368,28 @@
     return _indicatorView;
 }
 
+- (PhotonCircleProgressView *)progressView{
+    if (!_progressView) {
+        _progressView = [[PhotonCircleProgressView alloc]initWithFrame:CGRectMake(100, 100, 87, 85)];
+        _progressView.hidden = YES;
+        _progressView.delegate = self;
+    }
+    return _progressView;
+}
+- (void)changeProgressValue:(CGFloat)value
+{
+    self.progressView.hidden = NO;
+    self.progressView.progressValue = value;
+    
+    self.progressView.contentText=[NSString stringWithFormat:@"%f",self.progressView.progressValue];
 
+}
+
+-(void)progressViewOver:(PhotonCircleProgressView *)progressView {
+    if ((int)progressView.progressValue == 1) {
+        progressView.hidden = YES;
+    }
+}
 #pragma mark -------- Identifier ---------
 + (NSString *) cellIdentifier{
     return @"PhotonBaseChatCell";

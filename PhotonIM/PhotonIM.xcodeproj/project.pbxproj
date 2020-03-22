@@ -208,6 +208,7 @@
 		32740A4F23C8290B0089F318 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32740A4E23C8290B0089F318 /* CoreLocation.framework */; };
 		32740A5123C829110089F318 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32740A5023C829110089F318 /* MapKit.framework */; };
 		32740A5423C831EE0089F318 /* PhotonChatLocationItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */; };
+		32740AE22423351500337225 /* PhotonCircleProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 32740AE12423351500337225 /* PhotonCircleProgressView.m */; };
 		3275F89A2420659100E50E9F /* PhotonFilePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3275F8992420659100E50E9F /* PhotonFilePreviewViewController.swift */; };
 		327E50F82421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327E50F72421FF5B00EA8A6A /* UIScreen+PhotonExtension.swift */; };
 		32845465238FA886003C0683 /* PhotonChatData.m in Sources */ = {isa = PBXBuildFile; fileRef = 32845464238FA886003C0683 /* PhotonChatData.m */; };
@@ -643,6 +644,8 @@
 		32740A5023C829110089F318 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		32740A5223C831EE0089F318 /* PhotonChatLocationItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonChatLocationItem.h; sourceTree = "<group>"; };
 		32740A5323C831EE0089F318 /* PhotonChatLocationItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonChatLocationItem.m; sourceTree = "<group>"; };
+		32740AE02423351500337225 /* PhotonCircleProgressView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCircleProgressView.h; sourceTree = "<group>"; };
+		32740AE12423351500337225 /* PhotonCircleProgressView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonCircleProgressView.m; sourceTree = "<group>"; };
 		3275F8992420659100E50E9F /* PhotonFilePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonFilePreviewViewController.swift; sourceTree = "<group>"; };
 		327D8D7D23066A00006E2E90 /* PhotonCommonHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonCommonHeader.h; sourceTree = "<group>"; };
 		327D8D7E230691D6006E2E90 /* PhotonAPIMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAPIMacros.h; sourceTree = "<group>"; };
@@ -1298,6 +1301,7 @@
 		322B428E22C234150027C1A3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				32740ADF242334F600337225 /* Circleprogress */,
 				322932C2241F5D60000A79C9 /* FileExplorer */,
 				32664ECA23F91B9500201947 /* PhotonViews */,
 				32664EB023F3A67D00201947 /* AirSandbox */,
@@ -1389,6 +1393,7 @@
 		3238AB9F22D4AB8700EB3D0B /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				3259F3FC23C88B4E00701C3F /* Search */,
 				3238ABA022D4AB8700EB3D0B /* Model */,
 				3238ABBE22D4AB8700EB3D0B /* View */,
 				3238ABD322D4AB8700EB3D0B /* ViewController */,
@@ -1693,6 +1698,15 @@
 			path = Setting;
 			sourceTree = "<group>";
 		};
+		32740ADF242334F600337225 /* Circleprogress */ = {
+			isa = PBXGroup;
+			children = (
+				32740AE02423351500337225 /* PhotonCircleProgressView.h */,
+				32740AE12423351500337225 /* PhotonCircleProgressView.m */,
+			);
+			path = Circleprogress;
+			sourceTree = "<group>";
+		};
 		327D8D7C230664B4006E2E90 /* PhotonIMSource */ = {
 			isa = PBXGroup;
 			children = (
@@ -1951,7 +1965,6 @@
 		32FDC9FD22C4EB8400EECD24 /* IMBusiness */ = {
 			isa = PBXGroup;
 			children = (
-				3259F3FC23C88B4E00701C3F /* Search */,
 				3238AB9F22D4AB8700EB3D0B /* Conversation */,
 				3242C1B6238E23C100C221D2 /* Test */,
 				3272587122F1409800842026 /* Setting */,
@@ -2335,6 +2348,7 @@
 				32C557DC23CDD9E0007F06CE /* HXPhotoConfiguration.m in Sources */,
 				322932F5241F5D60000A79C9 /* FileViewModel.swift in Sources */,
 				329E67F92301460D0097BFDC /* PhotonBaseUITableView.m in Sources */,
+				32740AE22423351500337225 /* PhotonCircleProgressView.m in Sources */,
 				3221884322CCA5B6007E9FA3 /* PhotonCharBar.m in Sources */,
 				3221884422CCA5B6007E9FA3 /* PhotonImageBrowser.m in Sources */,
 				3238ACE822D4AB8800EB3D0B /* PhotonBaseContactCell.m in Sources */,

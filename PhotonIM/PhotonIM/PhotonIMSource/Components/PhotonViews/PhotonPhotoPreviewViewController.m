@@ -256,7 +256,6 @@ HXVideoEditViewControllerDelegate
 }
 - (void)changeSubviewFrame {
     UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
-    HXPhotoModel *model = self.modelArray[self.currentModelIndex];
     if (orientation == UIInterfaceOrientationPortrait || UIInterfaceOrientationPortrait == UIInterfaceOrientationPortraitUpsideDown) {
         [self changeStatusBarWithHidden:YES];
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
@@ -409,15 +408,18 @@ HXVideoEditViewControllerDelegate
     if (!model) {
         return;
     }
+    __weak typeof(self)weakSelf = self;
     HXPhotoPreviewViewCell *cell = (HXPhotoPreviewViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentModelIndex inSection:0]];
     if (self.delegate && [self.delegate respondsToSelector:@selector(viewOriginImage:completion:)]) {
         [self.delegate viewOriginImage:model completion:^(UIImage * _Nonnull image) {
             [PhotonUtil runMainThread:^{
                 if (cell){
-                      [cell setImage:image];
+                    model.cameraPhotoType = HXPhotoModelMediaTypeCameraPhotoTypeLocal;
+                    [weakSelf showViewOriginBtn:model];
+                    [cell setImage:image];
                 }
             }];
-           
+
         }];
     }
 }
@@ -679,6 +681,7 @@ HXVideoEditViewControllerDelegate
 - (UIButton *)viewOrigindBtn{
     if (!_viewOrigindBtn) {
         _viewOrigindBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _viewOrigindBtn.hidden = YES;
         _viewOrigindBtn.clipsToBounds = YES;
         _viewOrigindBtn.backgroundColor = [UIColor clearColor];
         _viewOrigindBtn.layer.cornerRadius = 5;
@@ -693,6 +696,11 @@ HXVideoEditViewControllerDelegate
 
 - (void)showViewOriginBtn:(HXPhotoModel *)model{
     if(model){
+        if(model.cameraPhotoType == HXPhotoModelMediaTypeCameraPhotoTypeLocal){
+            self.viewOrigindBtn.hidden = YES;
+        }else{
+            self.viewOrigindBtn.hidden = NO;
+        }
         PhotonIMMessage *message = model.userInfo;
         if (message && [message isKindOfClass:[PhotonIMMessage class]]) {
             NSInteger fileSize = (NSInteger)[message messageBody].fileSize;

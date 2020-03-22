@@ -82,7 +82,7 @@
     h = imgHeight;
     self.scrollView.maximumZoomScale = 2.5;
 
-    self.previewContentView.frame = CGRectMake(0, 0, w, h);
+    self.previewContentView.frame = CGRectMake(0, 0, width, height);
     if (h < height) {
         self.previewContentView.center = CGPointMake(width / 2, height / 2);
         self.scrollView.contentSize = CGSizeMake(self.hx_w, self.hx_h);

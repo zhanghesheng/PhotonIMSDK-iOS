@@ -194,10 +194,10 @@
     fileItem.fileSize = [NSString stringWithFormat:@"%.2f k",(float)body.fileSize/1024.0];
     fileItem.fileICon = [UIImage imageNamed:@"chatfile"];
     fileItem.filePath = body.localFilePath;
-    [self addItem:fileItem];
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendFileMessage:fileItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
-        
+         fileItem.filePath = [message messageBody].localFilePath;
+         [weakself addItem:fileItem];
     } completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         if (!succeed && error.em) {
             fileItem.tipText = error.em;

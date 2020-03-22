@@ -100,26 +100,27 @@
         for (PhotonChatBaseItem *item in self.dataSource.items) {
            
             if ([item isKindOfClass:[PhotonChatImageMessageItem class]]) {
-                
-                PhotonChatImageMessageItem *imgItem = (PhotonChatImageMessageItem *)item;
-                if ([imgItem localPath]) {
-                    index ++;
-                    if(chatItem == item){
-                        count = index;
-                    }
-                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL fileURLWithPath:[imgItem localPath]] thumbURL:[NSURL URLWithString:[imgItem thumURL]]];
-                    model.userInfo = imgItem.userInfo;
-                    [imageItems addObject:model];
-                }else if ([imgItem orignURL]) {
-                    index ++;
-                    if(chatItem == item){
-                        count = index;
-                    }
-                    PhotonIMImageBody *msgBody = (PhotonIMImageBody *)[imgItem.userInfo messageBody];
-                    HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]] thumbURL:[NSURL URLWithString:[msgBody bigURL]]];
-                    model.userInfo = imgItem.userInfo;
-                    [imageItems addObject:model];
+                PhotonIMMessage *message = item.userInfo;
+                if (!message) {
+                    continue;
                 }
+                index ++;
+                if(chatItem == item){
+                    count = index;
+                }
+                PhotonIMImageBody *msgBody = (PhotonIMImageBody *)[message messageBody];
+                BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message
+                                                                           fileQuality:PhotonIMDownloadFileQualityOrigin];
+                
+                 HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]] thumbURL:[NSURL URLWithString:[msgBody bigURL]]];
+                 model.userInfo = message;
+                if (exist && [msgBody localFilePath]) {
+                    model.fileLocalURL = [NSURL URLWithString:[msgBody localFilePath]];
+                    model.cameraPhotoType = HXPhotoModelMediaTypeCameraPhotoTypeLocal;
+                }else{
+                    model.cameraPhotoType = HXPhotoModelMediaTypeCameraPhotoTypeNetWork;
+                }
+                 [imageItems addObject:model];
             }else if ([item isKindOfClass:[PhotonChatVideoMessageItem class]]){
                 index ++;
                  if(chatItem == item){
@@ -201,16 +202,18 @@
         if (fileItem.fromType == PhotonChatMessageFromSelf) {
             filePath = fileItem.filePath;
         }
-        if (filePath.length == 0) {
+        
+        if ([[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin]) {
+             [self previewFile:filePath fileName:fileName message:message];
+        }else{
             [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
-                
+                [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
             } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                 [PhotonUtil runMainThread:^{
+                    [cell changeProgressValue:1.0];
                      [weakself previewFile:filePath fileName:fileName message:message];
                 }];
             }];
-        }else{
-             [self previewFile:filePath fileName:fileName message:message];
         }
 
     }
@@ -433,7 +436,6 @@
         id msgBody = [message messageBody];
         if (msgBody && [msgBody isKindOfClass:[PhotonIMImageBody class]]) {
             [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
-                NSLog(@"image local File %@",filePath);
                 UIImage *image = [UIImage imageWithContentsOfFile:filePath];
                 if (completion) {
                     completion(image);
