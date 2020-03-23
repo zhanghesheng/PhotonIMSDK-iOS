@@ -54,7 +54,6 @@
             if (error.code != -1 && error.code != -2) {
                  [PhotonUtil showErrorHint:error.em];
             }
-            
         }
         if (succeed) {
             textItem.tipText = @"";
