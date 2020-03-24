@@ -10,6 +10,7 @@
 #import "PhotonMessageCenter.h"
 #import <SDWebImage/UIButton+WebCache.h>
 #import "PhotonCircleProgressView.h"
+#import "PhotonCircleLoadingView.h"
 @interface PhotonChatBaseCell()<PhotonCircleProgressViewDelegate>
 /**
  头像
@@ -46,6 +47,8 @@
 @property (nonatomic, strong, nullable)UIView *maskView;
 
 @property (nonatomic, strong, nullable)PhotonCircleProgressView *progressView;
+
+@property (nonatomic, strong, nullable)PhotonCircleLoadingView *loadingView;
 @end
 
 @implementation PhotonChatBaseCell
@@ -63,6 +66,9 @@
         
         [self.contentBackgroundView addSubview:self.maskView];
         [self.maskView addSubview:self.progressView];
+        
+//        [self.contentBackgroundView addSubview:self.loadingView];
+//        [self.loadingView animation];
         
     }
     return self;
@@ -410,6 +416,14 @@
     if ((int)progressView.progressValue == 1) {
         progressView.hidden = YES;
     }
+}
+
+- (PhotonCircleLoadingView *)loadingView{
+    if (!_loadingView) {
+        _loadingView = [[PhotonCircleLoadingView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+        _loadingView.backgroundColor = [UIColor clearColor];
+    }
+    return _loadingView;
 }
 #pragma mark -------- Identifier ---------
 + (NSString *) cellIdentifier{

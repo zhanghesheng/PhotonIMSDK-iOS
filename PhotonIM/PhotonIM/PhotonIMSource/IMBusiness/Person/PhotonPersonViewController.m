@@ -105,10 +105,10 @@
        [self.items addObject:personItem2];
        [self.items addObject:settingItem];
     
-    #ifdef DEBUG
+//    #ifdef DEBUG
         [self.items addObject:documentItem];
-    #else
-    #endif
+//    #else
+//    #endif
        
        
        [self.items addObject:emptyitem];

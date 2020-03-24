@@ -8,7 +8,7 @@
 
 #import "PAirSandbox.h"
 #import <UIKit/UIKit.h>
-
+#import "PhotonIMSwift-Swift.h"
 #define ASThemeColor [UIColor colorWithWhite:0.2 alpha:1.0]
 #define ASWindowPadding 20
 
@@ -230,7 +230,7 @@ typedef enum : NSUInteger {
 {
     NSURL *url = [NSURL fileURLWithPath:path];
     NSArray *objectsToShare = @[url];
-    
+
     UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
     NSArray *excludedActivities = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
                                     UIActivityTypePostToWeibo,
@@ -240,13 +240,44 @@ typedef enum : NSUInteger {
                                     UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
                                     UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
     controller.excludedActivityTypes = excludedActivities;
-    
+
     if ([(NSString *)[UIDevice currentDevice].model hasPrefix:@"iPad"]) {
         controller.popoverPresentationController.sourceView = self.view;
         controller.popoverPresentationController.sourceRect = CGRectMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height, 10, 10);
     }
     [self presentViewController:controller animated:YES completion:nil];
+////
+//       FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:path] title:path.lastPathComponent compeltion:^{
+//             self.view.hidden = NO;
+//       }];
+//    [[[self getCurrentVC] navigationController] pushViewController:fileExpore animated:YES];
+////        [self.navigationController pushViewController:fileExpore animated:YES];
 }
+
+- (UIViewController *)getCurrentVC
+{
+    UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    
+    UIViewController *currentVC = [self getCurrentVCFrom:rootViewController];
+    
+    return currentVC;
+}
+- (UIViewController *)getCurrentVCFrom:(UIViewController *)rootVC
+{
+    UIViewController *currentVC;
+    if ([rootVC presentedViewController]) {
+        rootVC = [rootVC presentedViewController];
+    }
+    if ([rootVC isKindOfClass:[UITabBarController class]]) {
+        currentVC = [self getCurrentVCFrom:[(UITabBarController *)rootVC selectedViewController]];
+    } else if ([rootVC isKindOfClass:[UINavigationController class]]){
+        currentVC = [self getCurrentVCFrom:[(UINavigationController *)rootVC visibleViewController]];
+    } else {
+        currentVC = rootVC;
+    }
+    return currentVC;
+}
+
 
 @end
 

@@ -17,7 +17,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import "HXPhotoCustomNavigationBar.h"
 #import <Masonry/Masonry.h>
-
+#import "PhotonMacros.h"
 @interface HXCustomCameraViewController ()<HXCustomPreviewViewDelegate,HXCustomCameraBottomViewDelegate,HXCustomCameraControllerDelegate, CLLocationManagerDelegate>
 @property (strong, nonatomic) HXCustomCameraController *cameraController;
 @property (strong, nonatomic) HXCustomPreviewView *previewView;
@@ -341,9 +341,22 @@
             [self.playVideoView stopPlay];
             model = [HXPhotoModel photoModelWithVideoURL:self.videoURL videoTime:self.time];
         }
+         [self.view hx_immediatelyShowLoadingHudWithText:nil];
         model.creationDate = [NSDate date];
         model.location = self.location;
-        [self doneCompleteWithModel:model];
+        __weak typeof(self)weakSelf = self;
+        [self compressVideo:model.videoURL completion:^(NSURL *videoURL) {
+            if (videoURL) {
+                 [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
+            }
+            model.videoURL = videoURL;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.view hx_handleLoading:NO];
+                [weakSelf doneCompleteWithModel:model];
+            });
+           
+        }];
+       
     }else {
         HXWeakSelf
         [self.view hx_immediatelyShowLoadingHudWithText:nil];
@@ -376,6 +389,9 @@
     [self.cameraController stopSession];
     self.cameraController.flashMode = 0;
     self.cameraController.torchMode = 0;
+    
+
+    
     if ([self.delegate respondsToSelector:@selector(customCameraViewController:didDone:)]) {
         [self.delegate customCameraViewController:self didDone:model];
     }
@@ -383,6 +399,41 @@
         self.doneBlock(model, self);
     }
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+// 压缩视频
+- (void)compressVideo:(NSURL *)videoUrl completion:(void (^)(NSURL*))completion{
+    NSURL *saveUrl=videoUrl;
+
+    // 通过文件的 url 获取到这个文件的资源
+    AVURLAsset *avAsset = [[AVURLAsset alloc] initWithURL:saveUrl options:nil];
+    // 用 AVAssetExportSession 这个类来导出资源中的属性
+    NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
+
+    // 压缩视频
+    if ([compatiblePresets containsObject:AVAssetExportPresetHighestQuality]) { // 导出属性是否包含低分辨率
+    // 通过资源（AVURLAsset）来定义 AVAssetExportSession，得到资源属性来重新打包资源 （AVURLAsset, 将某一些属性重新定义
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:AVAssetExportPresetHighestQuality];
+    // 设置导出文件的存放路径
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];
+    NSDate    *date = [[NSDate alloc] init];
+    NSString *outPutPath = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"output-%@.mp4",[formatter stringFromDate:date]]];
+    exportSession.outputURL = [NSURL fileURLWithPath:outPutPath];
+    // 是否对网络进行优化
+    exportSession.shouldOptimizeForNetworkUse = true;
+    // 转换成MP4格式
+    exportSession.outputFileType = AVFileTypeMPEG4;
+    // 开始导出,导出后执行完成的block
+    [exportSession exportAsynchronouslyWithCompletionHandler:^{
+        // 如果导出的状态为完成
+        if ([exportSession status] == AVAssetExportSessionStatusCompleted) {
+            if (completion) {
+                completion(exportSession.outputURL);
+            }
+        }
+    }];
+}
 }
 - (void)didchangeCameraClick {
     if ([self.cameraController switchCameras]) {
@@ -655,7 +706,7 @@
         _resetBtn.layer.cornerRadius = _resetBtn.hx_size.width/2.0;
         _resetBtn.clipsToBounds = YES;
         _resetBtn.hx_centerX = self.view.hx_centerX - _resetBtn.hx_size.width;
-        _resetBtn.hx_y = self.view.hx_h - _resetBtn.hx_size.width - 20;
+        _resetBtn.hx_y = self.view.hx_h - _resetBtn.hx_size.height - SAFEAREA_INSETS_BOTTOM;
     }
     return _resetBtn;
 }
@@ -672,7 +723,7 @@
             _doneBtn.layer.cornerRadius = _doneBtn.hx_size.width/2.0;
             _doneBtn.clipsToBounds = YES;
            _doneBtn.hx_centerX = self.view.hx_centerX + _doneBtn.hx_size.width;
-           _doneBtn.hx_y = self.view.hx_h - _doneBtn.hx_size.width - 20;
+           _doneBtn.hx_y = self.view.hx_h - _doneBtn.hx_size.height - SAFEAREA_INSETS_BOTTOM;
        }
        return _doneBtn;
 }

@@ -453,24 +453,23 @@ PhotonAudioRecorderDelegate>
             }
             __weak typeof(self)weakSelf = self;
             [[self getCurrentVC] hx_presentCustomCameraViewControllerWithManager:self.cameraVideoManager done:^(HXPhotoModel *model, HXCustomCameraViewController *viewController) {
-                [weakSelf compressVideo:model.videoURL completion:^(NSURL * videoURL) {
-                     NSString *fileName = [NSString stringWithFormat:@"%.0lf.mp4", [NSDate date].timeIntervalSince1970 * 1000];
-                     NSString *path = [[PhotonMessageCenter sharedCenter] getVideoFilePath:weakSelf.identifier fileName:fileName];
-                     if (![path isNotEmpty]) {
-                         return;
-                     }
-                     NSURL *pathurl = [NSURL fileURLWithPath:path];
-                     NSError *error;
-                     BOOL res = [[NSFileManager defaultManager] moveItemAtURL:videoURL toURL:pathurl error:&error];
-                     if (res) {
-                         [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
-                         [[NSFileManager defaultManager] removeItemAtURL:videoURL error:nil];
-                     }
-                     if (self.delegate && [self.delegate respondsToSelector:@selector(sendVideoMessage:duraion:)]) {
-                         [self.delegate sendVideoMessage:fileName duraion:model.videoDuration];
-                    
-                     }
-                }];
+                NSString *fileName = [NSString stringWithFormat:@"%.0lf.mp4", [NSDate date].timeIntervalSince1970 * 1000];
+                 NSString *path = [[PhotonMessageCenter sharedCenter] getVideoFilePath:weakSelf.identifier fileName:fileName];
+                 if (![path isNotEmpty]) {
+                     return;
+                 }
+                 NSURL *pathurl = [NSURL fileURLWithPath:path];
+                 NSError *error;
+                 BOOL res = [[NSFileManager defaultManager] moveItemAtURL:model.videoURL toURL:pathurl error:&error];
+                 if (res) {
+                     [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
+                 }
+                 if (self.delegate && [self.delegate respondsToSelector:@selector(sendVideoMessage:duraion:)]) {
+                     [self.delegate sendVideoMessage:fileName duraion:model.videoDuration];
+                 }
+//                [weakSelf compressVideo:model.videoURL completion:^(NSURL * videoURL) {
+//
+//                }];
             } cancel:^(HXCustomCameraViewController *viewController) {
                 NSSLog(@"取消了");
             }];
@@ -539,7 +538,7 @@ PhotonAudioRecorderDelegate>
 
 - (HXPhotoManager *)photonManager
 {
-    if(!_photonManager){
+//    if(!_photonManager){
         HXPhotoManager *manager = [[HXPhotoManager alloc] initWithType:HXPhotoManagerSelectedTypePhoto];
         manager.configuration.deleteTemporaryPhoto = NO;
         manager.configuration.lookLivePhoto = YES;
@@ -564,9 +563,9 @@ PhotonAudioRecorderDelegate>
         };
         manager.configuration.videoCanEdit = NO;
         manager.configuration.photoCanEdit = NO;
-        _photonManager = manager;
-    }
-    return _photonManager;
+//        _photonManager = manager;
+//    }
+    return manager;
 }
 
 // 压缩视频
@@ -579,9 +578,9 @@ PhotonAudioRecorderDelegate>
     NSArray *compatiblePresets = [AVAssetExportSession exportPresetsCompatibleWithAsset:avAsset];
 
     // 压缩视频
-    if ([compatiblePresets containsObject:AVAssetExportPresetLowQuality]) { // 导出属性是否包含低分辨率
+    if ([compatiblePresets containsObject:AVAssetExportPresetHighestQuality]) { // 导出属性是否包含低分辨率
     // 通过资源（AVURLAsset）来定义 AVAssetExportSession，得到资源属性来重新打包资源 （AVURLAsset, 将某一些属性重新定义
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:AVAssetExportPresetLowQuality];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:AVAssetExportPresetHighestQuality];
     // 设置导出文件的存放路径
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd-HH:mm:ss"];

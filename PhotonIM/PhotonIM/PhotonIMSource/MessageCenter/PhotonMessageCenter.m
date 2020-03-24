@@ -301,7 +301,7 @@ static PhotonMessageCenter *center = nil;
 - (void)_sendMessage:(nullable PhotonIMMessage *)message readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
     PhotonWeakSelf(self);
     [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion fileUploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-        
+        // 上传的进度
     }  completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
             if (!succeed && error.code >= 1000) {

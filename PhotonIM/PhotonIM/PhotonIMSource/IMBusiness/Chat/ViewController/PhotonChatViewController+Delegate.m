@@ -122,13 +122,20 @@
                 }
                  [imageItems addObject:model];
             }else if ([item isKindOfClass:[PhotonChatVideoMessageItem class]]){
+                 PhotonIMMessage *message = item.userInfo;
                 index ++;
                  if(chatItem == item){
                      count = index;
                  }
                 PhotonIMVideoBody *videoBody = (PhotonIMVideoBody *)[item.userInfo messageBody];
-                HXPhotoModel *model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
-                model.userInfo = item.userInfo;
+                HXPhotoModel *model = nil;
+                BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin];
+                if (exist) {
+                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:@""] videoDuration:videoBody.mediaTime];
+                }else{
+                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
+                }
+                model.userInfo = message;
                 [imageItems addObject:model];
             }
         }
