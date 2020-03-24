@@ -197,21 +197,22 @@
          PhotonWeakSelf(self)
         PhotonChatFileMessageItem *fileItem = (PhotonChatFileMessageItem *)chatItem;
         PhotonIMMessage *message = fileItem.userInfo;
-        NSString *filePath = @"";
+        __block NSString *fileLocalPath = [[message messageBody] localFilePath];
         NSString *fileName = fileItem.fileName;
         if (fileItem.fromType == PhotonChatMessageFromSelf) {
-            filePath = fileItem.filePath;
+            fileLocalPath = fileItem.filePath;
         }
         
         if ([[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin]) {
-             [self previewFile:filePath fileName:fileName message:message];
+             [self previewFile:fileLocalPath fileName:fileName message:message];
         }else{
             [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
                 [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
             } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                 [PhotonUtil runMainThread:^{
                     [cell changeProgressValue:1.0];
-                     [weakself previewFile:filePath fileName:fileName message:message];
+                    fileLocalPath = filePath;
+                    [weakself previewFile:filePath fileName:fileName message:message];
                 }];
             }];
         }

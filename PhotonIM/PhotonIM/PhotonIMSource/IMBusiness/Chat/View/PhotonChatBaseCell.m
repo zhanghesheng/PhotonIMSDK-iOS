@@ -43,6 +43,8 @@
 
 @property (nonatomic, strong, nullable)UIActivityIndicatorView *indicatorView;
 
+@property (nonatomic, strong, nullable)UIView *maskView;
+
 @property (nonatomic, strong, nullable)PhotonCircleProgressView *progressView;
 @end
 
@@ -59,7 +61,8 @@
         [self.contentView addSubview:self.msgStatusLable];
         [self.contentView addSubview:self.timeLabel];
         
-        [self.contentBackgroundView addSubview:self.progressView];
+        [self.contentBackgroundView addSubview:self.maskView];
+        [self.maskView addSubview:self.progressView];
         
     }
     return self;
@@ -235,12 +238,14 @@
         
     }
     
+    self.maskView.frame = CGRectMake(0, 0, self.contentBackgroundView.width, self.contentBackgroundView.height);
+    
     CGRect progressViewFrame = self.progressView.frame;
-    CGFloat progressHeight = self.contentBackgroundView.height/2.0;
+    CGFloat progressHeight = self.maskView.height/3.0 * 2.0;
     CGFloat progressWidth = progressHeight;
     progressViewFrame.size =CGSizeMake(progressWidth, progressHeight);
-    CGFloat y = (self.contentBackgroundView.height/2.0)/2.0;
-    CGFloat x= (self.contentBackgroundView.width - progressWidth)/2.0;
+    CGFloat y = (self.maskView.height - progressHeight)/2.0;
+    CGFloat x= (self.maskView.width - progressWidth)/2.0;
     progressViewFrame.origin = CGPointMake(x, y);
     self.progressView.frame = progressViewFrame;
 }
@@ -361,6 +366,15 @@
     return _msgStatusLable;
 }
 
+- (UIView *)maskView{
+    if (!_maskView) {
+        _maskView = [[UIView alloc] init];
+        _maskView.hidden = YES;
+        _maskView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.5];
+    }
+    return _maskView;
+}
+
 - (UIActivityIndicatorView *)indicatorView{
     if (!_indicatorView) {
         _indicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -378,7 +392,14 @@
 }
 - (void)changeProgressValue:(CGFloat)value
 {
-    self.progressView.hidden = NO;
+    if(value >= 1.0){
+        self.maskView.hidden = YES;
+        self.progressView.hidden = YES;
+    }else{
+        self.maskView.hidden = NO;
+        self.progressView.hidden = NO;
+    }
+   
     self.progressView.progressValue = value;
     
     self.progressView.contentText=[NSString stringWithFormat:@"%f",self.progressView.progressValue];
