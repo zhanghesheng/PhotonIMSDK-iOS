@@ -9,6 +9,7 @@
 #import "PAirSandbox.h"
 #import <UIKit/UIKit.h>
 #import "PhotonIMSwift-Swift.h"
+#import "PhotonBaseViewController.h"
 #define ASThemeColor [UIColor colorWithWhite:0.2 alpha:1.0]
 #define ASWindowPadding 20
 
@@ -68,10 +69,10 @@ typedef enum : NSUInteger {
 @end
 
 #pragma mark- ASViewController
-@interface ASViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
-@property (nonatomic, strong) UITableView*                 tableView;
+@interface ASViewController : PhotonBaseViewController <UITableViewDelegate, UITableViewDataSource>
+//@property (nonatomic, strong) UITableView*                 tableView;
 @property (nonatomic, strong) UIButton*                    btnClose;
-@property (nonatomic, strong) NSArray*                     items;
+//@property (nonatomic, strong) NSArray*                     items;
 @property (nonatomic, copy) NSString*                      rootPath;
 @end
 
@@ -95,14 +96,14 @@ typedef enum : NSUInteger {
     [_btnClose setTitle:@"Close" forState:UIControlStateNormal];
     [_btnClose addTarget:self action:@selector(btnCloseClick) forControlEvents:UIControlEventTouchUpInside];
     
-    _tableView = [UITableView new];
-    [self.view addSubview:_tableView];
-    _tableView.backgroundColor = [UIColor whiteColor];
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
+    self.tableView = [[UITableView alloc] init];
+    [self.view addSubview:self.tableView];
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
 
-    _items = @[];
+    self.items = @[];
     _rootPath = NSHomeDirectory();
 }
 
@@ -119,7 +120,7 @@ typedef enum : NSUInteger {
     CGRect tableFrame = self.view.frame;
     tableFrame.origin.y += (closeHeight+4);
     tableFrame.size.height -= (closeHeight+4);
-    _tableView.frame = tableFrame;
+     self.tableView.frame = tableFrame;
 }
 
 - (void)btnCloseClick
@@ -172,23 +173,23 @@ typedef enum : NSUInteger {
         [files addObject:file];
         
     }
-    _items = files.copy;
-    [_tableView reloadData];
+    self.items = files.copy;
+    [self.tableView reloadData];
 }
 
 #pragma mark- UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _items.count;
+    return self.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > _items.count-1) {
+    if (indexPath.row > self.items.count-1) {
         return [UITableViewCell new];
     }
     
-    ASFileItem* item = [_items objectAtIndex:indexPath.row];
+    ASFileItem* item = [self.items objectAtIndex:indexPath.row];
     
     static NSString* cellIdentifier = @"PAirSandboxCell";
     PAirSandboxCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -208,13 +209,13 @@ typedef enum : NSUInteger {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row > _items.count-1) {
+    if (indexPath.row > self.items.count-1) {
         return;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:false];
     
-    ASFileItem* item = [_items objectAtIndex:indexPath.row];
+    ASFileItem* item = [self.items objectAtIndex:indexPath.row];
     if (item.type == ASFileItemUp) {
         [self loadPath:[item.path stringByDeletingLastPathComponent]];
     }
@@ -228,30 +229,31 @@ typedef enum : NSUInteger {
 
 - (void)sharePath:(NSString*)path
 {
-    NSURL *url = [NSURL fileURLWithPath:path];
-    NSArray *objectsToShare = @[url];
-
-    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
-    NSArray *excludedActivities = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
-                                    UIActivityTypePostToWeibo,
-                                    UIActivityTypeMessage, UIActivityTypeMail,
-                                    UIActivityTypePrint, UIActivityTypeCopyToPasteboard,
-                                    UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll,
-                                    UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
-                                    UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
-    controller.excludedActivityTypes = excludedActivities;
-
-    if ([(NSString *)[UIDevice currentDevice].model hasPrefix:@"iPad"]) {
-        controller.popoverPresentationController.sourceView = self.view;
-        controller.popoverPresentationController.sourceRect = CGRectMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height, 10, 10);
-    }
-    [self presentViewController:controller animated:YES completion:nil];
-////
-//       FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:path] title:path.lastPathComponent compeltion:^{
-//             self.view.hidden = NO;
-//       }];
-//    [[[self getCurrentVC] navigationController] pushViewController:fileExpore animated:YES];
-////        [self.navigationController pushViewController:fileExpore animated:YES];
+//    NSURL *url = [NSURL fileURLWithPath:path];
+//    NSArray *objectsToShare = @[url];
+//
+//    UIActivityViewController *controller = [[UIActivityViewController alloc] initWithActivityItems:objectsToShare applicationActivities:nil];
+//    NSArray *excludedActivities = @[UIActivityTypePostToTwitter, UIActivityTypePostToFacebook,
+//                                    UIActivityTypePostToWeibo,
+//                                    UIActivityTypeMessage, UIActivityTypeMail,
+//                                    UIActivityTypePrint, UIActivityTypeCopyToPasteboard,
+//                                    UIActivityTypeAssignToContact, UIActivityTypeSaveToCameraRoll,
+//                                    UIActivityTypeAddToReadingList, UIActivityTypePostToFlickr,
+//                                    UIActivityTypePostToVimeo, UIActivityTypePostToTencentWeibo];
+//    controller.excludedActivityTypes = excludedActivities;
+//
+//    if ([(NSString *)[UIDevice currentDevice].model hasPrefix:@"iPad"]) {
+//        controller.popoverPresentationController.sourceView = self.view;
+//        controller.popoverPresentationController.sourceRect = CGRectMake([UIScreen mainScreen].bounds.size.width * 0.5, [UIScreen mainScreen].bounds.size.height, 10, 10);
+//    }
+//    [self presentViewController:controller animated:YES completion:nil];
+    
+  
+   
+    FileExplorerViewController *fileExpore  = [[FileExplorerViewController alloc]  initWithDirectoryURL:[NSURL fileURLWithPath:path] title:path.lastPathComponent compeltion:^{
+        self.view.hidden = NO;
+    }];
+    [[[self getCurrentVC] navigationController] pushViewController:fileExpore animated:YES];
 }
 
 - (UIViewController *)getCurrentVC
@@ -316,21 +318,23 @@ typedef enum : NSUInteger {
 }
 
 - (void)showSandboxBrowser {
-    if (_window == nil) {
-        _window = [UIWindow new];
-        CGRect keyFrame = [UIScreen mainScreen].bounds;
-        keyFrame.origin.y += 64;
-        keyFrame.size.height -= 64;
-        _window.frame = CGRectInset(keyFrame, ASWindowPadding, ASWindowPadding);
-        _window.backgroundColor = [UIColor whiteColor];
-        _window.layer.borderColor = ASThemeColor.CGColor;
-        _window.layer.borderWidth = 2.0;
-        _window.windowLevel = UIWindowLevelStatusBar;
-        
-        _ctrl = [ASViewController new];
-        _window.rootViewController = _ctrl;
-    }
-    _window.hidden = false;
+    _ctrl = [ASViewController new];
+    [[[_ctrl getCurrentVC]navigationController] pushViewController:_ctrl animated:YES];
+//    if (_window == nil) {
+//        _window = [UIWindow new];
+//        CGRect keyFrame = [UIScreen mainScreen].bounds;
+//        keyFrame.origin.y += 64;
+//        keyFrame.size.height -= 64;
+//        _window.frame = CGRectInset(keyFrame, ASWindowPadding, ASWindowPadding);
+//        _window.backgroundColor = [UIColor whiteColor];
+//        _window.layer.borderColor = ASThemeColor.CGColor;
+//        _window.layer.borderWidth = 2.0;
+//        _window.windowLevel = UIWindowLevelStatusBar;
+//
+//        _ctrl = [ASViewController new];
+//        _window.rootViewController = _ctrl;
+//    }
+//    _window.hidden = false;
 }
 
 @end
