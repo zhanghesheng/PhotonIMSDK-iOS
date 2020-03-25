@@ -334,8 +334,8 @@
         if (!self.videoURL) {
             model = [HXPhotoModel photoModelWithImage:self.imageView.image];
         }else {
-            if (self.time < 3) {
-                [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"录制时间少于3秒"]];
+            if (self.time < 1) {
+                [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"录制时间少于1秒"]];
                 return;
             }
             [self.playVideoView stopPlay];
@@ -521,12 +521,12 @@
 }
 - (void)videoFinishRecording:(NSURL *)videoURL {
     [self.bottomView stopRecord];
-    if (self.time < 3) {
+    if (self.time < 1) {
         self.bottomView.hidden = NO;
         [self setCancelBtnSelect:NO];
         self.flashBtn.hidden = NO;
         self.changeCameraBtn.hidden = NO;
-        [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"3秒内的视频无效哦~"]];
+        [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"1秒内的视频无效哦~"]];
     }else {
         [self.cameraController stopSession];
         self.previewView.tapToFocusEnabled = NO;
@@ -909,8 +909,8 @@
     }
 }
 - (void)changeTime:(NSTimeInterval)time {
-    if (time < 3) {
-        self.timeLb.text = [NSBundle hx_localizedStringForKey:@"3秒内的视频无效哦~"];
+    if (time < 1) {
+        self.timeLb.text = [NSBundle hx_localizedStringForKey:@"1秒内的视频无效哦~"];
     }else {
         self.timeLb.text = [NSString stringWithFormat:@"%.0fs",time];
     }
@@ -938,7 +938,7 @@
 }
 - (void)startRecord {
     self.timeLb.hidden = NO;
-    self.timeLb.text = [NSBundle hx_localizedStringForKey:@"3秒内的视频无效哦~"];
+    self.timeLb.text = [NSBundle hx_localizedStringForKey:@"1秒内的视频无效哦~"];
 }
 - (void)stopRecord {
     if (self.manager.configuration.customCameraType == HXPhotoCustomCameraTypeUnused) {

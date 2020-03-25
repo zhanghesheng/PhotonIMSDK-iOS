@@ -137,7 +137,7 @@
 + (void)showSuccessHint:(nullable NSString *)hintText
 {
     [self runMainThread:^{
-        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD setMaximumDismissTimeInterval:2];
         [SVProgressHUD showSuccessWithStatus:hintText];
     }];
 }
@@ -145,7 +145,7 @@
 + (void)showErrorHint:(nullable NSString *)hintText
 {
     [self runMainThread:^{
-        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD setMaximumDismissTimeInterval:1];
         [SVProgressHUD showErrorWithStatus:hintText];
     }];
 }
@@ -153,7 +153,7 @@
 + (void)showInfoHint:(nullable NSString *)hintText
 {
     [self runMainThread:^{
-        [SVProgressHUD setMinimumDismissTimeInterval:2];
+        [SVProgressHUD setMaximumDismissTimeInterval:2];
         [SVProgressHUD showInfoWithStatus:hintText];
     }];
 }

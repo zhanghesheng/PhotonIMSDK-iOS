@@ -112,7 +112,7 @@
                 BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message
                                                                            fileQuality:PhotonIMDownloadFileQualityOrigin];
                 
-                 HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]] thumbURL:[NSURL URLWithString:[msgBody bigURL]]];
+                HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]?:@""] thumbURL:[NSURL URLWithString:[msgBody bigURL]?:@""]];
                  model.userInfo = message;
                 if (exist && [msgBody localFilePath]) {
                     model.fileLocalURL = [NSURL URLWithString:[msgBody localFilePath]];
@@ -131,9 +131,11 @@
                 HXPhotoModel *model = nil;
                 BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin];
                 if (exist) {
-                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:@""] videoDuration:videoBody.mediaTime];
+                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL fileURLWithPath:videoBody.localFilePath] videoCoverURL:[NSURL URLWithString:@""] videoDuration:videoBody.mediaTime];
+                    model.cameraVideoType = HXPhotoModelMediaTypeCameraVideoTypeLocal;
                 }else{
                     model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
+                    model.cameraVideoType = HXPhotoModelMediaTypeCameraVideoTypeNetWork;
                 }
                 model.userInfo = message;
                 [imageItems addObject:model];

@@ -227,7 +227,7 @@
     [(PhotonChatModel *)self.model addItem:item];
     
     [[PhotonMessageCenter sharedCenter] resendMessage:item completion:^(BOOL succeed, PhotonIMError * _Nullable error){
-        if (!succeed && error.code >=1000 && error.em) {
+        if (!succeed && error.em) {
             item.tipText = error.em;
         }else if (!succeed){
             if (error.code != -1 && error.code != -2) {

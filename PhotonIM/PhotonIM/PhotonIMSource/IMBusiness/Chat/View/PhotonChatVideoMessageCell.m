@@ -13,6 +13,7 @@
 //
 @interface PhotonChatVideoMessageCell()
 @property(nonatomic,strong)UIImageView *playIconView;
+@property(nonatomic,strong)UILabel *durationLable;
 @end
 @implementation PhotonChatVideoMessageCell
 
@@ -22,6 +23,8 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if(self){
+        [self.contentBackgroundView addSubview:self.playIconView];
+        [self.contentBackgroundView addSubview:self.durationLable];
     }
     return self;
 }
@@ -33,7 +36,6 @@
     }
     PhotonChatVideoMessageItem *videoItem = (PhotonChatVideoMessageItem *)object;
     self.contentBackgroundView.contentMode = UIViewContentModeScaleAspectFill;
-    [self.contentBackgroundView addSubview:self.playIconView];
     NSURL *fileURL = nil;
     if (videoItem.coverURL) {
         if ([videoItem.coverURL hasPrefix:@"http"]) {
@@ -47,6 +49,23 @@
     }else{
         [self.contentBackgroundView setImage:videoItem.coverImage];
     }
+    NSInteger minit= (NSInteger)videoItem.duration/60;
+    NSString *miniStr = @"";
+    if (minit < 10) {
+        miniStr = [NSString stringWithFormat:@"0%@",@(minit)];
+    }else{
+        miniStr = [NSString stringWithFormat:@"%@",@(minit)];
+    }
+    NSInteger second= videoItem.duration%60;
+    NSString *secondStr = @"";
+    if (second < 10) {
+           secondStr = [NSString stringWithFormat:@"0%@",@(second)];
+       }else{
+            secondStr = [NSString stringWithFormat:@"%@",@(second)];
+       }
+   
+    NSString *durationText = [NSString stringWithFormat:@"%@:%@",miniStr,secondStr];
+    self.durationLable.text = durationText;
 }
 
 - (void)p_layoutViews{
@@ -67,6 +86,12 @@
     CGPoint playOrigin = CGPointMake((contentBackgroundViewFrame.size.width - size.width)/2, (contentBackgroundViewFrame.size.height - size.height)/2);
     playFrame.origin = playOrigin;
     self.playIconView.frame = playFrame;
+    
+     CGRect durationFrame = self.durationLable.frame;
+     durationFrame.size = CGSizeMake(self.contentBackgroundView.width-5, 20);
+    CGPoint durationOrigin = CGPointMake(0,self.contentBackgroundView.height-20);
+    durationFrame.origin = durationOrigin;
+    self.durationLable.frame = durationFrame;
 }
 
 - (void)layoutSubviews{
@@ -91,6 +116,16 @@
     return _playIconView;
 }
 
+- (UILabel *)durationLable{
+    if (!_durationLable) {
+        _durationLable = [[UILabel alloc] init];
+        _durationLable.backgroundColor = [UIColor clearColor];
+        [_durationLable setTextColor:[UIColor whiteColor]];
+        _durationLable.font = [UIFont systemFontOfSize:13];
+        _durationLable.textAlignment = NSTextAlignmentRight;
+    }
+    return _durationLable;
+}
 #pragma mark ----- Getter ---------
 - (void)longPressBGView:(UIGestureRecognizer *)gestureRecognizer{
     [super longPressBGView:gestureRecognizer];

@@ -465,7 +465,7 @@ PhotonAudioRecorderDelegate>
                      [[NSFileManager defaultManager] removeItemAtURL:model.videoURL error:nil];
                  }
                  if (self.delegate && [self.delegate respondsToSelector:@selector(sendVideoMessage:duraion:)]) {
-                     [self.delegate sendVideoMessage:fileName duraion:model.videoDuration];
+                     [self.delegate sendVideoMessage:fileName duraion:model.videoDuration + 1];
                  }
 //                [weakSelf compressVideo:model.videoURL completion:^(NSURL * videoURL) {
 //
