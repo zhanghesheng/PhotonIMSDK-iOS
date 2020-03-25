@@ -109,7 +109,7 @@
     self.navBarTranslucent = YES;
     self.bottomViewTranslucent = YES;
     self.selectVideoBeyondTheLimitTimeAutoEdit = NO;
-    self.videoAutoPlayType = HXVideoAutoPlayTypeNormal;
+    self.videoAutoPlayType = HXVideoAutoPlayTypeWiFi;
     
     self.downloadNetworkVideo = YES;
 }

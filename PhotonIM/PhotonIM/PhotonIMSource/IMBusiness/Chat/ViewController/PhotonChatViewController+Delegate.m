@@ -91,7 +91,6 @@
 #pragma mark --------- PhotonBaseChatCellDelegate ---------
 // 点击内容背景
 - (void)chatCell:(PhotonChatBaseCell *)cell chatMessageCellTap:(PhotonChatBaseItem *)chatItem{
-    
     // 图片单击事件（预览大图）
     if([cell isKindOfClass:[PhotonChatImageMessageCell class]] || [cell isKindOfClass:[PhotonChatVideoMessageCell class]]){
         NSMutableArray *imageItems = [[NSMutableArray alloc] init];
