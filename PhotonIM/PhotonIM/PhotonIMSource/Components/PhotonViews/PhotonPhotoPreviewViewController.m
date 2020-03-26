@@ -26,6 +26,7 @@
 #import <PhotonIMSDK/PhotonIMSDK.h>
 #import "PhotonUtil.h"
 #import "PhotonMacros.h"
+#import "UIButton+HXExtension.h"
 @interface PhotonPhotoPreviewViewController ()
 <
 UICollectionViewDataSource,
@@ -58,7 +59,7 @@ HXVideoEditViewControllerDelegate
 @property (strong, nonatomic) UIView *btnView;
 @property (assign, nonatomic) BOOL statusBarShouldBeHidden;
 @property (assign, nonatomic) BOOL layoutSubviewsCompletion;
-
+@property (strong, nonatomic) HXHUD *loadingView;
 @end
 
 @implementation PhotonPhotoPreviewViewController
@@ -309,7 +310,7 @@ HXVideoEditViewControllerDelegate
    
    
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(SAFEAREA_INSETS_BOTTOM);
+        make.top.mas_equalTo(0);
         make.height.mas_equalTo(64);
         make.left.right.mas_equalTo(0);
     }];
@@ -380,11 +381,14 @@ HXVideoEditViewControllerDelegate
     if (!model) {
         return;
     }
+     [self.view hx_immediatelyShowLoadingHudWithText:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(downloadImage:completion:)]) {
         __weak typeof(self)weakSelf = self;
         [self.delegate downloadImage:model completion:^(UIImage * _Nonnull image) {
             [PhotonUtil runMainThread:^{
+                [weakSelf.view hx_handleLoading:NO];
                 [weakSelf saveMessage:image];
+                
             }];
            
         }];
@@ -397,6 +401,8 @@ HXVideoEditViewControllerDelegate
      } completionHandler:^(BOOL success, NSError * _Nullable error) {
          if(success){
              [PhotonUtil showSuccessHint:@"图片已存储到相册"];
+         }else{
+             [PhotonUtil showSuccessHint:@"图片存储到相册失败"];
          }
     }];
 }
@@ -410,13 +416,20 @@ HXVideoEditViewControllerDelegate
     }
     __weak typeof(self)weakSelf = self;
     HXPhotoPreviewViewCell *cell = (HXPhotoPreviewViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:self.currentModelIndex inSection:0]];
+   [self.view hx_immediatelyShowLoadingHudWithText:nil];
     if (self.delegate && [self.delegate respondsToSelector:@selector(viewOriginImage:completion:)]) {
         [self.delegate viewOriginImage:model completion:^(UIImage * _Nonnull image) {
             [PhotonUtil runMainThread:^{
                 if (cell){
-                    model.cameraPhotoType = HXPhotoModelMediaTypeCameraPhotoTypeLocal;
-                    [weakSelf showViewOriginBtn:model];
-                    [cell setImage:image];
+                    if (image) {
+                        [weakSelf.view hx_handleLoading:NO];
+                        model.cameraPhotoType = HXPhotoModelMediaTypeCameraPhotoTypeLocal;
+                        [weakSelf showViewOriginBtn:model];
+                        [cell setImage:image];
+                    }else{
+                        [weakSelf.view hx_handleLoading:NO];
+                    }
+                   
                 }
             }];
 
@@ -776,6 +789,22 @@ HXVideoEditViewControllerDelegate
         _modelArray = [NSMutableArray array];
     }
     return _modelArray;
+}
+
+- (HXHUD *)loadingView {
+    if (!_loadingView) {
+        _loadingView = [[HXHUD alloc] initWithFrame:CGRectMake(0, 0, 95, 95) imageName:nil text:nil];
+        [_loadingView showloading];
+    }
+    return _loadingView;
+}
+
+-(void)showLoadingView{
+    [self.view addSubview:self.loadingView];
+    self.loadingView.center = self.view.center;
+}
+- (void)hiddenLoadingView{
+    [self.loadingView removeFromSuperview];
 }
 
 @end

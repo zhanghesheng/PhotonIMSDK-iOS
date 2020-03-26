@@ -117,6 +117,8 @@
 - (HXPreviewImageView *)imageView {
     if (!_imageView) {
         _imageView = [[HXPreviewImageView alloc] init];
+        _imageView.backgroundColor= [UIColor clearColor];
+        _imageView.contentMode = UIViewContentModeScaleAspectFill;
         HXWeakSelf
         _imageView.downloadNetworkImageComplete = ^{
             if (weakSelf.downloadNetworkImageComplete) {

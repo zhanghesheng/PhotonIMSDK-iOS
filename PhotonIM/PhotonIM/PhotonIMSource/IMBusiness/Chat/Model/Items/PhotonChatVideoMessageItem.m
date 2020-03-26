@@ -19,7 +19,7 @@
 - (CGSize)contentSize{
     CGFloat scale = 1.5;
     CGSize imageSize = CGSizeZero;
-    CGFloat defaultWith = PhotoScreenWidth * 0.2;
+    CGFloat defaultWith = PhotoScreenWidth * 0.3;
     CGFloat realHeight = defaultWith * scale;
     imageSize = CGSizeMake(defaultWith, realHeight);
     return imageSize;

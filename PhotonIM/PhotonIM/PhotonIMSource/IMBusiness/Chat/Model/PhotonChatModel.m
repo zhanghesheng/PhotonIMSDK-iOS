@@ -206,6 +206,7 @@
             imageItem.whRatio = imgBody.whRatio;
             
             imageItem.userInfo = message;
+            imageItem.whRatio = imgBody.whRatio;
             resultItem = imageItem;
         }
             break;

@@ -97,7 +97,6 @@
         int count = 0;
         int index = -1;
         for (PhotonChatBaseItem *item in self.dataSource.items) {
-           
             if ([item isKindOfClass:[PhotonChatImageMessageItem class]]) {
                 PhotonIMMessage *message = item.userInfo;
                 if (!message) {
@@ -110,7 +109,6 @@
                 PhotonIMImageBody *msgBody = (PhotonIMImageBody *)[message messageBody];
                 BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message
                                                                            fileQuality:PhotonIMDownloadFileQualityOrigin];
-                
                 HXPhotoModel *model = [HXPhotoModel photoModelWithImageURL:[NSURL URLWithString:[msgBody url]?:@""] thumbURL:[NSURL URLWithString:[msgBody bigURL]?:@""]];
                  model.userInfo = message;
                 if (exist && [msgBody localFilePath]) {
@@ -130,10 +128,11 @@
                 HXPhotoModel *model = nil;
                 BOOL exist = [[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin];
                 if (exist) {
-                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL fileURLWithPath:videoBody.localFilePath] videoCoverURL:[NSURL URLWithString:@""] videoDuration:videoBody.mediaTime];
+                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL fileURLWithPath:videoBody.localFilePath?:@""] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl?:@""] videoDuration:videoBody.mediaTime];
                     model.cameraVideoType = HXPhotoModelMediaTypeCameraVideoTypeLocal;
+                    model.previewPhoto = [(PhotonChatVideoMessageItem *)item coverImage];
                 }else{
-                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl] videoDuration:videoBody.mediaTime];
+                    model = [HXPhotoModel photoModelWithNetworkVideoURL:[NSURL URLWithString:videoBody.url?:@""] videoCoverURL:[NSURL URLWithString:videoBody.coverUrl?:@""] videoDuration:videoBody.mediaTime];
                     model.cameraVideoType = HXPhotoModelMediaTypeCameraVideoTypeNetWork;
                 }
                 model.userInfo = message;
@@ -182,7 +181,7 @@
             }else{
                 [[PhotonMessageCenter sharedCenter] insertOrUpdateMessage:message];
                 PhotonWeakSelf(self);
-                [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
                     [weakself playAudioSource:filePath cell:voiceCell];
                 }];
             }
@@ -202,7 +201,6 @@
     }
     
     if([cell isKindOfClass:[PhotonChatFileMessageCell class]]){
-         PhotonWeakSelf(self)
         PhotonChatFileMessageItem *fileItem = (PhotonChatFileMessageItem *)chatItem;
         PhotonIMMessage *message = fileItem.userInfo;
         __block NSString *fileLocalPath = [[message messageBody] localFilePath];
@@ -211,21 +209,42 @@
             fileLocalPath = fileItem.filePath;
         }
         
-        if ([[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin]) {
-             [self previewFile:fileLocalPath fileName:fileName message:message];
+        if ([[PhotonIMClient sharedClient] fileExistsLocalWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin] && fileLocalPath) {
+            [self previewFile:fileLocalPath fileName:fileName message:message];
         }else{
-            [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
-                [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
-            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
-                [PhotonUtil runMainThread:^{
-                    [cell changeProgressValue:1.0];
-                    fileLocalPath = filePath;
-                    [weakself previewFile:filePath fileName:fileName message:message];
-                }];
-            }];
+            [[PhotonMessageCenter sharedCenter] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin userInfo:fileName];
         }
-
     }
+}
+
+- (void)downLoadProgress:(NSProgress *)downloadProgress userInfo:(id)userInfo{
+    NSArray *items = [self.model.items copy];
+    NSInteger index = 0;
+    for (PhotonChatBaseItem *item in items) {
+        if ([[item.userInfo messageID] isEqualToString:[userInfo messageID]]) {
+            index = [items indexOfObject:item];
+            break;
+        }
+    }
+    PhotonChatFileMessageCell *cell = (PhotonChatFileMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
+}
+
+- (void)downLoadCompletion:(NSString *)filePath fileName:(nonnull NSString *)fileName userInfo:(nonnull id)userInfo{
+     [self previewFile:filePath?:@"" fileName:fileName message:userInfo];
+}
+
+- (void)progress:(NSProgress *)downloadProgress message:(PhotonIMMessage *)message{
+    NSArray *items = [self.model.items copy];
+    NSInteger index = 0;
+    for (PhotonChatBaseItem *item in items) {
+        if ([[item.userInfo messageID] isEqualToString:[message messageID]]) {
+            index = [items indexOfObject:item];
+            break;
+        }
+    }
+    PhotonChatFileMessageCell *cell = (PhotonChatFileMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
 }
 
 - (void)previewFile:(NSString *)filePath fileName:(NSString *)fileName message:(PhotonIMMessage *)message{
@@ -444,7 +463,7 @@
     if (message && [message isKindOfClass:[PhotonIMMessage class]]) {
         id msgBody = [message messageBody];
         if (msgBody && [msgBody isKindOfClass:[PhotonIMImageBody class]]) {
-            [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+            [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:nil completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
                 UIImage *image = [UIImage imageWithContentsOfFile:filePath];
                 if (completion) {
                     completion(image);

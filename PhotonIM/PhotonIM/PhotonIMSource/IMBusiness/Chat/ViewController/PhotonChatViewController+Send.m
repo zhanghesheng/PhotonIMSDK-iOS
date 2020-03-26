@@ -274,6 +274,22 @@
         [self.navigationController pushViewController:memberListCtl animated:YES];
     }
    
+}
+
+- (void)imClient:(id)client sendResultWithMsgID:(NSString *)msgID chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith error:(PhotonIMError *)error{
+    NSArray *items = [self.model.items copy];
+    for (PhotonChatBaseItem *item in items) {
+        if ([[[item userInfo] messageID] isEqualToString:msgID]) {
+            if(error.em && error.code != 0){
+                item.tipText = error.em;
+            }
+            PhotonIMMessage *message = [[PhotonIMClient sharedClient]findMessage:chatType chatWith:chatWith msgId:msgID];
+            item.userInfo = message;
+            [self updateItem:item];
+            break;
+        }
+    }
+
     
 }
 @end

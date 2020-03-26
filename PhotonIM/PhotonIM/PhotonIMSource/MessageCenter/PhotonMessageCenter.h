@@ -20,6 +20,8 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 @protocol PhotonMessageProtocol <PhotonIMClientProtocol>
 @optional
 - (void)sendMessageResultCallBack:(PhotonIMMessage *)message;
+- (void)downLoadProgress:(NSProgress *)downloadProgress userInfo:(id)userInfo;
+- (void)downLoadCompletion:(NSString *)filePath fileName:(NSString *)fileName userInfo:(id)userInfo;
 @end
 @interface PhotonMessageCenter : NSObject
 + (instancetype)sharedCenter;
@@ -136,6 +138,10 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
  @return <#return value description#>
  */
 - (BOOL)deleteImageFile:(NSString *)chatWith fileName:(nullable NSString *)fileName;
+
+- (void)getLocalFileWithMessage:(PhotonIMMessage *)message
+                                            fileQuality:(PhotonIMDownloadFileQuality)fileQuality
+                                               userInfo:(nullable id)userInfo;
 
 #pragma mark === 数据存储 ======
 - (void)insertOrUpdateMessage:(PhotonIMMessage *)message;

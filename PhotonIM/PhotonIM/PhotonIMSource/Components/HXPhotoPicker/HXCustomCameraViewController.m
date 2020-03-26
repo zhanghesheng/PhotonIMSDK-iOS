@@ -333,6 +333,8 @@
         HXPhotoModel *model;
         if (!self.videoURL) {
             model = [HXPhotoModel photoModelWithImage:self.imageView.image];
+            [self doneCompleteWithModel:model];
+            return;
         }else {
             if (self.time < 1) {
                 [self.view hx_showImageHUDText:[NSBundle hx_localizedStringForKey:@"录制时间少于1秒"]];
@@ -341,7 +343,7 @@
             [self.playVideoView stopPlay];
             model = [HXPhotoModel photoModelWithVideoURL:self.videoURL videoTime:self.time];
         }
-         [self.view hx_immediatelyShowLoadingHudWithText:nil];
+        [self.view hx_immediatelyShowLoadingHudWithText:nil];
         model.creationDate = [NSDate date];
         model.location = self.location;
         __weak typeof(self)weakSelf = self;

@@ -67,9 +67,6 @@
         [self.contentBackgroundView addSubview:self.maskView];
         [self.maskView addSubview:self.progressView];
         
-//        [self.contentBackgroundView addSubview:self.loadingView];
-//        [self.loadingView animation];
-        
     }
     return self;
 }
@@ -261,6 +258,8 @@
     self.tipLable.text = nil;
     self.msgStatusLable.text = nil;
     self.timeLabel.text = nil;
+    self.progressView.hidden = YES;
+    self.progressView.hidden = YES;
 }
 
 + (CGFloat)tableView:(UITableView *)tableView rowHeightForObject:(id)object{

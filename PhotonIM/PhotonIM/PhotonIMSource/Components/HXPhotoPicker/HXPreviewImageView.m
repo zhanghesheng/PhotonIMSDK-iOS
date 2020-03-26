@@ -89,6 +89,18 @@
     _model = model;
     HXWeakSelf
     
+    if (model.type == HXPhotoModelMediaTypeCameraVideo) {
+        self.progressView.progress = 1;
+        self.progressView.hidden = YES;
+        self.model.downloadComplete = YES;
+        self.animatedImageView.image = model.previewPhoto;
+        if (self.downloadICloudAssetComplete) {
+            self.downloadICloudAssetComplete();
+        }
+        if (self.downloadNetworkImageComplete) {
+            self.downloadNetworkImageComplete();
+        }
+    }
 
     if (model.type == HXPhotoModelMediaTypeCameraPhoto || model.type == HXPhotoModelMediaTypeCameraVideo) {
         if (model.networkPhotoUrl) {
@@ -115,10 +127,24 @@
                         self.downloadNetworkImageComplete();
                     }
                 }else{
-                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:fileQuality progress:^(NSProgress * _Nonnull downloadProgress) {
+                    UIImage *image = [UIImage imageWithContentsOfFile:model.fileLocalURL.path];
+                    if (image) {
+                        self.progressView.progress = 1;
+                        self.progressView.hidden = YES;
+                        self.model.downloadComplete = YES;
+                        self.animatedImageView.image = image;
+                        if (self.downloadICloudAssetComplete) {
+                            self.downloadICloudAssetComplete();
+                        }
+                        if (self.downloadNetworkImageComplete) {
+                            self.downloadNetworkImageComplete();
+                        }
+                         [[SDWebImageManager sharedManager].imageCache storeImage:image forKey:model.fileLocalURL.lastPathComponent toDisk:NO completion:nil];
+                    }
+                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:fileQuality progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
                          CGFloat pro = (CGFloat)downloadProgress.completedUnitCount / downloadProgress.totalUnitCount;
                          weakSelf.progressView.progress = pro;
-                    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+                    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
                         if ((!filePath || filePath.length == 0) || error) {
                              [weakSelf.progressView showError];
                         }else{

@@ -71,7 +71,7 @@
 - (void)p_layoutViews{
     PhotonChatBaseItem *item = (PhotonChatBaseItem *)self.item;
     CGRect contentBackgroundViewFrame = self.contentBackgroundView.frame;
-    contentBackgroundViewFrame.size = CGSizeMake(item.contentSize.width + MSG_SPACE_RIGHT + MSG_SPACE_LEFT, item.contentSize.height + MSG_SPACE_TOP + MSG_SPACE_BTM);
+    contentBackgroundViewFrame.size = CGSizeMake(item.contentSize.width, item.contentSize.height);
     CGFloat contentBackgroundViewLeft = 0;
     if (item.fromType == PhotonChatMessageFromSelf) {
         contentBackgroundViewLeft = contentBackgroundViewFrame.origin.x-contentBackgroundViewFrame.size.width;

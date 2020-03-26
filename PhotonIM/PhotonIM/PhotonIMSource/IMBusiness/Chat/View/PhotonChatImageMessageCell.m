@@ -29,9 +29,11 @@
     if (!self.item) {
         return;
     }
+//    self.contentBackgroundView.contentMode =  UIViewContentModeScaleAspectFit;
+//    self.contentBackgroundView.backgroundColor = [UIColor clearColor];
     PhotonChatImageMessageItem *imageItem = (PhotonChatImageMessageItem *)object;
     NSURL *fileURL = nil;
-    if (imageItem.localPath) {
+    if (imageItem.localPath && imageItem.localPath.length > 0) {
         [self.contentBackgroundView setImage:[UIImage imageWithContentsOfFile:imageItem.localPath?:@""]];
     }else{
         if (imageItem.thumURL) {
@@ -56,7 +58,7 @@
 - (void)p_layoutViews{
     PhotonChatBaseItem *item = (PhotonChatBaseItem *)self.item;
     CGRect contentBackgroundViewFrame = self.contentBackgroundView.frame;
-    contentBackgroundViewFrame.size = CGSizeMake(item.contentSize.width + MSG_SPACE_RIGHT + MSG_SPACE_LEFT, item.contentSize.height + MSG_SPACE_TOP + MSG_SPACE_BTM);
+    contentBackgroundViewFrame.size = CGSizeMake(item.contentSize.width , item.contentSize.height);
     CGFloat contentBackgroundViewLeft = 0;
     if (item.fromType == PhotonChatMessageFromSelf) {
         contentBackgroundViewLeft = contentBackgroundViewFrame.origin.x-contentBackgroundViewFrame.size.width;

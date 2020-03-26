@@ -577,4 +577,25 @@ static PhotonMessageCenter *center = nil;
     }
     return _netService;
 }
+
+- (void)getLocalFileWithMessage:(PhotonIMMessage *)message
+                    fileQuality:(PhotonIMDownloadFileQuality)fileQuality
+                       userInfo:(nullable id)userInfo{
+    __weak typeof(self)weakself = self;
+    [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin userInfo:userInfo progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
+        NSHashTable *_observer = [weakself.observers copy];
+        for (id<PhotonMessageProtocol> observer in _observer) {
+            if (observer && [observer respondsToSelector:@selector(downLoadProgress:userInfo:)]) {
+                [observer downLoadProgress:downloadProgress userInfo:message];
+            }
+        }
+    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
+        NSHashTable *_observer = [weakself.observers copy];
+        for (id<PhotonMessageProtocol> observer in _observer) {
+            if (observer && [observer respondsToSelector:@selector(downLoadCompletion:fileName:userInfo:)]) {
+                [observer downLoadCompletion:filePath fileName:userInfo userInfo:message];
+            }
+        }
+    }];
+}
 @end

@@ -86,9 +86,9 @@
     }else if (model.cameraVideoType == HXPhotoModelMediaTypeCameraVideoTypeNetWork) {
         if (self.model.userInfo && [self.model.userInfo isKindOfClass:[PhotonIMMessage class]]) {
              [self showLoading];
-            self.photonIMFileTask = [[PhotonIMClient sharedClient] getLocalFileWithMessage:self.model.userInfo fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
+            [[PhotonIMClient sharedClient] getLocalFileWithMessage:self.model.userInfo fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
 
-            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
+            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
                 if (error) {
                     weakSelf.videoLoadFailed = YES;
                     [weakSelf hideLoading];
@@ -97,7 +97,6 @@
                     if (filePath) {
                         [weakSelf requestAVAssetComplete:[AVAsset assetWithURL:[NSURL fileURLWithPath:filePath]]];
                     }
-
                 }
             }];
             return;
@@ -106,6 +105,7 @@
 }
 
 - (void)requestAVAssetComplete:(AVAsset *)avAsset {
+     [self hideLoading];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategorySoloAmbient error: nil];
     self.avAsset = avAsset;
@@ -121,10 +121,6 @@
     if (!self.stopCancel && self.videoDownloadTask) {
         [self.videoDownloadTask cancel];
         self.videoDownloadTask = nil;
-    }
-    if (self.photonIMFileTask) {
-        [self.photonIMFileTask cancelTask];
-        self.photonIMFileTask = nil;
     }
     if (self.requestID) {
         [[PHImageManager defaultManager] cancelImageRequest:self.requestID];
@@ -391,7 +387,7 @@
 - (AVPlayerLayer *)playerLayer {
     if (!_playerLayer) {
         _playerLayer = [[AVPlayerLayer alloc] init];
-        _playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
         _playerLayer.player = self.player;
     }
     return _playerLayer;
