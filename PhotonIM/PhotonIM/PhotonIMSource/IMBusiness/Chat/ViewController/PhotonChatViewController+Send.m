@@ -60,7 +60,6 @@
         }
         [weakself updateItem:textItem];
     }];
-    
 }
 
 // 发送图片消息
@@ -193,6 +192,7 @@
     fileItem.fileSize = [NSString stringWithFormat:@"%.2f k",(float)body.fileSize/1024.0];
     fileItem.fileICon = [UIImage imageNamed:@"chatfile"];
     fileItem.filePath = body.localFilePath;
+    fileItem.avatalarImgaeURL = [PhotonContent userDetailInfo].avatarURL;
     PhotonWeakSelf(self)
     [[PhotonMessageCenter sharedCenter] sendFileMessage:fileItem conversation:self.conversation readyCompletion:^(PhotonIMMessage * _Nullable message) {
          fileItem.filePath = [message messageBody].localFilePath;
@@ -276,20 +276,17 @@
    
 }
 
-- (void)imClient:(id)client sendResultWithMsgID:(NSString *)msgID chatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith error:(PhotonIMError *)error{
+- (void)imClient:(id)client sendResultWithMessage:(PhotonIMMessage *)message succceed:(BOOL)succceed error:(PhotonIMError *)error{
     NSArray *items = [self.model.items copy];
-    for (PhotonChatBaseItem *item in items) {
-        if ([[[item userInfo] messageID] isEqualToString:msgID]) {
-            if(error.em && error.code != 0){
-                item.tipText = error.em;
-            }
-            PhotonIMMessage *message = [[PhotonIMClient sharedClient]findMessage:chatType chatWith:chatWith msgId:msgID];
-            item.userInfo = message;
-            [self updateItem:item];
-            break;
-        }
-    }
-
-    
+       for (PhotonChatBaseItem *item in items) {
+           if ([[[item userInfo] messageID] isEqualToString:message.messageID]) {
+               if(!succceed){
+                   item.tipText = error.em;
+               }
+               item.userInfo = message;
+               [self updateItem:item];
+               break;
+           }
+       }
 }
 @end

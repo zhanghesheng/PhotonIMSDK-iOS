@@ -20,8 +20,8 @@ typedef void(^CompletionBlock) (BOOL succeed, PhotonIMError * _Nullable error);
 @protocol PhotonMessageProtocol <PhotonIMClientProtocol>
 @optional
 - (void)sendMessageResultCallBack:(PhotonIMMessage *)message;
-- (void)downLoadProgress:(NSProgress *)downloadProgress userInfo:(id)userInfo;
-- (void)downLoadCompletion:(NSString *)filePath fileName:(NSString *)fileName userInfo:(id)userInfo;
+- (void)fileTransportProgress:(NSProgress *)downloadProgress userInfo:(id)userInfo;
+- (void)fileTransportCompletion:(NSString *)filePath fileName:(NSString *)fileName userInfo:(id)userInfo;
 @end
 @interface PhotonMessageCenter : NSObject
 + (instancetype)sharedCenter;

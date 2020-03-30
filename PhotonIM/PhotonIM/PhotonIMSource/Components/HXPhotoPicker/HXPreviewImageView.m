@@ -141,10 +141,10 @@
                         }
                          [[SDWebImageManager sharedManager].imageCache storeImage:image forKey:model.fileLocalURL.lastPathComponent toDisk:NO completion:nil];
                     }
-                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:fileQuality progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
+                    [[PhotonIMClient sharedClient] getLocalFileWithMessage:model.userInfo fileQuality:fileQuality progress:^(NSProgress * _Nonnull downloadProgress) {
                          CGFloat pro = (CGFloat)downloadProgress.completedUnitCount / downloadProgress.totalUnitCount;
                          weakSelf.progressView.progress = pro;
-                    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
+                    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                         if ((!filePath || filePath.length == 0) || error) {
                              [weakSelf.progressView showError];
                         }else{

@@ -301,7 +301,15 @@ static PhotonMessageCenter *center = nil;
 - (void)_sendMessage:(nullable PhotonIMMessage *)message readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
     PhotonWeakSelf(self);
     [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion fileUploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-        // 上传的进度
+        [PhotonUtil runMainThread:^{
+            NSHashTable *_observer = [weakself.observers copy];
+            for (id<PhotonMessageProtocol> observer in _observer) {
+                if (observer && [observer respondsToSelector:@selector(fileTransportProgress:userInfo:)]) {
+                    [observer fileTransportProgress:uploadProgress userInfo:message];
+                }
+            }
+        }];
+
     }  completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
         [PhotonUtil runMainThread:^{
             if (!succeed && error.code >= 1000) {
@@ -336,7 +344,7 @@ static PhotonMessageCenter *center = nil;
     if (!syncServer) {
         [self clearMessagesWithChatType:chatType chatWith:chatWith];
     }else{
-        [self  clear:@"" chatType:chatType chatWith:chatWith completion:completion];
+        [self clear:@"" chatType:chatType chatWith:chatWith completion:completion];
     }
 }
 
@@ -559,7 +567,9 @@ static PhotonMessageCenter *center = nil;
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
+            
             [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
+            
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);
@@ -582,18 +592,18 @@ static PhotonMessageCenter *center = nil;
                     fileQuality:(PhotonIMDownloadFileQuality)fileQuality
                        userInfo:(nullable id)userInfo{
     __weak typeof(self)weakself = self;
-    [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin userInfo:userInfo progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
+    [[PhotonIMClient sharedClient] getLocalFileWithMessage:message fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
         NSHashTable *_observer = [weakself.observers copy];
         for (id<PhotonMessageProtocol> observer in _observer) {
-            if (observer && [observer respondsToSelector:@selector(downLoadProgress:userInfo:)]) {
-                [observer downLoadProgress:downloadProgress userInfo:message];
+            if (observer && [observer respondsToSelector:@selector(fileTransportProgress:userInfo:)]) {
+                [observer fileTransportProgress:downloadProgress userInfo:message];
             }
         }
-    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
+    } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
         NSHashTable *_observer = [weakself.observers copy];
         for (id<PhotonMessageProtocol> observer in _observer) {
-            if (observer && [observer respondsToSelector:@selector(downLoadCompletion:fileName:userInfo:)]) {
-                [observer downLoadCompletion:filePath fileName:userInfo userInfo:message];
+            if (observer && [observer respondsToSelector:@selector(fileTransportCompletion:fileName:userInfo:)]) {
+                [observer fileTransportCompletion:filePath fileName:userInfo userInfo:message];
             }
         }
     }];

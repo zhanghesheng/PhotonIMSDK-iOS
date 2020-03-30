@@ -86,9 +86,9 @@
     }else if (model.cameraVideoType == HXPhotoModelMediaTypeCameraVideoTypeNetWork) {
         if (self.model.userInfo && [self.model.userInfo isKindOfClass:[PhotonIMMessage class]]) {
              [self showLoading];
-            [[PhotonIMClient sharedClient] getLocalFileWithMessage:self.model.userInfo fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress,id userInfo) {
+            [[PhotonIMClient sharedClient] getLocalFileWithMessage:self.model.userInfo fileQuality:PhotonIMDownloadFileQualityOrigin progress:^(NSProgress * _Nonnull downloadProgress) {
 
-            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error,id userInfo) {
+            } completion:^(NSString * _Nullable filePath, NSError * _Nullable error) {
                 if (error) {
                     weakSelf.videoLoadFailed = YES;
                     [weakSelf hideLoading];
