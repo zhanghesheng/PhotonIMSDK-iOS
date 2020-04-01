@@ -19,5 +19,6 @@ target :PhotonIM do
 #    pod 'PhotonIMSDK',:path => '../'
     pod 'PhotonPushSDK','1.0.2'
     pod 'PhotonIMSDK','2.2.2'
+    pod 'MMPlayer','1.0.13'
 
 end
