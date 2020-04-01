@@ -191,6 +191,7 @@ static PhotonMessageCenter *center = nil;
     item.userInfo = message;
     // 先做语音上传处理，获得资源地址后构建图片消息对象发送消息
     [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
+
 }
 
 - (void)sendVideoMessage:(nullable PhotonChatVideoMessageItem *)item
@@ -206,6 +207,8 @@ static PhotonMessageCenter *center = nil;
     
     [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
     
+
+    
 }
 
 - (void)sendFileMessage:(PhotonChatFileMessageItem *)item
@@ -217,7 +220,6 @@ static PhotonMessageCenter *center = nil;
     [message setMesageBody:fileBody];
     item.userInfo = message;
     [self _sendMessage:message readyCompletion:readyCompletion completion:completion];
-
 }
 
 - (void)sendLocationMessage:(PhotonChatLocationItem *)item conversation:(nullable PhotonIMConversation *)conversation readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable CompletionBlock)completion{
