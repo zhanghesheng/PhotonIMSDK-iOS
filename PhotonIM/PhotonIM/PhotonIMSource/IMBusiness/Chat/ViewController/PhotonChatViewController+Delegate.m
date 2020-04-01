@@ -231,15 +231,18 @@
 
 - (void)_fileTransportProgress:(NSProgress *)downloadProgress userInfo:(id)userInfo{
     NSArray *items = [self.model.items copy];
-       NSInteger index = 0;
-       for (PhotonChatBaseItem *item in items) {
-           if ([[item.userInfo messageID] isEqualToString:[userInfo messageID]]) {
-               index = [items indexOfObject:item];
-               break;
-           }
-       }
-       PhotonChatFileMessageCell *cell = (PhotonChatFileMessageCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-       [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
+    NSInteger index = 0;
+    for (PhotonChatBaseItem *item in items) {
+        if ([[item.userInfo messageID] isEqualToString:[userInfo messageID]]) {
+            index = [items indexOfObject:item];
+            break;
+        }
+    }
+    id cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+    if ([cell isKindOfClass:[PhotonChatBaseCell class]] && [[cell class] respondsToSelector:@selector(changeProgressValue:)]) {
+        [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
+    }
+
 }
 - (void)imClient:(id)client downloadCompletionWithMessage:(PhotonIMMessage *)message filePath:(NSString *)filePath error:(PhotonIMError *)error{
       [self previewFile:filePath?:@"" fileName:[[message messageBody] fileDisplayName] message:message];
