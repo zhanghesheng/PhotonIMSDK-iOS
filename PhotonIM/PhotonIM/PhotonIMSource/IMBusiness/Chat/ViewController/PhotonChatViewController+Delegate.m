@@ -239,7 +239,7 @@
         }
     }
     id cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-    if ([cell isKindOfClass:[PhotonChatBaseCell class]] && [[cell class] respondsToSelector:@selector(changeProgressValue:)]) {
+    if ([cell isKindOfClass:[PhotonChatBaseCell class]] && [cell respondsToSelector:@selector(changeProgressValue:)]) {
         [cell changeProgressValue:(CGFloat)((CGFloat)downloadProgress.completedUnitCount/(CGFloat)downloadProgress.totalUnitCount)];
     }
 

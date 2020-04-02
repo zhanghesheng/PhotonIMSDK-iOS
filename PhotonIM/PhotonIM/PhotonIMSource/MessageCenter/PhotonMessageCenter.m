@@ -302,33 +302,35 @@ static PhotonMessageCenter *center = nil;
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
     PhotonWeakSelf(self);
-    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion fileUploadProgress:^(NSProgress * _Nonnull uploadProgress) {
-        [PhotonUtil runMainThread:^{
-            NSHashTable *_observer = [weakself.observers copy];
-            for (id<PhotonMessageProtocol> observer in _observer) {
-                if (observer && [observer respondsToSelector:@selector(fileTransportProgress:userInfo:)]) {
-                    [observer fileTransportProgress:uploadProgress userInfo:message];
-                }
-            }
-        }];
-
-    }  completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-        [PhotonUtil runMainThread:^{
-            if (!succeed && error.code >= 1000) {
-                message.notic = error.em;
-            }
-            if (completion) {
-                completion(succeed,error);
-            }else{
-                NSHashTable *_observer = [weakself.observers copy];
-                for (id<PhotonMessageProtocol> observer in _observer) {
-                    if (observer && [observer respondsToSelector:@selector(sendMessageResultCallBack:)]) {
-                        [observer sendMessageResultCallBack:message];
-                    }
-                }
-            }
-        }];
-    }];
+//    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion fileUploadProgress:^(NSProgress * _Nonnull uploadProgress) {
+//        [PhotonUtil runMainThread:^{
+//            NSHashTable *_observer = [weakself.observers copy];
+//            for (id<PhotonMessageProtocol> observer in _observer) {
+//                if (observer && [observer respondsToSelector:@selector(fileTransportProgress:userInfo:)]) {
+//                    [observer fileTransportProgress:uploadProgress userInfo:message];
+//                }
+//            }
+//        }];
+//
+//    }  completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+//        [PhotonUtil runMainThread:^{
+//            if (!succeed && error.code >= 1000) {
+//                message.notic = error.em;
+//            }
+//            if (completion) {
+//                completion(succeed,error);
+//            }else{
+//                NSHashTable *_observer = [weakself.observers copy];
+//                for (id<PhotonMessageProtocol> observer in _observer) {
+//                    if (observer && [observer respondsToSelector:@selector(sendMessageResultCallBack:)]) {
+//                        [observer sendMessageResultCallBack:message];
+//                    }
+//                }
+//            }
+//        }];
+//    }];
+    
+    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion];
 }
 
 

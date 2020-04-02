@@ -2697,7 +2697,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"\"$(SRCROOT)/../../photon-im-ios/Products/MDAudioKit.framework\"",
+					"\"$(SRCROOT)/../../photon-im-ios/Products\"",
 					"$(PROJECT_DIR)/PhotonIM",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
@@ -2783,7 +2783,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
-					"\"$(SRCROOT)/../../photon-im-ios/Products/MDAudioKit.framework\"",
+					"\"$(SRCROOT)/../../photon-im-ios/Products\"",
 					"$(PROJECT_DIR)/PhotonIM",
 				);
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
