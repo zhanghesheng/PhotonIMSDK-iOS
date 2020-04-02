@@ -21,4 +21,5 @@ TODO: Add long description of the pod here.
   s.dependency 'protobuf-lib'
   s.dependency 'Protobuf','~>3.6.1'
   s.dependency 'MMFileService','~>1.3.0'
+  s.dependency 'openssl-lib'
 end
