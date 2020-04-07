@@ -207,7 +207,7 @@
     if([cell isKindOfClass:[PhotonChatFileMessageCell class]]){
         PhotonChatFileMessageItem *fileItem = (PhotonChatFileMessageItem *)chatItem;
         PhotonIMMessage *message = fileItem.userInfo;
-        __block NSString *fileLocalPath = [[message messageBody] localFilePath];
+        NSString *fileLocalPath = [[message messageBody] localFilePath];
         NSString *fileName = fileItem.fileName;
         if (fileItem.fromType == PhotonChatMessageFromSelf) {
             fileLocalPath = fileItem.filePath;
