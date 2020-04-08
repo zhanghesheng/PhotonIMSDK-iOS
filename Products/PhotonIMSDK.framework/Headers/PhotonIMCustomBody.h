@@ -21,8 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSData *data;
 
 + (PhotonIMCustomBody *)customBodyWithArg1:(int32_t)arg1
-                              arg2:(int32_t)arg2
-                          customData:(nullable NSData *)customData;
+                                      arg2:(int32_t)arg2
+                                customData:(nullable NSData *)customData;
 @end
 
 NS_ASSUME_NONNULL_END

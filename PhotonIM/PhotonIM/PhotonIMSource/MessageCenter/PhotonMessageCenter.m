@@ -143,9 +143,9 @@ static PhotonMessageCenter *center = nil;
     }
     [message setAtInfoWithAtType:(PhotonIMAtType)(item.type) atList:uids];
 //    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
-    PhotonIMCustomBody *body = [[PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData new]];
-    [message setMesageBody:body];
-    item.userInfo = message;
+//    PhotonIMCustomBody *body = [[PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData new]];
+//    [message setMesageBody:body];
+//    item.userInfo = message;
     
     
     [self _sendMessage:message completion:completion];
