@@ -31,8 +31,8 @@ void __Method_Swizzle__(Class cls, SEL origSel_, SEL altSel_)
 {
     if (motion == UIEventSubtypeMotionShake)
     {
-//        [DatabaseManager sharedInstance].dbDocumentPath = [[[PhotonIMClient sharedClient] getDBPath] stringByDeletingLastPathComponent];
-//        [[DatabaseManager sharedInstance] showTables];
+        [DatabaseManager sharedInstance].dbDocumentPath = [[[PhotonIMClient sharedClient] getDBPath] stringByDeletingLastPathComponent];
+        [[DatabaseManager sharedInstance] showTables];
     }
 }
 
