@@ -21,6 +21,8 @@
 		321FE3D722CF0F8E00020CCE /* UINavigation+FixSpace.m in Sources */ = {isa = PBXBuildFile; fileRef = 321FE3D622CF0F8E00020CCE /* UINavigation+FixSpace.m */; };
 		321FE3E622CF3F3600020CCE /* PhotonNetTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 321FE3E522CF3F3600020CCE /* PhotonNetTableItem.m */; };
 		321FE3E922CF3F9700020CCE /* PhotonNetTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 321FE3E822CF3F9700020CCE /* PhotonNetTableViewCell.m */; };
+		32216675244462780038E62B /* test.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 32216674244462780038E62B /* test.m4a */; };
+		32216677244464BB0038E62B /* 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 32216676244464BA0038E62B /* 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3 */; };
 		3221881E22CCA5B6007E9FA3 /* PhotonDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 322CC08822CB01A800518D58 /* PhotonDBManager.m */; };
 		3221881F22CCA5B6007E9FA3 /* PhotonDBaseStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 322CC08B22CB04DC00518D58 /* PhotonDBaseStore.m */; };
 		3221882022CCA5B6007E9FA3 /* PhotonDBUserStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 322CC09222CB0C6500518D58 /* PhotonDBUserStore.m */; };
@@ -301,6 +303,8 @@
 		321FE3E522CF3F3600020CCE /* PhotonNetTableItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonNetTableItem.m; sourceTree = "<group>"; };
 		321FE3E722CF3F9700020CCE /* PhotonNetTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonNetTableViewCell.h; sourceTree = "<group>"; };
 		321FE3E822CF3F9700020CCE /* PhotonNetTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonNetTableViewCell.m; sourceTree = "<group>"; };
+		32216674244462780038E62B /* test.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.m4a; sourceTree = "<group>"; };
+		32216676244464BA0038E62B /* 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3; sourceTree = "<group>"; };
 		3221CD2B22D754CA0029EF0A /* PhotonChatViewController+Send.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PhotonChatViewController+Send.h"; sourceTree = "<group>"; };
 		3221CD2C22D754CA0029EF0A /* PhotonChatViewController+Send.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "PhotonChatViewController+Send.m"; sourceTree = "<group>"; };
 		3221CD3722D7656F0029EF0A /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
@@ -1179,6 +1183,8 @@
 		3235758622C3128D00C0B442 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				32216676244464BA0038E62B /* 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3 */,
+				32216674244462780038E62B /* test.m4a */,
 				321FE3CF22CEEF4000020CCE /* Common.xcassets */,
 				3228700322BA552D009B6881 /* Conversation.xcassets */,
 				3228700522BA56BD009B6881 /* Mine.xcassets */,
@@ -1926,11 +1932,13 @@
 				321FE3D022CEEF4000020CCE /* Common.xcassets in Resources */,
 				32C5580E23CDD9E0007F06CE /* HXPhotoPicker.bundle in Resources */,
 				3228700422BA552D009B6881 /* Conversation.xcassets in Resources */,
+				32216677244464BB0038E62B /* 025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc.mp3 in Resources */,
 				3286B13322BB808C0032D066 /* FaceEmoji.json in Resources */,
 				3235759922C3129400C0B442 /* icon_chat_audio_playstatus_2@2x.png in Resources */,
 				3235759622C3129400C0B442 /* icon_chat_audio_playstatus_5@2x.png in Resources */,
 				3235759422C3129400C0B442 /* icon_chat_audio_playstatus_1@2x.png in Resources */,
 				3235759C22C3129400C0B442 /* icon_chat_audio_playstatus_4@2x.png in Resources */,
+				32216675244462780038E62B /* test.m4a in Resources */,
 				32286F9522B9F208009B6881 /* LaunchScreen.storyboard in Resources */,
 				3235759522C3129400C0B442 /* icon_chat_audio_playstatus_9@2x.png in Resources */,
 				3235759822C3129400C0B442 /* icon_chat_audio_playstatus_7@2x.png in Resources */,

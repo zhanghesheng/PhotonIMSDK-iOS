@@ -12,6 +12,7 @@
 #import "PhotonMessageCenter.h"
 #import "PhotonSingleSettingViewController.h"
 #import "PhotonGroupSettingViewController.h"
+#import <AVFoundation/AVFoundation.h>
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 @interface PhotonChatViewController ()
@@ -46,6 +47,7 @@
 @property (atomic, assign)BOOL scrollTop;
 @property (nonatomic,assign)BOOL loadFtsRet;
 @property (nonatomic, assign)BOOL isLoading;
+@property (nonatomic, strong)AVAudioPlayer *player;
 @end
 
 @implementation PhotonChatViewController
@@ -120,6 +122,17 @@
     
     // 添加接收消息的监听
     [[PhotonMessageCenter sharedCenter] addObserver:self];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int i = 0;
+        while (i < 1000) {
+            [NSThread sleepForTimeInterval:2];
+            i ++;
+            NSLog(@"backGroup test %@",@(i));
+        }
+    });
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -157,10 +170,17 @@
      [self.menuView dismiss];
 }
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    [self.player play];
+    [[PhotonIMClient sharedClient] keepConnectedOnBackground:YES];
+}
+
 - (void)viewDidDisappear:(BOOL)animated{
     [_panelManager dismissKeyboard];
     self.isStop = YES;
-   
+   [self.player stop];
+    [[PhotonIMClient sharedClient] keepConnectedOnBackground:NO];
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -317,5 +337,22 @@
         [self startLoadData];
     }
 }
+
+
+- (AVAudioPlayer *)player {
+    if (!_player) {
+        //后台播放音频设置
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setActive:YES error:nil];
+        [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+        [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+        NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc" withExtension:@"mp3"];
+        AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
+        audioPlayer.numberOfLoops = -1;
+        _player = audioPlayer;
+    }
+    return _player;
+}
+
 @end
 #pragma clang diagnostic pop
