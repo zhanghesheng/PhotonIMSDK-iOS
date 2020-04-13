@@ -204,6 +204,41 @@ NS_ASSUME_NONNULL_BEGIN
                 reaultBlock:(void(^)(NSArray<PhotonIMMessage *> * _Nullable,NSString * _Nullable,BOOL))result;
 
 
+///  下拉获取加载更多的会话消息（仅同步本地数据库）,此方法可设置要拉取的时间范围（beginTimeStamp<endTime且 endTime<0），如果设置的时间范围不合法，则默认依次拉取所有的消息
+/// @param chatType 会话类型
+/// @param chatWith 会话中对方的id
+/// @param anchor 开始一次查询的锚点
+/// @param beginTimeStamp 消息的起始拉取时间，比如7天前
+/// @param endTime 消息的结束拉取时间，比如当前时间
+/// @param size 每次拉去的条数
+/// @param result 回调的结果
+- (void)loadHistoryMessages:(PhotonIMChatType)chatType
+                   chatWith:(NSString *)chatWith
+                anchorMsgId:(nullable NSString *)anchor
+             beginTimeStamp:(NSTimeInterval)beginTimeStamp
+                    endTime:(NSTimeInterval)endTime
+                       size:(int)size
+                reaultBlock:(void(^)(NSArray<PhotonIMMessage *> * _Nullable,NSString * _Nullable,BOOL))result;
+
+
+///  下拉获取加载更多的会话消息（仅同步本地数据库）,此方法可设置要拉取的时间范围（beginTimeStamp<endTime且 endTime<0），如果设置的时间范围不合法，则默认依次拉取所有的消息
+/// @param chatType 会话类型
+/// @param chatWith 会话中对方的id
+/// @param messageTypeList messageTypeList
+/// @param anchor 开始一次查询的锚点
+/// @param beginTimeStamp 消息的起始拉取时间，比如7天前
+/// @param endTime 消息的结束拉取时间，比如当前时间
+/// @param size 每次拉去的条数
+/// @param result 回调的结果
+- (void)loadHistoryMessages:(PhotonIMChatType)chatType
+                   chatWith:(NSString *)chatWith
+                messageTypeList:(nullable NSArray<NSNumber *>*)messageTypeList
+                anchorMsgId:(nullable NSString *)anchor
+             beginTimeStamp:(NSTimeInterval)beginTimeStamp
+                    endTime:(NSTimeInterval)endTime
+                       size:(int)size
+                reaultBlock:(void(^)(NSArray<PhotonIMMessage *> * _Nullable,NSString * _Nullable,BOOL))result;
+
 
 /**
  同步服务端上的历史数据
