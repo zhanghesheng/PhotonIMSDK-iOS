@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
  批量保存消息到数据库
 
  @param chatType 查找的会话类型
- @param chatWith 会话中对方的id
+ @param chatWith 会话中对方的id 群组为群组id
  @param messageList 保存的消息列表，如果其中的消息已在表中，则不保存
  */
 - (void)saveMessageBatch:(PhotonIMChatType)chatType
@@ -113,7 +113,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 删除消息
 /// @param chatType 消息类型
-/// @param chatWith 会话id(会话中对方id)
+/// @param chatWith 会话id(会话中对方id) 群组为群组id
 /// @param msgId 消息id
 - (void)deleteMessageWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith msgId:(NSString *)msgId;
 
@@ -128,7 +128,7 @@ NS_ASSUME_NONNULL_BEGIN
  清空指定会话下的所有消息
  
  @param chatType 会话类型
- @param chatWith 会话中对方的id
+ @param chatWith 会话中对方的id 群组为群组id
  注:chatType 和 chatWith 二者确定会话的唯一性
  */
 - (void)clearMessagesWithChatType:(PhotonIMChatType)chatType
@@ -150,7 +150,7 @@ NS_ASSUME_NONNULL_BEGIN
 查找消息
 
 @param chatType 查找的会话类型
-@param chatWith 会话中对方的id
+@param chatWith 会话中对方的id 群组为群组id
 @param msgId 消息id
 @return <#return value description#>
 */
@@ -161,10 +161,9 @@ NS_ASSUME_NONNULL_BEGIN
  查找消息
 
  @param chatType 查找的会话类型
- @param chatWith 会话中对方的id
+ @param chatWith 会话中对方的id 群组为群组id
  @param anchorMsgId 锚点消息id （未有可为空）
  @param beforeAnchor 是否查找锚点之前的数据
- @param asc 是否为升序
  @param size 以锚点为中心，要查找的消息的个数
  @return <#return value description#>
  */
@@ -192,7 +191,7 @@ NS_ASSUME_NONNULL_BEGIN
  下拉获取加载更多的会话消息（仅同步本地数据库）
 
  @param chatType 会话类型
- @param chatWith 会话中对方的id
+ @param chatWith 会话中对方的id 群组为群组id
  @param anchor 开始一次查询的锚点
  @param size 每次查询的条数
  @param result 回调的数据结构是查询到数据对象
@@ -206,7 +205,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///  下拉获取加载更多的会话消息（仅同步本地数据库）,此方法可设置要拉取的时间范围（beginTimeStamp<endTime且 endTime<0），如果设置的时间范围不合法，则默认依次拉取所有的消息
 /// @param chatType 会话类型
-/// @param chatWith 会话中对方的id
+/// @param chatWith 会话中对方的id 群组为群组id
 /// @param anchor 开始一次查询的锚点
 /// @param beginTimeStamp 消息的起始拉取时间，比如7天前
 /// @param endTime 消息的结束拉取时间，比如当前时间
@@ -223,7 +222,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 ///  下拉获取加载更多的会话消息（仅同步本地数据库）,此方法可设置要拉取的时间范围（beginTimeStamp<endTime且 endTime<0），如果设置的时间范围不合法，则默认依次拉取所有的消息
 /// @param chatType 会话类型
-/// @param chatWith 会话中对方的id
+/// @param chatWith 会话中对方的id 群组为群组id
 /// @param messageTypeList messageTypeList
 /// @param anchor 开始一次查询的锚点
 /// @param beginTimeStamp 消息的起始拉取时间，比如7天前
