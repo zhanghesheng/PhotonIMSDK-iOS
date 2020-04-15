@@ -572,9 +572,9 @@ static PhotonMessageCenter *center = nil;
         extra = @{@"photon_im_forbid_uploadLog":[NSString stringWithFormat:@"%@",en]};
     }
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
-//    if ([token isNotEmpty]) {
-//         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
-//    }else{
+    if ([token isNotEmpty]) {
+         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
+    }else{
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
@@ -588,7 +588,7 @@ static PhotonMessageCenter *center = nil;
             [PhotonUtil showAlertWithTitle:@"Token获取失败" message:error.errorMessage];
             [self logout];
         }];
-//    }
+    }
 }
 
 - (PhotonNetworkService *)netService{

@@ -205,7 +205,7 @@
     NSString *baseUrl = @"";
     switch (type) {
         case PhotonIMServerTypeInland:
-            baseUrl = PHOTON_BASE_HW_URL;
+            baseUrl = PHOTON_BASE_URL;
             break;
         case PhotonIMServerTypeOverseas:
             baseUrl = PHOTON_BASE_HW_URL;

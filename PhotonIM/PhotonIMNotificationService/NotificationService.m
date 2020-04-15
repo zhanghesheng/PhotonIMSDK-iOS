@@ -9,6 +9,7 @@
 #import "NotificationService.h"
 #import <CoreServices/CoreServices.h>
 #import <CommonCrypto/CommonDigest.h>
+#import <UIKit/UIKit.h>
 #define kCacheDirectory [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0]
 typedef NS_ENUM(NSInteger,MDPushNotificationFileType)
 {
@@ -130,7 +131,9 @@ typedef NS_ENUM(NSInteger,MDPushNotificationFileType)
 
 
 - (void)request:(NSDictionary *)userInfo{
-    
+//    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
+//        
+//    }
     NSString *exData = userInfo[@"_ext"];
     // 无_ext在不打日志
     if (exData.length > 0) {
