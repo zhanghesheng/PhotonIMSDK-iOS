@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 //  国内
-static NSString* APP_ID_INLAND = @"9122fba3a09654f2972c0fde0ad19f96";//;@"280f8ef2cec41cde3bed705236ab9bc4";
+static NSString* APP_ID_INLAND = @"f89e8189cf455ed843253e447f887c85";//@"9122fba3a09654f2972c0fde0ad19f96";//;@"280f8ef2cec41cde3bed705236ab9bc4";
 
 // 海外
 static NSString* APP_ID_OVERSEAS = @"326a7a61d5e8f170957f9bf6591a7c9b";

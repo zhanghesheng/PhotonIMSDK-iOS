@@ -134,7 +134,7 @@ static PhotonMessageCenter *center = nil;
 - (void)sendTextMessage:(PhotonChatTextMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation   completion:(nullable CompletionBlock)completion{
     
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:conversation.chatType];
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
     NSMutableArray *uids = [[NSMutableArray alloc] init];
     for (PhotonChatAtInfo *atInfo in item.atInfo) {
         if ([atInfo.userid isNotEmpty]) {
@@ -142,14 +142,21 @@ static PhotonMessageCenter *center = nil;
         }
     }
     [message setAtInfoWithAtType:(PhotonIMAtType)(item.type) atList:uids];
-//    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
+    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
+    [message setMesageBody:body];
+    
+//    PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData new]];
 //    [message setMesageBody:body];
 //    item.userInfo = message;
-    NSString *str = @"hahahha";
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-    PhotonIMCustomBody *customBody = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:data];
-     [message setMesageBody:customBody];
-    item.userInfo = message;
+//
+//    PhotonIMCustomBody *customBody = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData dataWithBase64EncodedString:@"hahahha"]];
+//     [message setMesageBody:customBody];
+//    item.userInfo = message;
+//    NSString *str = @"hahahha";
+//    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+//    PhotonIMCustomBody *customBody = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:data];
+//     [message setMesageBody:customBody];
+//    item.userInfo = message;
     
     [self _sendMessage:message readyCompletion:nil  completion:completion];
     
@@ -565,9 +572,9 @@ static PhotonMessageCenter *center = nil;
         extra = @{@"photon_im_forbid_uploadLog":[NSString stringWithFormat:@"%@",en]};
     }
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
-    if ([token isNotEmpty]) {
-         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
-    }else{
+//    if ([token isNotEmpty]) {
+//         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
+//    }else{
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
@@ -581,7 +588,7 @@ static PhotonMessageCenter *center = nil;
             [PhotonUtil showAlertWithTitle:@"Token获取失败" message:error.errorMessage];
             [self logout];
         }];
-    }
+//    }
 }
 
 - (PhotonNetworkService *)netService{
