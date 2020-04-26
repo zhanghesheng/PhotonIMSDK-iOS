@@ -145,18 +145,7 @@ static PhotonMessageCenter *center = nil;
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
     
-//    PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData new]];
-//    [message setMesageBody:body];
-//    item.userInfo = message;
-//
-//    PhotonIMCustomBody *customBody = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:[NSData dataWithBase64EncodedString:@"hahahha"]];
-//     [message setMesageBody:customBody];
-//    item.userInfo = message;
-//    NSString *str = @"hahahha";
-//    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-//    PhotonIMCustomBody *customBody = [PhotonIMCustomBody customBodyWithArg1:100 arg2:100 customData:data];
-//     [message setMesageBody:customBody];
-//    item.userInfo = message;
+    item.userInfo = message;
     
     [self _sendMessage:message readyCompletion:nil  completion:completion];
     
