@@ -33,7 +33,9 @@ typedef NS_ENUM(NSInteger,MDPushNotificationFileType)
     self.bestAttemptContent = [request.content mutableCopy];
    
     NSDictionary *dict = self.bestAttemptContent.userInfo;
+    // 上传到达统计
     [self request:dict];
+    // 下载图片
     if ([dict isKindOfClass:[NSDictionary class]] && dict.count > 0) {
         NSDictionary *apsDict = dict[@"aps"];
         
@@ -78,6 +80,7 @@ typedef NS_ENUM(NSInteger,MDPushNotificationFileType)
     }
 }
 
+#pragma mark 图片下载逻辑
 - (void)loadAttachmentWithUrlString:(NSString *)urlStr completionHandle:(void(^)(UNNotificationAttachment *aAttachment))completionHandler
 {
     __block UNNotificationAttachment *attachment = nil;
@@ -130,10 +133,9 @@ typedef NS_ENUM(NSInteger,MDPushNotificationFileType)
 }
 
 
+
+#pragma mark === 到达统计逻辑 ====
 - (void)request:(NSDictionary *)userInfo{
-//    if([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive){
-//        
-//    }
     NSString *exData = userInfo[@"_ext"];
     // 无_ext在不打日志
     if (exData.length > 0) {
