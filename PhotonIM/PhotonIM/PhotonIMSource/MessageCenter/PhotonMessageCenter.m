@@ -712,7 +712,7 @@ static PhotonMessageCenter *center = nil;
     }
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
     if ([token isNotEmpty]) {
-         [[PhotonIMClient sharedClient] loginWithToken:@"322" extra:extra];
+         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
     }else{
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
@@ -720,7 +720,6 @@ static PhotonMessageCenter *center = nil;
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
             [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
             
-           
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);
