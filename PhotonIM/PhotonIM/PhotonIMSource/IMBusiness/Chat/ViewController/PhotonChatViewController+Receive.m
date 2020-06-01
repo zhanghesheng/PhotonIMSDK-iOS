@@ -48,6 +48,20 @@
     [self wrapperReadMessage:message];
 }
 
+- (void)imClient:(id)client didReceiveChennalMesage:(NSString *)msgId fromid:(NSString *)fromid toid:(NSString *)toid msgBody:(PhotonIMCustomBody *)msgBody{
+      PhotonChatMessageFromType fromeType = [fromid isEqualToString:[PhotonContent currentUser].userID]?PhotonChatMessageFromSelf:PhotonChatMessageFromFriend;
+    PhotonChatTextMessageItem *textItem = [[PhotonChatTextMessageItem alloc] init];
+    textItem.fromType = fromeType;
+    textItem.timeStamp = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    textItem.messageText = [[NSString alloc] initWithData:msgBody.data encoding:NSUTF8StringEncoding];
+    textItem.userInfo = [PhotonIMMessage commonMessageWithFrid:fromid toid:toid messageType:PhotonIMMessageTypeText chatType:PhotonIMChatTypeSingle];
+    NSString *avatarUrl = [PhotonContent friendDetailInfo:fromid].avatarURL;
+    textItem.avatalarImgaeURL = avatarUrl;
+
+    [self addItem:textItem];
+
+    
+}
 #pragma mark ------ Private Method---------
 // 处理二人聊天收到的信息
 - (void)wrapperMessage:(PhotonIMMessage *)message{
