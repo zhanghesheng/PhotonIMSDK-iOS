@@ -29,8 +29,6 @@
     [self registerPushSDK];
     
     PhotonIMClientConfig *config = [[PhotonIMClientConfig alloc] init];
-    application.delegate = config;
-    [MoPushManager setAppDelegate:config];
     [MoPushManager setNotiCenterDelegate:config];
     UNUserNotificationCenter.currentNotificationCenter.delegate = config;
     [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
@@ -103,7 +101,7 @@
      [[NSUserDefaults standardUserDefaults] setValue:[@([[NSDate date] timeIntervalSince1970]) stringValue] forKey:@"timeStamp_pushqq"];
     if ([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         NSDictionary *dict = response.notification.request.content.userInfo;
-        NSLog(@"%@",dict[@"gotoStr"]);
+        NSLog(@"%@",[dict description]);
     }
     completionHandler();
 }

@@ -164,7 +164,7 @@ static PhotonMessageCenter *center = nil;
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
     [message setMesageBody:body];
     item.userInfo = message;
-    
+    self.timeOut = 0;
     if (type == 0 || type== 4) {
          self.timeOut = 0;
          [self _sendMessage:message timeout:self.timeOut completion:completion];
@@ -198,7 +198,7 @@ static PhotonMessageCenter *center = nil;
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:text];
     [message setMesageBody:body];
     
-    [self _sendMessage:message timeout:self.timeOut completion:completion];
+    [self _sendMessage:message timeout:0 completion:completion];
     
 }
 
@@ -710,9 +710,9 @@ static PhotonMessageCenter *center = nil;
     return res;
 }
 
-- (void)imClient:(id)client didReceiveCustomMesage:(PhotonIMMessage *)message{
-    [PhotonUtil showInfoHint:@"这是自定义消息"];
-}
+//- (void)imClient:(id)client didReceiveCustomMesage:(PhotonIMMessage *)message{
+//    [PhotonUtil showInfoHint:@"这是自定义消息"];
+//}
 
 #pragma mark --------- 消息接收相关 ----------------
 
@@ -765,6 +765,7 @@ static PhotonMessageCenter *center = nil;
     NSString *token = [[MMKV defaultMMKV] getStringForKey:TOKENKEY defaultValue:@""];
     if ([token isNotEmpty]) {
         [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
+        
     }else{
         __weak typeof(self)weaKSelf = self;
         NSMutableDictionary *paramter = [NSMutableDictionary dictionary];
@@ -772,7 +773,6 @@ static PhotonMessageCenter *center = nil;
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
             [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
-           
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);

@@ -48,6 +48,10 @@
     [self wrapperReadMessage:message];
 }
 
+- (void)imClient:(id)client didReceiveCustomMesage:(PhotonIMMessage *)message{
+    [self imClient:client didReceiveChennalMesage:message.messageID fromid:message.fr toid:message.to msgBody:(PhotonIMCustomBody *)message.messageBody];
+}
+
 - (void)imClient:(id)client didReceiveChennalMesage:(NSString *)msgId fromid:(NSString *)fromid toid:(NSString *)toid msgBody:(PhotonIMCustomBody *)msgBody{
       PhotonChatMessageFromType fromeType = [fromid isEqualToString:[PhotonContent currentUser].userID]?PhotonChatMessageFromSelf:PhotonChatMessageFromFriend;
     PhotonChatTextMessageItem *textItem = [[PhotonChatTextMessageItem alloc] init];
