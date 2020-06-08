@@ -14,7 +14,7 @@
 }
 
 - (NSString *)customAppVersion{
-    return @"2.2.8";
+    return @"";
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
