@@ -147,13 +147,26 @@
             
         }];
         [self.navigationController pushViewController:msgSetting animated:YES];
-    }else if (self.conversation.chatType == PhotonIMChatTypeGroup){
+    }else if (self.conversation.chatType == PhotonIMChatTypeGroup || self.conversation.chatType == PhotonIMChatTypeRoom){
         PhotonGroupSettingViewController *msgSetting = [[PhotonGroupSettingViewController alloc] initWithGroupID:self.conversation compeltion:^(BOOL deleteMsg) {
             if (deleteMsg) {
                  [weakself clearLoadData];
             }
         }];
         [self.navigationController pushViewController:msgSetting animated:YES];
+    }
+}
+- (void)pop{
+    if (self.conversation.chatType == PhotonIMChatTypeRoom){
+        [[PhotonIMClient sharedClient] sendQuitRoomWithId:self.conversation.chatWith timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                   
+        }];
+        [(PhotonChatModel *)self.model quit:self.conversation.chatWith finish:^(NSDictionary * _Nullable dict) {
+             [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(PhotonErrorDescription * _Nullable error) {
+            [PhotonUtil showAlertWithTitle:@"退出房间失败" message:error.errorMessage];
+        }];
+       
     }
    
 }

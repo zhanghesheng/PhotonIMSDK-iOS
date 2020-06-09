@@ -365,4 +365,24 @@
     [self.items removeAllObjects];
 }
 
+
+- (void)quit:(NSString *)gid finish:(void (^)(NSDictionary * _Nullable))finish failure:(void (^)(PhotonErrorDescription * _Nullable))failure{
+    if (![gid isNotEmpty]) {
+        return;
+    }
+    NSDictionary *patamter = @{@"gid":gid};
+    NSString *path = @"/photonimdemo/room/remote/quit";
+    [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:path paramter:patamter completion:^(NSDictionary * _Nonnull responseDict) {
+        if (finish) {
+            finish(nil);
+        }
+        [PhotonUtil hiddenLoading];
+    } failure:^(PhotonErrorDescription * _Nonnull error) {
+        [PhotonUtil hiddenLoading];
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
 @end
