@@ -95,6 +95,7 @@
             
         }else if (self.type == 3){
             PhotonWeakSelf(self)
+            [PhotonUtil showLoading:@"正在加入房间..."];
             [self.model enter:temp_Item.contactID finish:^(NSDictionary * _Nullable dict) {
                // 加入聊天室
                PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:PhotonIMChatTypeRoom chatWith:temp_Item.contactID];
@@ -102,8 +103,17 @@
                 [[PhotonIMClient sharedClient] sendJoinRoomWithId:temp_Item.contactID timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
                     // 是否处理有业务端决定
                     if(succeed){
+                        [PhotonUtil hiddenLoading];
+                        PhotonUser *user = [PhotonContent userDetailInfo];
+                        NSData *data = [[NSString stringWithFormat:@"%@加入房间",user.nickName] dataUsingEncoding:NSUTF8StringEncoding];
+                         PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:PhotonIMChatTypeRoom];
+                        PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:1 arg2:2 customData:data];
+                        [message setMesageBody:body];
+                        [[PhotonIMClient sharedClient] sendMessage:message timeout:5 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                        }];
                         // 绑定房间成功
                     }else{
+                         [PhotonUtil hiddenLoading];
                         // 绑定房间失败
                     }
                 }];
@@ -111,6 +121,7 @@
                PhotonChatViewController *chatCtl = [[PhotonChatViewController alloc] initWithConversation:conversation];
                [weakself.navigationController pushViewController:chatCtl animated:YES];
             } failure:^(PhotonErrorDescription * _Nullable error) {
+                [PhotonUtil hiddenLoading];
                 [PhotonUtil showAlertWithTitle:@"加入房间失败" message:error.errorMessage];
             }];
             

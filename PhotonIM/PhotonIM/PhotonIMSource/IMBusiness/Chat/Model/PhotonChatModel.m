@@ -203,7 +203,7 @@
     NSString *avatarUrl = @"";
     if (message.chatType == PhotonIMChatTypeSingle) {
         avatarUrl = [PhotonContent friendDetailInfo:message.fr].avatarURL;
-    }else if (message.chatType == PhotonIMChatTypeGroup){
+    }else if (message.chatType == PhotonIMChatTypeGroup || message.chatType == PhotonIMChatTypeRoom){
         avatarUrl = [PhotonContent findUserWithGroupId:message.to uid:message.fr].avatarURL;
     }
     switch (message.messageType) {
@@ -269,18 +269,6 @@
             resultItem = locationItem;
         }
             break;
-//        case PhotonIMMessageTypeFile:{// 位置
-//            PhotonChatLocationItem *locationItem = [[PhotonChatLocationItem alloc] init];
-//            locationItem.fromType = fromeType;
-//            locationItem.timeStamp = message.timeStamp;
-//            PhotonIMLocationBody *audioBody = (PhotonIMLocationBody *)message.messageBody;
-//            locationItem.address = audioBody.address;
-//            locationItem.detailAddress = audioBody.detailedAddress;
-//            locationItem.locationCoordinate = CLLocationCoordinate2DMake(audioBody.lat, audioBody.lng);
-//            locationItem.userInfo = message;
-//            resultItem = locationItem;
-//        }
-//            break;
         case PhotonIMMessageTypeRaw:{// 自定义
             PhotonIMCustomBody *customBody = (PhotonIMCustomBody *)message.messageBody;
             if (customBody.data) {
