@@ -13,7 +13,6 @@
 NS_ASSUME_NONNULL_BEGIN
 @class PhotonIMMessage;
 @class PhotonIMCustomBody;
-/// <#Description#>
 @protocol PhotonIMClientProtocol <NSObject>
 
 @optional
@@ -51,38 +50,37 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  设置会话中对方的id
  
- @return <#return value description#>
+ @return 返回对话中对方的id
  */
 - (NSString *)getChatWith;
 /**
  接收到消息 包含所有类型的消息（单聊，群聊）消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveMesage:(PhotonIMMessage *)message;
 
 /**
  接收到单聊消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveSingleMesage:(PhotonIMMessage *)message;
 
 /**
  接收到群聊消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveGroupMesage:(PhotonIMMessage *)message;
 
 /**
- 接收到自定义消息
- 
- @param client <#client description#>
- @param message <#message description#>
+ 接收到自定义类型的通道消息，消息包含：接收的消息包含服务端发的系统消息和对端发的通道消息
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveCustomMesage:(PhotonIMMessage *)message;
 
@@ -91,16 +89,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  收到单人消息撤回消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveSingleWithDrawMesage:(PhotonIMMessage *)message;
 
 /**
  收到群组消息撤回消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveGroupWithDrawMesage:(PhotonIMMessage *)message;
 
@@ -108,8 +106,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  收到消息已读的消息
  
- @param client <#client description#>
- @param message <#message description#>
+ @param client imclient
+ @param message 消息对象，存储消息内容
  */
 - (void)imClient:(id)client didReceiveReadMesage:(PhotonIMMessage *)message DEPRECATED_MSG_ATTRIBUTE("Use imClient:didReceiveReadMesage:chatWith:readMsgIDs:userInfo: instead.");
 

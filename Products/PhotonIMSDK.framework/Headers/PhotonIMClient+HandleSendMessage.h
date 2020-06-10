@@ -86,6 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// 发送简单的通道消息（适用通知消息），此方法发送用户自定义的消息，此方法发送的消息为不可靠消息，不保证发送成功和送到。消息不入库
+/// 对端消息的接受统一通过imClient:(id) didReceiveCustomMesage:回调方法，通道消息即为灵活的自定义消息
 /// @param fromid 发送方的id
 /// @param toid 接收方的id
 /// @param msgBody 送法的消息体内容
