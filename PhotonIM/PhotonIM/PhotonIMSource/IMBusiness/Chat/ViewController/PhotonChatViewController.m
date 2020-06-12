@@ -172,24 +172,19 @@
 }
 - (void)pop{
     if (self.conversation.chatType == PhotonIMChatTypeRoom){
-        [[PhotonIMClient sharedClient] sendQuitRoomWithId:self.conversation.chatWith timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-            if(succeed){
-                PhotonUser *user = [PhotonContent userDetailInfo];
-                NSData *data = [[NSString stringWithFormat:@"%@退出房间",user.nickName] dataUsingEncoding:NSUTF8StringEncoding];
-                 PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:user.userID toid:self.conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:PhotonIMChatTypeRoom];
-                PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:1 arg2:2 customData:data];
-                [message setMesageBody:body];
-                [[PhotonIMClient sharedClient] sendMessage:message timeout:5 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
-                    
-                }];
-            }
-
-                   
-        }];
         [(PhotonChatModel *)self.model quit:self.conversation.chatWith finish:^(NSDictionary * _Nullable dict) {
+            PhotonUser *user = [PhotonContent userDetailInfo];
+            NSData *data = [[NSString stringWithFormat:@"%@退出房间",user.nickName] dataUsingEncoding:NSUTF8StringEncoding];
+             PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:user.userID toid:self.conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:PhotonIMChatTypeRoom];
+            PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:1 arg2:2 customData:data];
+            [message setMesageBody:body];
+            [[PhotonIMClient sharedClient] sendMessage:message timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+            }];
+            [[PhotonIMClient sharedClient] sendQuitRoomWithId:self.conversation.chatWith timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+            }];
              [self.navigationController popViewControllerAnimated:YES];
         } failure:^(PhotonErrorDescription * _Nullable error) {
-            [PhotonUtil showAlertWithTitle:@"退出房间失败" message:error.errorMessage];
+            [PhotonUtil showErrorHint:@"退出房间失败"];
         }];
        
     }else{
@@ -204,12 +199,16 @@
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    if(self.conversation.chatType == PhotonIMChatTypeRoom){
+        [self.player play];
+        [[PhotonIMClient sharedClient] keepConnectedOnBackground:YES];
+    }
+    
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [_panelManager dismissKeyboard];
     self.isStop = YES;
-   
 }
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -219,9 +218,11 @@
      [[PhotonMessageCenter sharedCenter] clearConversationUnReadCount:self.conversation];
     
     if(self.conversation.chatType == PhotonIMChatTypeRoom){
-           if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-               self.navigationController.interactivePopGestureRecognizer.enabled = YES;
-           }
+        if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
+            self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+        }
+        [self.player stop];
+        [[PhotonIMClient sharedClient] keepConnectedOnBackground:NO];
     }
 }
 // 加载数据
@@ -333,6 +334,10 @@
     BOOL change = NO;
     switch (loginstatus) {
         case PhotonIMLoginStatusLoginSucceed:
+            if (self.conversation.chatType == PhotonIMChatTypeRoom) {
+                   [[PhotonIMClient sharedClient] sendJoinRoomWithId:self.conversation.chatWith timeout:15 completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+                   }];
+            }
             self.authSucceedCount ++;
             change = YES;
             break;
@@ -384,10 +389,13 @@
         NSURL *fileURL = [[NSBundle mainBundle] URLForResource:@"025b_525d_040c_51958d1f13e76f9787173fe94bdca8fc" withExtension:@"mp3"];
         AVAudioPlayer *audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:fileURL error:nil];
         audioPlayer.numberOfLoops = -1;
+        audioPlayer.volume = 0;
         _player = audioPlayer;
     }
     return _player;
 }
+
+
 
 @end
 #pragma clang diagnostic pop
