@@ -41,10 +41,12 @@ def writeNewTagToSpecFile(name,tag,am):
         os.system('git commit -am"升级版本号到"');
         os.system('git pull');
         os.system('git push');
+        print('git tag -d'+tag);
         os.system('git tag -d'+tag);
+        print('git push origin :'+tag);
         os.system('git push origin :'+tag);
         os.system('git tag '+tag);
-        os.system('git push --tagitgs');
+        os.system('git push --tags');
         path = tag_path + name + '/' + tag;
         print path;
         spec_name = name + '.podspec';
