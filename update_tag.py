@@ -38,10 +38,10 @@ def writeNewTagToSpecFile(name,tag,am):
         f = open(base_path + name + '.podspec', 'w+', 0);
         f.write(result1);
         f.close();
-        os.system('git commit -am"升级版本号到"');
+        os.system('git commit -am"+ am +"');
         os.system('git pull');
         os.system('git push');
-        print('git tag -d'+tag);
+        print('git tag -d '+tag);
         os.system('git tag -d '+tag);
         print('git push origin :'+tag);
         os.system('git push origin :'+tag);
