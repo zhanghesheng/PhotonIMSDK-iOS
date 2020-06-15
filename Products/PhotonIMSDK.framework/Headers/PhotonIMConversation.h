@@ -11,6 +11,8 @@
 #import "PhotonIMMessage.h"
 NS_ASSUME_NONNULL_BEGIN
 
+
+/// 会话相关,管理会话的相关属性.
 @interface PhotonIMConversation : NSObject
 
 /**
