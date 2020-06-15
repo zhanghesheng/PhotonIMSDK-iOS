@@ -46,8 +46,8 @@ def writeNewTagToSpecFile(name,tag,am):
         os.system('git tag -d '+tag);
         print('git push origin :'+tag);
         os.system('git push origin :'+tag);
-        print('git tag '+tag+' -m "'+am+'"');
-        os.system('git tag '+tag);
+        print('git tag '+tag+' -m"'+am+'"');
+        os.system('git tag '+tag+' -m"'+am+'"');
         os.system('git push --tags');
         path = tag_path + name + '/' + tag;
         print path;
