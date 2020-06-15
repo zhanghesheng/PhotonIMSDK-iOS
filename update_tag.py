@@ -42,7 +42,7 @@ def writeNewTagToSpecFile(name,tag,am):
         os.system('git pull');
         os.system('git push');
         print('git tag -d'+tag);
-        os.system('git tag -d'+tag);
+        os.system('git tag -d '+tag);
         print('git push origin :'+tag);
         os.system('git push origin :'+tag);
         os.system('git tag '+tag);
