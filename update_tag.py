@@ -39,13 +39,14 @@ def writeNewTagToSpecFile(name,tag,am):
         f.write(result1);
         f.close();
         print('git commit -am"'+am+'"');
-        os.system('git commit -am"升级版本号到"');
+        os.system('git commit -am"'+am+'"');
         os.system('git pull');
         os.system('git push');
         print('git tag -d '+tag);
         os.system('git tag -d '+tag);
         print('git push origin :'+tag);
         os.system('git push origin :'+tag);
+        print('git tag '+tag+' -m "'+am+'"');
         os.system('git tag '+tag);
         os.system('git push --tags');
         path = tag_path + name + '/' + tag;
@@ -58,7 +59,7 @@ def writeNewTagToSpecFile(name,tag,am):
         os.system('git status');
         os.system('git add *');
         os.system('git status');
-        os.system('git commit -am"升级版本号到"');
+        os.system('git commit -am"'+am+'"');
         os.system('git status');
         os.system('git pull');
         os.system('git status');
