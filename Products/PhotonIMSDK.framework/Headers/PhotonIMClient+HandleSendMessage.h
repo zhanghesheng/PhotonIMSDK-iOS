@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark ----- 发送消息相关 ------
 /**
  @brief 发送通用消息（不带超时逻辑，内部支持重发）
- 
+ 针对消息正在发送过程中，app被kill掉的情况，app重启后，kill之前的消息会被尝试发送，此时接入端需要实现[-imClient:(id)client sendResultWithMsgID:chatType:chatWith:](https://cosmos.immomo.com/cosmos_sdk_apidoc/imios/html/Protocols/PhotonIMClientProtocol.html#//api/name/imClient:sendResultWithMsgID:chatType:chatWith:error:) 协议方法来处理被重发消息的发送状态。而针对带有资源上传的消息（图片，语音，视频等），如果是资源上传失败导致的消息未能发送，因为不会调用到sendMessage方法，此种情况需要业务端处理此类失败消息重发的逻辑，即在数据库中获取此类消息，重新上传文件，调用消息发送。
  @param message [PhotonIMMessage](https://cosmos.immomo.com/cosmos_sdk_apidoc/imios/html/Classes/PhotonIMMessage.html) 消息体
  @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
  */
@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /// @brief 发送通用消息（超时逻辑，超时期间内失败的消息重发）
+/// 使用此方法发送聊天消息，在消息发送和等待服务端发送结果的回执之间启动超时机制，超时时间内消息未收到服务端的回执则告知服务端消息发送失败。
+/// 针对消息正在发送过程中，app被kill掉的情况，重启app后消息的状态
 /// @param message [PhotonIMMessage](https://cosmos.immomo.com/cosmos_sdk_apidoc/imios/html/Classes/PhotonIMMessage.html) 消息体
 /// @param timeout 超时时间，单位秒
 /// @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
