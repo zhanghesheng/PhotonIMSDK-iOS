@@ -1,5 +1,7 @@
 source 'https://github.com/cocoapods/specs.git'
 source 'https://github.com/cosmos33/MMSpecs'
+source 'https://git.wemomo.com/ios/Specs.git'
+source 'https://git.wemomo.com/base/Specs.git'
 platform :ios, '10.0'
 inhibit_all_warnings!
 
@@ -17,10 +19,10 @@ target :PhotonIM do
     pod 'MMBase-iOS'
 #    pod 'PhotonPushSDK',:git => 'https://github.com/zhanghesheng/PhotonPushSDK.git',:tag => '1.0.3'
 #    pod 'PhotonIMSDK',:git => 'https://github.com/zhanghesheng/PhotonIMSDK-iOS.git',:tag => '2.2.9'
-#    pod 'PhotonIMSDK',:path => '../'
-    pod 'PhotonPushSDK','1.0.3'
-    pod 'PhotonIMSDK','2.2.9'
-    pod 'MLNDevTool', '0.1.9'
+    pod 'PhotonIMSDK',:path => '../'
+    pod 'PhotonPushSDK','1.1.0'
+#    pod 'PhotonIMSDK','2.2.9'
     pod 'GrowingAutoTrackKit'
+    pod 'Rifle'
 
 end
