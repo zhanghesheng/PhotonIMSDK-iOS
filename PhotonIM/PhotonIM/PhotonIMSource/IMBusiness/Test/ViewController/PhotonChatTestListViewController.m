@@ -459,7 +459,7 @@ static NSString *message_syncing = @"消息(收取中......)";
                       item.isStartChat = NO;
                       [weakself updateItem:item];
                      }
-                     
+
                   if ([conversation.chatWith isEqualToString:weakself.currentConversation.chatWith]) {
                       [weakself setTestContent:chatData];
                   }

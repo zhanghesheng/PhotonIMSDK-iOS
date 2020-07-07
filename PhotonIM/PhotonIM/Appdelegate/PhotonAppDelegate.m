@@ -10,10 +10,13 @@
 #import <UserNotifications/UserNotifications.h>
 #import <pushsdk/MoPushManager.h>
 #import "UIWindow+PhotonExtensions.h"
+#import "PhotonIMClientConfig.h"
 #import "PhotonContent.h"
 #import "PhotonAppLaunchManager.h"
 #import "PhotonMessageCenter.h"
 #import "YYFPSLabel.h"
+#import "Growing.h"
+#import <Rifle/Rifle.h>
 @interface PhotonAppDelegate ()<UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) YYFPSLabel *fpsLabel;
@@ -23,12 +26,15 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
+    [Rifle startWithAppId:APP_ID_INLAND config:nil];
     [[PhotonMessageCenter sharedCenter] initPhtonIMSDK];
-    
+    [Growing startWithAccountId:@"98874232e8f917cc"];
+//    [Growing setEnableLog:YES];
     [self registerPushSDK];
     
-    UNUserNotificationCenter.currentNotificationCenter.delegate = self;
+    PhotonIMClientConfig *config = [[PhotonIMClientConfig alloc] init];
+    [MoPushManager setNotiCenterDelegate:config];
+    UNUserNotificationCenter.currentNotificationCenter.delegate = config;
     [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
         if (settings.authorizationStatus == UNAuthorizationStatusNotDetermined) {
             [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionAlert | UNAuthorizationOptionBadge | UNAuthorizationOptionSound completionHandler:^(BOOL granted, NSError * _Nullable error) {
@@ -74,7 +80,7 @@
 
 - (void)addFPSLabel {
     _fpsLabel = [YYFPSLabel new];
-    _fpsLabel.frame = CGRectMake(35, 35, 50, 30);
+    _fpsLabel.frame = CGRectMake(135, 35, 50, 30);
     [_fpsLabel sizeToFit];
     [self.window addSubview:_fpsLabel];
 }
@@ -82,7 +88,7 @@
 
 #pragma mark - Notification
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
-    PhotonLog(@"获取到deviceToken --"); //SDK内部hook，业务层无需配置
+    PhotonLog(@"获取到deviceToken --");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"cdscds" message:@"vxvsd" delegate:self cancelButtonTitle:@"" otherButtonTitles:@"ok", nil];
     [alert show];
     
@@ -98,7 +104,7 @@
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
     if ([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         NSDictionary *dict = response.notification.request.content.userInfo;
-        NSLog(@"%@",dict);
+        NSLog(@"%@",[dict description]);
     }
     completionHandler();
 }
@@ -129,6 +135,14 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString*, id> *)options{
+    if ([Growing handleUrl:url]) // 请务必确保该函数被调用
+       {
+           return YES;
+       }
+       return NO;
 }
 
 
