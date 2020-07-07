@@ -17,19 +17,12 @@ target :PhotonIM do
     pod 'FMDB', '2.7.2'
     pod 'MMKV','1.0.22'
     pod 'MMBase-iOS'
+    pod 'DatabaseVisual'
 #    pod 'PhotonPushSDK',:git => 'https://github.com/zhanghesheng/PhotonPushSDK.git',:tag => '1.0.3'
-<<<<<<< Updated upstream
 #    pod 'PhotonIMSDK',:git => 'https://github.com/zhanghesheng/PhotonIMSDK-iOS.git',:tag => '2.2.10'
-=======
-#    pod 'PhotonIMSDK', '2.2.10',:source => 'https://github.com/cosmos33/MMSpecs.git'#,:tag => '2.2.10'
->>>>>>> Stashed changes
     pod 'PhotonIMSDK',:path => '../'
     pod 'PhotonPushSDK','1.1.0'
 #    pod 'PhotonIMSDK','2.2.10'
     pod 'GrowingAutoTrackKit'
     pod 'Rifle'
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
 end
