@@ -170,14 +170,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)networkChange:(PhotonIMNetworkStatus)networkStatus;
 
-/*
- 未发送成功的消息在被重新发送前触发，业务端实现返回枚举值
- 
- PhotonIMForbidenAutoResendTypeNO // 允许消息重发，此为默认值
- PhotonIMForbidenAutoResendTypeLogin // 禁止每次登录成功后消息的重发,
- PhotonIMForbidenAutoResendTypeColdStart = 3 // 仅在app冷启登录时消息重新发送
- */
-- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend;
 
 
 @required
@@ -194,7 +186,8 @@ NS_ASSUME_NONNULL_BEGIN
 sendResultWithMsgID:(NSString *)msgID
         chatType:(PhotonIMChatType)chatType
         chatWith:(NSString * _Nullable)chatWith
-        error:( PhotonIMError* _Nullable)error;
+        error:( PhotonIMError* _Nullable)error DEPRECATED_MSG_ATTRIBUTE("Use imClient:sendResultWithMessage:succceed: error.");
+
 /**
 消息发送的结果回调
 
@@ -228,14 +221,6 @@ transportProgressWithMessage:(PhotonIMMessage *)message
 downloadCompletionWithMessage:(PhotonIMMessage *)message
         filePath:(NSString* _Nullable)filePath
            error:(PhotonIMError* _Nullable)error;
-/*
- 未发送成功的消息在被重新发送前触发，业务端实现返回枚举值
- 
- PhotonIMForbidenAutoResendTypeNO // 允许消息重发，此为默认值
- PhotonIMForbidenAutoResendTypeLogin // 禁止每次登录成功后消息的重发,
- PhotonIMForbidenAutoResendTypeColdStart = 3 // 仅在app冷启登录时消息重新发送
- */
-- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend;
 @end
 #endif /* PhotonIMClientProtocol_h */
 NS_ASSUME_NONNULL_END

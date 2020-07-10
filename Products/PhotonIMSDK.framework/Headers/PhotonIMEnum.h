@@ -216,11 +216,6 @@ typedef NS_ENUM(NSInteger, PhotonIMAtType) {
     PhotonIMAtTypeAtAll = 2,
 };
 
-typedef NS_ENUM(NSInteger, PhotonIMForbidenAutoResendType){
-    PhotonIMForbidenAutoResendTypeNO = 0,
-    PhotonIMForbidenAutoResendTypeLogin = 1,
-    PhotonIMForbidenAutoResendTypeColdStart = 2,
-};
 
 /**
 下载文件的质量

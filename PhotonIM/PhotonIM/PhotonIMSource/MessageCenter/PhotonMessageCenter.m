@@ -66,7 +66,7 @@ static PhotonMessageCenter *center = nil;
     
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
-    [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
+    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
     
 //     是否开启断言，debug模式下推荐开启
     [[PhotonIMClient sharedClient] setAssertEnable:NO];
@@ -711,11 +711,6 @@ static PhotonMessageCenter *center = nil;
     NSLog(@"[pim sendResultWithMsgID msgID=%@,chatType=%@,chatWith=%@,errorCode=%@",msgID,@(chatType),chatWith,@(error.code));
 }
 
-- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend{
-    return PhotonIMForbidenAutoResendTypeNO;
-}
-
-
 #pragma mark ---- 登录相关 ----
 - (void)reGetToken{
      NSLog(@"[pim]:reGetToken");
@@ -738,9 +733,9 @@ static PhotonMessageCenter *center = nil;
         [self.netService commonRequestMethod:PhotonRequestMethodPost queryString:PHOTON_TOKEN_PATH paramter:paramter completion:^(NSDictionary * _Nonnull dict) {
             NSString *token = [[dict objectForKey:@"data"] objectForKey:@"token"];
             [[MMKV defaultMMKV] setString:token forKey:TOKENKEY];
-            
+
             [[PhotonIMClient sharedClient] loginWithToken:token extra:extra];
-            
+
             PhotonLog(@"[pim] dict = %@",dict);
         } failure:^(PhotonErrorDescription * _Nonnull error) {
             PhotonLog(@"[pim] error = %@",error.errorMessage);
