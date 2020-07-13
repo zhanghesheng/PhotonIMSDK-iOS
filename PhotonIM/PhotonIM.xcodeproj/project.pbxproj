@@ -2338,7 +2338,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = 4BXE593ED8;
+				DEVELOPMENT_TEAM = 36WT396TPZ;
 				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -2347,9 +2347,9 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 2.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim.push;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.momoappdemo1.MDNotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = hwpush;
+				PROVISIONING_PROFILE_SPECIFIER = MDNotificationServiceDevelopmentProfiles;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2503,7 +2503,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2210;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 4BXE593ED8;
+				DEVELOPMENT_TEAM = 36WT396TPZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2569,9 +2569,9 @@
 					"-framework",
 					"\"UIKit\"",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim;
+				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.momoappdemo1;
 				PRODUCT_NAME = PhotonIMMerge;
-				PROVISIONING_PROFILE_SPECIFIER = PhotonimHWdemo;
+				PROVISIONING_PROFILE_SPECIFIER = MomoChatDevelopmentProfile;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
