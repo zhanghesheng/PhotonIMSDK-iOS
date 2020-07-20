@@ -60,13 +60,13 @@ static PhotonMessageCenter *center = nil;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleAppWillEnterForegroundNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
     PhotonIMServerType serverType = [PhotonContent getServerSwitch];
     [[PhotonIMClient sharedClient] setServerType:serverType];
-//    [[PhotonIMClient sharedClient] supportFTS];
+    [[PhotonIMClient sharedClient] supportFTS];
     PhotonIMClientConfig *imclientConfig = [[PhotonIMClientConfig alloc] init];
     [[PhotonIMClient sharedClient] setIMClientConfig:imclientConfig];
     
 //#ifdef DEBUG
     // 是否在写log时开启控制台日志输出，debug模式下建议开启
-    [[PhotonIMClient sharedClient] openPhotonIMLog:NO];
+    [[PhotonIMClient sharedClient] openPhotonIMLog:YES];
     
 //     是否开启断言，debug模式下推荐开启
     [[PhotonIMClient sharedClient] setAssertEnable:NO];
@@ -201,8 +201,13 @@ static PhotonMessageCenter *center = nil;
     [message setAtInfoWithAtType:PhotonIMAtTypeNoAt atList:uids];
     PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:text];
     [message setMesageBody:body];
-    
-    [self _sendMessage:message readyCompletion:nil completion:completion];
+    [[PhotonIMClient sharedClient] sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
+        [PhotonUtil runMainThread:^{
+        if (completion) {
+            completion(succeed,error);
+        }
+        }];
+    }];
 }
 
 - (void)sendImageMessage:(PhotonChatImageMessageItem *)item
@@ -498,7 +503,7 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message readyCompletion:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyCompletion completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
-    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion];
+    [[PhotonIMClient sharedClient] sendMessage:message readyToSendBlock:readyCompletion ];
 }
  
 

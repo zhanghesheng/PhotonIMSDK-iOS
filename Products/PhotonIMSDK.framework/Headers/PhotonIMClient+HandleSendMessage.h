@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
  */
 - (void)sendMessage:(nullable PhotonIMMessage *)message
-         completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error))completion;
+         completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 
 /// @brief 发送通用消息（超时逻辑，超时期间内失败的消息重发）
 /// 使用此方法发送聊天消息，在消息发送和等待服务端发送结果的回执之间启动超时机制，超时时间内消息未收到服务端的回执则告知服务端消息发送失败。
@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
 - (void)sendMessage:(nullable PhotonIMMessage *)message
             timeout:(NSTimeInterval)timeout
-         completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error))completion;
+         completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 
 
 /// 消息发送方法，此方法支持文件托管功能(即SDK负责文件的上传和发送，操作一体化)。
@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param message 消息对象
 /// @param readyToSendBlock 消息准备完成，将要上传和发送，业务端可使用此回调加载刷新ui显示
 - (void)sendMessage:(nullable PhotonIMMessage *)message
-   readyToSendBlock:(nullable void(^)(PhotonIMMessage * _Nullable message))readyToSendBlock;
+   readyToSendBlock:(nullable void(^)(PhotonIMMessage * _Nullable message ))readyToSendBlock;
 
 
 /// 消息发送方法，此方法支持文件托管功能(即SDK负责文件的上传和发送，操作一体化)。

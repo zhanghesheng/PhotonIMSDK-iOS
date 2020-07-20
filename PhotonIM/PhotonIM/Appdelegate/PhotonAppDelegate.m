@@ -76,15 +76,15 @@
     PhotonHTTPDNSConfig *config1 = [[PhotonHTTPDNSConfig alloc] init];
      [PhotonHTTPDNSClient initHTTPDNSWithConfig:config1];
 
-     // 打开底层log 日志，用于排查问题，默认是关闭
-    [PhotonHTTPDNSClient shouldConsolLog:YES];
-     // 可配置那些域名支持自动接入Httpdns的方式，其调用在startEnableAutoRequest之前
-    NSSet *filter = [NSSet setWithObjects:@"cosmos-im-api.immomo.com",@"cosmos-im-demo.immomo.com",@"paas-push-api.immomo.com", nil];
-    [PhotonHTTPDNSClient setRequestDomainFilter:filter];
-    // 可配置那些域名支持自动接入Httpdns的方式，其调用在startEnableAutoRequest之前
-    [PhotonHTTPDNSClient supportWKWebview];
-    
-    [PhotonHTTPDNSClient startEnableAutoRequest];
+//     // 打开底层log 日志，用于排查问题，默认是关闭
+//    [PhotonHTTPDNSClient shouldConsolLog:YES];
+//     // 可配置那些域名支持自动接入Httpdns的方式，其调用在startEnableAutoRequest之前
+//    NSSet *filter = [NSSet setWithObjects:@"cosmos-im-api.immomo.com",@"cosmos-im-demo.immomo.com",@"paas-push-api.immomo.com", nil];
+//    [PhotonHTTPDNSClient setRequestDomainFilter:filter];
+//    // 可配置那些域名支持自动接入Httpdns的方式，其调用在startEnableAutoRequest之前
+//    [PhotonHTTPDNSClient supportWKWebview];
+//
+//    [PhotonHTTPDNSClient startEnableAutoRequest];
     
     
     [Rifle startWithAppId:APP_ID_INLAND config:nil];
