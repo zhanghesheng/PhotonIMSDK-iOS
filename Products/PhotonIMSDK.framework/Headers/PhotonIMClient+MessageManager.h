@@ -414,13 +414,11 @@ NS_ASSUME_NONNULL_BEGIN
                                                 BOOL haveNext,
                                                 NSError * _Nullable error))result;
 
-
 /// @brief 全文搜索（所有会话消息）
 /// @param matchQuery 搜索关键词
 /// @param startIdentifier 开始标签，比如 @"<a>"
 /// @param andIdentifier 结束标签，比如 @"</a>"
 /// @param maxCharacterLenth 显示的最大字符数
-
 - (NSArray<PhotonIMMessage *> *)searchMessagesWithMatchQuery:(NSString *)matchQuery
                                            startIdentifier:(NSString *)startIdentifier
                                              andIdentifier:(NSString *)andIdentifier maxCharacterLenth:(NSInteger)maxCharacterLenth;
