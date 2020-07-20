@@ -710,11 +710,6 @@ static PhotonMessageCenter *center = nil;
     NSLog(@"[pim sendResultWithMsgID msgID=%@,chatType=%@,chatWith=%@,errorCode=%@",msgID,@(chatType),chatWith,@(error.code));
 }
 
-- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend{
-    return PhotonIMForbidenAutoResendTypeNO;
-}
-
-
 #pragma mark ---- 登录相关 ----
 - (void)reGetToken{
      NSLog(@"[pim]:reGetToken");
