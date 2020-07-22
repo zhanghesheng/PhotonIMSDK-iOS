@@ -198,13 +198,12 @@ static PhotonMessageCenter *center = nil;
     self.timeOut = 0;
     // 文本消息，直接构建文本消息对象发送
     PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:conversation.chatType];
-//    NSMutableArray *uids = [[NSMutableArray alloc] init];
-//    [message setAtInfoWithAtType:PhotonIMAtTypeNoAt atList:uids];
-//    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:text];
-//    [message setMesageBody:body];
     
-    PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:1 arg2:2 customData:[@"SDSDS" dataUsingEncoding:NSUTF8StringEncoding]];
+    NSMutableArray *uids = [[NSMutableArray alloc] init];
+    [message setAtInfoWithAtType:PhotonIMAtTypeNoAt atList:uids];
+    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:text];
     [message setMesageBody:body];
+    
     [self _sendMessage:message timeout:0 completion:completion];
     
 }
