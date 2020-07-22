@@ -170,8 +170,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)networkChange:(PhotonIMNetworkStatus)networkStatus;
 
+/*
+ 未发送成功的消息在被重新发送前触发，业务端实现返回枚举值
+ 
+ PhotonIMForbidenAutoResendTypeNO // 允许消息重发，此为默认值
+ PhotonIMForbidenAutoResendTypeLogin // 禁止每次登录成功后消息的重发,
+ PhotonIMForbidenAutoResendTypeColdStart = 3 // 仅在app冷启登录时消息重新发送
+ */
+- (PhotonIMForbidenAutoResendType)messageWillBeAutoResend;
 
 
+@required
 /**
  重发程序kill时的消息，消息发出后监听此回执，刷新会话列表页UI展示
  
@@ -179,47 +188,13 @@ NS_ASSUME_NONNULL_BEGIN
  @param msgID 消息的id
  @param chatType 消息所属的会话
  @param chatWith 消息所属的会话对方id
- @param error 发送结果的成功失败信息
+ @param error 消息所属的会话对方error
  */
 - (void)imClient:(id)client
-sendResultWithMsgID:(NSString *)msgID
+        sendResultWithMsgID:(NSString *)msgID
         chatType:(PhotonIMChatType)chatType
         chatWith:(NSString * _Nullable)chatWith
-        error:( PhotonIMError* _Nullable)error DEPRECATED_MSG_ATTRIBUTE("Use imClient:sendResultWithMessage:succceed: error.");
-
-/**
-消息发送的结果回调
-
-@param client client
-@param message 发送后的nmessage对象
-@param succceed 发送是否成功
-@param error 发送结果的成功失败信息
-*/
-- (void)imClient:(id)client
-sendResultWithMessage:(PhotonIMMessage *)message
-        succceed:(BOOL)succceed
-           error:( PhotonIMError* _Nullable)error;
-
-/**
-消息中资源上传完成的时回调，更新UI层的进度显示
-@param client client
-@param message 发送后的nmessage对象
-@param progess 文件上传的进度，((float)progess.completedUnitCount/(float)progess.totalUnitCount)）>= 1.0是表示文件上传完成
-*/
-- (void)imClient:(id)client
-transportProgressWithMessage:(PhotonIMMessage *)message
-         progess:(NSProgress *_Nullable)progess;
-
-/**
-消息问价下载完成
-@param client client
-@param message 发送后的nmessage对象
-@param error 文件传输中的错误提示
-*/
-- (void)imClient:(id)client
-downloadCompletionWithMessage:(PhotonIMMessage *)message
-        filePath:(NSString* _Nullable)filePath
-           error:(PhotonIMError* _Nullable)error;
+        error:( PhotonIMError* _Nullable)error;
 @end
 #endif /* PhotonIMClientProtocol_h */
 NS_ASSUME_NONNULL_END
