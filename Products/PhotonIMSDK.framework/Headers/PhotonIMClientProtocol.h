@@ -172,7 +172,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 
-@required
 /**
  重发程序kill时的消息，消息发出后监听此回执，刷新会话列表页UI展示
  
