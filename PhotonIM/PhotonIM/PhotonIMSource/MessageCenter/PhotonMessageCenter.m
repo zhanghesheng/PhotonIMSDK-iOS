@@ -149,7 +149,7 @@ static PhotonMessageCenter *center = nil;
 - (void)sendTextMessage:(PhotonChatTextMessageItem *)item conversation:(nullable PhotonIMConversation *)conversation type:(int)type completion:(nullable CompletionBlock)completion{
     
     // 文本消息，直接构建文本消息对象发送
-    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeText chatType:conversation.chatType];
+    PhotonIMMessage *message = [PhotonIMMessage commonMessageWithFrid:[PhotonContent currentUser].userID toid:conversation.chatWith messageType:PhotonIMMessageTypeRaw chatType:conversation.chatType];
     if (type == 4) {
          [message unSaveMessage];
     }
@@ -160,7 +160,8 @@ static PhotonMessageCenter *center = nil;
         }
     }
     [message setAtInfoWithAtType:(PhotonIMAtType)(item.type) atList:uids];
-    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
+//    PhotonIMTextBody *body = [[PhotonIMTextBody alloc] initWithText:item.messageText];
+     PhotonIMCustomBody *body = [PhotonIMCustomBody customBodyWithArg1:1 arg2:1 customData:[@"哈哈哈哈哈哈" dataUsingEncoding:NSUTF8StringEncoding]];
     [message setMesageBody:body];
     item.userInfo = message;
     self.timeOut = 0;
