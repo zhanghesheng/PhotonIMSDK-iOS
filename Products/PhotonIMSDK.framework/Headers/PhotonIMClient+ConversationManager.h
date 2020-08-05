@@ -175,7 +175,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param chatWith 会话中对方的id 群组为群组id
  @return 会话对象
  */
-- (PhotonIMConversation *)findConversation:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
+- (nullable PhotonIMConversation *)findConversation:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
 
 /**
  @brief 查找会话
@@ -194,6 +194,7 @@ NS_ASSUME_NONNULL_BEGIN
 */
 - (NSArray<PhotonIMConversation *> *)findConversationList:(NSString *)anchor pageSize:(int)pageSize;
 
+
 /**
 @brief 查找会话
 @param anchor 为chatWith,开始查找的位置，查找小于此锚点对应的排序id的数据，查找结果按降序排列
@@ -201,8 +202,38 @@ NS_ASSUME_NONNULL_BEGIN
 @param completion finish表示列表拉取完成，netAnchor表示拉取下一页的锚点
 @return 查找到的session列表
 */
-- (NSArray<PhotonIMConversation *> *)findConversationList:(NSString *)anchor pageSize:(int)pageSize completion:(nullable void(^)(BOOL finish, NSString * _Nullable netAnchor))completion;
+- (NSArray<PhotonIMConversation *> *)findConversationList:(NSString *)anchor
+                                                 pageSize:(int)pageSize
+                                               completion:(nullable void(^)(BOOL finish, NSString * _Nullable netAnchor))completion;
 
+
+/**
+@brief 查找会话 符合Extra中key-value指定的会话
+@param anchor 为chatWith,开始查找的位置，查找小于此锚点对应的排序id的数据，查找结果按降序排列
+@param pageSize 每次查找的条数
+@param key Extra指定的key
+@param value Extra指定的key对应的value值。 注：key 或 value为空，查找结果忽略key-value限制
+@return 查找到的session列表
+*/
+- (NSArray<PhotonIMConversation *> *)findConversationList:(NSString *)anchor
+                                                 pageSize:(int)pageSize
+                                                 extraKey:(NSString *)key
+                                               extraValue:(NSString *)value;
+
+/**
+@brief 查找会话 符合Extra中key-value指定的会话
+@param anchor 为chatWith,开始查找的位置，查找小于此锚点对应的排序id的数据，查找结果按降序排列
+@param pageSize 每次查找的条数
+@param key Extra指定的key
+@param value Extra指定的key对应的value值。 注：key 或 value为空，查找结果忽略key-value限制
+@param completion finish表示列表拉取完成，netAnchor表示拉取下一页的锚点
+@return 查找到的session列表
+*/
+- (NSArray<PhotonIMConversation *> *)findConversationList:(NSString *)anchor
+                                                 pageSize:(int)pageSize
+                                                 extraKey:(NSString *)key
+                                               extraValue:(NSString *)value
+                                               completion:(nullable void(^)(BOOL finish, NSString * _Nullable netAnchor))completion;
 
 /**
  @brief 判断会话是否存在
