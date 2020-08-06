@@ -247,7 +247,6 @@ static PhotonMessageCenter *center = nil;
     PhotonIMImageBody *body = [[PhotonIMImageBody alloc] init];
     body.localFileName = item.fileName;
     body.whRatio = item.whRatio;
-    body.srcDescription = [[self getRandomArrFrome] firstObject];
     [message setMesageBody:body];
     item.userInfo = message;
     
@@ -492,6 +491,9 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (void)_sendMessage:(nullable PhotonIMMessage *)message timeout:(NSTimeInterval)timeout completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion{
+    if (message.messageType != PhotonIMMessageTypeText) {
+        message.messageBody.srcDescription = [[self getRandomArrFrome] firstObject];
+    }
     PhotonWeakSelf(self);
     BOOL isTimeOut = timeout > 0;
     NSLog(@"[Source Description] send message msgId = %@ === %@",message.messageID, [message.messageBody srcDescription]);
