@@ -249,6 +249,7 @@ static PhotonMessageCenter *center = nil;
     body.whRatio = item.whRatio;
     [message setMesageBody:body];
     item.userInfo = message;
+    message.messageBody.srcDescription = [[self getRandomArrFrome] firstObject];
     
     // 先做图片上传处理，获得资源地址后构建图片消息对象发送消息
     [self p_sendImageMessage:message completion:completion];
