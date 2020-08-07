@@ -138,7 +138,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// @param key 业务方指定
 - (nullable NSString *)extraValueForKey:(NSString *)key;
 
-/// 设置extra中的value值。存在key则修改替换，不存在则追加
+/// 设置extra中的value值。存在key则修改替换，不存在则追加。message未入库时此操作
 /// @param value Extra中设置的value
 /// @param key Extra中设置的key
 - (void)setExtraValue:(NSString *)value forKey:(NSString *)key;
