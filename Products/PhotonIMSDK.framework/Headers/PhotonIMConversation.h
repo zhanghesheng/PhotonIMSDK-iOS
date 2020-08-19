@@ -96,7 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  额外的信息
  */
-@property(nonatomic, nullable)NSMutableDictionary<NSString *, NSString *> *extra;
+@property(nonatomic, strong, nullable)NSMutableDictionary<NSString *, NSString *> *extra;
 
 /*
  session中最后一条消息自定义扩展字段参数

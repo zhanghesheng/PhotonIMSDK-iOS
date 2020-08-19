@@ -67,12 +67,6 @@ NS_ASSUME_NONNULL_BEGIN
                         chatWith:(NSString *)chatWith
                           sticky:(BOOL)sticky;
 
-/**
- @brief 会话草稿
-
- @param conversation <#conversation description#>
- */
-- (void)updateConversationDraft:(PhotonIMConversation *)conversation DEPRECATED_MSG_ATTRIBUTE("Please use 'alterConversationDraft:chatWith:draft:' instead");
 
 
 /// @brief 添加会话的中草稿
