@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PhotonIMBaseMessage : NSObject
 
 /**
- 消息类型，初始化时默认产生，业务端也可设置
+ 消息id，初始化时默认产生，业务端也可设置
  */
 @property(nonatomic, copy, nullable) NSString *messageID;
 
