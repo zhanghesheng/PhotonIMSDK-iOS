@@ -33,7 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable)NSString *withdrawNotice;
 
 
-
 ///////////////// 消息已读相关 ///////////////////
 /**
  已读消息的id集合
