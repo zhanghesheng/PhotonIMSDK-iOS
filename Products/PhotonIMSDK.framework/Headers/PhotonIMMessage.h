@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy, nullable)NSString *withdrawNotice;
 
+/** 被撤回消息的发送接收时间 */
+@property(nonatomic, readwrite) NSInteger originMsgTime;
+
 
 ///////////////// 消息已读相关 ///////////////////
 /**

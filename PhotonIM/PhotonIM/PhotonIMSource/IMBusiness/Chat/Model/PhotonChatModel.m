@@ -40,14 +40,15 @@
     
     PhotonIMMessageQueryPara *queryPara = [[PhotonIMMessageQueryPara alloc] init];
     queryPara.messageTypeList = @[@(PhotonIMMessageTypeImage),@(PhotonIMMessageTypeText)];
-    queryPara.beginTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000 - (100 * 24 * 60 * 60 * 1000.0);
-    queryPara.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
+//    queryPara.beginTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000 - (100 * 24 * 60 * 60 * 1000.0);
+//    queryPara.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
     count = [[PhotonIMClient sharedClient] getMessageCountByParamter:chatType chatWith:chatWith queryParameter:queryPara];
     
     NSLog(@"get_message_count2 %@",@(count));
     return count;
 }
 - (void)loadMoreMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
+    [self getMessageCount:chatType chatWith:chatWith];
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
     PhotonWeakSelf(self);
     if (_loadFtsData) {
@@ -95,11 +96,11 @@
             }
       PhotonIMMessageQueryPara *queryPara = [[PhotonIMMessageQueryPara alloc] init];
       queryPara.anchorMsgId = self.anchorMsgId;
-        queryPara.beginTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000 - (100 * 24 * 60 * 60 * 1000.0 );
-      queryPara.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
+//      queryPara.beginTimeStamp = [[NSDate date] timeIntervalSince1970] * 1000 - (100 * 24 * 60 * 60 * 1000.0 );
+//      queryPara.endTime = [[NSDate date] timeIntervalSince1970] * 1000;
       queryPara.beforeAnchor = YES;
       queryPara.size = self.pageSize;
-      queryPara.messageTypeList = @[@(PhotonIMMessageTypeText),@(PhotonIMMessageTypeImage)];
+      queryPara.messageTypeList = @[@(PhotonIMMessageTypeImage),@(PhotonIMMessageTypeAudio)];
         
       NSArray<PhotonIMMessage *> * _Nullable messages = [imclient loadHistoryMessages:chatType chatWith:chatWith  queryParameter:queryPara];
 
