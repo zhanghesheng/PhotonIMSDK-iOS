@@ -58,11 +58,11 @@ static PhotonAppLaunchManager *lauchManager = nil;
         PhotonConversationListViewController *conversationVC = [[PhotonConversationListViewController alloc] init];
         PhotonContactViewController *contactVC = [[PhotonContactViewController alloc] init];
         PhotonPersonViewController *personVC = [[PhotonPersonViewController alloc] init];
-        PhotonChatTestListViewController *testVC = [[PhotonChatTestListViewController alloc] init];
+        /*PhotonChatTestListViewController *testVC = [[PhotonChatTestListViewController alloc] init];*/
         data = @[addNavigationController(conversationVC),
                           addNavigationController(contactVC),
                           addNavigationController(personVC),
-                          addNavigationController(testVC),
+                          /*addNavigationController(testVC),*/
                           ];
         [tabVC setViewControllers:data];
         [window setRootViewController:tabVC];

@@ -104,7 +104,10 @@
         PhotonLog(@"history session data count: %@",@([lists count]));
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {
-                if ([item isKindOfClass:[NSNull null]]) {
+                if ([item isKindOfClass:[NSNull class]]) {
+                    continue;
+                }
+                if (![item isNil]) {
                     continue;
                 }
                 NSString *chatWith = [[item objectForKey:@"id"] isNil];
@@ -143,7 +146,6 @@
     }
     
     if (conversations.count) {
-//        [[PhotonIMClient sharedClient] saveConversationBatch:conversations];
         self.conversations = [conversations copy];
         if(self.loadConverationMessage){
             [self loadConversationMessage];

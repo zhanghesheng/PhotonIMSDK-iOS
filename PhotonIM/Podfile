@@ -25,6 +25,7 @@ target :PhotonIM do
 #    pod 'PhotonIMSDK','2.3.0'
     pod 'GrowingAutoTrackKit'
     pod 'Rifle'
+    pod 'MMFileService','1.3.0'
 #    pod 'PHCronet',:path => '../../cronet-ios-test'
     pod 'PhotonHTTPDNS',:path => '../../PhotonHTTPDNS-iOS'
 end
