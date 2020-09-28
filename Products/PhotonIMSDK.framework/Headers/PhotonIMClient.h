@@ -151,6 +151,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// 获取数据库的存储路径
 - (NSString *)getDBPath;
 
+
+- (void)corrupt;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -75,6 +75,21 @@ NS_ASSUME_NONNULL_BEGIN
                            fromid:(NSString *)fromid
                              toid:(NSString *)toid completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
 
+
+/**
+ 
+ @brief 群组中发送消息的撤回
+ 
+ @param msgID 撤回消息的id
+ @param fromid 撤回者的id，即消息发送者的id（即自己）
+ @param toid 群组的id
+ @param completion 消息发送的回执，succeed=YES 发送成功此时error = nil;succeed=NO 发送失败此时error包含失败的原因
+ */
+- (void)sendGroupWithDrawMessage:(NSString *)msgID
+                          fromid:(NSString *)fromid
+                            toid:(NSString *)toid
+                      completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
+
 /**
  
  @brief 群组中发送消息的撤回
@@ -89,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
                    originMsgTime:(int64_t)originMsgTime
                           fromid:(NSString *)fromid
                             toid:(NSString *)toid
-                      completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion;
+                      completion:(nullable void(^)(BOOL succeed, PhotonIMError * _Nullable error ))completion DEPRECATED_MSG_ATTRIBUTE("Please use 'sendGroupWithDrawMessage:fromid:toid:completion:' instead");
 
 /**
  @brief 发送已读消息

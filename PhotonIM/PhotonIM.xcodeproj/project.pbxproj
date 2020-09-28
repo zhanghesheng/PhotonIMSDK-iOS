@@ -2810,7 +2810,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 50;
-				DEVELOPMENT_TEAM = 4BXE593ED8;
+				DEVELOPMENT_TEAM = 72CZEEPG39;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2879,7 +2879,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim;
 				PRODUCT_NAME = PhotonIMMerge1;
-				PROVISIONING_PROFILE_SPECIFIER = photonimhoc;
+				PROVISIONING_PROFILE_SPECIFIER = "common-inhouse-profile";
 				SWIFT_OBJC_BRIDGING_HEADER = "PhotonIM/PhotonIMSource/Components/PhotonIM-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
