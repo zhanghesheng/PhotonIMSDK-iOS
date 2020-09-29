@@ -196,8 +196,9 @@
     }
 }
 + (PhotonIMServerType)getServerSwitch{
-    NSInteger serverType = [[MMKV defaultMMKV] getInt32ForKey:@"PhotonIMServerType"];
-    return (PhotonIMServerType)serverType;
+    return PhotonIMServerTypeInland;
+//    NSInteger serverType = [[MMKV defaultMMKV] getInt32ForKey:@"PhotonIMServerType"];
+//    return (PhotonIMServerType)serverType;
 }
 
 + (NSString *)baseUrlString{

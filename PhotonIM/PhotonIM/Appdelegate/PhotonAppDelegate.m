@@ -110,7 +110,7 @@
     [PhotonAppLaunchManager registerWithWindow:self.window];
     [PhotonAppLaunchManager launchInWindow];
     
-    [self addFPSLabel];
+//    [self addFPSLabel];
     
     return YES;
 }
@@ -141,7 +141,7 @@
 
 - (void)addFPSLabel {
     _fpsLabel = [YYFPSLabel new];
-    _fpsLabel.frame = CGRectMake(135, 35, 50, 30);
+    _fpsLabel.frame = CGRectMake(100, 35, 50, 30);
     [_fpsLabel sizeToFit];
     [self.window addSubview:_fpsLabel];
 }

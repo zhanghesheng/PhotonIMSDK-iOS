@@ -63,7 +63,7 @@
        PhotonPersonItem *personItem = [[PhotonPersonItem alloc] init];
        personItem.key = @"头像";
        personItem.value = user.avatarURL;
-       personItem.shorArrow = YES;
+       personItem.shorArrow = NO;
        personItem.type = PhotonPersonItemTypeAvatar;
        
        PhotonPersonItem *personItem1 = [[PhotonPersonItem alloc] init];
@@ -114,11 +114,12 @@
        [self.items addObject:personItem];
        [self.items addObject:personItem1];
        [self.items addObject:personItem2];
-       [self.items addObject:settingItem];
+      
     
 //    #ifdef DEBUG
-       [self.items addObject:documentItem];
-       [self.items addObject:dbItem];
+//       [self.items addObject:settingItem];
+//       [self.items addObject:documentItem];
+//       [self.items addObject:dbItem];
 //    #else
 //    #endif
        
@@ -136,10 +137,10 @@
     
     PhotonMessageSettingItem *settionItem = [[PhotonMessageSettingItem alloc] init];
     settionItem.settingName = name;
-     settionItem.open = open;
+    settionItem.open = open;
     settionItem.type = PhotonMessageSettingTypeDefault;
     [self.items addObject:emptyitem];
-    [self.items addObject:settionItem];
+//    [self.items addObject:settionItem];
     
     [self.items addObject:emptyitem];
     [self.items addObject:personItem4];

@@ -104,17 +104,14 @@
         PhotonLog(@"history session data count: %@",@([lists count]));
         if (lists.count > 0) {
             for (NSDictionary *item in lists) {
-                if ([item isKindOfClass:[NSNull class]]) {
+                if ([item isKindOfClass:[NSNull class]] || ![item isNil]) {
                     continue;
                 }
-                if (![item isNil]) {
-                    continue;
-                }
+                
                 NSString *chatWith = [[item objectForKey:@"id"] isNil];
                
                 int type = [[[item objectForKey:@"type"] isNil] intValue];
                 PhotonIMChatType chatType = (PhotonIMChatType)type;
-                
                 
                 PhotonIMConversation *conversation = [[PhotonIMConversation alloc] initWithChatType:chatType chatWith:chatWith];
                 conversation.FName = [[item objectForKey:@"nickname"] isNil];

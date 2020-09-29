@@ -106,6 +106,7 @@
 }
 
 - (void)loadMoreFtsMeesages:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith beforeAuthor:(BOOL)beforeAnchor asc:(BOOL)asc finish:(void (^)(NSDictionary * _Nullable))finish{
+    BOOL noHistory = NO;
     PhotonIMClient *imclient = [PhotonIMClient sharedClient];
       PhotonWeakSelf(self);
     if (self.items.count) {
@@ -118,10 +119,9 @@
    
      NSMutableArray *items = [NSMutableArray array];
     if (self.items.count == 0) {
-//        NSArray<PhotonIMMessage *> * _Nullable beforeMessages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:self.anchorMsgId beforeAuthor:beforeAnchor  size:(int)self.pageSize/2];
         NSArray<PhotonIMMessage *> * _Nullable beforeMessages = [imclient loadHistoryMessages:chatType chatWith:chatWith anchorMsgId:self.anchorMsgId beforeAuthor:beforeAnchor size:(int)self.pageSize/2];
+
         _ftsIndex = [beforeMessages count];
-//         NSArray<PhotonIMMessage *> * _Nullable afterMessages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:[[beforeMessages lastObject] messageID] beforeAuthor:!beforeAnchor size:(int)self.pageSize/2];
          NSArray<PhotonIMMessage *> * _Nullable afterMessages = [imclient loadHistoryMessages:chatType chatWith:chatWith anchorMsgId:[[beforeMessages lastObject] messageID] beginTimeStamp:0 endTime:[[NSDate date] timeIntervalSince1970] * 1000.0  beforeAuthor:!beforeAnchor size:(int)self.pageSize/2];
         
         NSMutableArray<PhotonIMMessage *> *messages = [NSMutableArray arrayWithArray:beforeMessages];
@@ -132,9 +132,15 @@
                    [items addObject:item];
                }
            }
+        if (items.count == 0 && self.anchorMsgId.length > 0) {
+            PhotonIMMessage * message = [imclient findMessage:chatType chatWith:chatWith msgId:self.anchorMsgId];
+            id item =  [self wrapperMessage:message];
+            if (item) {
+                [items addObject:item];
+            }
+            noHistory = YES;
+        }
     }else{
-//         NSArray<PhotonIMMessage *> * _Nullable messages = [imclient findMessageListByIdRange:chatType chatWith:chatWith anchorMsgId:self.anchorMsgId beforeAuthor:beforeAnchor  size:(int)self.pageSize];
-        
         NSArray<PhotonIMMessage *> * _Nullable messages = [imclient loadHistoryMessages:chatType chatWith:chatWith anchorMsgId:self.anchorMsgId beforeAuthor:beforeAnchor size:(int)self.pageSize];
        
            for (PhotonIMMessage *msg in messages) {
@@ -155,7 +161,7 @@
     }
     if (finish) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            finish(@{@"result_count":@(items.count)});
+            finish(@{@"result_count":noHistory?@(0):@(items.count)});
         });
     }
 }
@@ -274,6 +280,7 @@
                 PhotonChatNoticItem *noticItem = [[PhotonChatNoticItem alloc] init];
                 noticItem.notic = [[NSString alloc] initWithData:customBody.data encoding:NSUTF8StringEncoding];
                 noticItem.userInfo = message;
+                [[PhotonContent currentUser] loadMembersFormGroup:message.chatWith completion:nil];
                 return noticItem;
             }
         }
