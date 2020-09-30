@@ -110,7 +110,7 @@ typedef void(^Compention)(BOOL deleteMsg);
     
     PhotonGroupTitleTableItem *memberItem = [[PhotonGroupTitleTableItem alloc] init];
     memberItem.title = @"组成员";
-    memberItem.itemHeight = 30;
+    memberItem.itemHeight =40;
     memberItem.icon = @"right_arrow";
     NSInteger count = [members count];
     memberItem.detail = [NSString stringWithFormat:@"%@人",@(count)];
@@ -136,7 +136,7 @@ typedef void(^Compention)(BOOL deleteMsg);
     settionItem.settingName = @"消息免打扰";
     settionItem.open = _conversation.ignoreAlert;
     settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
-    [self.items addObject:settionItem];
+//    [self.items addObject:settionItem];
     
     PhotonMessageSettingItem *stickyItem = [[PhotonMessageSettingItem alloc] init];
     stickyItem.settingName = @"置顶";

@@ -88,7 +88,7 @@ typedef void(^Compention)(BOOL deleteMsg);
      settionItem.showSwitch = YES;
     settionItem.open = _conversation.ignoreAlert;
     settionItem.type = PhotonMessageSettingTypeIgnoreAlert;
-    [self.items addObject:settionItem];
+//    [self.items addObject:settionItem];
     
     PhotonMessageSettingItem *stickyItem = [[PhotonMessageSettingItem alloc] init];
     stickyItem.settingName = @"置顶";

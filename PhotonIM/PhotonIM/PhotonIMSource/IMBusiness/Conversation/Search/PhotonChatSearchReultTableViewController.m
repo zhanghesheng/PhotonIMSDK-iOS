@@ -113,13 +113,21 @@
         if (!attrString) {
             continue;
         }
-        PhotonUser *user =  [PhotonContent friendDetailInfo:msg.fr];
+        PhotonUser *user = nil;
+        if(msg.chatType == PhotonIMChatTypeSingle){
+            user =  [PhotonContent friendDetailInfo:msg.fr];
+        }else{
+            user =  [PhotonContent friendDetailInfo:msg.to];
+        }
         PhotonConversationItem *item = [[PhotonConversationItem alloc] init];
         PhotonIMConversation *conver = [[PhotonIMConversation alloc] initWithChatType:msg.chatType chatWith:msg.chatWith];
         conver.FAvatarPath = user.avatarURL;
+        conver.lastMsgFr = msg.fr;
+        conver.lastMsgTo = msg.to;
         conver.lastTimeStamp = msg.timeStamp;
         conver.lastMsgId = [msg messageID];
         conver.FName = user.nickName?user.nickName:user.userName;
+        conver.lastMsgContent = [attrString string];
         item.snnipetContent = attrString;
         item.userInfo = conver;
         [self.items addObject:item];

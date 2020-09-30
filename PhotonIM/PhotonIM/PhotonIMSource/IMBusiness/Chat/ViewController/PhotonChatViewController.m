@@ -76,7 +76,6 @@
         }
          [(PhotonChatModel *)self.model setLoadFtsData:_loadFtsRet];
         
-        
         // 添加接收消息的监听
         [[PhotonMessageCenter sharedCenter] addObserver:self];
     }
@@ -113,7 +112,9 @@
     _authSucceedCount = 0;
     _authFaileddCount = 0;
     [self addRightBarItem];
-    self.title = _conversation.FName;
+    PhotonUser *user = [PhotonContent friendDetailInfo:_conversation.chatWith];
+    NSString *title = user.nickName?user.nickName:user.userName;
+    self.title = title?:_conversation.FName;
     self.isStop = YES;
     [self.view setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];
     [self.tableView setBackgroundColor:[UIColor colorWithHex:0XF3F3F3]];

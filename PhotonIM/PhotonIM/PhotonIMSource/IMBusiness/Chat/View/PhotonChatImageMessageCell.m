@@ -29,9 +29,11 @@
     if (!self.item) {
         return;
     }
-//    self.contentBackgroundView.contentMode =  UIViewContentModeScaleAspectFit;
-//    self.contentBackgroundView.backgroundColor = [UIColor clearColor];
     PhotonChatImageMessageItem *imageItem = (PhotonChatImageMessageItem *)object;
+    if(imageItem.whRatio == 0){
+        self.contentBackgroundView.contentMode =  UIViewContentModeScaleAspectFit;
+        self.contentBackgroundView.backgroundColor = [UIColor clearColor];
+    }
     NSURL *fileURL = nil;
     if (imageItem.localPath && imageItem.localPath.length > 0) {
         [self.contentBackgroundView setImage:[UIImage imageWithContentsOfFile:imageItem.localPath?:@""]];

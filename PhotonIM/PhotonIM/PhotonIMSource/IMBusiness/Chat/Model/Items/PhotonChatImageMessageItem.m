@@ -18,7 +18,7 @@
 }
 - (CGSize)contentSize{
     CGFloat scale = 1.0 / self.whRatio;
-    if (isinf(scale)) {
+    if (self.whRatio == 0 || isinf(scale)) {
         scale = [UIScreen mainScreen].scale;
     }
     CGSize imageSize = CGSizeZero;

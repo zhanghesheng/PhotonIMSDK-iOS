@@ -71,7 +71,7 @@
     }
      self.nickLabel.text = nickName;
      NSMutableAttributedString *content = [[NSMutableAttributedString alloc] init];
-    if (item.snnipetContent.length > 0) {
+    if (item.snnipetContent.length > 0 && conversation.chatType == PhotonIMChatTypeSingle) {
         content = [item.snnipetContent mutableCopy];
     }else{
         NSMutableAttributedString *atTypeString = [[NSMutableAttributedString alloc] init];
@@ -178,8 +178,11 @@
     
 //    // 昵称
     CGFloat width = self.contentView.width - (self.timeLabel.width + self.iconView.x + self.iconView.width + 15.5 + 5.0 + 15.0);
+    if(conversation.ignoreAlert){
+        width = width - 16;
+    }
     size = [self.nickLabel sizeThatFits:CGSizeMake(PhotoScreenWidth, MAXFLOAT)];
-    size.width = width;
+    size.width = (size.width > width)?width:size.width;
     CGRect nickFrame = self.nickLabel.frame;
     nickFrame.size = size;
     CGFloat nickX = iconFrame.size.width + iconFrame.origin.x + 15.5;
