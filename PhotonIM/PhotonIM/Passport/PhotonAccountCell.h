@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loginAction:(PhotonAccountItem *)item;
 - (void)registerAction:(PhotonAccountItem *)item;
 - (void)tipToRegister;
+- (void)tipToLogin;
 @end
 @interface PhotonAccountCell : PhotonTableViewCell
 @property (nonatomic,strong,readonly, nonnull)UIButton      *accountBtn;

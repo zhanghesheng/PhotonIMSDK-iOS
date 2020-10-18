@@ -168,7 +168,7 @@
         _durationLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _durationLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
         _durationLabel.textAlignment = NSTextAlignmentCenter;
-        _durationLabel.textColor = [UIColor blackColor];
+        _durationLabel.textColor = [UIColor whiteColor];
         [_durationLabel setUserInteractionEnabled:NO];
     }
     return _durationLabel;

@@ -48,8 +48,11 @@
     }
 }
 - (void)tipAction:(id)sender{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(tipToRegister)]) {
+    PhotonAccountItem *item = (PhotonAccountItem *)self.item;
+    if (item.accountType == PhotonAccountTypeLogin && [self.delegate respondsToSelector:@selector(tipToRegister)]) {
         [self.delegate tipToRegister];
+    }else if([self.delegate respondsToSelector:@selector(tipToLogin)]){
+        [self.delegate tipToLogin];
     }
 }
 
@@ -65,7 +68,7 @@
 - (UITextField *)nickTextField{
     if (!_nickTextField) {
         _nickTextField = [[UITextField alloc] init];
-        _nickTextField.placeholder = @"用户id";
+        _nickTextField.placeholder = @"请输入登录账号";
         _nickTextField.clipsToBounds = YES;
         _nickTextField.layer.cornerRadius = 4.5;
         _nickTextField.backgroundColor = [UIColor colorWithHex:0xF9F9F9];
@@ -77,7 +80,7 @@
 - (UITextField *)pswTextField{
     if (!_pswTextField) {
         _pswTextField = [[UITextField alloc] init];
-        _pswTextField.placeholder = @"密码";
+        _pswTextField.placeholder = @"请输入登录密码";
         _pswTextField.clipsToBounds = YES;
         _pswTextField.keyboardType = UIKeyboardTypeNamePhonePad;
         _pswTextField.layer.cornerRadius = 4.5;
@@ -138,9 +141,13 @@
         [self.accountBtn setImage:[UIImage imageWithColor:[UIColor colorWithHex:0x1F90FF]] forState:UIControlStateNormal];
     }
     if (item.accountType == PhotonAccountTypeRegister) {
+        self.pswTextField.placeholder = @"请输入注册密码";
+        self.pswTextField.placeholder = @"请输入注册密码";
         [self.accountBtn setTitle:@"注册" forState:UIControlStateNormal];
         [self.tipBtn setTitle:@"已有账号登录" forState:UIControlStateNormal];
     }else{
+        self.pswTextField.placeholder = @"请输入登录密码";
+        self.pswTextField.placeholder = @"请输入登录密码";
         [self.accountBtn setTitle: @"登录" forState:UIControlStateNormal];
         [self.tipBtn setTitle:@"新账号注册" forState:UIControlStateNormal];
     }
@@ -170,7 +177,7 @@
         make.top.mas_equalTo(self.accountBtn.mas_bottom).mas_offset(22);
         make.centerX.mas_equalTo(self.accountBtn.mas_centerX);
         if (item.accountType == PhotonAccountTypeRegister) {
-            make.size.mas_equalTo(CGSizeMake(0, 0));
+            make.size.mas_equalTo(CGSizeMake(100, 20));
         }else{
             make.size.mas_equalTo(CGSizeMake(80, 20));
         }

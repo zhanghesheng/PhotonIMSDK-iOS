@@ -50,6 +50,9 @@
     }];
 }
 
+- (void)tipToLogin{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)wrapData:(NSDictionary *)dict{
     [super wrapData:dict];
 }

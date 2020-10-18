@@ -33,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *contactIcon;
 
+/**
+ 昵称
+ */
+@property (nonatomic, assign) CGFloat ration;
+
 @end
 
 NS_ASSUME_NONNULL_END
