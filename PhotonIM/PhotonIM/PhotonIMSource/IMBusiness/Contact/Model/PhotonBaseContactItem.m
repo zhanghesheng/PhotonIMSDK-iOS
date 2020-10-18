@@ -9,6 +9,14 @@
 #import "PhotonBaseContactItem.h"
 
 @implementation PhotonBaseContactItem
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _ration = 1;
+    }
+    return self;
+}
 - (CGFloat)itemHeight{
     return 70.0f;
 }

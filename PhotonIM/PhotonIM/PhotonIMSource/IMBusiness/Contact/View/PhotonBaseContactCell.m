@@ -50,10 +50,11 @@
 }
 
 - (void)p_layoutViews{
+    PhotonBaseContactItem *item = self.item;
     [self.avatarView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.contentView).mas_offset(20);
         make.centerY.mas_equalTo(self.contentView);
-        make.size.mas_equalTo(CGSizeMake(44, 44));
+        make.size.mas_equalTo(CGSizeMake(44 * item.ration, 42 * item.ration));
     }];
     
     [self.nickLabel mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -79,6 +79,7 @@
     [self.navigationController pushViewController:regesterVCL animated:YES];
 }
 
+
 - (void)resignResponder{
     [self.tempCell resignFirst];
 }

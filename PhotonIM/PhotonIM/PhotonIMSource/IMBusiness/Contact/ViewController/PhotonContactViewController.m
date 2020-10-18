@@ -32,21 +32,24 @@
         make.edges.mas_equalTo(self.view);
     }];
     singleItem.contactID = @"1";
-    singleItem.contactAvatar = @"default_head";
+    singleItem.contactAvatar = @"locationpeople";
     singleItem.contactName = @"附近在线的人";
     singleItem.contactIcon = @"right_arrow";
+    singleItem.ration = .6;
     
     PhotonBaseContactItem *groupItem = [[PhotonBaseContactItem alloc] init];
     groupItem.contactID = @"2";
-    groupItem.contactAvatar = @"default_head";
+    groupItem.contactAvatar = @"locationgroup";
     groupItem.contactName = @"附近的群组";
     groupItem.contactIcon = @"right_arrow";
+    groupItem.ration = .6;
     
     PhotonBaseContactItem *roomItem = [[PhotonBaseContactItem alloc] init];
     roomItem.contactID = @"3";
-    roomItem.contactAvatar = @"default_head";
+    roomItem.contactAvatar = @"chatroom";
     roomItem.contactName = @"附近的房间";
     roomItem.contactIcon = @"right_arrow";
+    roomItem.ration = .6;
     
     [self.items addObject:singleItem];
     [self.items addObject:groupItem];
