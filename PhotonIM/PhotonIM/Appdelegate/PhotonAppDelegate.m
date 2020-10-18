@@ -17,52 +17,6 @@
 #import "YYFPSLabel.h"
 #import "Growing.h"
 #import <Rifle/Rifle.h>
-#import <PhotonHTTPDNS/PhotonHTTPDNS.h>
-@interface PhotonHTTPDNSConfig : NSObject<PhotonHTTPDNSConfigProtocol>
-
-@end
-
-@implementation PhotonHTTPDNSConfig
-// appid
-- (NSString *)getAppid{
-    return @"2bd1a15c553de0a9df6dcede9af22962";
-}
-
-- (NSString *)getAppVersion{
-    return @"1438";
-}
-
-- (NSString *)getOsType{
-    return @"iOS";
-}
-
-- (NSString *)getUseragent{
-    return @"MomoChat/9.0 ios/1471 (iPhone 8; iOS 12.1.2; zh_CN; iPhone10,1; S1)";
-}
-// 获取全局的域名配置，有则设置
-- (NSString *)getHttpDNSGlobalConfigs{
-    return @"";
-}
-// 获取当前的用户id
-- (NSString *)getUserid{
-    return @"12345";
-}
-
-// 获取当前的用户id
-- (double)getLng{
-    return 0.0f;
-}
-
-// 获取当前的用户id
-- (double)getLat{
-    return 32.43f;
-}
-
-// 指定预先解析的域名
-- (nonnull NSArray<NSString *> *)getPreResolveHosts {
-    return @[@"immomo.com"];
-}
-@end
 
 @interface PhotonAppDelegate ()<UNUserNotificationCenterDelegate>
 
@@ -73,8 +27,6 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    PhotonHTTPDNSConfig *config1 = [[PhotonHTTPDNSConfig alloc] init];
-     [PhotonHTTPDNSClient initHTTPDNSWithConfig:config1];
 
 //     // 打开底层log 日志，用于排查问题，默认是关闭
 //    [PhotonHTTPDNSClient shouldConsolLog:YES];
