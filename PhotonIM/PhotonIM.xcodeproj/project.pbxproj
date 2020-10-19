@@ -2583,7 +2583,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2310;
 				DEAD_CODE_STRIPPING = YES;
@@ -2656,7 +2656,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim;
 				PRODUCT_NAME = PhotonIMMerge;
-				PROVISIONING_PROFILE_SPECIFIER = Photonimdemo;
+				PROVISIONING_PROFILE_SPECIFIER = hwphotonimhoc;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
