@@ -355,7 +355,7 @@
     if (ranges.count > 0) {
         NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:text];
         for (NSValue *tempRang in ranges) {
-            [attributeString setAttributes:@{NSForegroundColorAttributeName:[UIColor greenColor]} range:[tempRang rangeValue]];
+            [attributeString setAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:[tempRang rangeValue]];
         }
         return [attributeString copy];
     }else{

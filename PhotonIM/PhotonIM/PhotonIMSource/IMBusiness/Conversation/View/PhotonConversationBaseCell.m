@@ -92,7 +92,7 @@
                    chatContent = [[NSMutableAttributedString alloc] initWithString:preConetnt attributes:@{NSForegroundColorAttributeName:[UIColor greenColor]}];
                    [chatContent appendAttributedString:[[NSMutableAttributedString alloc] initWithString:conversation.lastMsgContent attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}]];
                }else{
-                    chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@",preConetnt,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];
+                    chatContent = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@",preConetnt,[conversation.lastMsgContent trim]] attributes:@{NSForegroundColorAttributeName:[UIColor colorWithHex:0x9B9B9B]}];//[UIColor colorWithHex:0x9B9B9B]
                }
                
            }else{

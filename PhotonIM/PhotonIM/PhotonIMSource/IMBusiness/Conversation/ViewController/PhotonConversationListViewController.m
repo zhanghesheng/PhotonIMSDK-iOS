@@ -159,7 +159,11 @@ static NSString *message_syncing = @"消息(收取中......)";
 - (void)loadPreDataItems{
     __weak typeof(self)weakSlef = self;
     [self.model loadItems:nil finish:^(NSDictionary * _Nullable dict) {
-        [weakSlef removeNoDataView];
+        if(weakSlef.model.items.count == 0){
+            [weakSlef loadNoDataView];
+        }else{
+            [weakSlef removeNoDataView];
+        }
         [weakSlef reloadData];
         [weakSlef endRefreshing];
         weakSlef.isRefreshing = NO;

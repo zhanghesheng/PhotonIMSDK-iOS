@@ -108,8 +108,8 @@
        
        
        PhotonEmptyTableItem *emptyitem = [[PhotonEmptyTableItem alloc] init];
-       emptyitem.itemHeight = 11.5;
-       [self.items addObject:emptyitem];
+       emptyitem.itemHeight = 8.5;
+//       [self.items addObject:emptyitem];
        
        [self.items addObject:personItem];
        [self.items addObject:personItem1];
@@ -123,7 +123,7 @@
 //    #else
 //    #endif
        
-       [self.items addObject:emptyitem];
+//       [self.items addObject:emptyitem];
        
     
    
@@ -142,7 +142,7 @@
     [self.items addObject:emptyitem];
 //    [self.items addObject:settionItem];
     
-    [self.items addObject:emptyitem];
+//    [self.items addObject:emptyitem];
     [self.items addObject:personItem4];
     
     PhotonPersonDataSource *dataSource = [[PhotonPersonDataSource alloc] initWithItems:self.items];

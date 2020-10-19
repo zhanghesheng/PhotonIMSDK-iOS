@@ -97,6 +97,9 @@
         self.dataSource.items = self.model.items;
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation: UITableViewRowAnimationAutomatic];
         [[PhotonMessageCenter sharedCenter] deleteConversation:item.userInfo clearChatMessage:YES];
+        if(self.dataSource.items.count == 0){
+            [self loadNoDataView];
+        }
     }
     
 }
