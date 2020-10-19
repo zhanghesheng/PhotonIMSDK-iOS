@@ -9,6 +9,7 @@
 #import "PhotonImageBrowser.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <objc/runtime.h>
+#import <SDWebImage/SDImageCache.h>
 #import "PhotonScreenImageCell.h"
 #import "PhotonMacros.h"
 #import "PhotonContent.h"

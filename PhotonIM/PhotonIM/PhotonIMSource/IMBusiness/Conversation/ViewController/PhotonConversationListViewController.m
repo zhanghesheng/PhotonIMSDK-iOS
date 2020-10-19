@@ -67,7 +67,7 @@ static NSString *message_syncing = @"消息(收取中......)";
 //                valueStr = [NSString stringWithFormat:@"%@+",@(totalCount)];
 //            }
             weakself.tabBarItem.badgeValue = [NSString stringWithFormat:@"%@",valueStr];
-            weakself.tabBarItem.badgeColor = [UIColor redColor];
+            weakself.tabBarItem.badgeColor = [UIColor colorWithHex:0xFD2655];
             weakself.navigationItem.title = [NSString stringWithFormat:@"消息(%@)",valueStr];
         }else{
             weakself.tabBarItem.badgeValue = nil;
@@ -232,8 +232,21 @@ static NSString *message_syncing = @"消息(收取中......)";
     if (!conversation) {
         return;
     }
+  
+    __block PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
+    if (!user) {
+        [[PhotonContent currentUser] loadFriendProfile:conversation.chatWith completion:^(BOOL success) {
+            user = [PhotonContent friendDetailInfo:conversation.chatWith];
+            [self insertConversation:conversation user:user];
+        }];
+        return;
+    }else{
+        [self insertConversation:conversation user:user];
+    }
+}
+
+- (void)insertConversation:(PhotonIMConversation *)conversation user:(PhotonUser *)user{
     PhotonConversationItem *temp = [[PhotonConversationItem alloc] init];
-    PhotonUser *user = [PhotonContent friendDetailInfo:conversation.chatWith];
     conversation.FAvatarPath = user.avatarURL;
     conversation.FName = user.nickName;
     temp.userInfo = conversation;

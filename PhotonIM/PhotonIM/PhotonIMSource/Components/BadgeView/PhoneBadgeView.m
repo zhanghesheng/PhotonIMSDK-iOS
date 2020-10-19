@@ -7,7 +7,7 @@
 //
 
 #import "PhoneBadgeView.h"
-
+#import "UIColor+PhotonExtensions.h"
 @interface PhoneBadgeView ()
 
 @property (nonatomic, strong) UILabel *titleLabel;
@@ -49,7 +49,7 @@
         [self addSubview:self.titleLabel];
         
         // 默认属性设置
-        [self setBackgroundColor:[UIColor redColor]];
+        [self setBackgroundColor:[UIColor colorWithHex:0xFD2655]];//
         [self setTitleColor:[UIColor whiteColor]];
         [self setTitleFont:[UIFont systemFontOfSize:12]];
         [self setMaxHeight:18.0];

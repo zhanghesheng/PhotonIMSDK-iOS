@@ -7,7 +7,7 @@
 //
 
 #import "PhotonUINavigationController.h"
-
+#import "UIColor+PhotonExtensions.h"
 @interface PhotonUINavigationController ()<UIGestureRecognizerDelegate>
 
 @end
@@ -16,7 +16,7 @@
 + (void)initialize {
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     [navigationBar setBarTintColor:[UIColor whiteColor]];
-    [navigationBar setTintColor:[UIColor blackColor]];
+    [navigationBar setTintColor:[UIColor colorWithHex:0xB7B7B7]];
     navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0]};
 }
 

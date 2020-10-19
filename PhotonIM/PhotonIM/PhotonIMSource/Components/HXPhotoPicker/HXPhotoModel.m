@@ -918,7 +918,6 @@
     BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
     if (downloadFinined && results) {
         dispatch_async(dispatch_get_main_queue(), ^{
-//            self.isICloud = NO;
             self.iCloudDownloading = NO;
             if (success) {
                 success(results, info, orientation, audioMix);
@@ -1012,7 +1011,6 @@
                     BOOL downloadFinined = (![[info objectForKey:PHImageCancelledKey] boolValue] && ![info objectForKey:PHImageErrorKey] && ![[info objectForKey:PHImageResultIsDegradedKey] boolValue]);
                     if (downloadFinined && imageData) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-//                            weakSelf.isICloud = NO;
                             weakSelf.iCloudDownloading = NO;
                             if (success) {
                                 success(imageData, info, orientation, nil);

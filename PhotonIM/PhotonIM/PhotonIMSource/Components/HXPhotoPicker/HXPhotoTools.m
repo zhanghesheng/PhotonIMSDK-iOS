@@ -24,22 +24,6 @@
         }
     }];
     return geoCoder;
-//    NSMutableArray *placemarkArray = [NSMutableArray array];
-//    NSInteger locationCount = 0;
-//    for (HXPhotoModel *subModel in model.photoModelArray) {
-//        if (subModel.asset.location) {
-//            [geoCoder reverseGeocodeLocation:subModel.asset.location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-//                if (placemarks.count > 0 && !error) {
-//                    CLPlacemark *placemark = placemarks.firstObject;
-//                    [placemarkArray addObject:placemark];
-//                    if (placemark) {
-//                        <#statements#>
-//                    }
-//                }
-//            }];
-//            locationCount++;
-//        }
-//    }
 }
 
 /**

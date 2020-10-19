@@ -27,7 +27,7 @@
                                                                            [weakSelf p_deleteCellWithIndexPath:indexPath];
                                                                               [tableView setEditing:NO animated:YES];
                                                                        }];
-    
+    delAction.backgroundColor = [UIColor colorWithHex:0xFD2655];
     PhotonConversationItem *item = self.dataSource.items[indexPath.row];
     if (!item.userInfo) {
           return @[delAction];
@@ -42,6 +42,8 @@
                                                                           handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
                                                                                  [tableView setEditing:NO animated:YES];
                                                                           }];
+    delAction.backgroundColor = [UIColor colorWithHex:0xFD2655];
+    readAction.backgroundColor = [UIColor colorWithHex:0xC9C9C9];
     return @[delAction,readAction];
 }
 
@@ -55,8 +57,8 @@
              [weakSelf p_deleteCellWithIndexPath:indexPath];
              [tableView setEditing:NO animated:YES];
         }];
-        deleteRowAction.backgroundColor = [UIColor redColor];
         NSMutableArray *actions = [NSMutableArray array];
+        deleteRowAction.backgroundColor = [UIColor colorWithHex:0xFD2655];
         [actions addObject:deleteRowAction];
         
         PhotonConversationItem *item = self.dataSource.items[indexPath.row];
@@ -72,7 +74,7 @@
                      [weakSelf reacAction:indexPath];
                 });
              }];
-            readAction.backgroundColor = [UIColor grayColor];
+            readAction.backgroundColor = [UIColor colorWithHex:0xC9C9C9];
             [actions addObject:readAction];
         }
        

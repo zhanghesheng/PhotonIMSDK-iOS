@@ -49,6 +49,25 @@ UITableViewDelegate
             [weakSelf.view hx_handleLoading];
             [weakSelf.view addSubview:weakSelf.authorizationLb];
         }
+        
+//        if (status == PHAuthorizationStatusAuthorized) {
+//            [weakSelf getAlbumModelList:YES];
+//        }
+//#ifdef __IPHONE_14_0
+//        else if (@available(iOS 14, *)) {
+//            if (status == PHAuthorizationStatusLimited) {
+//                [weakSelf.view hx_handleLoading];
+//                [weakSelf.view addSubview:weakSelf.authorizationLb];
+//            }
+//#endif
+//        else if (status == PHAuthorizationStatusRestricted ||
+//                 status == PHAuthorizationStatusDenied) {
+//        }
+//#ifdef __IPHONE_14_0
+//        }else if (status == PHAuthorizationStatusRestricted ||
+//                  status == PHAuthorizationStatusDenied) {
+//         }
+//#endif
     }];
 }
 - (UIStatusBarStyle)preferredStatusBarStyle {
@@ -222,10 +241,7 @@ UITableViewDelegate
     if (self.manager.configuration.navBarBackgroundImage) {
         [self.navigationController.navigationBar setBackgroundImage:self.manager.configuration.navBarBackgroundImage forBarMetrics:UIBarMetricsDefault];
     }
-//    if (navBarBackgroudColor) {
-//        [self.navigationController.navigationBar setBackgroundColor:navBarBackgroudColor];
-//        [self.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
-//    }
+
     
     if (self.manager.configuration.navigationTitleSynchColor) {
         self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : themeColor};
@@ -271,15 +287,6 @@ UITableViewDelegate
     [self cancelClick];
 }
 - (void)photoViewControllerDidChangeSelect:(HXPhotoModel *)model selected:(BOOL)selected {
-    if (self.albumModelArray.count > 0) {
-//        HXAlbumModel *albumModel = self.albumModelArray[model.currentAlbumIndex];
-//        if (selected) {
-//            albumModel.selectedCount++;
-//        }else {
-//            albumModel.selectedCount--;
-//        }
-//        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:model.currentAlbumIndex inSection:0]]];
-    }
 }
 - (void)pushPhotoListViewControllerWithAlbumModel:(HXAlbumModel *)albumModel animated:(BOOL) animated {
     if (!self.preloadPhotoListCompletion) {

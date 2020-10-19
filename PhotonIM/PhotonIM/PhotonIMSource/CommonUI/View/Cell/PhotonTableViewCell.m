@@ -19,7 +19,7 @@
 - (void)initView {
     CALayer *layer1 = [CALayer layer];
     [self.contentView.layer addSublayer:layer1];
-    layer1.backgroundColor = [UIColor colorWithHex:0xCECECE].CGColor;
+    layer1.backgroundColor = [UIColor colorWithHex:0xE6E6E6].CGColor;
     self.lineLayer = layer1;
 }
 + (CGFloat)tableView:(UITableView*)tableView rowHeightForObject:(id)object {

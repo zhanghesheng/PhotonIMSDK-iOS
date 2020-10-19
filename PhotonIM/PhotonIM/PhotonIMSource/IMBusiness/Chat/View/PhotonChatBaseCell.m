@@ -243,14 +243,6 @@
     
     self.maskView.frame = CGRectMake(0, 0, self.contentBackgroundView.width, self.contentBackgroundView.height);
     
-//    CGRect progressViewFrame = self.progressView.frame;
-//    CGFloat progressHeight = self.maskView.height/2.0;
-//    CGFloat progressWidth = progressHeight;
-//    progressViewFrame.size =CGSizeMake(progressWidth, progressHeight);
-//    CGFloat y = (self.maskView.height - progressHeight)/2.0;
-//    CGFloat x= (self.maskView.width - progressWidth)/2.0;
-//    progressViewFrame.origin = CGPointMake(x, y);
-//    self.progressView.frame = progressViewFrame;
     self.progressView.center = CGPointMake(self.maskView.width / 2, self.maskView.height / 2);
 }
 

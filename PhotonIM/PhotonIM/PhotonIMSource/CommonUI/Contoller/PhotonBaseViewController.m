@@ -122,6 +122,11 @@
 }
 
 - (void)reloadData{
+    [PhotonUtil runMainThread:^{
+        if (self.model.items > 0) {
+            [self removeNoDataView];
+        }
+    }];
     __weak typeof(self)weakSelf = self;
     [self runPhotonLoadDataQueue:^{
         [weakSelf.reloadDataRefreshUISource addEventSource:nil];
@@ -297,11 +302,12 @@
     
     [_noDataView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(self.view);
-        make.size.mas_equalTo(CGSizeMake(100, 100));
+        make.size.mas_equalTo(CGSizeMake(119, 119));
     }];
     
     [icon mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(self.noDataView);
+        make.left.top.right.bottom.mas_equalTo(0);
     }];
     
     [tip mas_makeConstraints:^(MASConstraintMaker *make) {
