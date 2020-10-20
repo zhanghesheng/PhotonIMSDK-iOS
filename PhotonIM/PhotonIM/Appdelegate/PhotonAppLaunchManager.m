@@ -45,7 +45,13 @@ static PhotonAppLaunchManager *lauchManager = nil;
 }
 
 - (void)launchInWindow{
+    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     UITabBarController *tabVC = [[UITabBarController alloc] init];
+    tabVC.tabBar.barTintColor = [UIColor colorWithHex:0xFAFAFA];
+    tabVC.tabBar.layer.borderWidth = 0.50;
+    tabVC.tabBar.layer.borderColor = [UIColor colorWithHex:0xFAFAFA].CGColor;
+    tabVC.tabBar.clipsToBounds = true;
+    tabVC.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 6, -6, 0);
     UIWindow *window = self.window ? self.window : [UIApplication sharedApplication].keyWindow;
     for (id view in window.subviews) {
         [view removeFromSuperview];

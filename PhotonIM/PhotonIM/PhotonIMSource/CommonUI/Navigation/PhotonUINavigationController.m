@@ -16,8 +16,21 @@
 + (void)initialize {
     UINavigationBar *navigationBar = [UINavigationBar appearance];
     [navigationBar setBarTintColor:[UIColor whiteColor]];
-    [navigationBar setTintColor:[UIColor colorWithHex:0xB7B7B7]];
+    [navigationBar setTintColor:[UIColor whiteColor]];
+    [navigationBar setShadowImage:[self imageWithColor:[UIColor colorWithHex:0xB7B7B7] size:CGSizeMake(PhotoScreenWidth, 0.5)]];
     navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName : [UIColor blackColor], NSFontAttributeName : [UIFont fontWithName:@"PingFangSC-Semibold" size:16.0]};
+}
+
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
+    if (!color || size.width <=0 || size.height <=0) return nil;
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    UIGraphicsBeginImageContextWithOptions(rect.size,NO, 0);
+    CGContextRef context =UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextFillRect(context, rect);
+    UIImage *image =UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 - (void)viewDidLoad {

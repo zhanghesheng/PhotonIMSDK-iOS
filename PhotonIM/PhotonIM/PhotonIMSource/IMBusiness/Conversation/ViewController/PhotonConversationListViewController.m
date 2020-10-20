@@ -91,7 +91,8 @@ static NSString *message_syncing = @"消息(收取中......)";
         self.tabBarItem.tag = 1;
         [self.tabBarItem setImage:[UIImage imageNamed:@"message"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"message_onClick"]];
-
+        self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, 0, 0);
+//        self.tabBarItem.titlePositionAdjustment
     }
     return self;
 }
@@ -140,6 +141,7 @@ static NSString *message_syncing = @"消息(收取中......)";
     [self setNavTitle:@"消息"];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(self.view);
+        make.top.mas_equalTo(self.view).offset(0.5);
     }];
     [self.dataDispatchSource addSemaphore];
 }

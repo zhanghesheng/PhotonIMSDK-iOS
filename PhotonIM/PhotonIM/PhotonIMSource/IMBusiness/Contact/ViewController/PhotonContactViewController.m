@@ -20,6 +20,7 @@
         [self.tabBarItem setTitle:@"通讯录"];
         [self.tabBarItem  setImage:[UIImage imageNamed:@"contact"]];
         [self.tabBarItem  setSelectedImage:[UIImage imageNamed:@"contact_onclick"]];
+        self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, 0, 0);
     }
     return self;
 }

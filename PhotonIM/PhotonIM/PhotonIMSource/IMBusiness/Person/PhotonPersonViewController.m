@@ -40,6 +40,7 @@
         [self.tabBarItem setTitle:@"我"];
         [self.tabBarItem setImage:[UIImage imageNamed:@"me"]];
         [self.tabBarItem setSelectedImage:[UIImage imageNamed:@"me_onclick@"]];
+        self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, 0, 0);
     }
     return self;
 }
