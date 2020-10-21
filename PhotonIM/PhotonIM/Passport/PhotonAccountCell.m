@@ -8,9 +8,10 @@
 
 #import "PhotonAccountCell.h"
 #import "PhotonAccountItem.h"
+#import "PhotonTextField.h"
 @interface PhotonAccountCell()
-@property (nonatomic,strong, nonnull)UITextField   *nickTextField;
-@property (nonatomic,strong, nonnull)UITextField   *pswTextField;
+@property (nonatomic,strong, nonnull)PhotonTextField   *nickTextField;
+@property (nonatomic,strong, nonnull)PhotonTextField   *pswTextField;
 @property (nonatomic,strong, nonnull)UIButton      *accountBtn;
 @property (nonatomic,strong, nonnull)UIButton      *tipBtn;
 @end
@@ -65,9 +66,9 @@
     }
 }
 #pragma mark -------- Getter ---------
-- (UITextField *)nickTextField{
+- (PhotonTextField *)nickTextField{
     if (!_nickTextField) {
-        _nickTextField = [[UITextField alloc] init];
+        _nickTextField = [[PhotonTextField alloc] init];
         _nickTextField.placeholder = @"请输入登录账号";
         _nickTextField.clipsToBounds = YES;
         _nickTextField.layer.cornerRadius = 4.5;
@@ -77,9 +78,9 @@
     return _nickTextField;
 }
 
-- (UITextField *)pswTextField{
+- (PhotonTextField *)pswTextField{
     if (!_pswTextField) {
-        _pswTextField = [[UITextField alloc] init];
+        _pswTextField = [[PhotonTextField alloc] init];
         _pswTextField.placeholder = @"请输入登录密码";
         _pswTextField.clipsToBounds = YES;
         _pswTextField.keyboardType = UIKeyboardTypeNamePhonePad;
@@ -89,9 +90,10 @@
         _pswTextField.secureTextEntry = YES;
         
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-        btn.frame = CGRectMake(0, 0, 50, 26);
+        btn.frame = CGRectMake(0, 0, 56, 26);
         btn.contentMode = UIViewContentModeCenter;
         [btn setImage:[UIImage imageNamed:@"hidden_psw"] forState:UIControlStateNormal];
+        btn.imageEdgeInsets = UIEdgeInsetsMake(0, -6, 0, 6);
         [btn addTarget:self action:@selector(hiddenPsw:) forControlEvents:UIControlEventTouchUpInside];
         [_pswTextField setRightView:btn];
         _pswTextField.rightViewMode = UITextFieldViewModeAlways;

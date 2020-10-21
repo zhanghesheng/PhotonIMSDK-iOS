@@ -195,6 +195,7 @@
 		32664ED023FA2ABD00201947 /* PhotonChatFileMessageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32664ECF23FA2ABD00201947 /* PhotonChatFileMessageItem.m */; };
 		32664ED323FA613500201947 /* PhotonDocumentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32664ED223FA613500201947 /* PhotonDocumentViewController.m */; };
 		32664EE523FA70B100201947 /* Files in Resources */ = {isa = PBXBuildFile; fileRef = 32664EE423FA70B100201947 /* Files */; };
+		32712DD1253F07030045DE7D /* PhotonTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 32712DD0253F07030045DE7D /* PhotonTextField.m */; };
 		3272587422F140D000842026 /* PhotonSingleSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587322F140D000842026 /* PhotonSingleSettingViewController.m */; };
 		3272587722F1433500842026 /* PhotonMessageSettingItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587622F1433500842026 /* PhotonMessageSettingItem.m */; };
 		3272587A22F1437100842026 /* PhotonMessageSettingCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3272587922F1437100842026 /* PhotonMessageSettingCell.m */; };
@@ -612,6 +613,8 @@
 		3270BC1022C635E5004CAA00 /* PhotonSafeMutableArray.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonSafeMutableArray.m; sourceTree = "<group>"; };
 		3270BC1222C63670004CAA00 /* PhotonSafeMutableDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonSafeMutableDictionary.h; sourceTree = "<group>"; };
 		3270BC1322C63670004CAA00 /* PhotonSafeMutableDictionary.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonSafeMutableDictionary.m; sourceTree = "<group>"; };
+		32712DCF253F07030045DE7D /* PhotonTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonTextField.h; sourceTree = "<group>"; };
+		32712DD0253F07030045DE7D /* PhotonTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonTextField.m; sourceTree = "<group>"; };
 		3272587222F140D000842026 /* PhotonSingleSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonSingleSettingViewController.h; sourceTree = "<group>"; };
 		3272587322F140D000842026 /* PhotonSingleSettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonSingleSettingViewController.m; sourceTree = "<group>"; };
 		3272587522F1433500842026 /* PhotonMessageSettingItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonMessageSettingItem.h; sourceTree = "<group>"; };
@@ -1302,6 +1305,8 @@
 				322B427D22C211350027C1A3 /* Media */,
 				32293161241F5A40000A79C9 /* PhotonTest.swift */,
 				32293160241F5A40000A79C9 /* PhotonIM-Bridging-Header.h */,
+				32712DCF253F07030045DE7D /* PhotonTextField.h */,
+				32712DD0253F07030045DE7D /* PhotonTextField.m */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -2237,6 +2242,7 @@
 				3238AC9222D4AB8800EB3D0B /* PhotonPersonCell.m in Sources */,
 				3272587722F1433500842026 /* PhotonMessageSettingItem.m in Sources */,
 				3226080823D063CD00C9E393 /* PhotonSettingView.m in Sources */,
+				32712DD1253F07030045DE7D /* PhotonTextField.m in Sources */,
 				3221883122CCA5B6007E9FA3 /* PhotonErrorDescription.m in Sources */,
 				32C557EC23CDD9E0007F06CE /* UIImage+HXExtension.m in Sources */,
 				3229330B241F5D60000A79C9 /* ActionsViewController.swift in Sources */,

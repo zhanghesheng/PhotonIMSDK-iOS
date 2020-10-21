@@ -148,8 +148,8 @@
 
 - (void)addRightBarItem{
     UIImage *image = [[UIImage imageNamed:@"nav_more"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(more)];
-    self.navigationItem.rightBarButtonItem = back;
+    UIBarButtonItem *more = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(more)];
+    self.navigationItem.rightBarButtonItem = more;
 }
 
 - (void)more{

@@ -646,19 +646,19 @@ static NSString *textRec = @"";
 {
     [self.modeButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self);
-        make.bottom.mas_equalTo(self).mas_offset(-4);
+        make.bottom.mas_equalTo(self).mas_offset(-4-SAFEAREA_INSETS_BOTTOM);
         make.width.mas_equalTo(0);
     }];
     
     [self.voiceButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.mas_equalTo(self);
+        make.centerY.mas_equalTo(self).offset(-SAFEAREA_INSETS_BOTTOM/2.0);
         make.left.mas_equalTo(self.modeButton.mas_right).mas_offset(1);
         make.width.mas_equalTo(38);
     }];
     
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).mas_offset(9);
-        make.bottom.mas_equalTo(self).mas_offset(-9);
+        make.bottom.mas_equalTo(self).mas_offset(-9-SAFEAREA_INSETS_BOTTOM);
         make.left.mas_equalTo(self.voiceButton.mas_right).mas_offset(4);
         make.right.mas_equalTo(self.emojiButton.mas_left).mas_offset(-4);
     }];

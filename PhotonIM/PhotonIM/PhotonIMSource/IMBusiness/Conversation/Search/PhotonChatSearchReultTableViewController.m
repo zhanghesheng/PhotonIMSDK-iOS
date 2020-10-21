@@ -62,7 +62,7 @@
     
     [self.view addSubview:self.searchBar];
     [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view.mas_top).offset(25);
+        make.top.equalTo(self.view.mas_top).offset((SAFEAREA_INSETS_TOP != 0)?SAFEAREA_INSETS_BOTTOM + 15:30);
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);
         make.height.equalTo(@50);

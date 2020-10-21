@@ -152,8 +152,8 @@ PhotonAudioRecorderDelegate>
 - (void)addMasonry{
     [self.chatBar mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self.view);
-        make.bottom.mas_equalTo(self.view).mas_offset(-SAFEAREA_INSETS_BOTTOM);
-        make.height.mas_greaterThanOrEqualTo(54.5);
+        make.bottom.mas_equalTo(self.view);
+        make.height.mas_greaterThanOrEqualTo(54.5 + SAFEAREA_INSETS_BOTTOM);
     }];
     [self.view layoutIfNeeded];
 }
@@ -237,7 +237,7 @@ PhotonAudioRecorderDelegate>
         return;
     }
     [self.chatBar mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view).mas_offset(MIN(-keyboardFrame.size.height, -SAFEAREA_INSETS_BOTTOM));
+        make.bottom.mas_equalTo(self.view).mas_offset(MIN((keyboardFrame.size.height!=0)?-keyboardFrame.size.height + SAFEAREA_INSETS_BOTTOM:0, -0));
     }];
     [self.view layoutIfNeeded];
     
@@ -255,7 +255,7 @@ PhotonAudioRecorderDelegate>
         return;
     }
     [self.chatBar mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view).mas_offset(-SAFEAREA_INSETS_BOTTOM);
+        make.bottom.mas_equalTo(self.view).mas_offset(0);
     }];
     [self.view layoutIfNeeded];
 }
@@ -432,7 +432,7 @@ PhotonAudioRecorderDelegate>
 
 - (void)chatKeyboard:(id)keyboard didChangeHeight:(CGFloat)height{
     [self.chatBar mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.view).mas_offset(MIN(-height, -SAFEAREA_INSETS_BOTTOM));
+        make.bottom.mas_equalTo(self.view).mas_offset(MIN((height!=0)?-height + SAFEAREA_INSETS_BOTTOM:0, -0));
     }];
     [self.view layoutIfNeeded];
     

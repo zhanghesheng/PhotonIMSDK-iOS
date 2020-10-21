@@ -65,13 +65,23 @@ typedef void(^ActiobBlcok)(void);
         [self _moveToLocation:self.locationCoordinate];
     }
 }
-
 - (void)_setupSubviews
 {
     if (self.canSend) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(sendAction)];
+        UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        leftBtn.frame = CGRectMake(0, 0, 58.5 * 0.9, 30*0.9);
+        [leftBtn setTitle:@"发送" forState:UIControlStateNormal];
+        [leftBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [leftBtn.titleLabel setFont:[UIFont systemFontOfSize:15]];
+        leftBtn.backgroundColor = [UIColor colorWithHex:0x02A33D];
+        leftBtn.clipsToBounds = YES;
+        leftBtn.layer.cornerRadius = 3.0;
+        [leftBtn addTarget:self action:@selector(sendAction) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     }else{
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(shared)];
+        UIImage *image = [[UIImage imageNamed:@"share"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIBarButtonItem *share = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(share)];
+        self.navigationItem.rightBarButtonItem = share;
     }
     
     

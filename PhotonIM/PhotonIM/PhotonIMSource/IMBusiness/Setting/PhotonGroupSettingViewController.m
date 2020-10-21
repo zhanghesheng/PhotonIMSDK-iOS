@@ -98,7 +98,7 @@ typedef void(^Compention)(BOOL deleteMsg);
     PhotonGroupTitleTableItem *titleItem = [[PhotonGroupTitleTableItem alloc] init];
     titleItem.title = @"聊天组名称";
     titleItem.itemHeight = 70;
-    titleItem.icon = @"right_arrow";;
+//    titleItem.icon = @"right_arrow";;
     titleItem.detail = user.nickName?user.nickName:@"无";
     titleItem.userInfo = [PhotonContent friendDetailInfo:self.conversation.chatWith];
     [self.items addObject:titleItem];

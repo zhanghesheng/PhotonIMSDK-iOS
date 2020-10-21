@@ -40,6 +40,7 @@ edgeInsets;  \
 })\
 
 #define     SAFEAREA_INSETS_BOTTOM      (SAFEAREA_INSETS.bottom)
+#define     SAFEAREA_INSETS_TOP      (SAFEAREA_INSETS.top)
 
 #pragma mark - # 设备(屏幕)类型
 #define     SCRREN_IPHONE4              (PhotoScreenHeight >= 480.0f)           // 320 * 480

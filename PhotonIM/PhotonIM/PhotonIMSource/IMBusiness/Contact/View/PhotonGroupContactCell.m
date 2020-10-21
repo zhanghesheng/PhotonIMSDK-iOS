@@ -34,7 +34,7 @@
         [self.enterGroupBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.contentView).mas_offset(-15);
             make.centerY.mas_equalTo(self.contentView);
-            make.size.mas_equalTo(CGSizeMake(80, 33));
+            make.size.mas_equalTo(CGSizeMake(80, 30));
         }];
     }else{
         [self.enterGroupBtn removeFromSuperview];
@@ -51,11 +51,13 @@
     if (!_enterGroupBtn) {
         _enterGroupBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_enterGroupBtn addTarget:self action:@selector(enterGroup:) forControlEvents:UIControlEventTouchUpInside];
-        [_enterGroupBtn setBackgroundColor:[UIColor colorWithHex:0x02A33D] forState:UIControlStateNormal];
+        _enterGroupBtn.layer.cornerRadius = 3.0;
+        _enterGroupBtn.layer.borderColor = [UIColor colorWithHex:0x20C236].CGColor;
+        _enterGroupBtn.layer.borderWidth = .5;
         [_enterGroupBtn setTitle:@"加入群组" forState:UIControlStateNormal];
-        [_enterGroupBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_enterGroupBtn setTitleColor:[UIColor colorWithHex:0x20C236] forState:UIControlStateNormal];
         _enterGroupBtn.clipsToBounds = YES;
-        _enterGroupBtn.layer.cornerRadius = 5;
+        _enterGroupBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     }
     return _enterGroupBtn;
 }

@@ -35,6 +35,11 @@
     PhotonChatVoiceMessageItem *item = (PhotonChatVoiceMessageItem *)object;
     CGFloat duration = item.duration;
     self.durationLabel.text = [NSString stringWithFormat:@"%ld \"",lround(duration)];
+    if(item.fromType== PhotonChatMessageFromSelf){
+        self.durationLabel.textColor = [UIColor whiteColor];
+    }else{
+        self.durationLabel.textColor = [UIColor blackColor];
+    }
 }
 
 - (void)prepareForReuse{
