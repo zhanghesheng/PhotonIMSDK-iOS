@@ -80,8 +80,16 @@ typedef void(^ActiobBlcok)(void);
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:leftBtn];
     }else{
         UIImage *image = [[UIImage imageNamed:@"share"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        UIBarButtonItem *share = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(share)];
-        self.navigationItem.rightBarButtonItem = share;
+        UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        shareBtn.frame = CGRectMake(0, 0, 25, 25);
+        [shareBtn setBackgroundImage:image forState:UIControlStateNormal];
+//        shareBtn.imageEdgeInsets = UIEdgeInsetsMake(-3, 8, -3, -3 );
+        [shareBtn addTarget:self action:@selector(shared) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:shareBtn];
+        
+//        UIImage *image = [[UIImage imageNamed:@"share"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+//        UIBarButtonItem *share = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(shared)];
+//        self.navigationItem.rightBarButtonItem = share;
     }
     
     
