@@ -105,7 +105,7 @@ static PhotonMessageCenter *center = nil;
 }
 
 - (NSInteger)unreadMsgCount{
-    _unreadCount = [self.imClient getUnreadCountExcludeIgnore:nil];
+    _unreadCount = [self.imClient getUnreadCountExcludeIgnore:@[]];
     return _unreadCount;
 }
 
