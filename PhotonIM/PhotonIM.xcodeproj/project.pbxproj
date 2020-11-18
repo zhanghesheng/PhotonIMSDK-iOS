@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3211BECA24697712005FA455 /* PAirSandbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3211BEC824697712005FA455 /* PAirSandbox.m */; };
-		321838BF22F84B3F005CCB00 /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 321838BE22F84B3F005CCB00 /* NotificationService.m */; };
-		321838C322F84B3F005CCB00 /* PhotonIMNotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 321838BB22F84B3F005CCB00 /* PhotonIMNotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		321A0FEE22E6A447000AF586 /* PhotonChatNoticItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 321A0FED22E6A447000AF586 /* PhotonChatNoticItem.m */; };
 		321A0FF122E6A4BD000AF586 /* PhotonChatNoticCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 321A0FF022E6A4BD000AF586 /* PhotonChatNoticCell.m */; };
 		321E1C6E22F2C9BE00BB9585 /* PhotonTitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 321E1C6D22F2C9BE00BB9585 /* PhotonTitleTableViewCell.m */; };
@@ -247,7 +245,6 @@
 		32E0BE0122D3464300DEEFA5 /* PhotonEmptyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0022D3464300DEEFA5 /* PhotonEmptyTableViewCell.m */; };
 		32E0BE0422D3466A00DEEFA5 /* PhotonEmptyTableItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0322D3466A00DEEFA5 /* PhotonEmptyTableItem.m */; };
 		32E0BE0822D358DF00DEEFA5 /* PhotonRecorderIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E0BE0722D358DF00DEEFA5 /* PhotonRecorderIndicator.m */; };
-		32E7927F22FAC3AA00CB3E76 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 32E7927E22FAC3A900CB3E76 /* CoreServices.framework */; };
 		32F94D8C23387D06002DF468 /* PhotonContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D8B23387D06002DF468 /* PhotonContactViewController.m */; };
 		32F94D8F23388353002DF468 /* PhotonGroupContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D8E23388353002DF468 /* PhotonGroupContactViewController.m */; };
 		32F94D9223388456002DF468 /* PhotonGroupContactModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F94D9123388456002DF468 /* PhotonGroupContactModel.m */; };
@@ -258,13 +255,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		321838C122F84B3F005CCB00 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 32286F7D22B9F207009B6881 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 321838BA22F84B3F005CCB00;
-			remoteInfo = PhotonIMNotificationService;
-		};
 		32286F9E22B9F208009B6881 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 32286F7D22B9F207009B6881 /* Project object */;
@@ -281,7 +271,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				321838C322F84B3F005CCB00 /* PhotonIMNotificationService.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -293,7 +282,6 @@
 		3126E6C64AF43F212FD7B4E3 /* libPods-PhotonIM.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PhotonIM.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3211BEC824697712005FA455 /* PAirSandbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PAirSandbox.m; sourceTree = "<group>"; };
 		3211BEC924697712005FA455 /* PAirSandbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PAirSandbox.h; sourceTree = "<group>"; };
-		321838BB22F84B3F005CCB00 /* PhotonIMNotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = PhotonIMNotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		321838BD22F84B3F005CCB00 /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
 		321838BE22F84B3F005CCB00 /* NotificationService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationService.m; sourceTree = "<group>"; };
 		321838C022F84B3F005CCB00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -761,17 +749,10 @@
 		32FDC9FA22C4CCF600EECD24 /* PhotonAccountViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PhotonAccountViewController.h; sourceTree = "<group>"; };
 		32FDC9FB22C4CCF600EECD24 /* PhotonAccountViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhotonAccountViewController.m; sourceTree = "<group>"; };
 		F254C153413A28E07D1CAA4A /* Pods-PhotonIM.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotonIM.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotonIM/Pods-PhotonIM.release.xcconfig"; sourceTree = "<group>"; };
+		FAAF0FEE256383D400F01722 /* PhotonIMMergeRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotonIMMergeRelease.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		321838B822F84B3F005CCB00 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				32E7927F22FAC3AA00CB3E76 /* CoreServices.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		32286F8222B9F207009B6881 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -981,7 +962,6 @@
 			children = (
 				32286F8522B9F207009B6881 /* PhotonIMMerge.app */,
 				32286F9D22B9F208009B6881 /* PhotonIMUITests.xctest */,
-				321838BB22F84B3F005CCB00 /* PhotonIMNotificationService.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -989,6 +969,7 @@
 		32286F8722B9F207009B6881 /* PhotonIM */ = {
 			isa = PBXGroup;
 			children = (
+				FAAF0FEE256383D400F01722 /* PhotonIMMergeRelease.entitlements */,
 				32AE413323B4B7E300BCBE5C /* MDAudioKit.framework */,
 				327D8D7C230664B4006E2E90 /* PhotonIMSource */,
 				323D507A22F9A10600182F50 /* PhotonIM.entitlements */,
@@ -1855,23 +1836,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		321838BA22F84B3F005CCB00 /* PhotonIMNotificationService */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 321838C622F84B3F005CCB00 /* Build configuration list for PBXNativeTarget "PhotonIMNotificationService" */;
-			buildPhases = (
-				321838B722F84B3F005CCB00 /* Sources */,
-				321838B822F84B3F005CCB00 /* Frameworks */,
-				321838B922F84B3F005CCB00 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = PhotonIMNotificationService;
-			productName = PhotonIMNotificationService;
-			productReference = 321838BB22F84B3F005CCB00 /* PhotonIMNotificationService.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		32286F8422B9F207009B6881 /* PhotonIM */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 32286FA622B9F208009B6881 /* Build configuration list for PBXNativeTarget "PhotonIM" */;
@@ -1887,7 +1851,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				321838C222F84B3F005CCB00 /* PBXTargetDependency */,
 			);
 			name = PhotonIM;
 			productName = PhotonIM;
@@ -1921,14 +1884,6 @@
 				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = Bruce;
 				TargetAttributes = {
-					321838BA22F84B3F005CCB00 = {
-						CreatedOnToolsVersion = 10.2.1;
-						SystemCapabilities = {
-							com.apple.Push = {
-								enabled = 1;
-							};
-						};
-					};
 					32286F8422B9F207009B6881 = {
 						CreatedOnToolsVersion = 10.2.1;
 						SystemCapabilities = {
@@ -1961,19 +1916,11 @@
 			targets = (
 				32286F8422B9F207009B6881 /* PhotonIM */,
 				32286F9C22B9F208009B6881 /* PhotonIMUITests */,
-				321838BA22F84B3F005CCB00 /* PhotonIMNotificationService */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		321838B922F84B3F005CCB00 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		32286F8322B9F207009B6881 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2069,14 +2016,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		321838B722F84B3F005CCB00 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				321838BF22F84B3F005CCB00 /* NotificationService.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3221880B22CCA51C007E9FA3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2299,11 +2238,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		321838C222F84B3F005CCB00 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 321838BA22F84B3F005CCB00 /* PhotonIMNotificationService */;
-			targetProxy = 321838C122F84B3F005CCB00 /* PBXContainerItemProxy */;
-		};
 		32286F9F22B9F208009B6881 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 32286F8422B9F207009B6881 /* PhotonIM */;
@@ -2331,54 +2265,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		321838C422F84B3F005CCB00 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = 4BXE593ED8;
-				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 2.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim.push;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = PhotonimPushdemo;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		321838C522F84B3F005CCB00 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = PhotonIMNotificationService/PhotonIMNotificationService.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
-				DEVELOPMENT_TEAM = 72CZEEPG39;
-				INFOPLIST_FILE = PhotonIMNotificationService/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 2.8;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wemomo.cosmos.hwphotonim.push;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "common-inhouse-profile";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		32286FA422B9F208009B6881 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2582,7 +2468,7 @@
 			baseConfigurationReference = F254C153413A28E07D1CAA4A /* Pods-PhotonIM.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIM.entitlements;
+				CODE_SIGN_ENTITLEMENTS = PhotonIM/PhotonIMMergeRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 2310;
@@ -2704,15 +2590,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		321838C622F84B3F005CCB00 /* Build configuration list for PBXNativeTarget "PhotonIMNotificationService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				321838C422F84B3F005CCB00 /* Debug */,
-				321838C522F84B3F005CCB00 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		32286F8022B9F207009B6881 /* Build configuration list for PBXProject "PhotonIM" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
