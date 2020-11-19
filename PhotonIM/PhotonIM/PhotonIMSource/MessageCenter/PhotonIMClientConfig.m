@@ -41,4 +41,46 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"获取失败deviceToken -- %@", error.localizedDescription);
 }
+
+
+// appid
+- (NSString *)getAppid{
+    return @"2bd1a15c553de0a9df6dcede9af22962";
+}
+
+- (NSString *)getAppVersion{
+    return @"1438";
+}
+
+- (NSString *)getOsType{
+    return @"iOS";
+}
+
+- (NSString *)getUseragent{
+    return @"MomoChat/9.0 ios/1471 (iPhone 8; iOS 12.1.2; zh_CN; iPhone10,1; S1)";
+}
+// 获取全局的域名配置，需要配置预埋
+- (NSString *)getHttpDNSGlobalConfigs{
+    return @"";
+}
+// 获取当前的用户id
+- (NSString *)getUserid{
+    return @"12345";
+}
+
+// 获取当前的用户id
+- (double)getLng{
+    return 0.0f;
+}
+
+// 获取当前的用户id
+- (double)getLat{
+    return 32.43f;
+}
+
+// 指定预先解析的域名
+- (nonnull NSArray<NSString *> *)getPreResolveHosts {
+    return @[@"immomo.com"];
+}
+
 @end
