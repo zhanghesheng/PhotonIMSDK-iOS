@@ -525,6 +525,12 @@ static PhotonMessageCenter *center = nil;
     }else{
         [[PhotonIMClient sharedClient] sendMessage:message completion:^(BOOL succeed, PhotonIMError * _Nullable error) {
             [PhotonUtil runMainThread:^{
+                [message setExtraValue:@"1234567" forKey:@"sdel"];
+                
+                PhotonIMMessage *message1 = [PhotonIMMessage commonMessageWithFrid:message.fr toid:message.to messageType:message.messageType chatType:message.chatType];
+                message1.messageID = message.messageID;
+                sleep(1);
+                NSString *value = [message1 extraValueForKey:@"sdel"];
                 if (!succeed && error.code >= 1000) {
                     message.notic = error.em;
                 }

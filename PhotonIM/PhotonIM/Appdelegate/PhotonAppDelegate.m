@@ -16,6 +16,7 @@
 #import "YYFPSLabel.h"
 //#import "Growing.h"
 #import <Rifle/Rifle.h>
+#import "LKLinkEngineKit.h"
 @interface PhotonAppDelegate ()<UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) YYFPSLabel *fpsLabel;
@@ -32,13 +33,19 @@
     [self registerPushSDK];
     
     PhotonIMClientConfig *config = [[PhotonIMClientConfig alloc] init];
-     [PhotonHTTPDNSClient initHTTPDNSWithConfig:config];
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        [PhotonHTTPDNSClient initHTTPDNSWithConfig:config];
+    });
+    
 
      // 打开底层log 日志，用于排查问题，默认是关闭
     [PhotonHTTPDNSClient shouldConsolLog:YES];
     
     [PhotonHTTPDNSClient getIPbyHost:@"immomo.com"];
     
+    
+    LKLinkEngineKit
     //[MoPushManager setNotiCenterDelegate:self];
     UNUserNotificationCenter.currentNotificationCenter.delegate = self;
     [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
