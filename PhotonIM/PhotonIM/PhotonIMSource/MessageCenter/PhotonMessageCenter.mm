@@ -426,6 +426,7 @@ static PhotonMessageCenter *center = nil;
     if (completion) {
         completion(YES,nil);
     }
+    [message retrySendMsg];
     if(message.messageType == PhotonIMMessageTypeImage || message.messageType == PhotonIMMessageTypeAudio){
         PhotonIMBaseBody *body = message.messageBody;
         if ([body.url isNotEmpty]) {// 文件上传完成，直接发送

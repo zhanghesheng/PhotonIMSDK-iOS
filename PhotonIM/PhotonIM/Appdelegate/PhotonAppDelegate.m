@@ -16,7 +16,6 @@
 #import "YYFPSLabel.h"
 //#import "Growing.h"
 #import <Rifle/Rifle.h>
-#import "LKLinkEngineKit.h"
 @interface PhotonAppDelegate ()<UNUserNotificationCenterDelegate>
 
 @property (nonatomic, strong) YYFPSLabel *fpsLabel;
@@ -45,7 +44,6 @@
     [PhotonHTTPDNSClient getIPbyHost:@"immomo.com"];
     
     
-    LKLinkEngineKit
     //[MoPushManager setNotiCenterDelegate:self];
     UNUserNotificationCenter.currentNotificationCenter.delegate = self;
     [[UNUserNotificationCenter currentNotificationCenter] getNotificationSettingsWithCompletionHandler:^(UNNotificationSettings * _Nonnull settings) {
