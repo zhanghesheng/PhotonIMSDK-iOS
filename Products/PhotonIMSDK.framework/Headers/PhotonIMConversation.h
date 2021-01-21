@@ -141,29 +141,29 @@ PhotonIMConversationTypeAtAl,//会话处于at所有群成员
 
 
 
-/**
- 初始化方法
-
- @param chatType 会话类型
- @param chatWith 会话中对方的id
- @return <#return value description#>
- */
-- (instancetype)initWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
-
-
-#pragma mark ------ Extra数据操作 用于扩展功能 ------
-/// 通过key获取extra对应的value
-/// @param key 业务方指定
-- (nullable NSString *)extraValueForKey:(NSString *)key;
-
-/// 设置extra中的value值。存在key则修改替换，不存在则追加
-/// @param value Extra中设置的value
-/// @param key Extra中设置的key
-- (void)setExtraValue:(NSString *)value forKey:(NSString *)key;
-
-/// 通过key删除extra对应的value
-/// @param key 业务方指定
-- (void)removeExtraValueForKey:(NSString *)key;
+///**
+// 初始化方法
+//
+// @param chatType 会话类型
+// @param chatWith 会话中对方的id
+// @return <#return value description#>
+// */
+//- (instancetype)initWithChatType:(PhotonIMChatType)chatType chatWith:(NSString *)chatWith;
+//
+//
+//#pragma mark ------ Extra数据操作 用于扩展功能 ------
+///// 通过key获取extra对应的value
+///// @param key 业务方指定
+//- (nullable NSString *)extraValueForKey:(NSString *)key;
+//
+///// 设置extra中的value值。存在key则修改替换，不存在则追加
+///// @param value Extra中设置的value
+///// @param key Extra中设置的key
+//- (void)setExtraValue:(NSString *)value forKey:(NSString *)key;
+//
+///// 通过key删除extra对应的value
+///// @param key 业务方指定
+//- (void)removeExtraValueForKey:(NSString *)key;
 @end
 
 NS_ASSUME_NONNULL_END

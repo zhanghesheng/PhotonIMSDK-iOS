@@ -81,19 +81,6 @@ typedef NS_ENUM(NSInteger,PhotonIMSyncStatus) {
 };
 
 
-/**
- 使用数据可的模式
-
- - PhotonIMDBModeNoDB: 不使用数据库,业务端需要自行处理数据的存储逻辑.
- - PhotonIMDBModeDBSync: 同步使用数据库,消息的收发和入库操作是同步执行。消息的接收效率较低
- - PhotonIMDBModeDBAsync: 异步使用数据库，消息的收发和入库操作异步执行，消息的接收效率较高，推荐使用
- */
-typedef NS_ENUM(NSInteger,PhotonIMDBMode) {
-    PhotonIMDBModeNoDB = 0,
-    PhotonIMDBModeDBSync = 1,
-    PhotonIMDBModeDBAsync = 2
-};
-
 
 #pragma MARK -------- 消息数据相关枚举 --------
 

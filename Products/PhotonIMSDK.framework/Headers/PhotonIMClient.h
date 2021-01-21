@@ -72,12 +72,6 @@ NS_ASSUME_NONNULL_BEGIN
 */
 - (void)supportGroup;
 
-/**
- 设置使用内嵌的模式，支持三种数据库的模式，详情请见
- [PhotonIMDBMode](https://cosmos.immomo.com/cosmos_sdk_apidoc/imios/html/Constants/PhotonIMDBMode.html)
- @param mode 数据库模式
- */
-- (void)setPhotonIMDBMode:(PhotonIMDBMode)mode;
 
 
 /**
@@ -147,12 +141,6 @@ NS_ASSUME_NONNULL_BEGIN
 */
 - (void)keepConnectedOnBackground:(BOOL)keep;
 
-
-/// 数据库的路径
-- (NSString *)dbPath;
-
-
-- (void)corrupt;
 @end
 
 NS_ASSUME_NONNULL_END

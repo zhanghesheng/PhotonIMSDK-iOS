@@ -137,20 +137,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)unUpdateSessionOrder;
 
-#pragma mark ------ Extra数据操作 用于扩展功能 ------
-
-/// 通过key获取extra对应的value
-/// @param key 业务方指定
-- (nullable NSString *)extraValueForKey:(NSString *)key;
-
-/// 设置extra中的value值。存在key则修改替换，不存在则追加。message未入库时此操作
-/// @param value Extra中设置的value
-/// @param key Extra中设置的key
-- (void)setExtraValue:(NSString *)value forKey:(NSString *)key;
-
-/// 通过key删除extra对应的value
-/// @param key 业务方指定
-- (void)removeExtraValueForKey:(NSString *)key;
 @end
 
 
